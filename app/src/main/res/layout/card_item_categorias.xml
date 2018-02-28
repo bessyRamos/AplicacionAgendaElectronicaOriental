@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:id="@+id/card"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="5dp"
+    app:cardElevation="15dp"
+    android:padding="3dp"
+    app:cardCornerRadius="5dp"
+    app.card="5dp"
+    >
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:weightSum="1"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@android:drawable/screen_background_dark_transparent"
+            android:orientation="horizontal"
+            android:layout_weight="2"
+
+            >
+
+            <TextView
+                android:id="@+id/titulo"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="16dp"
+                android:text="Titulo"
+                android:layout_weight="0.52"
+                android:textColor="#ffffff"
+                android:textSize="14dp"
+                android:textStyle="bold"
+
+                />
+            <TextView
+                android:id="@+id/cantida"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
+                android:text="cant :"
+                android:textColor="#ffffff"
+                android:layout_weight="1.50"
+                android:textSize="14dp" />
+
+            <TextView
+                android:id="@+id/cantidad"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="10dp"
+                android:paddingTop="10dp"
+                android:text="17"
+                android:textColor="#ffffff"
+                android:layout_weight="1.50"
+                android:textSize="14dp" />
+
+
+        </LinearLayout>
+
+
+        <ImageView
+            android:id="@+id/foto"
+            android:layout_width="match_parent"
+            android:layout_height="180dp"
+            android:layout_gravity="center"
+            android:scaleType="centerCrop"
+
+
+            />
+
+
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+
+            >
+
+
+        </FrameLayout>
+    </LinearLayout>
+</android.support.v7.widget.CardView>

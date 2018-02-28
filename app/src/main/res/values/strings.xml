@@ -1,0 +1,18 @@
+<resources>
+    <string name="app_name">Agenda Electrónica Oriental</string>
+
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="action_settings">Settings</string>
+    <string name="nombre">Nombre:</string>
+    <string name="direccion">Dirección:</string>
+    <string name="telefono">Teléfono:</string>
+    <string name="email">E-mail:</string>
+    <string name="apperfil">Pérfil</string>
+    <string name="principal">Principal</string>
+    <string name="acercadeapp">Acerca de:</string>
+    <string name="app_correo">AEO@Gmail.com</string>
+    <string name="title_activity_acerca_de">AcercaDe</string>
+    <string name="section_format">Hello World from section: %1$d</string>
+
+</resources>
