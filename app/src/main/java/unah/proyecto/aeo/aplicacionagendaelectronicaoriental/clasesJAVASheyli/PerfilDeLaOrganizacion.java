@@ -23,6 +23,7 @@ public class PerfilDeLaOrganizacion extends AppCompatActivity implements Navigat
     private ImageView organizacion;
     private TextView nombre,direccion,telefono,email,descripcion;
     ConexionSQLiteHelper conn;
+    private int id_organizacion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,11 +49,15 @@ public class PerfilDeLaOrganizacion extends AppCompatActivity implements Navigat
         email = (TextView) findViewById(R.id.e);
         descripcion = (TextView) findViewById(R.id.descripcion);
 
+        Bundle extras = getIntent().getExtras();
+        if (extras!=null){
+            id_organizacion = Integer.parseInt(extras.getString("id_organizacion"));
+        }
 
         conn = new ConexionSQLiteHelper(this,"bdaeo",null,1);
         //llenado desde la base de datos
         SQLiteDatabase db = conn.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT imagen, nombre_organizacion,direccion,numero_fijo,e_mail,descripcion_organizacion FROM CONTACTOS WHERE id_contacto = 1",null );
+        Cursor cursor = db.rawQuery("SELECT imagen, nombre_organizacion,direccion,numero_fijo,e_mail,descripcion_organizacion FROM CONTACTOS WHERE id_contacto = "+id_organizacion,null );
         while(cursor.moveToNext())
         {
             organizacion.setImageResource(cursor.getInt(0));
