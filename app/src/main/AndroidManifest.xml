@@ -3,28 +3,24 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@drawable/icono_aeo"
+        android:icon="@mipmap/icono"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/icono_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme" >
-
         <activity
             android:name=".clasesJAVAAlan.ActivityCategorias"
-            android:label="Categorías"
             android:theme="@style/AppTheme.NoActionBar"    >
 
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
 
         <activity
             android:name=".clasesJAVAMelvin.ListaDeContactos"
-            android:label="@string/app_name"
+            android:label="@string/lista_contactos"
             android:theme="@style/AppTheme.NoActionBar"   >
 
         </activity>
