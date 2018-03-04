@@ -124,13 +124,14 @@ public class ActivityCategorias extends AppCompatActivity
         Fuente_Categoria fuente_categoria = null;
 
         //Asignar la consulta sql
-        Cursor cursor =  db.rawQuery("SELECT nombre_categoria, imagen_categoria FROM CATEGORIAS",null);
+        Cursor cursor =  db.rawQuery("SELECT id_categoria, nombre_categoria, imagen_categoria FROM CATEGORIAS ",null);
 
         //se obtienen los objetos de la consulta y se asignan a los componentes visuales
         while (cursor.moveToNext()){
             fuente_categoria = new Fuente_Categoria();
-            fuente_categoria.setTitulo(cursor.getString(0));
-            fuente_categoria.setImagen(cursor.getInt(1));
+            fuente_categoria.setId(cursor.getInt(0));
+            fuente_categoria.setTitulo(cursor.getString(1));
+            fuente_categoria.setImagen(cursor.getInt(2));
 
 
             //se añade los datos al array
