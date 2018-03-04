@@ -31,8 +31,21 @@
 
         <activity
             android:name=".clasesJAVAVirgilio.AcercaDe"
-            android:label="Acerca De"
-            android:theme="@style/AppTheme.NoActionBar"   >
+            android:label="@string/acercadeapp"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:parentActivityName=".clasesJAVAAlan.ActivityCategorias">
+
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".clasesJAVAAlan.ActivityCategorias"
+            >
+            </meta-data>
+
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+                <category android:name="android.intent.category.LAUNCHER"/>
+            </intent-filter>
+
 
         </activity>
 

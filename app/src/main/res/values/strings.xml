@@ -14,5 +14,13 @@
     <string name="app_correo">AEO@Gmail.com</string>
     <string name="title_activity_acerca_de">AcercaDe</string>
     <string name="section_format">Hello World from section: %1$d</string>
+    <string name="lugares">Lugares</string>
+    <string name="todos">Todos</string>
+    <string name="danli">Danlí</string>
+    <string name="elparaiso">El Paraíso</string>
+    <string name="info_app">Agenda Electrónica Oriental es una App pensada para que accedas de forma fácil y sencilla a los números telefónicos,
+        información y ubicación de las diferentes organizaciones ubicadas en las regiones de Danlí y el Paraíso pertenecientes al departamento de El Paraíso en Honduras.</string>
+    <string name="info_desarrolladores">Nosotros WebEver, equipo de desarrolladores de la App Agenda Electrónica Oriental somos los únicos responsables de aceptar o denegar solicitudes de actualización de las empresas aquí registradas o por registrar en el futuro.</string>
+    <string name="version">Version 1.1.1.0</string>
 
 </resources>

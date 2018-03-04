@@ -16,7 +16,7 @@
         >
             <ImageView
                 android:layout_width="match_parent"
-                android:layout_height="150dp"
+                android:layout_height="130dp"
                 android:src="@drawable/telefono"
                 android:layout_marginTop="15dp"
             />
@@ -28,10 +28,21 @@
                 android:layout_marginEnd="@dimen/activity_horizontal_margin"
                 android:layout_marginStart="@dimen/activity_horizontal_margin"
                 android:layout_marginTop="@dimen/activity_vertical_margin"
-                android:textSize="30sp"
+                android:textSize="20sp"
                 android:textColor="#000"
-                android:text="Contenido de la aplicacion por discutir"
+                android:text="@string/info_app"
                 android:layout_gravity="center_horizontal"
+            />
+            <TextView android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+
+                      android:textSize="20dp"
+                      android:text="@string/version"
+                      android:layout_marginBottom="@dimen/activity_vertical_margin"
+                      android:layout_marginEnd="@dimen/activity_horizontal_margin"
+                      android:layout_marginStart="@dimen/activity_horizontal_margin"
+                      android:layout_marginTop="@dimen/activity_vertical_margin"
+
             />
 
         </LinearLayout>

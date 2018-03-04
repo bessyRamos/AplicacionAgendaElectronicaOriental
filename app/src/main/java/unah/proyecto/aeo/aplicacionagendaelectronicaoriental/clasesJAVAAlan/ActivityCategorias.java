@@ -84,7 +84,7 @@ public class ActivityCategorias extends AppCompatActivity
             super.onBackPressed();
         }
     }
-
+/*
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -106,15 +106,17 @@ public class ActivityCategorias extends AppCompatActivity
 
         return super.onOptionsItemSelected(item);
     }
+    */
 
     @SuppressWarnings("StatementWithEmptyBody")
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
 
-        if (id == R.id.principal) {
+        if (id == R.id.principaldos) {
             // Handle the camera action
-        } else if (id == R.id.acercadeinfo) {
+
+        } else if (id == R.id.acercadeinfodos) {
             Intent intent = new Intent(this,AcercaDe.class);
             startActivity(intent);
 
