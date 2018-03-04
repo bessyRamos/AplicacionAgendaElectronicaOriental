@@ -7,8 +7,9 @@
     <string name="nombre">Nombre:</string>
     <string name="direccion">Dirección:</string>
     <string name="telefono">Teléfono:</string>
+    <string name="lista_contactos">Lista de Contactos</string>
     <string name="email">E-mail:</string>
-    <string name="apperfil">Pérfil</string>
+    <string name="apperfil">Perfil</string>
     <string name="principal">Principal</string>
     <string name="acercadeapp">Acerca de:</string>
     <string name="app_correo">AEO@Gmail.com</string>
