@@ -37,30 +37,17 @@ public class ViewHolderPerfilBreve extends RecyclerView.ViewHolder  implements V
     }
 
     public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.imagen_organizacion:
                 intentPasarPerfilCompleto();
-                break;
-            case R.id.nombre_organizacion:
-                intentPasarPerfilCompleto();
-                break;
-            case R.id.direccion_organizacion:
-                intentPasarPerfilCompleto();
-                break;
-            case R.id.id_Deorganizacion:
-                intentPasarPerfilCompleto();
-                break;
-        }
-
     }
 
     void setOnClickListener() {
         imagenPerfilBreve.setOnClickListener(this);
-
+        nombrePerfilBreve.setOnClickListener(this);
+        numeroTelefonoPerfilBreve.setOnClickListener(this);
+        direccionPerfilBreve.setOnClickListener(this);
     }
 
     public void intentPasarPerfilCompleto(){
-
 
         Intent intent = new Intent(context,PerfilDeLaOrganizacion.class);
         intent.putExtra("id_organizacion",id_perfilBreve.getText().toString());

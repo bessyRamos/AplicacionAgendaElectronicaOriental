@@ -25,6 +25,7 @@ public class ListaDeContactos extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     ArrayList<PerfilBreve> listaOrganizaciones;
     ConexionSQLiteHelper conn;
+    int id_categoria;
 
 
     @Override
@@ -45,7 +46,10 @@ public class ListaDeContactos extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
 
-        String categoria="Centros Educativos";
+        Bundle extras = getIntent().getExtras();
+        if (extras!=null){
+            id_categoria = Integer.parseInt(extras.getString("id_categoria"));
+        }
 
 
         //Conexión a la base de datos
@@ -135,7 +139,7 @@ public class ListaDeContactos extends AppCompatActivity
         PerfilBreve perfilContacto = null;
 
         //Asignar la consulta sql
-        Cursor cursor =  db.rawQuery("SELECT nombre_organizacion, imagen, numero_fijo, direccion FROM CONTACTOS",null);
+        Cursor cursor =  db.rawQuery("SELECT nombre_organizacion, imagen, numero_fijo, direccion, id_contacto FROM CONTACTOS",null);
 
        //se obtienen los objetos de la consulta y se asignan a los componentes visuales
         while (cursor.moveToNext()){
@@ -144,6 +148,7 @@ public class ListaDeContactos extends AppCompatActivity
             perfilContacto.setImagen(cursor.getInt(1));
             perfilContacto.setNumeroTelefono(cursor.getString(2));
             perfilContacto.setDireccion(cursor.getString(3));
+            perfilContacto.setId(cursor.getInt(4));
 
             //se añade los datos al array
             listaOrganizaciones.add(perfilContacto);
