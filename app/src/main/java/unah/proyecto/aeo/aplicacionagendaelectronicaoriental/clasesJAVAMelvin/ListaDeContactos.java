@@ -79,6 +79,8 @@ public class ListaDeContactos extends AppCompatActivity
         contenedor.setAdapter(adaptadorPerfilBreve);
         contenedor.setLayoutManager(layout);
 
+        conn.close();
+
     }
 
 
