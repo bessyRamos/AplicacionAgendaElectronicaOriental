@@ -50,9 +50,33 @@ public class ConexionSQLiteHelper extends SQLiteOpenHelper {
             "(id_contacto, nombre_organizacion, numero_fijo, numero_movil, direccion, e_mail, descripcion_organizacion, latitud, " +
             " longitud, id_usuario, id_categoria, id_estado, id_region) values" +
             "(1,'Policía','2763-2063','', 'Barrio Las Colinas Segunda Etapa dos cuadras arriba de la escuela Gabriela Albarado  a mano derecha', 'redes.sociales@seguridad.gob.hn', 'Nos pueden contactar las 24 horas y estamos para servir y proteger ',100,100," +
-            " 1, 2,2, 0703), " +
-            "(2,'Policía','2793-0286','', 'Barrio El Calvario cuadra y media de agro comercial Gaitan contiguo el cementerio', 'redes.sociales@seguridad.gob.hn', 'Nos pueden contactar las 24 horas y estamos para servir y proteger',100,100," +
-            " 1, 2,2, 0704)";
+            " 1, 1,2, 0703)," + "(2,'Policía','2793-0286','', 'Barrio El Calvario cuadra y media de agro comercial Gaitan contiguo el cementerio', 'redes.sociales@seguridad.gob.hn', 'Nos pueden contactar las 24 horas y estamos para servir y proteger',100,100," +
+            " 1, 1,2, 0704)," + "(3,'Instituto Teodoro Rodas Valle','2763-3050','3219-6497', 'Barrio las Flores', 'loborams@yahoo.com', 'Instituto privado',100,100," +
+            " 1, 2,2, 0703),"+ "(4,'Centro Tecnico Vocacional Pedro Nufio','2763-3195','', 'Barrio El Quiquisque', '', 'Instituto Público',100,100," + " 1, 2,2, 0703)," +
+            "(5,'Instituto Teodoro Rodas Valle','2763-3050','3219-6497', 'Barrio las Flores', 'loborams@yahoo.com', 'Instituto privado',100,100," +
+            " 1, 2,2, 0703),"+
+            "(6,'Instituto Técnico Alegandro Flores','2793-4123','', 'Col.Los Montesitos, Salida Danlí', '', 'Instituto Público',100,100," +
+            " 1, 2,2, 0704),"+
+            "(7,'Farmacia Cimar','2763-2115','', 'Barrio San Sebastian', '', 'Cuenta con servicio a domicilio',100,100," +
+            " 1, 3,2, 0704),"+
+            "(8,'Farmacia del Ahorro','2763-2787','', 'Barrio El Centro Edificio Astrovisión, Salida Danlí', '', 'Cuenta con servicio a domicilio',100,100," +
+            " 1, 3,2, 0703),"+
+            "(9,'Hospital Gabriela Alvarado','2763-5824','', 'San Marcos abajo, calle panamericana', '', 'Trabajamos 24 hrs',100,100," +
+            " 1, 3,2, 0703),"+
+            "(10,'BANHCAFE','2763-2402','', 'Barrio Tierra Blanca', '', 'Servicios financieros',100,100," +
+            " 1, 4, 2, 0703),"+
+            "(11,'Banco Atlantida','2793-4200','', 'El paraiso frente a plaza Ramón Ignacio Díaz, Bo.San Isidro', '', 'Servicios financieros',100,100," +
+            " 1, 4, 2, 0704),"+
+            "(12,'Hotel La Esperanza','2763-2106','', 'Bo.Tierra Santa', '', 'Servicios de hoteleria',100,100," +
+            " 1, 5, 2, 0703),"+
+            "(13,'Hotel y Restaurante Mario Chávez','2793-4345','', 'Calle principal quinta avenida, El Paraíso', '', 'Servicios de hoteleria y comida',100,100," +
+            " 1, 5, 2, 0704),"+
+            "(14,'Finca Santa Emilia','','9842-7586', 'Siete km del parque central de Danlí, una reserva natural', '', 'turismo',100,100," +
+            " 1, 5, 2, 0703),"+
+            "(15,'Instituto de la Propiedad','2763-0473','', 'Bo.Oriental', '', 'Registro de bienes',100,100," +
+            " 1, 6, 2, 0703)";
+
+
 
     public ConexionSQLiteHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
         super(context, name, factory, version);
