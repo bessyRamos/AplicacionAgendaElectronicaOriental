@@ -10,16 +10,15 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class ConexionSQLiteHelper extends SQLiteOpenHelper {
 
-
     private int imagenPredeterminada=R.drawable.iconocontactowhite;
 
     final String CREAR_TABLA_ROLES = "create table Roles(id_rol INTEGER PRIMARY KEY, descripcion_rol TEXT)";
     final String CREAR_TABLA_USUARIOS = "create table Usuarios(id_usuario INTEGER PRIMARY KEY, nombre_usuario TEXT, nombre_propio TEXT, contrasena TEXT, rol INTEGER, estado_usuario INTEGER, FOREIGN KEY(rol) REFERENCES Roles(id_rol))";
-    final String CREAR_TABLA_CATEGORIAS = "create table Categorias(id_categoria INTEGER AUTOINCREMENT PRIMARY KEY, nombre_categoria TEXT NOT NULL, imagen_categoria INT)";
+    final String CREAR_TABLA_CATEGORIAS = "create table Categorias(id_categoria INTEGER PRIMARY KEY , nombre_categoria TEXT NOT NULL, imagen_categoria INT)";
     final String CREAR_TABLA_REGIONES = "create table Regiones(id_region INTEGER PRIMARY KEY, nombre_region TEXT NOT NULL)";
     final String CREAR_TABLA_ESTADO_CONTACTOS = "create table Estado_Contactos(id_estado INTEGER PRIMARY KEY, descripcion_estado_contactos TEXT NOT NULL)";
 
-    final String CREAR_TABLA_CONTACTOS = "create table Contactos(id_contacto INTEGER AUTOINCREMENT PRIMARY KEY, nombre_organizacion TEXT NOT NULL, numero_fijo TEXT," +
+    final String CREAR_TABLA_CONTACTOS = "create table Contactos(id_contacto INTEGER  PRIMARY KEY, nombre_organizacion TEXT NOT NULL, numero_fijo TEXT," +
             " numero_movil TEXT, direccion TEXT NOT NULL, imagen INTEGER DEFAULT "+imagenPredeterminada+", e_mail TEXT DEFAULT'No Disponible', descripcion_organizacion TEXT NOT NULL, latitud DOUBLE, " +
             "longitud DOUBLE, id_usuario INTEGER, id_categoria INTEGER, id_estado INTEGER, id_region INTEGER, FOREIGN KEY(id_usuario) REFERENCES Usuarios(id_usuario)," +
             "  FOREIGN KEY(id_categoria) REFERENCES Categoria(id_categoria) , FOREIGN KEY(id_estado) REFERENCES Estado_Contactos(id_estado),  FOREIGN KEY(id_region) REFERENCES Regiones(id_region))";
@@ -40,9 +39,9 @@ public class ConexionSQLiteHelper extends SQLiteOpenHelper {
 
     final String INSERTAR_ESTADO_CONTACTOS = "INSERT INTO Estado_Contactos values(1,'Solicitado'), (2,'Aprobado'),(3,'Rechazado'), (4,'Eliminado')";
 
-    final String INSERTAR_CONTACTOS = "INSERT INTO Contactos( nombre_organizacion, numero_fijo, numero_movil, direccion, e_mail, descripcion_organizacion, latitud, " +
-            " longitud, id_usuario, id_categoria, id_estado, id_region) values('Policía','2763-2063','', 'Barrio Las Colinas Segunda Etapa dos cuadras arriba de la escuela Gabriela Albarado  a mano derecha', 'redes.sociales@seguridad.gob.hn', 'Nos pueden contactar las 24 horas y estamos para servir y proteger ', , ," +
-            " 1, 2, 0703), ('Policía','2793-0286','', 'Barrio El Calvario cuadra y media de agro comercial Gaitan contiguo el cementerio', 'redes.sociales@seguridad.gob.hn', 'Nos pueden contactar las 24 horas y estamos para servir y proteger', ,," +
+    final String INSERTAR_CONTACTOS = "INSERT INTO Contactos( id_contacto,nombre_organizacion, numero_fijo, numero_movil, direccion, e_mail, descripcion_organizacion, latitud, " +
+            " longitud, id_usuario, id_categoria, id_estado, id_region) values(1,'Policía','2763-2063','', 'Barrio Las Colinas Segunda Etapa dos cuadras arriba de la escuela Gabriela Albarado  a mano derecha', 'redes.sociales@seguridad.gob.hn', 'Nos pueden contactar las 24 horas y estamos para servir y proteger ',,," +
+            " 1, 2, 0703), (2,'Policía','2793-0286','', 'Barrio El Calvario cuadra y media de agro comercial Gaitan contiguo el cementerio', 'redes.sociales@seguridad.gob.hn', 'Nos pueden contactar las 24 horas y estamos para servir y proteger',,," +
             " 1, 2, 0704)";
 
     public ConexionSQLiteHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
