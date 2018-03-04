@@ -55,7 +55,10 @@ public class ConexionSQLiteHelper extends SQLiteOpenHelper {
             " 1, 1,2, 0704)" +
             "(3,'Instituto Teodoro Rodas Valle','2763-3050','3219-6497', 'Barrio las Flores', 'loborams@yahoo.co', 'Instituto privado',100,100," +
             " 1, 2,2, 0703)"+ "(4,'Centro Tecnico Vocacional Pedro Nufio','2763-3195','', 'Barrio El Quiquisque', '', 'Instituto Publico',100,100," +
-            " 1, 2,2, 0703)";
+            " 1, 2,2, 0703)"+"(5,'Instituto Teodoro Rodas Valle','2763-3050','3219-6497', 'Barrio las Flores', 'loborams@yahoo.co', 'Instituto privado',100,100," +
+            " 1, 2,2, 0703)"+
+            "(6,'Instituto Tecnico Alegandro Flores','2793-4123','', 'Col.Los Montesitos, Salida Danlí', '', 'Instituto Publico',100,100," +
+            " 1, 2,2, 0704)";
 
 
 
