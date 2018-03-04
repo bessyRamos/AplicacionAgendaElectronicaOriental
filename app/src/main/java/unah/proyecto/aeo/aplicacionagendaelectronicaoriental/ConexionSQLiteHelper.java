@@ -50,15 +50,14 @@ public class ConexionSQLiteHelper extends SQLiteOpenHelper {
             "(id_contacto, nombre_organizacion, numero_fijo, numero_movil, direccion, e_mail, descripcion_organizacion, latitud, " +
             " longitud, id_usuario, id_categoria, id_estado, id_region) values" +
             "(1,'Policía','2763-2063','', 'Barrio Las Colinas Segunda Etapa dos cuadras arriba de la escuela Gabriela Albarado  a mano derecha', 'redes.sociales@seguridad.gob.hn', 'Nos pueden contactar las 24 horas y estamos para servir y proteger ',100,100," +
-            " 1, 1,2, 0703), " +
-            "(2,'Policía','2793-0286','', 'Barrio El Calvario cuadra y media de agro comercial Gaitan contiguo el cementerio', 'redes.sociales@seguridad.gob.hn', 'Nos pueden contactar las 24 horas y estamos para servir y proteger',100,100," +
-            " 1, 1,2, 0704)" +
-            "(3,'Instituto Teodoro Rodas Valle','2763-3050','3219-6497', 'Barrio las Flores', 'loborams@yahoo.co', 'Instituto privado',100,100," +
-            " 1, 2,2, 0703)"+ "(4,'Centro Tecnico Vocacional Pedro Nufio','2763-3195','', 'Barrio El Quiquisque', '', 'Instituto Publico',100,100," +
-            " 1, 2,2, 0703)"+"(5,'Instituto Teodoro Rodas Valle','2763-3050','3219-6497', 'Barrio las Flores', 'loborams@yahoo.co', 'Instituto privado',100,100," +
-            " 1, 2,2, 0703)"+
+            " 1, 1,2, 0703), " + "(2,'Policía','2793-0286','', 'Barrio El Calvario cuadra y media de agro comercial Gaitan contiguo el cementerio', 'redes.sociales@seguridad.gob.hn', 'Nos pueden contactar las 24 horas y estamos para servir y proteger',100,100," +
+            " 1, 1,2, 0704)," + "(3,'Instituto Teodoro Rodas Valle','2763-3050','3219-6497', 'Barrio las Flores', 'loborams@yahoo.co', 'Instituto privado',100,100," +
+            " 1, 2,2, 0703),"+ "(4,'Centro Tecnico Vocacional Pedro Nufio','2763-3195','', 'Barrio El Quiquisque', '', 'Instituto Publico',100,100," + " 1, 2,2, 0703)," +"(5,'Instituto Teodoro Rodas Valle','2763-3050','3219-6497', 'Barrio las Flores', 'loborams@yahoo.co', 'Instituto privado',100,100," +
+            " 1, 2,2, 0703),"+
             "(6,'Instituto Tecnico Alegandro Flores','2793-4123','', 'Col.Los Montesitos, Salida Danlí', '', 'Instituto Publico',100,100," +
-            " 1, 2,2, 0704)";
+            " 1, 2,2, 0704),"+
+            "(7,'Instituto Tecnico Alegandro Flores','2793-4123','', 'Col.Los Montesitos, Salida Danlí', '', 'Instituto Publico',100,100," +
+            " 1, 2,2, 0704),";
 
 
 
