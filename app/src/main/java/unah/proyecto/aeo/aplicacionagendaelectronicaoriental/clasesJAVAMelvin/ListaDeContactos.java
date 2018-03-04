@@ -25,7 +25,6 @@ public class ListaDeContactos extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
     ArrayList<PerfilBreve> listaOrganizaciones;
     ConexionSQLiteHelper conn;
-    private TextView numero_telefono;
 
 
     @Override
@@ -48,7 +47,6 @@ public class ListaDeContactos extends AppCompatActivity
 
         String categoria="Centros Educativos";
 
-        numero_telefono = (TextView)findViewById(R.id.numero_telefono_organizacion);
 
         //Conexión a la base de datos
         conn = new ConexionSQLiteHelper(this,"bdaeo",null,1);

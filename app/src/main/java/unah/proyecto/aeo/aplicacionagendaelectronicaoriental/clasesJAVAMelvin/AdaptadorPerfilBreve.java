@@ -33,6 +33,7 @@ public class AdaptadorPerfilBreve extends RecyclerView.Adapter<ViewHolderPerfilB
             holder.imagenPerfilBreve.setImageResource(listaObjetos.get(position).getImagen());
             holder.direccionPerfilBreve.setText(listaObjetos.get(position).getDireccion().toString());
             holder.numeroTelefonoPerfilBreve.setText(listaObjetos.get(position).getNumeroTelefono().toString());
+            holder.id_perfilBreve.setText(""+listaObjetos.get(position).getId());
             holder.setOnClickListener();
         }
 

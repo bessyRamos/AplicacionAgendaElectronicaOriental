@@ -30,7 +30,7 @@ public class ConexionSQLiteHelper extends SQLiteOpenHelper {
     final String INSERTAR_USUARIOS="INSERT INTO Usuarios values(1,'Admin','Administrador','admin123',1,1), (2,'cliente1','nombreCliente','cliente123',2,1), (3,'cliente2','nombreCliente2','cliente123',2,1)";
 
     final String INSERTAR_CATEGORIAS = "INSERT INTO Categorias values(1,'Emergencia',"+R.drawable.emergencia+")" +
-            ",(2,'Educación',"+R.drawable.educacion +"),(3,'Centros Asistenciales',"+R.drawable.centros_asistenciales+")" +
+            ",(2,'Educación',"+R.drawable.educacion +"),(3,'Centros Asistenciales',"+R.drawable.centrosasistenciales +")" +
             ",(4,'Bancos',"+R.drawable.bancos+"),(5,'Hoteleria y Turismo',"+R.drawable.hoteleria_y_turismo+")," +
             "(6,'Instituciones Públicas',"+R.drawable.gobierno+"),(7,'Comercio de Bienes',"+R.drawable.comercio_de_bienes+")," +
             "(8,'Comercio de Servicios',"+R.drawable.comercio_de_servicios+"),(9,'Bienes y Raises',"+R.drawable.biene_y_raises+")," +
@@ -52,7 +52,6 @@ public class ConexionSQLiteHelper extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
-
         db.execSQL(CREAR_TABLA_ROLES);
         db.execSQL(CREAR_TABLA_USUARIOS);
         db.execSQL(CREAR_TABLA_CATEGORIAS);
@@ -65,7 +64,6 @@ public class ConexionSQLiteHelper extends SQLiteOpenHelper {
         db.execSQL(INSERTAR_REGIONES);
         db.execSQL(INSERTAR_ESTADO_CONTACTOS);
         db.execSQL(INSERTAR_CONTACTOS);
-
     }
 
     @Override
@@ -79,5 +77,6 @@ public class ConexionSQLiteHelper extends SQLiteOpenHelper {
         onCreate(db);
 
     }
+
 
 }

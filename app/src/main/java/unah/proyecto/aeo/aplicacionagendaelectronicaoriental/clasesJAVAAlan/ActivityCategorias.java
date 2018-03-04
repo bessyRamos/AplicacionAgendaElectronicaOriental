@@ -2,6 +2,7 @@ package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -29,27 +30,23 @@ public class ActivityCategorias extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_categorias);
-
-        //Conexión a la base de datos
-        conn = new ConexionSQLiteHelper(this,"bdaeo",null,1);
-
-        //Inicializacion del array
         lista= new ArrayList<Fuente_Categoria>();
 
-        //Inicializacion del RecyclerView
+        //Conexión a la base de datos
+        conn = new ConexionSQLiteHelper(getApplicationContext(),"bdaeo",null,1);
+
+        consultarListaCategorias();
+
         RecyclerView contenedor = (RecyclerView) findViewById(R.id.contenedor);
         contenedor.setHasFixedSize(true);
         LinearLayoutManager layout = new LinearLayoutManager(getApplicationContext());
         layout.setOrientation(LinearLayoutManager.VERTICAL);
-
-        //Llamada al método para consultar la base de datos
-        consultarListaCategorias();
-
-
         //Declaracion y seteo del adaptador al contenedor
         Adaptador_Categoria adaptador_categoria  = new Adaptador_Categoria(lista);
         contenedor.setAdapter(adaptador_categoria);
         contenedor.setLayoutManager(layout);
+
+        conn.close();
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -63,8 +60,6 @@ public class ActivityCategorias extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
     }
-
-
 
 
     @Override
@@ -143,7 +138,6 @@ public class ActivityCategorias extends AppCompatActivity
 
         }
     }
-
 
 
 }

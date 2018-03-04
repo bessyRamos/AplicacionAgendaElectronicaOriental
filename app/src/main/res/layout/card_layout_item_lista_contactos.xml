@@ -59,13 +59,14 @@
                             android:textColor="#FFF"
                             android:textSize="14sp"
                             />
-                    <TextView
-                        android:id="@+id/id_Deorganizacion"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:textColor="#FFF"
-                        android:textSize="14sp"
-                        android:visibility="invisible"/>
+                        <TextView
+                            android:id="@+id/id_Deorganizacion"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="#FFF"
+                            android:textSize="14sp"
+                            android:text=""
+                            android:visibility="invisible" />
                 </LinearLayout>
     </LinearLayout>
 

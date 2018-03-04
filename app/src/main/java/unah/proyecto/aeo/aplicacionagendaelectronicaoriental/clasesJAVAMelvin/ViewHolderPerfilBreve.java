@@ -2,6 +2,7 @@ package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin;
 
 import android.content.Context;
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.ImageView;
@@ -38,16 +39,32 @@ public class ViewHolderPerfilBreve extends RecyclerView.ViewHolder  implements V
     public void onClick(View v) {
         switch (v.getId()){
             case R.id.imagen_organizacion:
-
-                Intent intent = new Intent(context,PerfilDeLaOrganizacion.class);
-                intent.putExtra("id_organizacion",id_perfilBreve.getText().toString());
-                context.startActivity(intent);
+                intentPasarPerfilCompleto();
+                break;
+            case R.id.nombre_organizacion:
+                intentPasarPerfilCompleto();
+                break;
+            case R.id.direccion_organizacion:
+                intentPasarPerfilCompleto();
+                break;
+            case R.id.id_Deorganizacion:
+                intentPasarPerfilCompleto();
+                break;
         }
 
     }
 
     void setOnClickListener() {
         imagenPerfilBreve.setOnClickListener(this);
+
+    }
+
+    public void intentPasarPerfilCompleto(){
+
+
+        Intent intent = new Intent(context,PerfilDeLaOrganizacion.class);
+        intent.putExtra("id_organizacion",id_perfilBreve.getText().toString());
+        context.startActivity(intent);
 
     }
 }
