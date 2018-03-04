@@ -64,7 +64,17 @@ public class ConexionSQLiteHelper extends SQLiteOpenHelper {
             "(9,'Hospital Gabriela Alvarado','2763-5824','', 'San Marcos abajo, calle panamericana', '', 'Trabajamos 24 hrs',100,100," +
             " 1, 3,2, 0703),"+
             "(10,'BANHCAFE','2763-2402','', 'Barrio Tierra Blanca', '', 'Servicios financieros',100,100," +
-            " 1, 4, 2, 0703)";
+            " 1, 4, 2, 0703),"+
+            "(11,'Banco Atlantida','2793-4200','', 'El paraiso frente a plaza Ramón Ignacio Díaz, Bo.San Isidro', '', 'Servicios financieros',100,100," +
+            " 1, 4, 2, 0704),"+
+            "(12,'Hotel La Esperanza','2763-2106','', 'Bo.Tierra Santa', '', 'Servicios de hoteleria',100,100," +
+            " 1, 5, 2, 0703),"+
+            "(13,'Hotel y Restaurante Mario Chávez','2793-4345','', 'Calle principal quinta avenida, El Paraíso', '', 'Servicios de hoteleria y comida',100,100," +
+            " 1, 5, 2, 0704),"+
+            "(14,'Finca Santa Emilia','','9842-7586', 'Siete km del parque central de Danlí, una reserva natural', '', 'turismo',100,100," +
+            " 1, 5, 2, 0703),"+
+            "(15,'Instituto de la Propiedad','2763-0473','', 'Bo.Oriental', '', 'Registro de bienes',100,100," +
+            " 1, 6, 2, 0703)";
 
 
 
