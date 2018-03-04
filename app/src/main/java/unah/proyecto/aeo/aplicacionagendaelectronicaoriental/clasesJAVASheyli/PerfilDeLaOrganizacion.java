@@ -26,8 +26,7 @@ public class PerfilDeLaOrganizacion extends AppCompatActivity implements Navigat
     private ImageView organizacion;
     private TextView nombre,direccion,telefono,email,descripcion;
     ConexionSQLiteHelper conn;
-
-
+    private int id_organizacion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,23 +52,24 @@ public class PerfilDeLaOrganizacion extends AppCompatActivity implements Navigat
         email = (TextView) findViewById(R.id.e);
         descripcion = (TextView) findViewById(R.id.descripcion);
 
+        Bundle extras = getIntent().getExtras();
+        if (extras!=null){
+            id_organizacion = Integer.parseInt(extras.getString("id_organizacion"));
+        }
 
         conn = new ConexionSQLiteHelper(this,"bdaeo",null,1);
-
+        //llenado desde la base de datos
         SQLiteDatabase db = conn.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT imagen, nombre_organizacion,direccion,numero_fijo,e_mail,descripcion_organizacion FROM CONTACTOS WHERE id_contacto = 1",null );
+        Cursor cursor = db.rawQuery("SELECT imagen, nombre_organizacion,direccion,numero_fijo,e_mail,descripcion_organizacion FROM CONTACTOS WHERE id_contacto = "+id_organizacion,null );
         while(cursor.moveToNext())
         {
             organizacion.setImageResource(cursor.getInt(0));
-            nombre.setText(cursor.getString(0));
-            direccion.setText(cursor.getString(0));
-            telefono.setText(cursor.getString(0));
-            email.setText(cursor.getString(0));
-            descripcion.setText(cursor.getString(0));
-
+            nombre.setText(cursor.getString(1));
+            direccion.setText(cursor.getString(2));
+            telefono.setText(cursor.getString(3));
+            email.setText(cursor.getString(4));
+            descripcion.setText(cursor.getString(5));
         }
-
-
     }
 
     @Override
@@ -126,5 +126,5 @@ public class PerfilDeLaOrganizacion extends AppCompatActivity implements Navigat
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }
+    }//fin de boolean
 }
