@@ -1,10 +1,12 @@
 package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan;
 
+
 import android.content.Context;
 import android.content.Intent;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.CalendarView;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -22,8 +24,9 @@ import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.Li
 public class viewHolder_Categoria extends RecyclerView.ViewHolder implements View.OnClickListener {
     ImageView imagen;
     TextView titulo;
-    TextView Numero;
+    TextView cantidad;
     Context context;
+    TextView id_categoria;
     int position;
 
 
@@ -31,29 +34,34 @@ public class viewHolder_Categoria extends RecyclerView.ViewHolder implements Vie
         super(v);
         context = v.getContext();
 
-        imagen = (ImageView) itemView.findViewById(R.id.foto);
-        titulo = (TextView) itemView.findViewById(R.id.titulo);
-        Numero = (TextView) itemView.findViewById(R.id.cantidad);
+        imagen = (ImageView) v.findViewById(R.id.foto);
+        titulo = (TextView) v.findViewById(R.id.titulo);
+        cantidad = (TextView) v.findViewById(R.id.cantidad);
+        id_categoria = (TextView) v.findViewById(R.id.id_categorias);
 
 
     }
 
     @Override
     public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.foto:
 
-                Intent intent = new Intent(context,ListaDeContactos.class);
-                intent.putExtra("nombre_categoria",titulo.getText().toString());
-                context.startActivity(intent);
-
-        }
+        intenPasarAPerfilBreve();
 
     }
 
     void setOnClickListener() {
         imagen.setOnClickListener(this);
+        titulo.setOnClickListener(this);
+        cantidad.setOnClickListener(this);
 
+
+
+    }
+
+    public void intenPasarAPerfilBreve(){
+        Intent intent = new Intent(context,ListaDeContactos.class);
+        intent.putExtra("id_categoria",id_categoria.getText().toString());
+        context.startActivity(intent);
     }
 
 }

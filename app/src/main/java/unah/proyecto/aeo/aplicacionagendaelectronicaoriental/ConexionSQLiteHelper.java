@@ -15,7 +15,7 @@ public class ConexionSQLiteHelper extends SQLiteOpenHelper {
 
     final String CREAR_TABLA_ROLES = "create table Roles(id_rol INTEGER PRIMARY KEY, descripcion_rol TEXT)";
     final String CREAR_TABLA_USUARIOS = "create table Usuarios(id_usuario INTEGER PRIMARY KEY, nombre_usuario TEXT, nombre_propio TEXT, contrasena TEXT, rol INTEGER, estado_usuario INTEGER, FOREIGN KEY(rol) REFERENCES Roles(id_rol))";
-    final String CREAR_TABLA_CATEGORIAS = "create table Categorias(id_categoria INTEGER PRIMARY KEY, nombre_categoria TEXT NOT NULL)";
+    final String CREAR_TABLA_CATEGORIAS = "create table Categorias(id_categoria INTEGER PRIMARY KEY, nombre_categoria TEXT NOT NULL, imagen_categoria INT)";
     final String CREAR_TABLA_REGIONES = "create table Regiones(id_region INTEGER PRIMARY KEY, nombre_region TEXT NOT NULL)";
     final String CREAR_TABLA_ESTADO_CONTACTOS = "create table Estado_Contactos(id_estado INTEGER PRIMARY KEY, descripcion_estado_contactos TEXT NOT NULL)";
 
@@ -26,10 +26,15 @@ public class ConexionSQLiteHelper extends SQLiteOpenHelper {
 
     final String INSERTAR_ROL="INSERT INTO Roles values(1,'Administrador'), " +
             "(2,'Cliente')";
-
+//99-45-02-13
     final String INSERTAR_USUARIOS="INSERT INTO Usuarios values(1,'Admin','Administrador','admin123',1,1), (2,'cliente1','nombreCliente','cliente123',2,1), (3,'cliente2','nombreCliente2','cliente123',2,1)";
 
-    final String INSERTAR_CATEGORIAS = "INSERT INTO Categorias values(1,'Hoteles'),(2,'Restaurantes')";
+    final String INSERTAR_CATEGORIAS = "INSERT INTO Categorias values(1,'Emergencia',"+R.drawable.emergencia+")" +
+            ",(2,'Educación',"+R.drawable.educacion +"),(3,'Centros Asistenciales',"+R.drawable.centros_asistenciales+")" +
+            ",(4,'Bancos',"+R.drawable.bancos+"),(5,'Hoteleria y Turismo',"+R.drawable.hoteleria_y_turismo+")," +
+            "(6,'Instituciones Públicas',"+R.drawable.gobierno+"),(7,'Comercio de Bienes',"+R.drawable.comercio_de_bienes+")," +
+            "(8,'Comercio de Servicios',"+R.drawable.comercio_de_servicios+"),(9,'Bienes y Raises',"+R.drawable.biene_y_raises+")," +
+            "(10,'Asesoria Legal',"+R.drawable.asesoria_legal+"),(11,'Funerarias',"+R.drawable.funeraria+")";
 
     final String INSERTAR_REGIONES = "INSERT INTO Regiones values(0703,'Danlí'),(0704,'El Paraíso')";
 
