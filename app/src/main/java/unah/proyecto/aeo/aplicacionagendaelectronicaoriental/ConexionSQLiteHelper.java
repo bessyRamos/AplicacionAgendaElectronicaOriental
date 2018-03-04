@@ -29,7 +29,7 @@ public class ConexionSQLiteHelper extends SQLiteOpenHelper {
     final String INSERTAR_USUARIOS="INSERT INTO Usuarios values(1,'Admin','Administrador','admin123',1,1), (2,'cliente1','nombreCliente','cliente123',2,1), (3,'cliente2','nombreCliente2','cliente123',2,1)";
 
     final String INSERTAR_CATEGORIAS = "INSERT INTO Categorias" +
-            "(id_categoria,nombre_categoria,imagen_categoria values" +
+            "(id_categoria,nombre_categoria,imagen_categoria) values" +
             "(1,'Emergencia',"+R.drawable.emergencia+")" +
             ",(2,'Educación',"+R.drawable.educacion +")," +
             "(3,'Centros Asistenciales',"+R.drawable.centrosasistenciales +")" +
@@ -40,7 +40,7 @@ public class ConexionSQLiteHelper extends SQLiteOpenHelper {
             "(8,'Comercio de Servicios',"+R.drawable.comercio_de_servicios+")," +
             "(9,'Bienes y Raises',"+R.drawable.biene_y_raises+")," +
             "(10,'Asesoria Legal',"+R.drawable.asesoria_legal+")," +
-            "(11'Funerarias',"+R.drawable.funeraria+")";
+            "(11,'Funerarias',"+R.drawable.funeraria+")";
 
     final String INSERTAR_REGIONES = "INSERT INTO Regiones values(0703,'Danlí'),(0704,'El Paraíso')";
 
