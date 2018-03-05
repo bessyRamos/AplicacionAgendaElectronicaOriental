@@ -62,48 +62,17 @@
                 android:textSize="15sp" />
 
             <TextView
-                android:id="@+id/direccion"
+                android:id="@+id/telefono"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignStart="@+id/nombreOrganizacion"
                 android:layout_below="@+id/nombreOrganizacion"
                 android:layout_marginTop="60dp"
-                android:text="@string/direccion"
-                android:textColor="#000"
-                android:textSize="20sp"
-                android:textStyle="bold" />
-
-            <ImageView
-                android:id="@+id/imagedireccion"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_alignTop="@+id/direccion"
-                android:src="@drawable/direccion" />
-
-            <TextView
-                android:id="@+id/d"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/direccion"
-                android:layout_alignBottom="@+id/direccion"
-                android:text="hola"
-                android:textColor="#000"
-                android:textSize="15sp"
-                android:layout_marginLeft="3dp"
-                android:layout_toEndOf="@+id/direccion"/>
-
-            <TextView
-                android:id="@+id/telefono"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignStart="@+id/direccion"
-                android:layout_below="@+id/direccion"
-                android:layout_marginTop="60dp"
                 android:text="@string/telefono"
                 android:textColor="#000"
                 android:textSize="20sp"
                 android:textStyle="bold" />
+
 
             <ImageView
                 android:id="@+id/imagetelefono"
@@ -126,17 +95,38 @@
                 android:textSize="15sp"
                 />
 
+            <ImageView
+                android:id="@+id/imagencelular"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignTop="@+id/celular"
+                android:src="@drawable/celular" />
+
             <TextView
-                android:id="@+id/email"
+                android:id="@+id/celular"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignStart="@+id/telefono"
                 android:layout_below="@+id/telefono"
-                android:layout_marginTop="60dp"
-                android:text="@string/email"
+                android:text="@string/celular"
                 android:textColor="#000"
                 android:textSize="20sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                android:layout_marginTop="60dp"/>
+
+            <TextView
+                android:id="@+id/tcelular"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/celular"
+                android:layout_marginLeft="3dp"
+                android:layout_toEndOf="@id/celular"
+                android:layout_alignBaseline="@+id/celular"
+                android:text="hola"
+                android:textColor="#000"
+                android:textSize="15sp"
+                />
 
             <ImageView
                 android:id="@+id/imageemail"
@@ -145,6 +135,18 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignTop="@+id/email"
                 android:src="@drawable/email" />
+
+            <TextView
+                android:id="@+id/email"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/celular"
+                android:layout_below="@+id/celular"
+                android:layout_marginTop="60dp"
+                android:text="@string/email"
+                android:textColor="#000"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/e"
@@ -158,12 +160,44 @@
                 android:textColor="#000"
                 android:textSize="15sp" />
 
+            <ImageView
+                android:id="@+id/imagedireccion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignTop="@+id/direccion"
+                android:src="@drawable/direccion" />
+
+            <TextView
+                android:id="@+id/direccion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignStart="@+id/email"
+                android:layout_below="@+id/email"
+                android:layout_marginTop="60dp"
+                android:text="@string/direccion"
+                android:textColor="#000"
+                android:textSize="20sp"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/d"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBaseline="@+id/direccion"
+                android:layout_alignBottom="@+id/direccion"
+                android:text="hola"
+                android:textColor="#000"
+                android:textSize="15sp"
+                android:layout_marginLeft="3dp"
+                android:layout_toEndOf="@+id/direccion"/>
+
             <TextView
                 android:id="@+id/descripcion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_below="@+id/email"
-                android:layout_marginTop="60dp"
+                android:layout_below="@+id/direccion"
+                android:layout_marginTop="80dp"
                 android:textColor="#000"
                 android:text="zxcvbnmlkjhgfdsaqwertyuiop"
                 android:textSize="15sp"
