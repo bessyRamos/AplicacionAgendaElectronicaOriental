@@ -26,6 +26,8 @@ public class ListaDeContactos extends AppCompatActivity
     ArrayList<PerfilBreve> listaOrganizaciones;
     ConexionSQLiteHelper conn;
     int id_categoria;
+    String nombre_categoria;
+    TextView nombreCategoria;
 
 
     @Override
@@ -34,6 +36,7 @@ public class ListaDeContactos extends AppCompatActivity
         setContentView(R.layout.activity_lista_de_contactos);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        nombreCategoria = (TextView)findViewById(R.id.nombreCategoriaMostrada);
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -49,8 +52,10 @@ public class ListaDeContactos extends AppCompatActivity
         Bundle extras = getIntent().getExtras();
         if (extras!=null){
             id_categoria = Integer.parseInt(extras.getString("id_categoria"));
+            nombre_categoria = extras.getString("nombre_categoria");
         }
 
+        nombreCategoria.setText(nombre_categoria);
 
         //Conexión a la base de datos
         conn = new ConexionSQLiteHelper(this,"bdaeo",null,1);
@@ -73,6 +78,8 @@ public class ListaDeContactos extends AppCompatActivity
         AdaptadorPerfilBreve adaptadorPerfilBreve = new AdaptadorPerfilBreve(listaOrganizaciones);
         contenedor.setAdapter(adaptadorPerfilBreve);
         contenedor.setLayoutManager(layout);
+
+        conn.close();
 
     }
 
@@ -139,7 +146,7 @@ public class ListaDeContactos extends AppCompatActivity
         PerfilBreve perfilContacto = null;
 
         //Asignar la consulta sql
-        Cursor cursor =  db.rawQuery("SELECT nombre_organizacion, imagen, numero_fijo, direccion, id_contacto FROM CONTACTOS",null);
+        Cursor cursor =  db.rawQuery("SELECT nombre_organizacion, imagen, numero_fijo, direccion, id_contacto FROM CONTACTOS where id_categoria="+id_categoria,null);
 
        //se obtienen los objetos de la consulta y se asignan a los componentes visuales
         while (cursor.moveToNext()){

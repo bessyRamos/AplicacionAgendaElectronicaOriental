@@ -61,6 +61,7 @@ public class viewHolder_Categoria extends RecyclerView.ViewHolder implements Vie
     public void intenPasarAPerfilBreve(){
         Intent intent = new Intent(context,ListaDeContactos.class);
         intent.putExtra("id_categoria",id_categoria.getText().toString());
+        intent.putExtra("nombre_categoria",titulo.getText().toString());
         context.startActivity(intent);
     }
 
