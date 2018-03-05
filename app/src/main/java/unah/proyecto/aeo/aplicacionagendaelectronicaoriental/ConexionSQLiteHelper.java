@@ -74,7 +74,27 @@ public class ConexionSQLiteHelper extends SQLiteOpenHelper {
             "(14,'Finca Santa Emilia','','9842-7586', 'Siete km del parque central de Danlí, una reserva natural', '', 'turismo',100,100," +
             " 1, 5, 2, 0703),"+
             "(15,'Instituto de la Propiedad','2763-0473','', 'Bo.Oriental', '', 'Registro de bienes',100,100," +
-            " 1, 6, 2, 0703)";
+            " 1, 6, 2, 0703),"+
+            "(16,'Secretaria Agricultura Ganaderia','2763-2112','98543113', 'Salida El Paraiso frente al intituto Cosme Garcia', 'valdivita_10@yahoo.com', ' asesoria ',100,100," +
+            " 1, 6, 2, 0703),"+
+            "(17,'Plaza Unicentro','2763-3552','', 'Bo.el centro calle del comerciofrente a hondutel', 'jeany_salinas@hotmail.com', 'adquiere un bien',100,100," +
+            " 1, 7, 2, 0703),"+
+            "(18,'Carrión','2763-2331','', 'frente a Casa de la Cultura', '', 'servio de bienes',100,100," +
+            " 1, 7, 2, 0703),"+
+            "(19,'Oficina Postal Danlí Paraíso','2763-2036','', 'Bo. El Centro frente al Parque Centenario', '', ' envio',100,100," +
+            " 1, 8, 2, 0703),"+
+            "(20,'Cámara de Comercio E Industrias de Danlí (CCID)','2763-2061','', 'Colonia Gualiquemes por terminal de buses contiguo ala Plaza San Miguel en Boulevard La Democracia.', 'cidedanli@yahoo.com cidedanli@hotmail.com', ' Comercio',100,100," +
+            " 1, 8, 2, 0703),"+
+            "(21,'Inmobiliaria y Constructora El Protector','27634746','', 'Media cuadra al norte del parque central entre banco Los Trabajadores y La Despensa (72,02 km)', '','Agente de bienes raíces',100,100," +
+            " 1, 9, 2, 0703),"+
+            "(22,'Despacho Legal Lic. Hector Paguaga','','9767-3875', 'Barrio Tierra Blanca', '', ' Abogado',100,100," +
+            " 1, 10, 2, 0703),"+
+            "(23,'Colegio de Abogados Capitulo Danli','','', 'Frente al Triangulo salida al paraiso a la par de Instituto Técnico Pedro Nufio', '', '',100,100," +
+            " 1, 10, 2, 0703),"+
+            "(24,'FUNERALES DIVINA MISERICORDIA','2763-6798','', 'V-216  Danlí', '', 'disponibilidad de local',100,100," +
+            " 1, 11, 2, 0703),"+
+            "(25,'Funerales Puerta Al Cielo','2763-2588','', 'Danlí', '', 'disponibilidad de local',100,100," +
+            " 1, 11, 2, 0703)";
 
 
 
