@@ -124,7 +124,8 @@ public class ActivityCategorias extends AppCompatActivity
         Fuente_Categoria fuente_categoria = null;
 
         //Asignar la consulta sql
-        Cursor cursor =  db.rawQuery("SELECT id_categoria, nombre_categoria, imagen_categoria FROM CATEGORIAS ",null);
+        Cursor cursor =  db.rawQuery("SELECT A.id_categoria,A.nombre_categoria, A.imagen_categoria,COUNT(*) FROM CATEGORIAS AS A " +
+                "JOIN CONTACTOS AS C ON A.id_categoria=C.id_categoria GROUP BY A.id_categoria ",null);
 
         //se obtienen los objetos de la consulta y se asignan a los componentes visuales
         while (cursor.moveToNext()){
@@ -132,6 +133,7 @@ public class ActivityCategorias extends AppCompatActivity
             fuente_categoria.setId(cursor.getInt(0));
             fuente_categoria.setTitulo(cursor.getString(1));
             fuente_categoria.setImagen(cursor.getInt(2));
+            fuente_categoria.setCantidad(cursor.getInt(3));
 
 
             //se añade los datos al array
