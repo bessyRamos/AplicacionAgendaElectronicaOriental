@@ -146,7 +146,7 @@ public class ListaDeContactos extends AppCompatActivity
         PerfilBreve perfilContacto = null;
 
         //Asignar la consulta sql
-        Cursor cursor =  db.rawQuery("SELECT nombre_organizacion, imagen, numero_fijo, direccion, id_contacto FROM CONTACTOS where id_categoria="+id_categoria,null);
+        Cursor cursor =  db.rawQuery("SELECT c.nombre_organizacion, c.imagen, c.numero_fijo, c.id_contacto, a.nombre_region FROM CONTACTOS as c  JOIN REGIONES as a on c.id_region=a.id_region where id_categoria="+id_categoria,null);
 
        //se obtienen los objetos de la consulta y se asignan a los componentes visuales
         while (cursor.moveToNext()){
@@ -154,8 +154,8 @@ public class ListaDeContactos extends AppCompatActivity
             perfilContacto.setNombre(cursor.getString(0));
             perfilContacto.setImagen(cursor.getInt(1));
             perfilContacto.setNumeroTelefono(cursor.getString(2));
-            perfilContacto.setDireccion(cursor.getString(3));
-            perfilContacto.setId(cursor.getInt(4));
+            perfilContacto.setDireccion(cursor.getString(4));
+            perfilContacto.setId(cursor.getInt(3));
 
             //se añade los datos al array
             listaOrganizaciones.add(perfilContacto);
