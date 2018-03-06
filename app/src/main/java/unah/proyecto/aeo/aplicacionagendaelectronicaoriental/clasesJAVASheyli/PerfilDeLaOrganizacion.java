@@ -21,7 +21,7 @@ import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.
 
 public class PerfilDeLaOrganizacion extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private ImageView organizacion;
-    private TextView nombre,direccion,telefono,email,descripcion;
+    private TextView nombre,direccion,telefono,email,descripcion,movil;
     ConexionSQLiteHelper conn;
     private int id_organizacion;
 
@@ -46,6 +46,7 @@ public class PerfilDeLaOrganizacion extends AppCompatActivity implements Navigat
         nombre = (TextView) findViewById(R.id.n);
         direccion = (TextView) findViewById(R.id.d);
         telefono = (TextView) findViewById(R.id.t);
+        movil = (TextView) findViewById(R.id.tcelular);
         email = (TextView) findViewById(R.id.e);
         descripcion = (TextView) findViewById(R.id.descripcion);
 
@@ -57,15 +58,17 @@ public class PerfilDeLaOrganizacion extends AppCompatActivity implements Navigat
         conn = new ConexionSQLiteHelper(this,"bdaeo",null,1);
         //llenado desde la base de datos
         SQLiteDatabase db = conn.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT imagen, nombre_organizacion,direccion,numero_fijo,e_mail,descripcion_organizacion FROM CONTACTOS WHERE id_contacto = "+id_organizacion,null );
+        Cursor cursor = db.rawQuery("SELECT imagen, nombre_organizacion,numero_fijo,numero_movil,e_mail,direccion,descripcion_organizacion FROM CONTACTOS WHERE id_contacto = "+id_organizacion,null );
         while(cursor.moveToNext())
         {
             organizacion.setImageResource(cursor.getInt(0));
             nombre.setText(cursor.getString(1));
-            direccion.setText(cursor.getString(2));
-            telefono.setText(cursor.getString(3));
+            telefono.setText(cursor.getString(2));
+            movil.setText(cursor.getString(3));
             email.setText(cursor.getString(4));
-            descripcion.setText(cursor.getString(5));
+            direccion.setText(cursor.getString(5));
+            descripcion.setText(cursor.getString(6));
+
         }
     }
 
