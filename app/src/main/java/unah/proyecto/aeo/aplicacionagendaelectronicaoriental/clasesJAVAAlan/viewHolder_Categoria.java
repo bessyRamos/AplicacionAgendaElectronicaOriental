@@ -40,6 +40,7 @@ public class viewHolder_Categoria extends RecyclerView.ViewHolder implements Vie
         id_categoria = (TextView) v.findViewById(R.id.id_categorias);
 
 
+
     }
 
     @Override
@@ -53,6 +54,7 @@ public class viewHolder_Categoria extends RecyclerView.ViewHolder implements Vie
         imagen.setOnClickListener(this);
         titulo.setOnClickListener(this);
         cantidad.setOnClickListener(this);
+
 
 
 
