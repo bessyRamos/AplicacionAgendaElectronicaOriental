@@ -49,7 +49,7 @@ public class ActivityCategorias extends AppCompatActivity
         conn = new ConexionSQLiteHelper(getApplicationContext(),"bdaeo",null,1);
 
         consultarListaCategorias();
-
+//metodo contenedor de la pcicion de las pantallas horizontal y verical
         RecyclerView contenedor = (RecyclerView) findViewById(R.id.contenedor);
         Adaptador_Categoria myAdapter = new Adaptador_Categoria(this.lista);
         contenedor.setHasFixedSize(true);
