@@ -2,7 +2,11 @@ package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio
 
 import android.content.Intent;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 
@@ -20,8 +24,9 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.ActivityCategorias;
 
-public class AcercaDe extends AppCompatActivity {
+public class AcercaDe extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -55,8 +60,28 @@ public class AcercaDe extends AppCompatActivity {
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
+        //muestra el menu lateral
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
+
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+
     }
 
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
 
    /*
     @Override
@@ -82,6 +107,24 @@ public class AcercaDe extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
     */
+
+   public boolean onNavigationItemSelected(MenuItem item) {
+
+       // Handle navigation view item clicks here.
+       int id = item.getItemId();
+        //acción de principal
+       if (id == R.id.principaldos) {
+           startActivity(new Intent(getBaseContext(), ActivityCategorias.class)
+                   .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP));
+           finish();
+       } else if (id == R.id.acercadeinfodos) {
+
+       }
+
+       DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+       drawer.closeDrawer(GravityCompat.START);
+       return true;
+   }
 
 
 
@@ -157,11 +200,6 @@ public class AcercaDe extends AppCompatActivity {
             return rootView;
         }
     }
-
-
-
-
-
     /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.

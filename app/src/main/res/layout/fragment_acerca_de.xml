@@ -17,7 +17,7 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="130dp"
-                android:src="@drawable/telefono"
+                android:src="@drawable/icono_final"
                 android:layout_marginTop="15dp"
             />
             <TextView
