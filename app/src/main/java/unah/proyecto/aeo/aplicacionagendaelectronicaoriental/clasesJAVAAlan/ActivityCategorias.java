@@ -1,4 +1,5 @@
 package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan;
+import android.content.Context;
 import android.content.Intent;
 import android.content.res.Resources;
 import android.database.Cursor;
@@ -14,9 +15,12 @@ import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView.Adapter;
 import android.support.v7.widget.Toolbar;
 import android.util.TypedValue;
 import android.view.MenuItem;
+import android.view.Surface;
+import android.view.WindowManager;
 
 import java.util.ArrayList;
 
@@ -46,21 +50,26 @@ public class ActivityCategorias extends AppCompatActivity
 
         consultarListaCategorias();
 
-
-
-
-
-
-
         RecyclerView contenedor = (RecyclerView) findViewById(R.id.contenedor);
-
+        Adaptador_Categoria myAdapter = new Adaptador_Categoria(this.lista);
         contenedor.setHasFixedSize(true);
-        LinearLayoutManager layout = new LinearLayoutManager(getApplicationContext());
-        layout.setOrientation(LinearLayoutManager.VERTICAL);
-        //Declaracion y seteo del adaptador al contenedor
-        Adaptador_Categoria adaptador_categoria  = new Adaptador_Categoria(lista);
-        contenedor.setAdapter(adaptador_categoria);
-        contenedor.setLayoutManager(layout);
+
+
+       if(getRotation(getApplicationContext())== "vertical"){
+           LinearLayoutManager layout = new LinearLayoutManager(getApplicationContext());
+           layout.setOrientation(LinearLayoutManager.VERTICAL);
+           contenedor.setAdapter(myAdapter);
+           contenedor.setLayoutManager(layout);
+       }else{
+
+           contenedor.setLayoutManager(new GridLayoutManager(this,2));
+           contenedor.setAdapter(myAdapter);
+
+       }
+
+
+
+
 
         conn.close();
 
@@ -77,6 +86,19 @@ public class ActivityCategorias extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
     }
 
+    public String getRotation(Context context){
+        final int rotation = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getOrientation();
+        switch (rotation) {
+            case Surface.ROTATION_0:
+                return "vertical";
+            case Surface.ROTATION_90:
+                return "horizontal";
+            case Surface.ROTATION_180:
+                return "vertical inversa";
+            default:
+                return "horizontal inversa";
+        }
+    }
 
     @Override
     public void onBackPressed() {
@@ -88,27 +110,7 @@ public class ActivityCategorias extends AppCompatActivity
         }
     }
 
-  //  @Override
-   // public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-      //  getMenuInflater().inflate(R.menu.main_categorias, menu);
-      //  return true;
-   // }
 
-   // @Override
-   // public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-     //   int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-       // if (id == R.id.action_settings) {
-       //     return true;
-      //  }
-
-       // return super.onOptionsItemSelected(item);
-   // }
 
     @SuppressWarnings("StatementWithEmptyBody")
     public boolean onNavigationItemSelected(MenuItem item) {
