@@ -31,7 +31,7 @@
 
             <TextView
                 android:id="@+id/titulo"
-                android:layout_width="165dp"
+                android:layout_width="248dp"
                 android:layout_height="wrap_content"
                 android:text="@string/titulo"
                 android:textColor="#ffffff"
