@@ -54,10 +54,6 @@ public class ActivityCategorias extends AppCompatActivity
 
         RecyclerView contenedor = (RecyclerView) findViewById(R.id.contenedor);
 
-       // RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this,2);
-        //contenedor.setLayoutManager(layoutManager);
-       //contenedor.setItemAnimator(new DefaultItemAnimator());
-
         contenedor.setHasFixedSize(true);
         LinearLayoutManager layout = new LinearLayoutManager(getApplicationContext());
         layout.setOrientation(LinearLayoutManager.VERTICAL);
