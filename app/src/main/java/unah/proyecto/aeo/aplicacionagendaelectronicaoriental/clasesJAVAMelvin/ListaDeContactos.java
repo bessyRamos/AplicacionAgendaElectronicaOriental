@@ -35,9 +35,17 @@ public class ListaDeContactos extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_de_contactos);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        nombreCategoria = (TextView)findViewById(R.id.nombreCategoriaMostrada);
+        //Obtiene el id de la categoria de la cual se mostrarán los contactos
+        Bundle extras = getIntent().getExtras();
+        if (extras!=null){
+            id_categoria = Integer.parseInt(extras.getString("id_categoria"));
+            nombre_categoria = extras.getString("nombre_categoria");
 
+            //Establece el texto del toolbar con el nombre de la categoria a la que se  entró
+            toolbar.setTitle(nombre_categoria);
+        }
+
+        setSupportActionBar(toolbar);
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -48,14 +56,6 @@ public class ListaDeContactos extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-
-        Bundle extras = getIntent().getExtras();
-        if (extras!=null){
-            id_categoria = Integer.parseInt(extras.getString("id_categoria"));
-            nombre_categoria = extras.getString("nombre_categoria");
-        }
-
-        nombreCategoria.setText(nombre_categoria);
 
         //Conexión a la base de datos
         conn = new ConexionSQLiteHelper(this,"bdaeo",null,1);
@@ -93,30 +93,7 @@ public class ListaDeContactos extends AppCompatActivity
             super.onBackPressed();
         }
     }
-/*
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.lista_de_contactos, menu);
-        return true;
-    }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
-*/
-    @SuppressWarnings("StatementWithEmptyBody")
 
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
