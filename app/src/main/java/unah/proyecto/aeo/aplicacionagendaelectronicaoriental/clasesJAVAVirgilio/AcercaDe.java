@@ -26,7 +26,7 @@ import android.widget.TextView;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.ActivityCategorias;
 
-public class AcercaDe extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
+public class AcercaDe extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener  {
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -46,7 +46,7 @@ public class AcercaDe extends AppCompatActivity implements NavigationView.OnNavi
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_acerca_de);
+        setContentView(R.layout.app_bar_acerca_de);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -69,7 +69,6 @@ public class AcercaDe extends AppCompatActivity implements NavigationView.OnNavi
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
-
 
     }
 
@@ -108,24 +107,26 @@ public class AcercaDe extends AppCompatActivity implements NavigationView.OnNavi
     }
     */
 
-   public boolean onNavigationItemSelected(MenuItem item) {
+    @SuppressWarnings("StatementWithEmptyBody")
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
 
-       // Handle navigation view item clicks here.
-       int id = item.getItemId();
-        //acción de principal
-       if (id == R.id.principaldos) {
-           startActivity(new Intent(getBaseContext(), ActivityCategorias.class)
-                   .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP));
-           finish();
-       } else if (id == R.id.acercadeinfodos) {
+        if (id == R.id.principaldos) {
+            // acción principal
+            startActivity(new Intent(getBaseContext(), ActivityCategorias.class)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP));
+            finish();
 
-       }
+        } else if (id == R.id.acercadeinfodos) {
 
-       DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-       drawer.closeDrawer(GravityCompat.START);
-       return true;
-   }
 
+        }
+
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
+    }
 
 
     /**
