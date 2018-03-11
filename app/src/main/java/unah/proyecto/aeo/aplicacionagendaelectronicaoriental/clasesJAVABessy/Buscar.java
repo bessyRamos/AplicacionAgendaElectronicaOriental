@@ -1,4 +1,4 @@
-package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin;
+package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVABessy;
 
 import android.content.Intent;
 import android.database.Cursor;
@@ -14,84 +14,40 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.AdapterView;
 import android.widget.EditText;
 import android.widget.ImageButton;
-import android.widget.Spinner;
-import android.widget.TextView;
 
 import java.util.ArrayList;
 
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.ConexionSQLiteHelper;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVABessy.Buscar;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.AdaptadorPerfilBreve;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.PerfilBreve;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.AcercaDe;
 
-public class ListaDeContactos extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
-    ArrayList<PerfilBreve> listaOrganizaciones;
+/**
+ * Created by melvinrivera on 10/3/18.
+ */
+
+public class Buscar extends AppCompatActivity
+        implements NavigationView.OnNavigationItemSelectedListener  {
+
+    private  String busquedaDesdeContactos;
+    String filtroRegionDesdeContactos;
+    EditText busqueda;
+    ImageButton btnBusqueda;
     ConexionSQLiteHelper conn;
-    int id_categoria;
-    String nombre_categoria;
-    EditText abuscar;
-    Spinner spinnerregion;
-    ImageButton btnbuscar;
-    String regionEnviar;
+    ArrayList<PerfilBreve> listaOrganizaciones;
+    PerfilBreve perfilContacto = null;
+    Cursor cursor;
+    int id_region;
 
-
-    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_de_contactos);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        //Obtiene el id de la categoria de la cual se mostrarán los contactos
-        Bundle extras = getIntent().getExtras();
-        if (extras!=null){
-            id_categoria = Integer.parseInt(extras.getString("id_categoria"));
-            nombre_categoria = extras.getString("nombre_categoria");
-
-            //Establece el texto del toolbar con el nombre de la categoria a la que se  entró
-            toolbar.setTitle(nombre_categoria);
-        }
-
         setSupportActionBar(toolbar);
 
-        abuscar= findViewById(R.id.abuscar);
-        spinnerregion= findViewById(R.id.filtroRegion);
-        btnbuscar= findViewById(R.id.btnBuscar);
-
-        spinnerregion.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                switch (position){
-                    case 0:
-                        regionEnviar = "Todas Regiones";
-                        break;
-                    case 1:
-                        regionEnviar = "El Paraiso";
-                        break;
-                    case 2:
-                        regionEnviar = "Danli";
-                        break;
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        btnbuscar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent pasarAbuscador = new Intent(getApplicationContext(),Buscar.class);
-                pasarAbuscador.putExtra("busqueda",abuscar.getText().toString());
-                pasarAbuscador.putExtra("regionBuscar",regionEnviar);
-                startActivity(pasarAbuscador);
-                finish();
-            }
-        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -102,35 +58,57 @@ public class ListaDeContactos extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-
-        //Conexión a la base de datos
-        conn = new ConexionSQLiteHelper(this,"bdaeo",null,1);
-        conn.getReadableDatabase().setForeignKeyConstraintsEnabled(true);
-
-        //Inicializacion del array
+        busqueda = findViewById(R.id.abuscar);
+        btnBusqueda = findViewById(R.id.btnBuscar);
+        conn = new ConexionSQLiteHelper(this, "bdaeo", null, 1);
         listaOrganizaciones = new ArrayList<PerfilBreve>();
-
-        //Inicializacion del RecyclerView
         RecyclerView contenedor = (RecyclerView) findViewById(R.id.recyclerViewPerfilBreve);
         contenedor.setHasFixedSize(true);
         LinearLayoutManager layout = new LinearLayoutManager(getApplicationContext());
         layout.setOrientation(LinearLayoutManager.VERTICAL);
 
 
-        //Llamada al método para consultar la base de datos
-        consultarListaContactos();
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
 
-        //Declaracion y seteo del adaptador al contenedor
+            SQLiteDatabase db = conn.getReadableDatabase();
+            busquedaDesdeContactos = extras.getString("busqueda");
+            filtroRegionDesdeContactos = extras.getString("regionBuscar");
+
+            switch (filtroRegionDesdeContactos){
+                case "Danli":
+                    id_region=3;
+                    cursor = db.rawQuery("SELECT c.nombre_organizacion, c.imagen, c.numero_fijo, c.numero_movil, c.id_contacto, a.nombre_region FROM CONTACTOS as c INNER JOIN REGIONES as a ON c.id_region=a.id_region where c.nombre_organizacion like '%"+busquedaDesdeContactos+"%' and c.id_region="+id_region+" or c.numero_fijo like '%"+busquedaDesdeContactos+"%' and c.id_region="+id_region+" or c.numero_movil like '%"+busquedaDesdeContactos+"%' and c.id_region="+id_region, null);
+                    break;
+                case "El Paraiso":
+                    id_region=4;
+                    cursor = db.rawQuery("SELECT c.nombre_organizacion, c.imagen, c.numero_fijo, c.numero_movil, c.id_contacto, a.nombre_region FROM CONTACTOS as c INNER JOIN REGIONES as a ON c.id_region=a.id_region where c.nombre_organizacion like '%"+busquedaDesdeContactos+"%' and c.id_region="+id_region+" or c.numero_fijo like '%"+busquedaDesdeContactos+"%' and c.id_region="+id_region+" or c.numero_movil like '%"+busquedaDesdeContactos+"%' and c.id_region="+id_region, null);
+                    break;
+                default:
+                    cursor = db.rawQuery("SELECT c.nombre_organizacion, c.imagen, c.numero_fijo, c.numero_movil, c.id_contacto, a.nombre_region FROM CONTACTOS as c INNER JOIN REGIONES as a ON c.id_region=a.id_region where c.nombre_organizacion like '%"+busquedaDesdeContactos+"%'"+" or c.numero_fijo like '%"+busquedaDesdeContactos+"%'or c.numero_movil like '%"+busquedaDesdeContactos+"%' and c.id_region="+id_region, null);
+                    break;
+
+            }
+            consultarListaContactos();
+
+
+        }
+
+       //Declaracion y seteo del adaptador al contenedor
         AdaptadorPerfilBreve adaptadorPerfilBreve = new AdaptadorPerfilBreve(listaOrganizaciones);
         contenedor.setAdapter(adaptadorPerfilBreve);
         contenedor.setLayoutManager(layout);
 
         conn.close();
 
+        btnBusqueda.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+            }
+        });
     }
 
-
-    @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
@@ -138,8 +116,8 @@ public class ListaDeContactos extends AppCompatActivity
         } else {
             super.onBackPressed();
         }
+        finish();
     }
-
 
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
@@ -158,20 +136,10 @@ public class ListaDeContactos extends AppCompatActivity
         return true;
     }
 
-
-
-    //Metodo que consulta a la base de datos para ver los contactos
     private void consultarListaContactos(){
 
-        //Obtener la base de datos
-        SQLiteDatabase db = conn.getReadableDatabase();
 
-        PerfilBreve perfilContacto = null;
-
-        //Asignar la consulta sql
-        Cursor cursor =  db.rawQuery("SELECT c.nombre_organizacion, c.imagen, c.numero_fijo, c.numero_movil, c.id_contacto, a.nombre_region FROM CONTACTOS as c  JOIN REGIONES as a on c.id_region=a.id_region where id_categoria="+id_categoria,null);
-
-       //se obtienen los objetos de la consulta y se asignan a los componentes visuales
+        //se obtienen los objetos de la consulta y se asignan a los componentes visuales
         while (cursor.moveToNext()){
             perfilContacto = new PerfilBreve();
             perfilContacto.setNombre(cursor.getString(0));
@@ -190,6 +158,5 @@ public class ListaDeContactos extends AppCompatActivity
 
         }
     }
-
 
 }

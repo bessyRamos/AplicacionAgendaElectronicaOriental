@@ -42,7 +42,7 @@ public class ConexionSQLiteHelper extends SQLiteOpenHelper {
             "(10,'Asesoria Legal',"+R.drawable.asesoria_legal+")," +
             "(11,'Funerarias',"+R.drawable.funeraria+")";
 
-    final String INSERTAR_REGIONES = "INSERT INTO Regiones values(0703,'Danlí'),(0704,'El Paraíso')";
+    final String INSERTAR_REGIONES = "INSERT INTO Regiones values(3,'Danlí'),(4,'El Paraíso')";
 
     final String INSERTAR_ESTADO_CONTACTOS = "INSERT INTO Estado_Contactos values(1,'Solicitado'), (2,'Aprobado'),(3,'Rechazado'), (4,'Eliminado')";
 
@@ -50,51 +50,50 @@ public class ConexionSQLiteHelper extends SQLiteOpenHelper {
             "(id_contacto, nombre_organizacion, numero_fijo, numero_movil, direccion, e_mail, descripcion_organizacion, latitud, " +
             " longitud, id_usuario, id_categoria, id_estado, id_region) values" +
             "(1,'Policía','2763-2063','', 'Barrio Las Colinas Segunda Etapa dos cuadras arriba de la escuela Gabriela Albarado  a mano derecha', 'redes.sociales@seguridad.gob.hn', 'Nos pueden contactar las 24 horas y estamos para servir y proteger ',100,100," +
-            " 1, 1,2, 0703)," + "(2,'Policía','2793-0286','', 'Barrio El Calvario cuadra y media de agro comercial Gaitan contiguo el cementerio', 'redes.sociales@seguridad.gob.hn', 'Nos pueden contactar las 24 horas y estamos para servir y proteger',100,100," +
-            " 1, 1,2, 0704)," + "(3,'Instituto Teodoro Rodas Valle','2763-3050','3219-6497', 'Barrio las Flores', 'loborams@yahoo.com', 'Instituto privado',100,100," +
-            " 1, 2,2, 0703),"+ "(4,'Centro Tecnico Vocacional Pedro Nufio','2763-3195','', 'Barrio El Quiquisque', '', 'Instituto Público',100,100," + " 1, 2,2, 0703)," +
+            " 1, 1,2, 3)," + "(2,'Policía','2793-0286','', 'Barrio El Calvario cuadra y media de agro comercial Gaitan contiguo el cementerio', 'redes.sociales@seguridad.gob.hn', 'Nos pueden contactar las 24 horas y estamos para servir y proteger',100,100," +
+            " 1, 1,2, 4)," + "(4,'Centro Tecnico Vocacional Pedro Nufio','2763-3195','', 'Barrio El Quiquisque', '', 'Instituto Público',100,100," + " 1, 2,2, 0703)," +
             "(5,'Instituto Teodoro Rodas Valle','2763-3050','3219-6497', 'Barrio las Flores', 'loborams@yahoo.com', 'Instituto privado',100,100," +
-            " 1, 2,2, 0703),"+
+            " 1, 2,2, 3),"+
             "(6,'Instituto Técnico Alegandro Flores','2793-4123','', 'Col.Los Montesitos, Salida Danlí', '', 'Instituto Público',100,100," +
-            " 1, 2,2, 0704),"+
+            " 1, 2,2, 4),"+
             "(7,'Farmacia Cimar','2763-2115','', 'Barrio San Sebastian', '', 'Cuenta con servicio a domicilio',100,100," +
-            " 1, 3,2, 0704),"+
+            " 1, 3,2, 4),"+
             "(8,'Farmacia del Ahorro','2763-2787','', 'Barrio El Centro Edificio Astrovisión, Salida Danlí', '', 'Cuenta con servicio a domicilio',100,100," +
-            " 1, 3,2, 0703),"+
+            " 1, 3,2, 3),"+
             "(9,'Hospital Gabriela Alvarado','2763-5824','', 'San Marcos abajo, calle panamericana', '', 'Trabajamos 24 hrs',100,100," +
-            " 1, 3,2, 0703),"+
+            " 1, 3,2, 3),"+
             "(10,'BANHCAFE','2763-2402','', 'Barrio Tierra Blanca', '', 'Servicios financieros',100,100," +
-            " 1, 4, 2, 0703),"+
+            " 1, 4, 2, 3),"+
             "(11,'Banco Atlantida','2793-4200','', 'El paraiso frente a plaza Ramón Ignacio Díaz, Bo.San Isidro', '', 'Servicios financieros',100,100," +
-            " 1, 4, 2, 0704),"+
+            " 1, 4, 2, 4),"+
             "(12,'Hotel La Esperanza','2763-2106','', 'Bo.Tierra Santa', '', 'Servicios de hoteleria',100,100," +
-            " 1, 5, 2, 0703),"+
+            " 1, 5, 2, 3),"+
             "(13,'Hotel y Restaurante Mario Chávez','2793-4345','', 'Calle principal quinta avenida, El Paraíso', '', 'Servicios de hoteleria y comida',100,100," +
-            " 1, 5, 2, 0704),"+
+            " 1, 5, 2, 4),"+
             "(14,'Finca Santa Emilia','','9842-7586', 'Siete km del parque central de Danlí, una reserva natural', '', 'turismo',100,100," +
-            " 1, 5, 2, 0703),"+
+            " 1, 5, 2, 3),"+
             "(15,'Instituto de la Propiedad','2763-0473','', 'Bo.Oriental', '', 'Registro de bienes',100,100," +
-            " 1, 6, 2, 0703),"+
+            " 1, 6, 2, 3),"+
             "(16,'Secretaria Agricultura Ganaderia','2763-2112','98543113', 'Salida El Paraiso frente al intituto Cosme Garcia', 'valdivita_10@yahoo.com', ' asesoria ',100,100," +
-            " 1, 6, 2, 0703),"+
+            " 1, 6, 2, 3),"+
             "(17,'Plaza Unicentro','2763-3552','', 'Bo.el centro calle del comerciofrente a hondutel', 'jeany_salinas@hotmail.com', 'adquiere un bien',100,100," +
-            " 1, 7, 2, 0703),"+
+            " 1, 7, 2, 3),"+
             "(18,'Carrión','2763-2331','', 'frente a Casa de la Cultura', '', 'servio de bienes',100,100," +
-            " 1, 7, 2, 0703),"+
+            " 1, 7, 2, 3),"+
             "(19,'Oficina Postal Danlí Paraíso','2763-2036','', 'Bo. El Centro frente al Parque Centenario', '', ' envio',100,100," +
-            " 1, 8, 2, 0703),"+
+            " 1, 8, 2, 3),"+
             "(20,'Cámara de Comercio E Industrias de Danlí (CCID)','2763-2061','', 'Colonia Gualiquemes por terminal de buses contiguo ala Plaza San Miguel en Boulevard La Democracia.', 'cidedanli@yahoo.com cidedanli@hotmail.com', ' Comercio',100,100," +
-            " 1, 8, 2, 0703),"+
+            " 1, 8, 2, 3),"+
             "(21,'Inmobiliaria y Constructora El Protector','27634746','', 'Media cuadra al norte del parque central entre banco Los Trabajadores y La Despensa (72,02 km)', '','Agente de bienes raíces',100,100," +
-            " 1, 9, 2, 0703),"+
+            " 1, 9, 2, 3),"+
             "(22,'Despacho Legal Lic. Hector Paguaga','','9767-3875', 'Barrio Tierra Blanca', '', ' Abogado',100,100," +
-            " 1, 10, 2, 0703),"+
+            " 1, 10, 2, 3),"+
             "(23,'Colegio de Abogados Capitulo Danli','','', 'Frente al Triangulo salida al paraiso a la par de Instituto Técnico Pedro Nufio', '', '',100,100," +
-            " 1, 10, 2, 0703),"+
+            " 1, 10, 2, 3),"+
             "(24,'FUNERALES DIVINA MISERICORDIA','2763-6798','', 'V-216  Danlí', '', 'disponibilidad de local',100,100," +
-            " 1, 11, 2, 0703),"+
+            " 1, 11, 2, 3),"+
             "(25,'Funerales Puerta Al Cielo','2763-2588','', 'Danlí', '', 'disponibilidad de local',100,100," +
-            " 1, 11, 2, 0703)";
+            " 1, 11, 2, 3)";
 
 
 

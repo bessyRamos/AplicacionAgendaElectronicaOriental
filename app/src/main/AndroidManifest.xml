@@ -38,6 +38,13 @@
             android:theme="@style/AppTheme.NoActionBar"    >
 
         </activity>
+
+        <activity
+            android:name=".clasesJAVABessy.Buscar"
+            android:label="Resultados de Búsqueda"
+            android:theme="@style/AppTheme.NoActionBar"    >
+
+        </activity>
     </application>
 
 </manifest>
