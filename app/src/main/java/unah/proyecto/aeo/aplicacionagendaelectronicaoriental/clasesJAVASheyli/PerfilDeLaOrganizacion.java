@@ -10,6 +10,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -71,6 +72,24 @@ public class PerfilDeLaOrganizacion extends AppCompatActivity implements Navigat
 
         }
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.ubicacion, menu);
+        return true;
+    }
+
+   /* @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+
+        if (id == R.id.ubicacion) {
+            Intent tasaM = new Intent(this, Ubicacion.class);
+            startActivity(tasaM);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }*/
 
     @Override
     public void onBackPressed() {

@@ -28,5 +28,6 @@
     <string name="info_desarrolladores">Nosotros WebEver, equipo de desarrolladores de la App Agenda Electrónica Oriental somos los únicos responsables de aceptar o denegar solicitudes de actualización de las empresas aquí registradas o por registrar en el futuro.</string>
     <string name="version">Version 1.1.1.0</string>
     <string name="celular">Celular:</string>
+    <string name="ubicacion">Ubicación</string>
 
 </resources>
