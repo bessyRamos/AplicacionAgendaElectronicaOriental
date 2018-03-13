@@ -124,8 +124,10 @@ public class ActivityCategorias extends AppCompatActivity
             Intent intent = new Intent(this,AcercaDe.class);
             startActivity(intent);
 
+        }else if (id == R.id.paneldecontrol) {
+            Intent intent = new Intent(this,Panel_de_Control.class);
+            startActivity(intent);
         }
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;

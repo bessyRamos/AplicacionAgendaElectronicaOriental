@@ -12,5 +12,10 @@
             android:id="@+id/acercadeinfodos"
             android:icon="@drawable/acerca"
             android:title="@string/acercadeapp"/>
+
+        <item
+            android:id="@+id/paneldecontrol"
+            android:icon="@drawable/ic_menu_manage"
+            android:title="Panel de Control"/>
     </group>
 </menu>
