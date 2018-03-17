@@ -31,4 +31,13 @@
     <string name="celular">Celular:</string>
     <string name="ubicacion">Ubicación</string>
 
+    <string name="login">Acceder ala Cuenta</string>
+    <string name="formularioRegistro">Formulario de Registro</string>
+
+    <string name="error_nombre_usuario">Ingrese el Nombre de Usuario</string>
+
+    <string name="error_nombre">Ingrese su Nombre y Apellido</string>
+    <string name="error_contrasena">Cree su Contraseña</string>
+
+
 </resources>

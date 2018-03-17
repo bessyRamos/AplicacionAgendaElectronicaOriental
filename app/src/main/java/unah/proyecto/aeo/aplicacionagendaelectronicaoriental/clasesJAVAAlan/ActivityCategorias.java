@@ -27,6 +27,7 @@ import java.util.ArrayList;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.ConexionSQLiteHelper;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.AcercaDe;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.Login;
 
 public class ActivityCategorias extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -124,8 +125,8 @@ public class ActivityCategorias extends AppCompatActivity
             Intent intent = new Intent(this,AcercaDe.class);
             startActivity(intent);
 
-        }else if (id == R.id.paneldecontrol) {
-            Intent intent = new Intent(this,Panel_de_Control.class);
+        }else if (id == R.id.login) {
+            Intent intent = new Intent(this, Login.class);
             startActivity(intent);
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

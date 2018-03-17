@@ -86,7 +86,7 @@ public class AcercaDe extends AppCompatActivity implements NavigationView.OnNavi
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.volver, menu);
+        getMenuInflater().inflate(R.menu.lista_de_contactos, menu);
         return true;
     }
 

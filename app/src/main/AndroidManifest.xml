@@ -37,6 +37,12 @@
             android:label="Resultados de Búsqueda"
             android:theme="@style/AppTheme.NoActionBar"></activity>
         <activity android:name=".clasesJAVAAlan.Panel_de_Control"></activity>
+
+        <activity android:name=".clasesJAVAVirgilio.FormularioRegistroLogin"
+        android:label="@string/formularioRegistro"></activity>
+        <activity android:name=".clasesJAVAVirgilio.Login" android:label="@string/login"></activity>
+
+
     </application>
 
 </manifest>

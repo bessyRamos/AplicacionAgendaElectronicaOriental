@@ -1,6 +1,8 @@
 package unah.proyecto.aeo.aplicacionagendaelectronicaoriental;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
@@ -13,11 +15,10 @@ public class ConexionSQLiteHelper extends SQLiteOpenHelper {
     private int imagenPredeterminada=R.drawable.iconocontactowhite;
 
     final String CREAR_TABLA_ROLES = "create table Roles(id_rol INTEGER PRIMARY KEY, descripcion_rol TEXT)";
-    final String CREAR_TABLA_USUARIOS = "create table Usuarios(id_usuario INTEGER  PRIMARY KEY, nombre_usuario TEXT, nombre_propio TEXT, contrasena TEXT, rol INTEGER, estado_usuario INTEGER, FOREIGN KEY(rol) REFERENCES Roles(id_rol))";
+    final String CREAR_TABLA_USUARIOS = "create table Usuarios(id_usuario INTEGER PRIMARY KEY AUTOINCREMENT , nombre_usuario TEXT, nombre_propio TEXT, contrasena TEXT, rol INTEGER, estado_usuario INTEGER, FOREIGN KEY(rol) REFERENCES Roles(id_rol))";
     final String CREAR_TABLA_CATEGORIAS = "create table Categorias(id_categoria INTEGER  PRIMARY KEY  , nombre_categoria TEXT NOT NULL, imagen_categoria INT)";
     final String CREAR_TABLA_REGIONES = "create table Regiones(id_region INTEGER PRIMARY KEY, nombre_region TEXT NOT NULL)";
     final String CREAR_TABLA_ESTADO_CONTACTOS = "create table Estado_Contactos(id_estado INTEGER PRIMARY KEY, descripcion_estado_contactos TEXT NOT NULL)";
-
     final String CREAR_TABLA_CONTACTOS = "create table Contactos(id_contacto INTEGER PRIMARY KEY  , nombre_organizacion TEXT NOT NULL, numero_fijo TEXT," +
             " numero_movil TEXT, direccion TEXT NOT NULL, imagen INTEGER DEFAULT "+imagenPredeterminada+", e_mail TEXT DEFAULT 'No Disponible', descripcion_organizacion TEXT NOT NULL, latitud DOUBLE, " +
             "longitud DOUBLE, id_usuario INTEGER, id_categoria INTEGER, id_estado INTEGER, id_region INTEGER, FOREIGN KEY(id_usuario) REFERENCES Usuarios(id_usuario)," +
@@ -129,6 +130,16 @@ public class ConexionSQLiteHelper extends SQLiteOpenHelper {
         onCreate(db);
 
     }
+
+
+
+    //Metodo que valida si el usuario existe
+    public Cursor ConsultarUsuarioPassword(String usuario, String password) throws SQLException {
+        Cursor mcursor = null;
+        mcursor = this.getReadableDatabase().query("Usuarios",new String[]{"id_usuario", "nombre_usuario","nombre_propio","contrasena","rol","estado_usuario"},"nombre_usuario like'"+usuario+"'and  contrasena like '"+password+"'",null,null,null,null);
+        return mcursor;
+    }
+
 
 
 }
