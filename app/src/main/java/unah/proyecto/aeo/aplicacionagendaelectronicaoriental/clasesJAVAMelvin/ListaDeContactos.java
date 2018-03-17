@@ -6,37 +6,27 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.Spinner;
-import android.widget.TextView;
-
 import java.util.ArrayList;
-
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.ConexionSQLiteHelper;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVABessy.Buscar;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.AcercaDe;
 
 public class ListaDeContactos extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, android.support.v7.widget.SearchView.OnQueryTextListener {
     ArrayList<PerfilBreve> listaOrganizaciones;
     ConexionSQLiteHelper conn;
     int id_categoria;
     String nombre_categoria;
-    EditText abuscar;
-    Spinner spinnerregion;
-    ImageButton btnbuscar;
-    String regionEnviar;
+    AdaptadorPerfilBreve adaptadorPerfilBreve;
 
 
     @Override
@@ -56,42 +46,6 @@ public class ListaDeContactos extends AppCompatActivity
 
         setSupportActionBar(toolbar);
 
-        abuscar= findViewById(R.id.abuscar);
-        spinnerregion= findViewById(R.id.filtroRegion);
-        btnbuscar= findViewById(R.id.btnBuscar);
-
-        spinnerregion.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                switch (position){
-                    case 0:
-                        regionEnviar = "Todas Regiones";
-                        break;
-                    case 1:
-                        regionEnviar = "El Paraiso";
-                        break;
-                    case 2:
-                        regionEnviar = "Danli";
-                        break;
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        btnbuscar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent pasarAbuscador = new Intent(getApplicationContext(),Buscar.class);
-                pasarAbuscador.putExtra("busqueda",abuscar.getText().toString());
-                pasarAbuscador.putExtra("regionBuscar",regionEnviar);
-                startActivity(pasarAbuscador);
-                finish();
-            }
-        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -105,7 +59,6 @@ public class ListaDeContactos extends AppCompatActivity
 
         //Conexión a la base de datos
         conn = new ConexionSQLiteHelper(this,"bdaeo",null,1);
-        conn.getReadableDatabase().setForeignKeyConstraintsEnabled(true);
 
         //Inicializacion del array
         listaOrganizaciones = new ArrayList<PerfilBreve>();
@@ -117,14 +70,15 @@ public class ListaDeContactos extends AppCompatActivity
         layout.setOrientation(LinearLayoutManager.VERTICAL);
 
 
-        //Llamada al método para consultar la base de datos
+        //Llamada al método para consultar los contactos en la base de datos
         consultarListaContactos();
 
         //Declaracion y seteo del adaptador al contenedor
-        AdaptadorPerfilBreve adaptadorPerfilBreve = new AdaptadorPerfilBreve(listaOrganizaciones);
+        adaptadorPerfilBreve = new AdaptadorPerfilBreve(listaOrganizaciones);
         contenedor.setAdapter(adaptadorPerfilBreve);
         contenedor.setLayoutManager(layout);
 
+        //cierre de la conexión a la base de datos
         conn.close();
 
     }
@@ -140,6 +94,49 @@ public class ListaDeContactos extends AppCompatActivity
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.lista_de_contactos,menu);
+        MenuItem menuItem = menu.findItem(R.id.accion_buscar);
+        MenuItem itemBusquedaAvanzada   = menu.findItem(R.id.accion_buscarAvanzado);
+        //Establecimeinto del SearchView para filtrar por nombre, numero de telefono o region
+        android.support.v7.widget.SearchView searchView  = (android.support.v7.widget.SearchView) MenuItemCompat.getActionView(menuItem);
+        searchView.setOnQueryTextListener(this);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            //Intent para pasar a la activity de búsqueda avanzada
+            case R.id.accion_buscarAvanzado:
+                Intent aBusquedaAvanzada= new Intent(getApplicationContext(),BusquedaAvanzada.class);
+                startActivity(aBusquedaAvanzada);
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    //Metodo que establece el filtro del adaptador según se va escribiendo en el SearchView
+    public boolean onQueryTextChange(String newText) {
+        newText = newText.toLowerCase();
+        ArrayList<PerfilBreve> newList = new ArrayList<>();
+        for (PerfilBreve perfilBreve: listaOrganizaciones){
+            String nombre = perfilBreve.getNombre().toLowerCase();
+            String numeroTel = perfilBreve.getNumeroTelefono().toLowerCase();
+            String region = perfilBreve.getDireccion().toLowerCase();
+
+            if(nombre.contains(newText) || numeroTel.contains(newText) || region.contains(newText))
+                newList.add(perfilBreve);
+        }
+        adaptadorPerfilBreve.setFilter(newList);
+        return true;
+    }
 
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
@@ -189,6 +186,8 @@ public class ListaDeContactos extends AppCompatActivity
             listaOrganizaciones.add(perfilContacto);
 
         }
+        //cierra la conexión a la base de datos
+        db.close();
     }
 
 
