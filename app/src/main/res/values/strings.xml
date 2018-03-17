@@ -46,4 +46,15 @@
     <string name="title_dashboard">Dashboard</string>
     <string name="title_notifications">Notifications</string>
 
+
+
+
+    <string name="usuario_eliminado">El usuario fue Eliminado</string>
+    <string name="usuario_no_eliminado">El usuario no fue Eliminado</string>
+    <string name="mensaje">El usuario sera eliminado</string>
+    <string name="Eliminar_usuario">Eliminar Usuario</string>
+    <string name="eliminar">Eliminar</string>
+    <string name="canselar">Canselar</string>
+
+
 </resources>

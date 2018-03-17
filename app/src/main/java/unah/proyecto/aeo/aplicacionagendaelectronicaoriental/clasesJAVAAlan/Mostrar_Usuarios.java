@@ -1,9 +1,12 @@
 package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.ActionMode;
 import android.view.Menu;
@@ -69,7 +72,28 @@ public class Mostrar_Usuarios extends AppCompatActivity {
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             if(item.getItemId()== R.id.EliminarItem){
-                eliminarUsuario();
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(Mostrar_Usuarios.this);
+                builder.setTitle(R.string.Eliminar_usuario);
+                builder.setMessage(R.string.mensaje);
+                builder.setPositiveButton(R.string.eliminar, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        eliminarUsuario();
+                        Toast.makeText(Mostrar_Usuarios.this,R.string.usuario_eliminado,Toast.LENGTH_SHORT).show();
+                    }
+                });
+                builder.setNegativeButton(R.string.canselar, new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialogInterface, int i) {
+                        Toast.makeText(Mostrar_Usuarios.this,R.string.usuario_no_eliminado,Toast.LENGTH_SHORT).show();
+
+                    }
+                });
+                Dialog dialog = builder.create();
+                dialog.show();
+
+
                 mode.finish();
             }else
             if(item.getItemId()==R.id.EditarItem){
@@ -126,7 +150,6 @@ public class Mostrar_Usuarios extends AppCompatActivity {
             Usuarios usu = usuarios.get(usuarioselecionado);
             long respuesta = db.delete("USUARIOS","id_usuario="+usu.getId_usuario(),null);
             if(respuesta>0 ){
-                Toast.makeText(Mostrar_Usuarios.this,"Eliminado con exito",Toast.LENGTH_LONG).show();
                 usuarios.removeAll(usuarios);
                 llenarLista();
             }else {
