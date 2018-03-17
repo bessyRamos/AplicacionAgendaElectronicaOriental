@@ -131,8 +131,6 @@ public class ConexionSQLiteHelper extends SQLiteOpenHelper {
 
     }
 
-
-
     //Metodo que valida si el usuario existe
     public Cursor ConsultarUsuarioPassword(String usuario, String password) throws SQLException {
         Cursor mcursor = null;

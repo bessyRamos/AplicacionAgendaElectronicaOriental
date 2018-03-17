@@ -69,4 +69,5 @@ public class Usuarios {
     public void setEstado_usuario(int estado_usuario) {
         this.estado_usuario = estado_usuario;
     }
+
 }
