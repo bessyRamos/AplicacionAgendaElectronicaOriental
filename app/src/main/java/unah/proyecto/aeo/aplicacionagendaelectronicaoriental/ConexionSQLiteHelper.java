@@ -27,7 +27,7 @@ public class ConexionSQLiteHelper extends SQLiteOpenHelper {
     final String INSERTAR_ROL="INSERT INTO Roles values(1,'Administrador'), " +
             "(2,'Cliente')";
 
-    final String INSERTAR_USUARIOS="INSERT INTO Usuarios values(1,'Admin','Administrador','admin123',1,1), (2,'cliente1','nombreCliente','cliente123',2,1), (3,'cliente2','nombreCliente2','cliente123',2,1)";
+   final String INSERTAR_USUARIOS="INSERT INTO Usuarios values(1,'Admin','Administrador','admin123',1,1), (2,'cliente1','nombreCliente','cliente123',2,1), (3,'cliente2','nombreCliente2','cliente123',2,1)";
 
     final String INSERTAR_CATEGORIAS = "INSERT INTO Categorias" +
             "(id_categoria,nombre_categoria,imagen_categoria) values" +

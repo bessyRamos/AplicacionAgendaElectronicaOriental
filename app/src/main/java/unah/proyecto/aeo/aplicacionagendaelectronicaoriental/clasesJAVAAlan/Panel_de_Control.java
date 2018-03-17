@@ -23,8 +23,8 @@ public class Panel_de_Control extends AppCompatActivity {
 
 
             Fuente_Panel_de_control fuente_panel_de_control[]={
-                    new Fuente_Panel_de_control(R.drawable.administracionperfil,"Administración de Perfil",0),
-                    new Fuente_Panel_de_control(R.drawable.administracioncuenta,"Administración de Cuenta",0)
+                    new Fuente_Panel_de_control(R.drawable.administracioncuenta,"Administración de  Cuenta",0)
+                    //new Fuente_Panel_de_control(R.drawable.administracionperfil,"Administración de Perfil",0)
                    // new Fuente_Panel_de_control(R.drawable.celular,"Solicitudes Nuevas",0),
                    // new Fuente_Panel_de_control(R.drawable.celular,"Solicitudes Aprovadas",0),
                    // new Fuente_Panel_de_control(R.drawable.celular,"Solicitudes Eliminadas",0)
@@ -38,10 +38,10 @@ public class Panel_de_Control extends AppCompatActivity {
 
 
                     if(position==0){
-                        Intent intent = new Intent(view.getContext(),ListaDeContactos.class);
+                       Intent intent = new Intent(view.getContext(),Mostrar_Usuarios.class);
                         startActivityForResult(intent,0);
                     }else if(position==1){
-                        Intent intent = new Intent(view.getContext(),ListaDeContactos.class);
+                        Intent intent = new Intent(view.getContext(),Mostrar_Usuarios.class);
                         startActivityForResult(intent,0);
                     }else if(position==2){
                         Intent intent = new Intent(view.getContext(),ListaDeContactos.class);
