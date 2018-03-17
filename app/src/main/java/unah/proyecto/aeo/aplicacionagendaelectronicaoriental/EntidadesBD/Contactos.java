@@ -13,10 +13,10 @@ public class Contactos {
     private int imagen;
     private String e_mail;
     private String descripcion_organizacion;
-    private Double latitud;
-    private Double longitud;
+    private String latitud;
+    private String longitud;
 
-    public Contactos(int id_contacto, String nombre_organizacion, String numero_fijo, String numero_movil, String direccion, int imagen, String e_mail, String descripcion_organizacion, Double latitud, Double longitud) {
+    public Contactos(int id_contacto, String nombre_organizacion, String numero_fijo, String numero_movil, String direccion, int imagen, String e_mail, String descripcion_organizacion, String latitud, String longitud) {
         this.id_contacto = id_contacto;
         this.nombre_organizacion = nombre_organizacion;
         this.numero_fijo = numero_fijo;
@@ -93,19 +93,19 @@ public class Contactos {
         this.descripcion_organizacion = descripcion_organizacion;
     }
 
-    public Double getLatitud() {
+    public String getLatitud() {
         return latitud;
     }
 
-    public void setLatitud(Double latitud) {
+    public void setLatitud(String latitud) {
         this.latitud = latitud;
     }
 
-    public Double getLongitud() {
+    public String getLongitud() {
         return longitud;
     }
 
-    public void setLongitud(Double longitud) {
+    public void setLongitud(String longitud) {
         this.longitud = longitud;
     }
 }
