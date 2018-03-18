@@ -12,19 +12,23 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.ConexionSQLiteHelper;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.ActivityCategorias;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVABessy.Mapa;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.AcercaDe;
 
 public class PerfilDeLaOrganizacion extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private ImageView organizacion;
     private TextView nombre,direccion,telefono,email,descripcion,movil;
+    private ImageView ubicacion;
     ConexionSQLiteHelper conn;
-    private int id_organizacion;
+    int id_organizacion;
+    int x,y;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,11 +54,29 @@ public class PerfilDeLaOrganizacion extends AppCompatActivity implements Navigat
         movil = (TextView) findViewById(R.id.tcelular);
         email = (TextView) findViewById(R.id.e);
         descripcion = (TextView) findViewById(R.id.descripcion);
+        ubicacion = (ImageView) findViewById(R.id.ubicacion);
 
         Bundle extras = getIntent().getExtras();
         if (extras!=null){
             id_organizacion = Integer.parseInt(extras.getString("id_organizacion"));
         }
+
+        ubicacion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SQLiteDatabase db = conn.getReadableDatabase();
+                Cursor cursor1 = db.rawQuery("SELECT latitud, longitud FROM CONTACTOS WHERE id_contacto = "+id_organizacion,null);
+                while(cursor1.moveToNext()){
+                    x = cursor1.getInt(0);
+                    y = cursor1.getInt(1);
+                }
+                Intent ubicacion = new Intent(getApplicationContext(),Mapa.class);
+                ubicacion.putExtra("latitud",x);
+                ubicacion.putExtra("longitud",y);
+                startActivity(ubicacion);
+            }
+        });
+
 
         conn = new ConexionSQLiteHelper(this,"bdaeo",null,1);
         //llenado desde la base de datos

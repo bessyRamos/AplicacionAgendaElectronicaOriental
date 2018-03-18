@@ -63,11 +63,11 @@ public class ConexionSQLiteHelper extends SQLiteOpenHelper {
             " 1, 2,2, 4),"+
             "(7,'Farmacia Cimar','2763-2115','', 'Barrio San Sebastian', '', 'Cuenta con servicio a domicilio','',''," +
             " 1, 3,2, 4),"+
-            "(8,'Farmacia del Ahorro','2763-2787','', 'Barrio El Centro Edificio Astrovisión, Salida Danlí', '', 'Cuenta con servicio a domicilio','14.030842','-86.569456'," +
+            "(8,'Farmacia del Ahorro','2763-2787','', 'Barrio El Centro Edificio Astrovisión, Salida Danlí', '', 'Cuenta con servicio a domicilio','14.033952','-86.572866'," +
             " 1, 3,2, 3),"+
             "(9,'Hospital Gabriela Alvarado','2763-5824','', 'San Marcos abajo, calle panamericana', '', 'Trabajamos 24 hrs','13.991433','-86.568148'," +
             " 1, 3,2, 3),"+
-            "(10,'BANHCAFE','2763-2402','', 'Barrio Tierra Blanca', '', 'Servicios financieros','14.033798','-86.56784'," +
+            "(10,'BANHCAFE','2763-2402','', 'Barrio Tierra Blanca', '', 'Servicios financieros','14.0337981','-86.56783999999999'," +
             " 1, 4, 2, 3),"+
             "(11,'Banco Atlantida','2793-4200','', 'El paraiso frente a plaza Ramón Ignacio Díaz, Bo.San Isidro', '', 'Servicios financieros','',''," +
             " 1, 4, 2, 4),"+
