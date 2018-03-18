@@ -48,10 +48,9 @@ public class ConexionSQLiteHelper extends SQLiteOpenHelper {
     final String INSERTAR_ESTADO_CONTACTOS = "INSERT INTO Estado_Contactos values(1,'Solicitado'), (2,'Aprobado'),(3,'Rechazado'), (4,'Eliminado')";
 
     final String INSERTAR_CONTACTOS = "INSERT INTO Contactos" +
-            "(id_contacto, nombre_organizacion, numero_fijo, numero_movil, direccion, e_mail, descripcion_organizacion, latitud, " +
+            "(id_contacto, nombre_organizacion, numero_fijo, numero_movil, direccion, e_mail, descripcion_organizacion, latitud," +
             " longitud, id_usuario, id_categoria, id_estado, id_region) values" +
-
-            "(1,'Policía','2763-2063','', 'Barrio Las Colinas Segunda Etapa dos cuadras arriba de la escuela Gabriela Albarado  a mano derecha', 'redes.sociales@seguridad.gob.hn', 'Nos pueden contactar las 24 horas y estamos para servir y proteger ',14.024732,-86.568221," +
+            "(1,'Policía','2763-2063','', 'Barrio Las Colinas Segunda Etapa dos cuadras arriba de la escuela Gabriela Albarado  a mano derecha', 'redes.sociales@seguridad.gob.hn', 'Nos pueden contactar las 24 horas y estamos para servir y proteger',14.024732,-86.568221," +
             " 1, 1,2, 3),"+
             "(2,'Policía','2793-0286','', 'Barrio El Calvario cuadra y media de agro comercial Gaitan contiguo el cementerio', 'redes.sociales@seguridad.gob.hn', 'Nos pueden contactar las 24 horas y estamos para servir y proteger',13.859826,-86.55470179999998," +
             " 1, 1,2, 4)," +
@@ -79,7 +78,7 @@ public class ConexionSQLiteHelper extends SQLiteOpenHelper {
             " 1, 5, 2, 3),"+
             "(14,'Instituto de la Propiedad','2763-0473','', 'Bo.Oriental', '', 'Registro de bienes',,," +
             " 1, 6, 2, 3),"+
-            "(15,'Secretaria Agricultura Ganaderia','2763-2112','98543113', 'Salida El Paraiso frente al intituto Cosme Garcia', 'valdivita_10@yahoo.com', ' asesoria ', 14.023419,-86.569327," +
+            "(15,'Secretaria Agricultura Ganaderia','2763-2112','98543113', 'Salida El Paraiso frente al intituto Cosme Garcia', 'valdivita_10@yahoo.com', ' asesoria', 14.023419,-86.569327," +
             " 1, 6, 2, 3),"+
             "(16,'Plaza Unicentro','2763-3552','', 'Bo.el centro calle del comerciofrente a hondutel', 'jeany_salinas@hotmail.com', 'adquiere un bien',14.031468, -86.571082," +
             " 1, 7, 2, 3),"+
@@ -105,7 +104,7 @@ public class ConexionSQLiteHelper extends SQLiteOpenHelper {
             " 1, 2, 2, 3),"+
             "(27,'Escuela Francisco Morazán','2793-4263','', 'Bo. Santa Clara', '', 'Escuela',13.864001,-86.555687," +
             " 1, 2, 2, 4),"+
-            "(28,'UNAH-Tec Danlí','2763-9900','8935-3296', 'Carretera a Danlí El Paraíso frente al hospital Gabriela Alvarado', 'tecdanli@unah.edu.hn ', 'Universidad', 13.992873  ,-86.570329," +
+            "(28,'UNAH-Tec Danlí','2763-9900','8935-3296', 'Carretera a Danlí El Paraíso frente al hospital Gabriela Alvarado', 'tecdanli@unah.edu.hn ', 'Universidad', 13.992873,-86.570329," +
             " 1, 2, 2, 3),"+
             "(29,' BANADESA','2763-2393','', 'Bo.Tierra Blanca Frente al Museo Municipal', '', 'Banco',14.032018,-86.566156," +
             " 1, 4, 2, 3),"+
@@ -123,9 +122,9 @@ public class ConexionSQLiteHelper extends SQLiteOpenHelper {
             " 1, 7, 2, 3),"+
             "(36,'Gasolinera Puma Roca','2763-2242','','una cuadra antes de comercial Jamastran','','Gasolinera',14.044373,-86.567722,"+
             "1,8,2,3),"+
-            "(37,'Comercial la Unión','2763-2357','','Bo. Abajo','','Comercial','','',"+
+            "(37,'Comercial la Unión','2763-2357','','Bo. Abajo','','Comercial',,,"+
             "1,7,2,3),"+
-            "(38,'Residencial Vereda Real','2763-6274','99782015','Crretera panamericana entrada principal Col.La Ceibita 100 metros a mano derecha de la Iglesia Gran Comision','@residencialveredarealdanli','Bienes y Raises',14.015085,-86.574649,"+
+            "(38,'Residencial Vereda Real','2763-6274','99782015','Carretera panamericana entrada principal Col.La Ceibita 100 metros a mano derecha de la Iglesia Gran Comision','@residencialveredarealdanli','Bienes y Raises',14.015085,-86.574649,"+
             "1,9,2,3),"+
             "(39,'El Rincón del Toro','2763-4312','','Los Zarsales','',' Comercio de Bienes',14.027979,-86.577733,"+
             "1,6,2,3)";

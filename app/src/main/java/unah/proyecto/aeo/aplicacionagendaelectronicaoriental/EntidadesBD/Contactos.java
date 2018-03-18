@@ -105,7 +105,6 @@ public class Contactos {
         return longitud;
     }
 
-    public void setLongitud(int longitud) {
-        this.longitud = longitud;
+    public void setLongitud(int longitud) {this.longitud = longitud;
     }
 }
