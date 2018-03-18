@@ -28,7 +28,7 @@ public class PerfilDeLaOrganizacion extends AppCompatActivity implements Navigat
     private ImageView ubicacion;
     ConexionSQLiteHelper conn;
     int id_organizacion;
-    int x,y;
+    double x,y;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -67,12 +67,13 @@ public class PerfilDeLaOrganizacion extends AppCompatActivity implements Navigat
                 SQLiteDatabase db = conn.getReadableDatabase();
                 Cursor cursor1 = db.rawQuery("SELECT latitud, longitud FROM CONTACTOS WHERE id_contacto = "+id_organizacion,null);
                 while(cursor1.moveToNext()){
-                    x = cursor1.getInt(0);
-                    y = cursor1.getInt(1);
+                    x = cursor1.getDouble(0);
+                    y = cursor1.getDouble(1);
                 }
                 Intent ubicacion = new Intent(getApplicationContext(),Mapa.class);
                 ubicacion.putExtra("latitud",x);
                 ubicacion.putExtra("longitud",y);
+                ubicacion.putExtra("nombre",nombre.getText().toString());
                 startActivity(ubicacion);
             }
         });

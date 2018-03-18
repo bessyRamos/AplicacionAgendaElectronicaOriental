@@ -15,8 +15,9 @@ import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 public class Mapa extends FragmentActivity implements OnMapReadyCallback {
 
     private GoogleMap mMap;
-    int x;
-    int y;
+    double x;
+    double y;
+    String n;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +30,9 @@ public class Mapa extends FragmentActivity implements OnMapReadyCallback {
 
         Bundle extras = getIntent().getExtras();
         if (extras!=null){
-            x = extras.getInt("latitud");
-            y = extras.getInt("longitud");
+            x = extras.getDouble("latitud");
+            y = extras.getDouble("longitud");
+            n = extras.getString("nombre");
         }
     }
 
@@ -38,8 +40,10 @@ public class Mapa extends FragmentActivity implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
+        mMap.setMapType(googleMap.MAP_TYPE_SATELLITE);
+
         LatLng coordenadas = new LatLng(x,y);
-        mMap.addMarker(new MarkerOptions().position(coordenadas).title(""));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(coordenadas,50));
+        mMap.addMarker(new MarkerOptions().position(coordenadas).title(n));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(coordenadas,18));
     }
 }
