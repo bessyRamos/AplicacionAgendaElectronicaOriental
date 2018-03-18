@@ -166,13 +166,5 @@ public class ConexionSQLiteHelper extends SQLiteOpenHelper {
 
     }
 
-    //Metodo que valida si el usuario existe
-    public Cursor ConsultarUsuarioPassword(String usuario, String password) throws SQLException {
-        Cursor mcursor = null;
-        mcursor = this.getReadableDatabase().query("Usuarios",new String[]{"id_usuario", "nombre_usuario","nombre_propio","contrasena","rol","estado_usuario"},"nombre_usuario like'"+usuario+"'and  contrasena like '"+password+"'",null,null,null,null);
-        return mcursor;
-    }
-
-
 
 }
