@@ -55,8 +55,8 @@ public class ConexionSQLiteHelper extends SQLiteOpenHelper {
             " 1, 1,2, 3),"+
             "(2,'Policía','2793-0286','', 'Barrio El Calvario cuadra y media de agro comercial Gaitan contiguo el cementerio', 'redes.sociales@seguridad.gob.hn', 'Nos pueden contactar las 24 horas y estamos para servir y proteger','13.859826','-86.55470179999998'," +
             " 1, 1,2, 4)," +
-            "(4,'Centro Tecnico Vocacional Pedro Nufio','2763-3195','', 'Barrio El Quiquisque', '', 'Instituto Público', '14.011955', '-86.569433'," +
-            " 1, 2,2, 0703)," +
+            "(4,'Centro Tecnico Vocacional Pedro Nufio','2763-3195','', 'Barrio El Quiquisque', '', 'Instituto Público', 14.011955, -86.569433," +
+            " 1, 2,2, 3)," +
             "(5,'Instituto Teodoro Rodas Valle','2763-3050','3219-6497', 'Barrio las Flores', 'loborams@yahoo.com', 'Instituto privado','',''," +
             " 1, 2,2, 3),"+
             "(6,'Instituto Técnico Alegandro Flores','2793-4123','', 'Col.Los Montesitos, Salida Danlí', '', 'Instituto Público',13.874814 ,-86.554105," +

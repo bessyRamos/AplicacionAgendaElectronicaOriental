@@ -49,11 +49,19 @@
 
     <string name="usuario_eliminado">El usuario fue Eliminado</string>
     <string name="usuario_no_eliminado">El usuario no fue Eliminado</string>
-    <string name="mensaje">El usuario sera eliminado</string>
-    <string name="Eliminar_usuario">Eliminar Usuario</string>
+    <string name="eliminar_usuario">Eliminar Usuario</string>
+    <string name="mensaje_para_eliminar">\"Se Eliminará el usuario. \' %1$s\ '?\"</string>
     <string name="eliminar">Eliminar</string>
-    <string name="canselar">Canselar</string>
+    <string name="confirmar_borrar">\"Desea Eliminar todo.\"</string>
+    <string name="canselar">Cancelar</string>
+
+
     <string name="title_activity_mapa">Map</string>
+
+
+
+
+
 
 
 </resources>
