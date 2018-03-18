@@ -43,7 +43,6 @@ public class ConexionSQLiteHelper extends SQLiteOpenHelper {
             "(10,'Asesoría Legal',"+R.drawable.asesoria_legal+")," +
             "(11,'Funerarias',"+R.drawable.funeraria+")";
 
-
     final String INSERTAR_REGIONES = "INSERT INTO Regiones values(3,'Danlí'),(4,'El Paraíso')";
 
     final String INSERTAR_ESTADO_CONTACTOS = "INSERT INTO Estado_Contactos values(1,'Solicitado'), (2,'Aprobado'),(3,'Rechazado'), (4,'Eliminado')";
@@ -163,14 +162,4 @@ public class ConexionSQLiteHelper extends SQLiteOpenHelper {
         onCreate(db);
 
     }
-
-    //Metodo que valida si el usuario existe
-    public Cursor ConsultarUsuarioPassword(String usuario, String password) throws SQLException {
-        Cursor mcursor = null;
-        mcursor = this.getReadableDatabase().query("Usuarios",new String[]{"id_usuario", "nombre_usuario","nombre_propio","contrasena","rol","estado_usuario"},"nombre_usuario like'"+usuario+"'and  contrasena like '"+password+"'",null,null,null,null);
-        return mcursor;
-    }
-
-
-
 }
