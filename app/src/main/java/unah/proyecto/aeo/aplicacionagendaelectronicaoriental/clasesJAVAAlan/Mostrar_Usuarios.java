@@ -34,6 +34,7 @@ public class Mostrar_Usuarios extends AppCompatActivity {
     private  Object mActionMode;
     String usuarioLogiado;
     String usuarioEnClick;
+    ArrayAdapter<String> adaptador;
 
     public  void onCreate(Bundle b){
         super.onCreate(b);
@@ -79,35 +80,10 @@ public class Mostrar_Usuarios extends AppCompatActivity {
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             if(item.getItemId()== R.id.EliminarItem){
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(Mostrar_Usuarios.this);
-                builder.setTitle(R.string.Eliminar_usuario);
-                builder.setMessage(R.string.mensaje);
-                builder.setPositiveButton(R.string.eliminar, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        if(lista.getSelectedItem()=="Admin"){
-
-                            Toast.makeText(Mostrar_Usuarios.this,"No se puede eliminar el usuario Administrador",Toast.LENGTH_SHORT).show();
-
-                        }else{
-                            eliminarUsuario();
-                            Toast.makeText(Mostrar_Usuarios.this,R.string.usuario_eliminado,Toast.LENGTH_SHORT).show();
-                        }
-                    }
-                });
-                builder.setNegativeButton(R.string.canselar, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        Toast.makeText(Mostrar_Usuarios.this,R.string.usuario_no_eliminado,Toast.LENGTH_SHORT).show();
-
-                    }
-                });
-                Dialog dialog = builder.create();
-                dialog.show();
+                removerusuario(usuarioselecionado);
 
 
-                mode.finish();
+
             }else
             if(item.getItemId()==R.id.EditarItem){
                 Usuarios usu = usuarios.get(usuarioselecionado);
@@ -127,6 +103,36 @@ public class Mostrar_Usuarios extends AppCompatActivity {
         }
     };
 
+//METODO PARA ELIMINAR USUARIO  ATRAVES  DE UN CUADRO DE DIALOGO
+public void removerusuario(final int pos) {
+    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    builder.setTitle(R.string.eliminar_usuario);
+    String fmt= getResources().getString(R.string.mensaje_para_eliminar);
+    builder.setMessage(String.format(fmt,usuarios.get(pos).getNombre_usuario()));
+    builder.setPositiveButton(R.string.eliminar, new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialog, int which) {
+          //  usuarios.remove(pos);
+            if(!usuarios.get(pos).getNombre_usuario().contains("Admin")){
+                    eliminarUsuario();
+                    Toast.makeText(Mostrar_Usuarios.this,R.string.usuario_eliminado,Toast.LENGTH_SHORT).show();
+                    adaptador.notifyDataSetChanged();
+            }else{
+                Toast.makeText(getApplicationContext(),"No se puede eliminar el usuario Administrador",Toast.LENGTH_SHORT).show();
+            }
+        }
+    });
+
+    builder.setNegativeButton(R.string.canselar,new DialogInterface.OnClickListener() {
+        @Override
+        public void onClick(DialogInterface dialogInterface, int i) {
+            Toast.makeText(Mostrar_Usuarios.this,R.string.usuario_no_eliminado,Toast.LENGTH_SHORT).show();
+
+        }
+    });
+    builder.create().show();
+
+}
 
     //LLENAR El LIST VIEW CON LA BSASE DE DATOS
 
@@ -148,14 +154,15 @@ public class Mostrar_Usuarios extends AppCompatActivity {
             arreglo[i] = usuarios.get(i).getNombre_usuario();
 
         }
-        ArrayAdapter<String> adaptador = new ArrayAdapter<String>(Mostrar_Usuarios.this,android.R.layout.simple_list_item_1,arreglo);
+        adaptador = new ArrayAdapter<String>(Mostrar_Usuarios.this,android.R.layout.simple_list_item_1,arreglo);
 
         lista.setAdapter(adaptador);
-        adaptador.notifyDataSetChanged();
+
 
 
     }
 
+    //Eliminacion de usuarios desde la base de datos.
     public  void eliminarUsuario(){
         ConexionSQLiteHelper bh = new ConexionSQLiteHelper(Mostrar_Usuarios.this,"bdaeo",null,1);
         if(bh!=null){
@@ -173,3 +180,4 @@ public class Mostrar_Usuarios extends AppCompatActivity {
             }
         }
     }
+

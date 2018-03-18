@@ -2,6 +2,7 @@ package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -16,6 +17,8 @@ import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.Pane
 public class Login extends AppCompatActivity {
     public EditText usuario,contrasena;
     ConexionSQLiteHelper basedatos = new ConexionSQLiteHelper(this,"bdaeo",null,1);
+
+    private int contador=0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,10 +42,8 @@ public class Login extends AppCompatActivity {
         }else{                          //si existe el usuario y la contraseña son correctas el accedera
 
             try {
-                Cursor cursor = basedatos.ConsultarUsuarioPassword(usuario.getText().toString(),contrasena.getText().toString());
-
+                Cursor cursor = ConsultarUsuarioPassword(usuario.getText().toString(),contrasena.getText().toString());
                 if(cursor.getCount()> 0 ){
-
                     basedatos.close();
                     usuario.setText("");
                     contrasena.setText("");
@@ -51,18 +52,29 @@ public class Login extends AppCompatActivity {
                     finish();
 
                 }else {
+                    contador = contador+1;
+                    if (contador >3){
+                        Toast.makeText(getApplicationContext(),"Limite de Intentos Excedido",Toast.LENGTH_LONG).show();
+                        finish();
+                    }else {
                     Toast.makeText(getApplicationContext(),"Usuario y/o contraseña incorrecto",Toast.LENGTH_SHORT).show();
                     usuario.findFocus();
+                    }
                 }
-
-            }catch (android.database.SQLException e){
+            }catch (SQLException e){
                 e.printStackTrace();
-
             }
 
-        }
+        }//fin else
 
     }//fin de boton
+    private Cursor ConsultarUsuarioPassword(String usuario, String password) throws SQLException {
+        SQLiteDatabase conexion = basedatos.getReadableDatabase();
+        Cursor mcursor = null;
+        mcursor = conexion.query("Usuarios", new String[]{"id_usuario", "nombre_usuario", "nombre_propio", "contrasena", "rol", "estado_usuario"}, "nombre_usuario like'" + usuario + "'and  contrasena like '" + password + "'", null, null, null, null);
+        return mcursor;
+    }
+
 
 
 }
