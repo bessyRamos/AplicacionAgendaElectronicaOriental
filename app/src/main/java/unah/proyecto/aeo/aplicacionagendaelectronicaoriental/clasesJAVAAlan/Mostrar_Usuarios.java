@@ -80,8 +80,9 @@ public class Mostrar_Usuarios extends AppCompatActivity {
         @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             if(item.getItemId()== R.id.EliminarItem){
+                removerusuario(usuarioselecionado);
 
-               removerusuario(usuarioselecionado);
+
 
             }else
             if(item.getItemId()==R.id.EditarItem){
@@ -112,9 +113,13 @@ public void removerusuario(final int pos) {
         @Override
         public void onClick(DialogInterface dialog, int which) {
           //  usuarios.remove(pos);
-            eliminarUsuario();
-            Toast.makeText(Mostrar_Usuarios.this,R.string.usuario_eliminado,Toast.LENGTH_SHORT).show();
-            adaptador.notifyDataSetChanged();
+            if(!usuarios.get(pos).getNombre_usuario().contains("Admin")){
+                    eliminarUsuario();
+                    Toast.makeText(Mostrar_Usuarios.this,R.string.usuario_eliminado,Toast.LENGTH_SHORT).show();
+                    adaptador.notifyDataSetChanged();
+            }else{
+                Toast.makeText(getApplicationContext(),"No se puede eliminar el usuario Administrador",Toast.LENGTH_SHORT).show();
+            }
         }
     });
 
@@ -152,11 +157,12 @@ public void removerusuario(final int pos) {
         adaptador = new ArrayAdapter<String>(Mostrar_Usuarios.this,android.R.layout.simple_list_item_1,arreglo);
 
         lista.setAdapter(adaptador);
-      //  adaptador.notifyDataSetChanged();
+
 
 
     }
 
+    //Eliminacion de usuarios desde la base de datos.
     public  void eliminarUsuario(){
         ConexionSQLiteHelper bh = new ConexionSQLiteHelper(Mostrar_Usuarios.this,"bdaeo",null,1);
         if(bh!=null){
