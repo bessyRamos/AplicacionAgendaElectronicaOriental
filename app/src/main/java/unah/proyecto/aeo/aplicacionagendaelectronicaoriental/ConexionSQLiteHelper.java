@@ -43,6 +43,7 @@ public class ConexionSQLiteHelper extends SQLiteOpenHelper {
             "(10,'Asesoría Legal',"+R.drawable.asesoria_legal+")," +
             "(11,'Funerarias',"+R.drawable.funeraria+")";
 
+
     final String INSERTAR_REGIONES = "INSERT INTO Regiones values(3,'Danlí'),(4,'El Paraíso')";
 
     final String INSERTAR_ESTADO_CONTACTOS = "INSERT INTO Estado_Contactos values(1,'Solicitado'), (2,'Aprobado'),(3,'Rechazado'), (4,'Eliminado')";
