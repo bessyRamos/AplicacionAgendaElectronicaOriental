@@ -2,6 +2,7 @@ package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio
 
 import android.content.Intent;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -41,6 +42,7 @@ public class Login extends AppCompatActivity {
                 Cursor cursor = basedatos.ConsultarUsuarioPassword(usuario.getText().toString(),contrasena.getText().toString());
 
                 if(cursor.getCount()> 0 ){
+
                     basedatos.close();
                     usuario.setText("");
                     contrasena.setText("");

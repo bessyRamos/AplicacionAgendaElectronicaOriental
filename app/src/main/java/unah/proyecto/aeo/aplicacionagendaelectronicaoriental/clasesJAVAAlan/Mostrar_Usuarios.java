@@ -32,13 +32,20 @@ public class Mostrar_Usuarios extends AppCompatActivity {
     private ListView lista;
     private int usuarioselecionado = -1;
     private  Object mActionMode;
+    String usuarioLogiado;
+    String usuarioEnClick;
 
     public  void onCreate(Bundle b){
         super.onCreate(b);
 
         setContentView(R.layout.mostrar_usuario);
         lista=(ListView)findViewById(R.id.idmostrar_usuario);
+        Bundle extras =getIntent().getExtras();
+        if(extras!=null){
+            usuarioLogiado=extras.getString("Usuario_logiado");
+        }
         llenarLista();
+
         onclick();
 
 
@@ -79,8 +86,14 @@ public class Mostrar_Usuarios extends AppCompatActivity {
                 builder.setPositiveButton(R.string.eliminar, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        eliminarUsuario();
-                        Toast.makeText(Mostrar_Usuarios.this,R.string.usuario_eliminado,Toast.LENGTH_SHORT).show();
+                        if(lista.getSelectedItem()=="Admin"){
+
+                            Toast.makeText(Mostrar_Usuarios.this,"No se puede eliminar el usuario Administrador",Toast.LENGTH_SHORT).show();
+
+                        }else{
+                            eliminarUsuario();
+                            Toast.makeText(Mostrar_Usuarios.this,R.string.usuario_eliminado,Toast.LENGTH_SHORT).show();
+                        }
                     }
                 });
                 builder.setNegativeButton(R.string.canselar, new DialogInterface.OnClickListener() {
@@ -132,7 +145,7 @@ public class Mostrar_Usuarios extends AppCompatActivity {
         }
         String[] arreglo = new String[usuarios.size()];
         for(int i =0; i<arreglo.length;i++){
-            arreglo[i] = usuarios.get(i).getId_usuario()+" "+usuarios.get(i).getNombre_usuario()+"  "+usuarios.get(i).getContrasena();
+            arreglo[i] = usuarios.get(i).getNombre_usuario();
 
         }
         ArrayAdapter<String> adaptador = new ArrayAdapter<String>(Mostrar_Usuarios.this,android.R.layout.simple_list_item_1,arreglo);
@@ -152,10 +165,11 @@ public class Mostrar_Usuarios extends AppCompatActivity {
             if(respuesta>0 ){
                 usuarios.removeAll(usuarios);
                 llenarLista();
+                }
+
+
             }else {
                 Toast.makeText(Mostrar_Usuarios.this,"Fallo",Toast.LENGTH_LONG).show();
             }
         }
     }
-
-}
