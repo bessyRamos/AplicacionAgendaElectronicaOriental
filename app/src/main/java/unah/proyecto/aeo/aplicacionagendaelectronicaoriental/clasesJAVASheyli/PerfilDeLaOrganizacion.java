@@ -10,20 +10,26 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.ConexionSQLiteHelper;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.ActivityCategorias;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVABessy.Mapa;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.AcercaDe;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.Login;
 
 public class PerfilDeLaOrganizacion extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private ImageView organizacion;
-    private TextView nombre,direccion,telefono,email,descripcion;
+    private TextView nombre,direccion,telefono,email,descripcion,movil;
+    private ImageView ubicacion;
     ConexionSQLiteHelper conn;
-    private int id_organizacion;
+    int id_organizacion;
+    double x,y;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,26 +52,47 @@ public class PerfilDeLaOrganizacion extends AppCompatActivity implements Navigat
         nombre = (TextView) findViewById(R.id.n);
         direccion = (TextView) findViewById(R.id.d);
         telefono = (TextView) findViewById(R.id.t);
+        movil = (TextView) findViewById(R.id.tcelular);
         email = (TextView) findViewById(R.id.e);
         descripcion = (TextView) findViewById(R.id.descripcion);
+        ubicacion = (ImageView) findViewById(R.id.ubicacion);
 
         Bundle extras = getIntent().getExtras();
         if (extras!=null){
-            id_organizacion = Integer.parseInt(extras.getString("id_organizacion"));
+            id_organizacion = extras.getInt("id_organizacion");
         }
+
+        ubicacion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                SQLiteDatabase db = conn.getReadableDatabase();
+                Cursor cursor1 = db.rawQuery("SELECT latitud, longitud FROM CONTACTOS WHERE id_contacto = "+id_organizacion,null);
+                while(cursor1.moveToNext()){
+                    x = cursor1.getDouble(0);
+                    y = cursor1.getDouble(1);
+                }
+                Intent ubicacion = new Intent(getApplicationContext(),Mapa.class);
+                ubicacion.putExtra("latitud",x);
+                ubicacion.putExtra("longitud",y);
+                ubicacion.putExtra("nombre",nombre.getText().toString());
+                startActivity(ubicacion);
+            }
+        });
+
 
         conn = new ConexionSQLiteHelper(this,"bdaeo",null,1);
         //llenado desde la base de datos
         SQLiteDatabase db = conn.getReadableDatabase();
-        Cursor cursor = db.rawQuery("SELECT imagen, nombre_organizacion,direccion,numero_fijo,e_mail,descripcion_organizacion FROM CONTACTOS WHERE id_contacto = "+id_organizacion,null );
+        Cursor cursor = db.rawQuery("SELECT imagen, nombre_organizacion,numero_fijo,numero_movil,e_mail,direccion,descripcion_organizacion FROM CONTACTOS WHERE id_contacto = "+id_organizacion,null );
         while(cursor.moveToNext())
         {
             organizacion.setImageResource(cursor.getInt(0));
             nombre.setText(cursor.getString(1));
-            direccion.setText(cursor.getString(2));
-            telefono.setText(cursor.getString(3));
+            telefono.setText(cursor.getString(2));
+            movil.setText(cursor.getString(3));
             email.setText(cursor.getString(4));
-            descripcion.setText(cursor.getString(5));
+            direccion.setText(cursor.getString(5));
+            descripcion.setText(cursor.getString(6));
         }
     }
 
@@ -118,6 +145,9 @@ public class PerfilDeLaOrganizacion extends AppCompatActivity implements Navigat
             Intent intent = new Intent(this,AcercaDe.class);
             startActivity(intent);
 
+        }else if (id == R.id.login) {
+            Intent intent = new Intent(this, Login.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

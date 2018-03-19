@@ -12,5 +12,10 @@
             android:id="@+id/acercadeinfodos"
             android:icon="@drawable/acerca"
             android:title="@string/acercadeapp"/>
+
+        <item
+            android:id="@+id/login"
+            android:icon="@drawable/login_icono"
+            android:title="@string/login"/>
     </group>
 </menu>

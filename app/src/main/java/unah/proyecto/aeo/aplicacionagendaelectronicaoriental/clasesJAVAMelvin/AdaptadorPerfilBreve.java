@@ -5,6 +5,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
@@ -40,6 +41,12 @@ public class AdaptadorPerfilBreve extends RecyclerView.Adapter<ViewHolderPerfilB
         @Override
         public int getItemCount() {
             return listaObjetos.size();
+        }
+
+        public void setFilter(ArrayList<PerfilBreve>  newList){
+            listaObjetos = new ArrayList<PerfilBreve>();
+            listaObjetos.addAll(newList);
+            notifyDataSetChanged();
         }
     }
 

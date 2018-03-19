@@ -6,28 +6,28 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.TextView;
-
 import java.util.ArrayList;
-
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.ConexionSQLiteHelper;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.AcercaDe;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.Login;
 
 public class ListaDeContactos extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, android.support.v7.widget.SearchView.OnQueryTextListener {
     ArrayList<PerfilBreve> listaOrganizaciones;
     ConexionSQLiteHelper conn;
     int id_categoria;
     String nombre_categoria;
-    TextView nombreCategoria;
+    AdaptadorPerfilBreve adaptadorPerfilBreve;
 
 
     @Override
@@ -35,8 +35,17 @@ public class ListaDeContactos extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_de_contactos);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        //Obtiene el id de la categoria de la cual se mostrarán los contactos
+        Bundle extras = getIntent().getExtras();
+        if (extras!=null){
+            id_categoria = Integer.parseInt(extras.getString("id_categoria"));
+            nombre_categoria = extras.getString("nombre_categoria");
+
+            //Establece el texto del toolbar con el nombre de la categoria a la que se  entró
+            toolbar.setTitle(nombre_categoria);
+        }
+
         setSupportActionBar(toolbar);
-        nombreCategoria = (TextView)findViewById(R.id.nombreCategoriaMostrada);
 
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -49,17 +58,8 @@ public class ListaDeContactos extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
 
-        Bundle extras = getIntent().getExtras();
-        if (extras!=null){
-            id_categoria = Integer.parseInt(extras.getString("id_categoria"));
-            nombre_categoria = extras.getString("nombre_categoria");
-        }
-
-        nombreCategoria.setText(nombre_categoria);
-
         //Conexión a la base de datos
         conn = new ConexionSQLiteHelper(this,"bdaeo",null,1);
-        conn.getReadableDatabase().setForeignKeyConstraintsEnabled(true);
 
         //Inicializacion del array
         listaOrganizaciones = new ArrayList<PerfilBreve>();
@@ -71,13 +71,16 @@ public class ListaDeContactos extends AppCompatActivity
         layout.setOrientation(LinearLayoutManager.VERTICAL);
 
 
-        //Llamada al método para consultar la base de datos
+        //Llamada al método para consultar los contactos en la base de datos
         consultarListaContactos();
 
         //Declaracion y seteo del adaptador al contenedor
-        AdaptadorPerfilBreve adaptadorPerfilBreve = new AdaptadorPerfilBreve(listaOrganizaciones);
+        adaptadorPerfilBreve = new AdaptadorPerfilBreve(listaOrganizaciones);
         contenedor.setAdapter(adaptadorPerfilBreve);
         contenedor.setLayoutManager(layout);
+
+        //cierre de la conexión a la base de datos
+        conn.close();
 
     }
 
@@ -91,30 +94,50 @@ public class ListaDeContactos extends AppCompatActivity
             super.onBackPressed();
         }
     }
-/*
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.lista_de_contactos, menu);
+        getMenuInflater().inflate(R.menu.lista_de_contactos,menu);
+        MenuItem menuItem = menu.findItem(R.id.accion_buscar);
+        MenuItem itemBusquedaAvanzada   = menu.findItem(R.id.accion_buscarAvanzado);
+        //Establecimeinto del SearchView para filtrar por nombre, numero de telefono o region
+        android.support.v7.widget.SearchView searchView  = (android.support.v7.widget.SearchView) MenuItemCompat.getActionView(menuItem);
+        searchView.setOnQueryTextListener(this);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()){
+            //Intent para pasar a la activity de búsqueda avanzada
+            case R.id.accion_buscarAvanzado:
+                Intent aBusquedaAvanzada= new Intent(getApplicationContext(),BusquedaAvanzada.class);
+                startActivity(aBusquedaAvanzada);
         }
-
         return super.onOptionsItemSelected(item);
     }
-*/
-    @SuppressWarnings("StatementWithEmptyBody")
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    //Metodo que establece el filtro del adaptador según se va escribiendo en el SearchView
+    public boolean onQueryTextChange(String newText) {
+        newText = newText.toLowerCase();
+        ArrayList<PerfilBreve> newList = new ArrayList<>();
+        for (PerfilBreve perfilBreve: listaOrganizaciones){
+            String nombre = perfilBreve.getNombre().toLowerCase();
+            String numeroTel = perfilBreve.getNumeroTelefono().toLowerCase();
+            String region = perfilBreve.getDireccion().toLowerCase();
+
+            if(nombre.contains(newText) || numeroTel.contains(newText) || region.contains(newText))
+                newList.add(perfilBreve);
+        }
+        adaptadorPerfilBreve.setFilter(newList);
+        return true;
+    }
 
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
@@ -125,6 +148,9 @@ public class ListaDeContactos extends AppCompatActivity
             finish();
         } else if (id == R.id.acercadeinfodos) {
             Intent intent = new Intent(this,AcercaDe.class);
+            startActivity(intent);
+        }else if (id == R.id.login) {
+            Intent intent = new Intent(this, Login.class);
             startActivity(intent);
         }
 
@@ -144,21 +170,28 @@ public class ListaDeContactos extends AppCompatActivity
         PerfilBreve perfilContacto = null;
 
         //Asignar la consulta sql
-        Cursor cursor =  db.rawQuery("SELECT nombre_organizacion, imagen, numero_fijo, direccion, id_contacto FROM CONTACTOS where id_categoria="+id_categoria,null);
+        Cursor cursor =  db.rawQuery("SELECT c.nombre_organizacion, c.imagen, c.numero_fijo, c.numero_movil, c.id_contacto, a.nombre_region FROM CONTACTOS as c  JOIN REGIONES as a on c.id_region=a.id_region where id_categoria="+id_categoria,null);
 
        //se obtienen los objetos de la consulta y se asignan a los componentes visuales
         while (cursor.moveToNext()){
             perfilContacto = new PerfilBreve();
             perfilContacto.setNombre(cursor.getString(0));
             perfilContacto.setImagen(cursor.getInt(1));
-            perfilContacto.setNumeroTelefono(cursor.getString(2));
-            perfilContacto.setDireccion(cursor.getString(3));
+            if(cursor.getString(2).isEmpty()) {
+                perfilContacto.setNumeroTelefono(cursor.getString(3));
+            }else{
+                perfilContacto.setNumeroTelefono(cursor.getString(2));
+            }
+
+            perfilContacto.setDireccion(cursor.getString(5));
             perfilContacto.setId(cursor.getInt(4));
 
             //se añade los datos al array
             listaOrganizaciones.add(perfilContacto);
 
         }
+        //cierra la conexión a la base de datos
+        db.close();
     }
 
 

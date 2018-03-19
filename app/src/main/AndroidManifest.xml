@@ -1,51 +1,79 @@
+<?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="unah.proyecto.aeo.aplicacionagendaelectronicaoriental">
 
+    <!--
+         The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
+         Google Maps Android API v2, but you must specify either coarse or fine
+         location permissions for the 'MyLocation' functionality. 
+    -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
     <application
         android:allowBackup="true"
-        android:icon="@drawable/icono_aeo"
+        android:icon="@mipmap/ic_launcher_round"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme" >
-
+        android:theme="@style/AppTheme">
         <activity
             android:name=".clasesJAVAAlan.ActivityCategorias"
-            android:label="Categorías"
-            android:theme="@style/AppTheme.NoActionBar"    >
-
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
-
         <activity
             android:name=".clasesJAVAMelvin.ListaDeContactos"
-            android:label="@string/app_name"
-            android:theme="@style/AppTheme.NoActionBar"   >
-
-        </activity>
-
+            android:label="@string/lista_contactos"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".clasesJAVAVirgilio.AcercaDe"
             android:label="@string/acercadeapp"
-            android:theme="@style/AppTheme.NoActionBar"
-            >
-
-        </activity>
-
-
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".clasesJAVASheyli.PerfilDeLaOrganizacion"
             android:label="@string/apperfil"
-            android:theme="@style/AppTheme.NoActionBar"    >
-
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".clasesJAVAAlan.Panel_de_Control"
+            android:label="Panel de Control" />
+        <activity
+            android:name=".clasesJAVAAlan.Editar_Usuarios"
+            android:label="Edición de Cuenta" />
+        <activity
+            android:name=".clasesJAVAAlan.Mostrar_Usuarios"
+            android:label="Usuarios" />
+        <activity
+            android:name=".clasesJAVAVirgilio.Login"
+            android:label="@string/login"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
+        <activity
+            android:name=".clasesJAVAVirgilio.FormularioRegistroLogin"
+            android:label="Formulario de Registro"/>
+        <activity
+            android:name=".clasesJAVAMelvin.BusquedaAvanzada"
+            android:label="Búsqueda Avanzada"
+            android:theme="@style/AppTheme.NoActionBar" />
 
+        <!--
+             The API key for Google Maps-based APIs is defined as a string resource.
+             (See the file "res/values/google_maps_api.xml").
+             Note that the API key is linked to the encryption key used to sign the APK.
+             You need a different API key for each encryption key, including the release key that is used to
+             sign the APK for publishing.
+             You can define the keys for the debug and release targets in src/debug/ and src/release/. 
+        -->
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="@string/google_maps_key" />
 
+        <activity
+            android:name=".clasesJAVABessy.Mapa"
+            android:label="@string/title_activity_mapa"></activity>
     </application>
 
 </manifest>
