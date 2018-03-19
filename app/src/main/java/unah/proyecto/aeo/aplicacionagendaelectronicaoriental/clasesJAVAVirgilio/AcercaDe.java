@@ -120,7 +120,9 @@ public class AcercaDe extends AppCompatActivity implements NavigationView.OnNavi
 
         } else if (id == R.id.acercadeinfodos) {
 
-
+        }else if (id == R.id.login) {
+            Intent intent = new Intent(this, Login.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

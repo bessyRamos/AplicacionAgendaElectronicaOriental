@@ -26,6 +26,8 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
     public EditText usuario,contrasena;
     public Button button;
     ConexionSQLiteHelper basedatos = new ConexionSQLiteHelper(this,"bdaeo",null,1);
+    String usuarioPermiso,contrasenaPermiso;
+    int idRol;
 
     private int contador=0;
 
@@ -100,10 +102,10 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
             try {
                 Cursor cursor = ConsultarUsuarioPassword(usuario.getText().toString(),contrasena.getText().toString());
                 if(cursor.getCount()> 0 ){
+                    Intent intent = new Intent(getApplicationContext(),Panel_de_Control.class);
                     basedatos.close();
                     usuario.setText("");
                     contrasena.setText("");
-                    Intent intent = new Intent(this,Panel_de_Control.class);
                     startActivity(intent);
                     finish();
 
@@ -129,6 +131,23 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
         Cursor mcursor = null;
         mcursor = conexion.query("Usuarios", new String[]{"id_usuario", "nombre_usuario", "nombre_propio", "contrasena", "rol", "estado_usuario"}, "nombre_usuario like'" + usuario + "'and  contrasena like '" + password + "'", null, null, null, null);
         return mcursor;
+    }
+
+    public void permisoAdmin(){
+        SQLiteDatabase permiso = basedatos.getReadableDatabase();
+        idRol = 1;
+        Cursor cursorP = permiso.rawQuery("SELECT nombre_usuario, contrasena FROM USUARIOS WHERE rol = "+ idRol,null);
+        while (cursorP.moveToNext()){
+            usuarioPermiso = cursorP.getString(0);
+            contrasenaPermiso = cursorP.getString(1);
+        }
+
+        if (usuarioPermiso != "Admin"){
+            Toast.makeText(getApplicationContext(),"Permiso denegado",Toast.LENGTH_SHORT).show();
+        }else{
+            Intent p = new Intent(getApplicationContext(),Panel_de_Control.class);
+            startActivity(p);
+        }
     }
 
 

@@ -39,13 +39,16 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".clasesJAVAAlan.Panel_de_Control"
-            android:label="Panel de Control" />
+            android:label="Panel de Control"
+            android:theme="@style/AppTheme.NoActionBar"
+        />
         <activity
             android:name=".clasesJAVAAlan.Editar_Usuarios"
             android:label="Edición de Cuenta" />
         <activity
             android:name=".clasesJAVAAlan.Mostrar_Usuarios"
-            android:label="Usuarios" />
+            android:label="Usuarios"
+           />
         <activity
             android:name=".clasesJAVAVirgilio.Login"
             android:label="@string/login"
