@@ -92,7 +92,6 @@ public class PerfilDeLaOrganizacion extends AppCompatActivity implements Navigat
             email.setText(cursor.getString(4));
             direccion.setText(cursor.getString(5));
             descripcion.setText(cursor.getString(6));
-
         }
     }
 
