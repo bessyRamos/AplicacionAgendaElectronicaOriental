@@ -19,6 +19,7 @@ import java.util.ArrayList;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.ConexionSQLiteHelper;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.AcercaDe;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.Login;
 
 public class ListaDeContactos extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, android.support.v7.widget.SearchView.OnQueryTextListener {
@@ -147,6 +148,9 @@ public class ListaDeContactos extends AppCompatActivity
             finish();
         } else if (id == R.id.acercadeinfodos) {
             Intent intent = new Intent(this,AcercaDe.class);
+            startActivity(intent);
+        }else if (id == R.id.login) {
+            Intent intent = new Intent(this, Login.class);
             startActivity(intent);
         }
 

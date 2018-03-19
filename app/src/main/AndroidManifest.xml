@@ -48,10 +48,12 @@
             android:label="Usuarios" />
         <activity
             android:name=".clasesJAVAVirgilio.Login"
-            android:label="@string/login"></activity>
+            android:label="@string/login"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
         <activity
             android:name=".clasesJAVAVirgilio.FormularioRegistroLogin"
-            android:label="Formulario de Registro"></activity>
+            android:label="Formulario de Registro"/>
         <activity
             android:name=".clasesJAVAMelvin.BusquedaAvanzada"
             android:label="Búsqueda Avanzada"
