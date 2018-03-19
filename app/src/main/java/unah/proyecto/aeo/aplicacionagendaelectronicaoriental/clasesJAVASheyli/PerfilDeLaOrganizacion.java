@@ -59,7 +59,7 @@ public class PerfilDeLaOrganizacion extends AppCompatActivity implements Navigat
 
         Bundle extras = getIntent().getExtras();
         if (extras!=null){
-            id_organizacion = Integer.parseInt(extras.getString("id_organizacion"));
+            id_organizacion = extras.getInt("id_organizacion");
         }
 
         ubicacion.setOnClickListener(new View.OnClickListener() {

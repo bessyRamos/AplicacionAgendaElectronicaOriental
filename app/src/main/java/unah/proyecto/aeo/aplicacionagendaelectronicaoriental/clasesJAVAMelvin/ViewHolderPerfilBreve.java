@@ -50,7 +50,7 @@ public class ViewHolderPerfilBreve extends RecyclerView.ViewHolder  implements V
     public void intentPasarPerfilCompleto(){
 
         Intent intent = new Intent(context,PerfilDeLaOrganizacion.class);
-        intent.putExtra("id_organizacion",id_perfilBreve.getText().toString());
+        intent.putExtra("id_organizacion",Integer.valueOf(id_perfilBreve.getText().toString()));
         context.startActivity(intent);
 
     }
