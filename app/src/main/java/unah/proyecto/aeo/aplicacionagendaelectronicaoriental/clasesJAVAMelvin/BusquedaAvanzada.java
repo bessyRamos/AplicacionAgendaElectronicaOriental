@@ -33,6 +33,7 @@ import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.Acti
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.AdaptadorPerfilBreve;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.PerfilBreve;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.AcercaDe;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.Login;
 
 public class BusquedaAvanzada extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -148,6 +149,9 @@ public class BusquedaAvanzada extends AppCompatActivity
             finish();
         } else if (id == R.id.acercadeinfodos) {
             Intent intent = new Intent(this,AcercaDe.class);
+            startActivity(intent);
+        }else if (id == R.id.login) {
+            Intent intent = new Intent(this, Login.class);
             startActivity(intent);
         }
 

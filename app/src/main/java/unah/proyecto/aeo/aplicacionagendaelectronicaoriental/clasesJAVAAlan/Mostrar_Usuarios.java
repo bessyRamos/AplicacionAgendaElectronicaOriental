@@ -1,5 +1,6 @@
 package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan;
 
+import android.app.ActionBar;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -40,6 +41,10 @@ public class Mostrar_Usuarios extends AppCompatActivity {
         super.onCreate(b);
 
         setContentView(R.layout.mostrar_usuario);
+        //flecha atraz
+        android.support.v7.app.ActionBar actionBar= getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        //fin de flecha
         lista=(ListView)findViewById(R.id.idmostrar_usuario);
         Bundle extras =getIntent().getExtras();
         if(extras!=null){
@@ -48,6 +53,7 @@ public class Mostrar_Usuarios extends AppCompatActivity {
         llenarLista();
 
         onclick();
+
 
 
     }

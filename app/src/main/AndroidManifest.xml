@@ -48,7 +48,14 @@
         <activity
             android:name=".clasesJAVAAlan.Mostrar_Usuarios"
             android:label="Usuarios"
-           />
+            android:parentActivityName=".clasesJAVAAlan.Panel_de_Control"
+        >
+           <meta-data android:name="android:support.PARENT_ACTIVITY"
+                      android:value=".clasesJAVAAlan.Panel_de_Control">
+                      </meta-data>
+
+
+        </activity>
         <activity
             android:name=".clasesJAVAVirgilio.Login"
             android:label="@string/login"
