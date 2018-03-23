@@ -132,7 +132,7 @@ public void removerusuario(final int pos) {
                  if (mostrar_usuarios.get(pos).getId()==id_usuario_resibido){
                      eliminarUsuario();
                      Toast.makeText(Mostrar_Usuarios.this,R.string.usuario_eliminado,Toast.LENGTH_SHORT).show();
-                     startActivity(new Intent(getBaseContext(), Login.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP));
+                     startActivity(new Intent(getBaseContext(), ActivityCategorias.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP));
                      finish();
                  }
 
