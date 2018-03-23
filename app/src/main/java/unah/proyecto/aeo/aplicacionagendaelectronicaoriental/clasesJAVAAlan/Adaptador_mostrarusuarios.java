@@ -26,7 +26,6 @@ public class Adaptador_mostrarusuarios extends BaseAdapter{
 
     //constructor
 
-
     public Adaptador_mostrarusuarios(List<Fuente_mostrarUsuarios> usuarios, Context context) {
         this.usuarios = usuarios;
         this.context = context;
@@ -47,12 +46,11 @@ public class Adaptador_mostrarusuarios extends BaseAdapter{
         usuarios.get(i).getId();
         return i;
     }
-
     @Override
     public View getView(int i, View view, ViewGroup viewGroup) {
         View v=view;
-
                v = View.inflate(context,R.layout.activity_item_list_view_mostrar_usuarios,null);
+
         TextView textid = (TextView)v.findViewById(R.id.id_mostrarusuarios);
         TextView textnombre = (TextView)v.findViewById(R.id.mostrarusuarios);
 

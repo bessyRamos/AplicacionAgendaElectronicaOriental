@@ -110,7 +110,6 @@ Adaptador_mostrarusuarios adaptador;
                 startActivity(in);
                 mode.finish();
                  finish();
-
             }
             return false;
         }
@@ -160,10 +159,6 @@ public void removerusuario(final int pos) {
             SQLiteDatabase db = bh.getReadableDatabase();
             Fuente_mostrarUsuarios fuente_mostrarUsuarios = null;
             Cursor c = db.rawQuery("SELECT id_usuario,nombre_usuario FROM Usuarios WHERE estado_usuario=1",null);
-
-
-
-
                 while (c.moveToNext()){
                 fuente_mostrarUsuarios = new Fuente_mostrarUsuarios();
                 fuente_mostrarUsuarios.setId(c.getInt(0));

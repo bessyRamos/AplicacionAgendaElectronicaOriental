@@ -13,7 +13,6 @@ public class Fuente_mostrarUsuarios {
         this.usuario = usuario;
     }
     public Fuente_mostrarUsuarios(){
-
     }
     public int getId() {
         return id;
