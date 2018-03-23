@@ -169,6 +169,7 @@ public void removerusuario(final int pos) {
                 mostrar_usuarios.add(fuente_mostrarUsuarios);
 
             adaptador = new Adaptador_mostrarusuarios(mostrar_usuarios,getApplicationContext());
+
                     //se pasa ala lista el adaptador
             lista.setAdapter(adaptador);
 
