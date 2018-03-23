@@ -23,6 +23,7 @@ public class Panel_de_Control extends AppCompatActivity implements NavigationVie
 
     private DrawerLayout mdrawerLayout;
     private ActionBarDrawerToggle mToggle;
+    private int id_usuario_resibido;
 
    public Fuente_Panel_de_control[] fuente_panel_de_control;
     @Override
@@ -51,6 +52,10 @@ public class Panel_de_Control extends AppCompatActivity implements NavigationVie
 
                     if(position==0){
                        Intent intent = new Intent(view.getContext(),Mostrar_Usuarios.class);
+                       if (getIntent().getExtras()!=null){
+                           id_usuario_resibido = getIntent().getExtras().getInt("id_usuario_enviado");
+                           intent.putExtra("usuario_ingreso",id_usuario_resibido);
+                       }
                         startActivityForResult(intent,0);
                     }else if(position==1){
                         Intent intent = new Intent(view.getContext(),Mostrar_Usuarios.class);

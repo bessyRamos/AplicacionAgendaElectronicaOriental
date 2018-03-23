@@ -6,13 +6,16 @@ import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Surface;
 import android.view.WindowManager;
@@ -22,13 +25,16 @@ import java.util.ArrayList;
 
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.ConexionSQLiteHelper;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.BusquedaAvanzada;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.PerfilBreve;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.AcercaDe;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.Login;
 
 public class ActivityCategorias extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener {
     ArrayList<Fuente_Categoria> lista;
     ConexionSQLiteHelper conn;
+    Adaptador_Categoria myAdapter;
 
 
 
@@ -48,7 +54,7 @@ public class ActivityCategorias extends AppCompatActivity
         consultarListaCategorias();
 //metodo contenedor de la pcicion de las pantallas horizontal y verical
         RecyclerView contenedor = (RecyclerView) findViewById(R.id.contenedor);
-        Adaptador_Categoria myAdapter = new Adaptador_Categoria(this.lista);
+        myAdapter = new Adaptador_Categoria(this.lista);
         contenedor.setHasFixedSize(true);
 
 
@@ -107,6 +113,27 @@ public class ActivityCategorias extends AppCompatActivity
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.lista_de_contactos,menu);
+        MenuItem menuItem = menu.findItem(R.id.accion_buscar);
+        MenuItem itemBusquedaAvanzada   = menu.findItem(R.id.accion_buscarAvanzado);
+        //Establecimeinto del SearchView para filtrar por nombre, numero de telefono o region
+        android.support.v7.widget.SearchView searchView  = (android.support.v7.widget.SearchView) MenuItemCompat.getActionView(menuItem);
+        searchView.setOnQueryTextListener(this);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()){
+            //Intent para pasar a la activity de búsqueda avanzada
+            case R.id.accion_buscarAvanzado:
+                Intent aBusquedaAvanzada= new Intent(getApplicationContext(),BusquedaAvanzada.class);
+                startActivity(aBusquedaAvanzada);
+        }
+        return super.onOptionsItemSelected(item);
+    }
 
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -160,6 +187,25 @@ public class ActivityCategorias extends AppCompatActivity
     }
 
 
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        newText = newText.toLowerCase();
+        ArrayList<Fuente_Categoria> newList = new ArrayList<>();
+        for (Fuente_Categoria fuentecategoria :  lista){
+            String nombre = fuentecategoria.getTitulo().toLowerCase();
 
 
+            if(nombre.contains(newText)){
+                newList.add(fuentecategoria);
+            }
+
+        }
+        myAdapter.setFilter(newList);
+        return true;
+    }
 }
