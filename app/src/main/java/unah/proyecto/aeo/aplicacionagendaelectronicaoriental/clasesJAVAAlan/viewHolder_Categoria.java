@@ -1,11 +1,15 @@
 package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan;
 
 
+import android.animation.Animator;
 import android.content.Context;
 import android.content.Intent;
 
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.widget.CalendarView;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -42,6 +46,23 @@ public class viewHolder_Categoria extends RecyclerView.ViewHolder implements Vie
 
 
     }
+
+   /// public void onViewAttachedToWindow(RecyclerView.ViewHolder viewHolder){
+      //  super.onViewAttacheedToWindow(viewHolder);
+     //   animateCircularReveald(viewHolder.itemView);
+  //  }
+
+
+  //  public void animateCircularReveald(View view){
+    //    int centerX=0;
+     //   int centerY=0;
+     //  int startRadius = 0;
+      //  int endRadius= Math.max(view.getWidth(),view.getHeight());
+      //  Animator animation = ViewAnimationUtils.createCircularReveal(view,centerX,centerY,startRadius,endRadius);
+      //  view.setVisibility(View.VISIBLE);
+      //  animation.start();
+
+  // }
 
     @Override
     public void onClick(View v) {

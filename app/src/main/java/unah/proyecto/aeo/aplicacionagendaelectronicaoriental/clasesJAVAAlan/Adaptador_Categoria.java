@@ -16,6 +16,7 @@ public class Adaptador_Categoria extends RecyclerView.Adapter  <viewHolder_Categ
     List<Fuente_Categoria> ListaObjetos;
 
     public Adaptador_Categoria(List<Fuente_Categoria> listaObjetos) {
+
         ListaObjetos = listaObjetos;
     }
 
