@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.ConexionSQLiteHelper;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.EntidadesBD.Usuarios;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.Login;
 
 /**
  * Created by alan fabricio on 14/03/2018.
@@ -37,6 +38,7 @@ public class Mostrar_Usuarios extends AppCompatActivity {
     private  Object mActionMode;
     String usuarioLogiado;
     String usuarioEnClick;
+    private int id_usuario_resibido;
 Adaptador_mostrarusuarios adaptador;
 
     public  void onCreate(Bundle b){
@@ -52,19 +54,14 @@ Adaptador_mostrarusuarios adaptador;
         //fin de flecha
         lista=(ListView)findViewById(R.id.idmostrar_usuario);
         Bundle extras =getIntent().getExtras();
-        if(extras!=null){
-            usuarioLogiado=extras.getString("Usuario_logiado");
 
-
-
-
+        if (getIntent().getExtras()!=null){
+            id_usuario_resibido = getIntent().getExtras().getInt("usuario_ingreso");
 
         }
         llenarLista();
 
         onclick();
-
-
 
     }
     public void onclick(){
@@ -130,11 +127,18 @@ public void removerusuario(final int pos) {
         @Override
         public void onClick(DialogInterface dialog, int which) {
           //  usuarios.remove(pos);
-            if(!mostrar_usuarios.get(pos).getUsuario().contains("Admin")){
-                    eliminarUsuario();
-                    Toast.makeText(Mostrar_Usuarios.this,R.string.usuario_eliminado,Toast.LENGTH_SHORT).show();
+
+             if(!mostrar_usuarios.get(pos).getUsuario().contains("Admin")){
+                 if (mostrar_usuarios.get(pos).getId()==id_usuario_resibido){
+                     eliminarUsuario();
+                     Toast.makeText(Mostrar_Usuarios.this,R.string.usuario_eliminado,Toast.LENGTH_SHORT).show();
+                     startActivity(new Intent(getBaseContext(), Login.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP));
+                     finish();
+                 }
+
                     adaptador.notifyDataSetChanged();
-            }else{
+            }else  {
+
                 Toast.makeText(getApplicationContext(),"No se puede eliminar el usuario Administrador",Toast.LENGTH_SHORT).show();
             }
         }
@@ -187,12 +191,12 @@ public void removerusuario(final int pos) {
             ContentValues contenedor_valores= new ContentValues();
            contenedor_valores.put("estado_usuario",2) ;
             long respuesta = db.update("USUARIOS",contenedor_valores,"id_usuario="+usu.getId(),null);
+
             if(respuesta>0 ){
+
                 mostrar_usuarios.removeAll(mostrar_usuarios);
                 llenarLista();
                 }
-
-
             }else {
                 Toast.makeText(Mostrar_Usuarios.this,"Fallo",Toast.LENGTH_LONG).show();
             }

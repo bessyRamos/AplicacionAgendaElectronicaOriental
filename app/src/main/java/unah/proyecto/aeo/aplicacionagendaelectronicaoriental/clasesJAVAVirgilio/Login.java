@@ -109,7 +109,6 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
                         Intent intent = new Intent(getApplicationContext(),Panel_de_Control.class);
                         int id_enviar = (cursor.getInt(0));
                         intent.putExtra("id_usuario_enviado",id_enviar);
-
                         basedatos.close();
                         usuario.setText("");
                         contrasena.setText("");
