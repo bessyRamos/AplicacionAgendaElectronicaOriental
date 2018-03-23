@@ -2,6 +2,7 @@ package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan;
 
 import android.app.ActionBar;
 import android.app.Dialog;
+import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
@@ -29,18 +30,22 @@ import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
  */
 
 public class Mostrar_Usuarios extends AppCompatActivity {
-    private ArrayList<Usuarios> usuarios = new ArrayList<>();
+
+    ArrayList<Fuente_mostrarUsuarios> mostrar_usuarios;
     private ListView lista;
     private int usuarioselecionado = -1;
     private  Object mActionMode;
     String usuarioLogiado;
     String usuarioEnClick;
-    ArrayAdapter<String> adaptador;
+Adaptador_mostrarusuarios adaptador;
 
     public  void onCreate(Bundle b){
         super.onCreate(b);
 
+        mostrar_usuarios= new ArrayList<Fuente_mostrarUsuarios>();
+
         setContentView(R.layout.mostrar_usuario);
+        new ArrayList<>();
         //flecha atraz
         android.support.v7.app.ActionBar actionBar= getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
@@ -49,6 +54,11 @@ public class Mostrar_Usuarios extends AppCompatActivity {
         Bundle extras =getIntent().getExtras();
         if(extras!=null){
             usuarioLogiado=extras.getString("Usuario_logiado");
+
+
+
+
+
         }
         llenarLista();
 
@@ -84,21 +94,22 @@ public class Mostrar_Usuarios extends AppCompatActivity {
         }
 
         @Override
+
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             if(item.getItemId()== R.id.EliminarItem){
                 removerusuario(usuarioselecionado);
+                mode.finish();
 
 
 
             }else
             if(item.getItemId()==R.id.EditarItem){
-                Usuarios usu = usuarios.get(usuarioselecionado);
+                Fuente_mostrarUsuarios usu = mostrar_usuarios.get(usuarioselecionado);
                 Intent in = new Intent(Mostrar_Usuarios.this,Editar_Usuarios.class);
-               in.putExtra("id",usu.getId_usuario());
+               in.putExtra("id",usu.getId());
                 startActivity(in);
                 mode.finish();
                  finish();
-
             }
             return false;
         }
@@ -114,12 +125,12 @@ public void removerusuario(final int pos) {
     AlertDialog.Builder builder = new AlertDialog.Builder(this);
     builder.setTitle(R.string.eliminar_usuario);
     String fmt= getResources().getString(R.string.mensaje_para_eliminar);
-    builder.setMessage(String.format(fmt,usuarios.get(pos).getNombre_usuario()));
+    builder.setMessage(String.format(fmt,mostrar_usuarios.get(pos).getUsuario()));
     builder.setPositiveButton(R.string.eliminar, new DialogInterface.OnClickListener() {
         @Override
         public void onClick(DialogInterface dialog, int which) {
           //  usuarios.remove(pos);
-            if(!usuarios.get(pos).getNombre_usuario().contains("Admin")){
+            if(!mostrar_usuarios.get(pos).getUsuario().contains("Admin")){
                     eliminarUsuario();
                     Toast.makeText(Mostrar_Usuarios.this,R.string.usuario_eliminado,Toast.LENGTH_SHORT).show();
                     adaptador.notifyDataSetChanged();
@@ -132,7 +143,7 @@ public void removerusuario(final int pos) {
     builder.setNegativeButton(R.string.canselar,new DialogInterface.OnClickListener() {
         @Override
         public void onClick(DialogInterface dialogInterface, int i) {
-            Toast.makeText(Mostrar_Usuarios.this,R.string.usuario_no_eliminado,Toast.LENGTH_SHORT).show();
+
 
         }
     });
@@ -144,39 +155,40 @@ public void removerusuario(final int pos) {
 
     public  void llenarLista(){
         ConexionSQLiteHelper bh = new ConexionSQLiteHelper(Mostrar_Usuarios.this,"bdaeo",null,1);
-        if(bh!=null){
+
             SQLiteDatabase db = bh.getReadableDatabase();
-            Cursor c = db.rawQuery("SELECT * FROM Usuarios",null);
+            Fuente_mostrarUsuarios fuente_mostrarUsuarios = null;
+            Cursor c = db.rawQuery("SELECT id_usuario,nombre_usuario FROM Usuarios WHERE estado_usuario=1",null);
+                while (c.moveToNext()){
+                fuente_mostrarUsuarios = new Fuente_mostrarUsuarios();
+                fuente_mostrarUsuarios.setId(c.getInt(0));
+                fuente_mostrarUsuarios.setUsuario(c.getString(1));
 
-            if (c.moveToFirst()){
-                do{
 
-                    usuarios.add(new Usuarios(c.getInt(0),c.getString(1), c.getString(2), c.getString(3),c.getInt(4),c.getInt(5)));
-                }while (c.moveToNext());
+                //se añade los datos al array
+                mostrar_usuarios.add(fuente_mostrarUsuarios);
+
+            adaptador = new Adaptador_mostrarusuarios(mostrar_usuarios,getApplicationContext());
+
+                    //se pasa ala lista el adaptador
+            lista.setAdapter(adaptador);
+
             }
-        }
-        String[] arreglo = new String[usuarios.size()];
-        for(int i =0; i<arreglo.length;i++){
-            arreglo[i] = usuarios.get(i).getNombre_usuario();
-
-        }
-        adaptador = new ArrayAdapter<String>(Mostrar_Usuarios.this,android.R.layout.simple_list_item_1,arreglo);
-
-        lista.setAdapter(adaptador);
-
-
 
     }
+
 
     //Eliminacion de usuarios desde la base de datos.
     public  void eliminarUsuario(){
         ConexionSQLiteHelper bh = new ConexionSQLiteHelper(Mostrar_Usuarios.this,"bdaeo",null,1);
         if(bh!=null){
             SQLiteDatabase db = bh.getReadableDatabase();
-            Usuarios usu = usuarios.get(usuarioselecionado);
-            long respuesta = db.delete("USUARIOS","id_usuario="+usu.getId_usuario(),null);
+            Fuente_mostrarUsuarios usu = mostrar_usuarios.get(usuarioselecionado);
+            ContentValues contenedor_valores= new ContentValues();
+           contenedor_valores.put("estado_usuario",2) ;
+            long respuesta = db.update("USUARIOS",contenedor_valores,"id_usuario="+usu.getId(),null);
             if(respuesta>0 ){
-                usuarios.removeAll(usuarios);
+                mostrar_usuarios.removeAll(mostrar_usuarios);
                 llenarLista();
                 }
 

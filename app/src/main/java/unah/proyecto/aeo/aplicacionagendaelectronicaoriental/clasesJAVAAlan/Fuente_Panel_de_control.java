@@ -17,6 +17,7 @@ public class Fuente_Panel_de_control {
         this.id=id;
     }
 
+
     public int getImagenPaneldeControl() {
         return imagenPaneldeControl;
     }
