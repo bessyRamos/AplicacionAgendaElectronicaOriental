@@ -4,9 +4,11 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.PerfilBreve;
 
 /**
  * Created by alan fabricio on 22/02/2018.
@@ -16,6 +18,7 @@ public class Adaptador_Categoria extends RecyclerView.Adapter  <viewHolder_Categ
     List<Fuente_Categoria> ListaObjetos;
 
     public Adaptador_Categoria(List<Fuente_Categoria> listaObjetos) {
+
         ListaObjetos = listaObjetos;
     }
 
@@ -38,5 +41,11 @@ public class Adaptador_Categoria extends RecyclerView.Adapter  <viewHolder_Categ
     @Override
     public int getItemCount() {
         return ListaObjetos.size();
+    }
+
+    public void setFilter(ArrayList<Fuente_Categoria> newList){
+        ListaObjetos = new ArrayList<Fuente_Categoria>();
+        ListaObjetos.addAll(newList);
+        notifyDataSetChanged();
     }
 }

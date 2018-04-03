@@ -1,5 +1,7 @@
 package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin;
 
+import android.graphics.Bitmap;
+
 import java.io.Serializable;
 
 /**
@@ -8,13 +10,13 @@ import java.io.Serializable;
 
 public class PerfilBreve implements Serializable{
     private String nombre;
-    private int imagen;
+    private Bitmap imagen;
     private String numeroTelefono;
     private String direccion;
     private int id;
     int estado;
 
-    public PerfilBreve(String nombre, int imagen, String numeroTelefono, String direccion,int id, int estado) {
+    public PerfilBreve(String nombre, Bitmap imagen, String numeroTelefono, String direccion,int id, int estado) {
         this.nombre = nombre;
         this.imagen = imagen;
         this.numeroTelefono = numeroTelefono;
@@ -25,6 +27,14 @@ public class PerfilBreve implements Serializable{
 
     public PerfilBreve(){
 
+    }
+
+    public Bitmap getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(Bitmap imagen) {
+        this.imagen = imagen;
     }
 
     public int getId() {
@@ -41,14 +51,6 @@ public class PerfilBreve implements Serializable{
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
-    }
-
-    public int getImagen() {
-        return imagen;
-    }
-
-    public void setImagen(int imagen) {
-        this.imagen = imagen;
     }
 
     public String getNumeroTelefono() {

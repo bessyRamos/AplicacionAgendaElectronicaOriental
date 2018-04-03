@@ -31,7 +31,7 @@ public class AdaptadorPerfilBreve extends RecyclerView.Adapter<ViewHolderPerfilB
         @Override
         public void onBindViewHolder(ViewHolderPerfilBreve holder, int position) {
             holder.nombrePerfilBreve.setText(listaObjetos.get(position).getNombre().toString());
-            holder.imagenPerfilBreve.setImageResource(listaObjetos.get(position).getImagen());
+            holder.imagenPerfilBreve.setImageBitmap(listaObjetos.get(position).getImagen());
             holder.direccionPerfilBreve.setText(listaObjetos.get(position).getDireccion().toString());
             holder.numeroTelefonoPerfilBreve.setText(listaObjetos.get(position).getNumeroTelefono().toString());
             holder.id_perfilBreve.setText(""+listaObjetos.get(position).getId());

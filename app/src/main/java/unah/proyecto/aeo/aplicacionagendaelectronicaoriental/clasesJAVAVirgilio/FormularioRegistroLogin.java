@@ -38,7 +38,7 @@ public class FormularioRegistroLogin extends AppCompatActivity {
         contrasena = (EditText) findViewById(R.id.txtcontrasena_registro_login);
         rol = (EditText) findViewById(R.id.txtrol_registro_login);
         estado_del_usuario = (EditText) findViewById(R.id.txtestado_registro_login);
-        rol.setText("2");
+        rol.setText("1");
         estado_del_usuario.setText("1");
 
 
@@ -75,11 +75,14 @@ public class FormularioRegistroLogin extends AppCompatActivity {
 
         }
 
-        String nom,nombusuario,conta;
+        String nom,nombusuario,conta,ro,est;
 
         nom= nombre_usuario.getText().toString();
         nombusuario=nombre.getText().toString();
         conta = contrasena.getText().toString();
+        ro = rol.getText().toString();
+        est = estado_del_usuario.getText().toString();
+
         ConexionSQLiteHelper bh = new ConexionSQLiteHelper(FormularioRegistroLogin.this,"bdaeo",null,1);
         if(bh!=null){
             SQLiteDatabase db = bh.getWritableDatabase();
@@ -88,7 +91,10 @@ public class FormularioRegistroLogin extends AppCompatActivity {
             valores.put("nombre_usuario",nom);
             valores.put("nombre_propio",nombusuario);
             valores.put("contrasena",conta);
+            valores.put("rol",ro);
+            valores.put("estado_usuario",est);
             long insertado = db.insert("USUARIOS",null,valores);
+            db.close();
             if(insertado>0 ){
 
                 Toast.makeText(FormularioRegistroLogin.this,"Agregado con exito",Toast.LENGTH_SHORT).show();

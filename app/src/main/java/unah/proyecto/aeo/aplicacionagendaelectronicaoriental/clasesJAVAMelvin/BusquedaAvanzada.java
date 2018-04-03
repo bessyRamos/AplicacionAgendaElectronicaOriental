@@ -3,6 +3,7 @@ package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -166,7 +167,10 @@ public class BusquedaAvanzada extends AppCompatActivity
         while (cursor.moveToNext()){
             PerfilBreve perfilContacto = new PerfilBreve();
             perfilContacto.setNombre(cursor.getString(0));
-            perfilContacto.setImagen(cursor.getInt(1));
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize = 2;
+            perfilContacto.setImagen(BitmapFactory.decodeResource(getResources(),cursor.getInt(1),options));
+
             if(cursor.getString(2).isEmpty()) {
                 perfilContacto.setNumeroTelefono(cursor.getString(3));
             }else{

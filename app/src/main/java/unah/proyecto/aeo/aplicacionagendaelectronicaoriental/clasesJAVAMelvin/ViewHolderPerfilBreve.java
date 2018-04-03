@@ -8,6 +8,7 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVASheyli.PerfilDeLaOrganizacion;
 
@@ -17,7 +18,7 @@ import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVASheyli.Pe
  */
 
 public class ViewHolderPerfilBreve extends RecyclerView.ViewHolder  implements View.OnClickListener{
-    ImageView imagenPerfilBreve;
+    CircleImageView imagenPerfilBreve;
     TextView nombrePerfilBreve;
     TextView numeroTelefonoPerfilBreve;
     TextView direccionPerfilBreve;
@@ -29,7 +30,7 @@ public class ViewHolderPerfilBreve extends RecyclerView.ViewHolder  implements V
     public ViewHolderPerfilBreve(View itemView) {
         super(itemView);
         context = itemView.getContext();
-        imagenPerfilBreve = (ImageView) itemView.findViewById(R.id.imagen_organizacion);
+        imagenPerfilBreve =  itemView.findViewById(R.id.imagen_organizacion);
         nombrePerfilBreve = (TextView) itemView.findViewById(R.id.nombre_organizacion);
         numeroTelefonoPerfilBreve = (TextView) itemView.findViewById(R.id.numero_telefono_organizacion);
         direccionPerfilBreve = (TextView) itemView.findViewById(R.id.direccion_organizacion);

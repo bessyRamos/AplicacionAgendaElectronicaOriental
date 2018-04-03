@@ -26,6 +26,7 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
     public EditText usuario,contrasena;
     public Button button;
     ConexionSQLiteHelper basedatos = new ConexionSQLiteHelper(this,"bdaeo",null,1);
+    SQLiteDatabase conexion ;
     String usuarioPermiso,contrasenaPermiso;
     int idRol;
 
@@ -95,19 +96,26 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
     }
     public void Ingresar_Login(View v){ // metodo que verificaque se ingresen datos en los campos usuario y contraseña
         if(usuario.getText().toString().isEmpty() || contrasena.getText().toString().isEmpty()){
-            Toast.makeText(getApplicationContext(),"Usuario o contraseña incorrecta",Toast.LENGTH_SHORT).show();
+            Toast.makeText(getApplicationContext(),"Favor ingresar todos los Campos",Toast.LENGTH_SHORT).show();
 
         }else{                          //si existe el usuario y la contraseña son correctas el accedera
 
             try {
-                Cursor cursor = ConsultarUsuarioPassword(usuario.getText().toString(),contrasena.getText().toString());
+
+               Cursor cursor = ConsultarUsuarioPassword(usuario.getText().toString(),contrasena.getText().toString());
+
                 if(cursor.getCount()> 0 ){
-                    Intent intent = new Intent(getApplicationContext(),Panel_de_Control.class);
-                    basedatos.close();
-                    usuario.setText("");
-                    contrasena.setText("");
-                    startActivity(intent);
-                    finish();
+                    if (cursor.moveToFirst()==true){
+                        Intent intent = new Intent(getApplicationContext(),Panel_de_Control.class);
+                        int id_enviar = (cursor.getInt(0));
+                        intent.putExtra("id_usuario_enviado",id_enviar);
+                        basedatos.close();
+                        usuario.setText("");
+                        contrasena.setText("");
+                        startActivity(intent);
+                        finish();
+                    }
+
 
                 }else {
                     contador = contador+1;
@@ -119,6 +127,7 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
                         usuario.findFocus();
                     }
                 }
+
             }catch (SQLException e){
                 e.printStackTrace();
             }
@@ -127,10 +136,33 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
 
     }//fin de boton
     private Cursor ConsultarUsuarioPassword(String usuario, String password) throws SQLException {
-        SQLiteDatabase conexion = basedatos.getReadableDatabase();
+       conexion = basedatos.getReadableDatabase();
         Cursor mcursor = null;
-        mcursor = conexion.query("Usuarios", new String[]{"id_usuario", "nombre_usuario", "nombre_propio", "contrasena", "rol", "estado_usuario"}, "nombre_usuario like'" + usuario + "'and  contrasena like '" + password + "'", null, null, null, null);
+        int estado=1;
+        mcursor = conexion.query("Usuarios", new String[]{"id_usuario", "nombre_usuario", "nombre_propio", "contrasena", "rol", "estado_usuario"}, "nombre_usuario like'" + usuario + "'and  contrasena like '" + password + "'and  estado_usuario like '" + estado + "'", null, null, null, null);
         return mcursor;
+    }
+    private void consultaUsuContra(String nombre_usuario, String password_usuario){
+        String usuario_resibido,password_resibido;
+
+        usuario_resibido = usuario.getText().toString();
+        password_resibido = contrasena.getText().toString();
+
+        Cursor fila = conexion.rawQuery("select nombre_usuario,contrasena,id_usuario,estado_usuario from Usuarios WHERE nombre_usuario= '" + usuario_resibido + "'and contrasena='" + password_resibido + "'", null);
+
+        while (fila.moveToNext()){
+            String usua = fila.getString(0);
+            String pass = fila.getString(1);
+            if (usuario_resibido.equals(usua) && password_resibido.equals(pass)){
+                Intent intent = new Intent(this,Panel_de_Control.class);
+                usuario.setText("");
+                contrasena.setText("");
+                startActivity(intent);
+            }else{
+                Toast.makeText(getApplicationContext(),"usuario o contrase;a erronea",Toast.LENGTH_SHORT).show();
+            }
+        }
+
     }
 
     public void permisoAdmin(){
@@ -149,7 +181,6 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
             startActivity(p);
         }
     }
-
 
 
 }

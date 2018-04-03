@@ -18,12 +18,13 @@
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:background="@color/colorPrimaryDark">
-                <ImageView
+
+                <de.hdodenhof.circleimageview.CircleImageView
                     android:id="@+id/imagen_organizacion"
                     android:layout_width="85dp"
                     android:layout_height="100dp"
-                    android:src="@color/colorPrimary"
-                    />
+                    android:src="@drawable/comercio_de_bienes"/>
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
