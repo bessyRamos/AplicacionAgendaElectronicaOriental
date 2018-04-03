@@ -82,6 +82,7 @@
                 android:layout_height="wrap_content"
                 android:layout_above="@+id/imagencelular"
                 android:layout_toEndOf="@+id/direccion"
+                android:layout_alignBaseline="@+id/telefono"
                 android:text="hola"
                 android:textColor="#000"
                 android:textSize="15sp" />

@@ -119,7 +119,7 @@ public class ConexionSQLiteHelper extends SQLiteOpenHelper {
             " 1, 6, 2, 3),"+
             "(34,'Pizza Hut Danlí','','9553-9569', 'Los Zarsales', '', 'Comercio de Bienes',14.027684,-86.578159," +
             " 1, 7, 2, 3),"+
-            "(35,'Santa Fé','2763-2479','', 'Bo. ABAJO CALLE PRINCIPAL SALIDAA TEGUCIGALPA KM93', '', 'Comercio de Bienes',14.028412, -86.572974," +
+            "(35,'Santa Fé','2763-2479','', 'Bo. Abajo calle principal salida tegicigalpa KM 93', '', 'Comercio de Bienes',14.028412, -86.572974," +
             " 1, 7, 2, 3),"+
             "(36,'Gasolinera Puma Roca','2763-2242','','una cuadra antes de comercial Jamastran','','Gasolinera',14.044373,-86.567722,"+
             "1,8,2,3),"+

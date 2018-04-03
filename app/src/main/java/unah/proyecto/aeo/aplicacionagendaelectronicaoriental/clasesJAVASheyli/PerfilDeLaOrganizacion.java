@@ -88,11 +88,35 @@ public class PerfilDeLaOrganizacion extends AppCompatActivity implements Navigat
         {
             organizacion.setImageResource(cursor.getInt(0));
             nombre.setText(cursor.getString(1));
-            telefono.setText(cursor.getString(2));
-            movil.setText(cursor.getString(3));
-            email.setText(cursor.getString(4));
-            direccion.setText(cursor.getString(5));
+            if(cursor.getString(2).isEmpty()) {
+                telefono.setText("(No disponible)");
+            }else{
+               telefono.setText(cursor.getString(2));
+            }
+
+            if(cursor.getString(3).isEmpty()) {
+                movil.setText("(No disponible)");
+            }else{
+                movil.setText(cursor.getString(3));
+            }
+
+            if(cursor.getString(4).isEmpty()) {
+                email.setText("(No disponible)");
+            }else{
+                email.setText(cursor.getString(4));
+            }
+
+            if(cursor.getString(5).isEmpty()) {
+                direccion.setText("(Ninguna)");
+            }else{
+               direccion.setText(cursor.getString(5));
+            }
+
+            if(cursor.getString(6).isEmpty()) {
+            descripcion.setText("(No disponible)");
+            }else{
             descripcion.setText(cursor.getString(6));
+            }
         }
     }
 
