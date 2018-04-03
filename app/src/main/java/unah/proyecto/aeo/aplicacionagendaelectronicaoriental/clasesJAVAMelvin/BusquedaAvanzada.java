@@ -96,6 +96,7 @@ public class BusquedaAvanzada extends AppCompatActivity
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 parent.setSelection(position);
+                filtros();
             }
 
             @Override
@@ -108,6 +109,7 @@ public class BusquedaAvanzada extends AppCompatActivity
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 parent.setSelection(position);
+                filtros();
             }
 
             @Override
