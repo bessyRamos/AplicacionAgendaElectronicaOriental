@@ -4,7 +4,9 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -26,7 +28,6 @@ import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.
 public class PerfilDeLaOrganizacion extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private ImageView organizacion;
     private TextView nombre,direccion,telefono,email,descripcion,movil;
-    private ImageView ubicacion;
     ConexionSQLiteHelper conn;
     int id_organizacion;
     double x,y;
@@ -55,13 +56,14 @@ public class PerfilDeLaOrganizacion extends AppCompatActivity implements Navigat
         movil = (TextView) findViewById(R.id.tcelular);
         email = (TextView) findViewById(R.id.e);
         descripcion = (TextView) findViewById(R.id.descripcion);
-        ubicacion = (ImageView) findViewById(R.id.ubicacion);
 
         Bundle extras = getIntent().getExtras();
         if (extras!=null){
             id_organizacion = extras.getInt("id_organizacion");
         }
+        conn = new ConexionSQLiteHelper(this,"bdaeo",null,1);
 
+       FloatingActionButton ubicacion = (FloatingActionButton) findViewById(R.id.fab);
         ubicacion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -71,16 +73,14 @@ public class PerfilDeLaOrganizacion extends AppCompatActivity implements Navigat
                     x = cursor1.getDouble(0);
                     y = cursor1.getDouble(1);
                 }
-                Intent ubicacion = new Intent(getApplicationContext(),Mapa.class);
-                ubicacion.putExtra("latitud",x);
-                ubicacion.putExtra("longitud",y);
-                ubicacion.putExtra("nombre",nombre.getText().toString());
-                startActivity(ubicacion);
+                Intent ubicacion1 = new Intent(getApplicationContext(),Mapa.class);
+                ubicacion1.putExtra("latitud",x);
+                ubicacion1.putExtra("longitud",y);
+                ubicacion1.putExtra("nombre",nombre.getText().toString());
+                startActivity(ubicacion1);
             }
         });
 
-
-        conn = new ConexionSQLiteHelper(this,"bdaeo",null,1);
         //llenado desde la base de datos
         SQLiteDatabase db = conn.getReadableDatabase();
         Cursor cursor = db.rawQuery("SELECT imagen, nombre_organizacion,numero_fijo,numero_movil,e_mail,direccion,descripcion_organizacion FROM CONTACTOS WHERE id_contacto = "+id_organizacion,null );
