@@ -11,7 +11,6 @@
 
     <application
         android:allowBackup="true"
-        android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher_round"
         android:label="@string/app_name"
         android:largeHeap="true"
@@ -52,12 +51,12 @@
             android:parentActivityName=".clasesJAVAAlan.Panel_de_Control">
             <meta-data
                 android:name="android:support.PARENT_ACTIVITY"
-                android:value=".clasesJAVAAlan.Panel_de_Control"></meta-data>
+                android:value=".clasesJAVAAlan.Panel_de_Control" />
         </activity>
         <activity
             android:name=".clasesJAVAVirgilio.Login"
             android:label="@string/login"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".clasesJAVAVirgilio.FormularioRegistroLogin"
             android:label="Formulario de Registro" />
@@ -81,7 +80,10 @@
         <activity
             android:name=".clasesJAVABessy.Mapa"
             android:label="@string/title_activity_mapa" />
-
+        <activity
+            android:name=".clasesJAVAMelvin.Mostrar_Perfiles"
+            android:label="@string/title_activity_mostrar__perfiles"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
