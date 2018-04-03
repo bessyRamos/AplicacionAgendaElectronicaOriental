@@ -62,7 +62,6 @@ public class PerfilDeLaOrganizacion extends AppCompatActivity implements Navigat
             id_organizacion = extras.getInt("id_organizacion");
         }
         conn = new ConexionSQLiteHelper(this,"bdaeo",null,1);
-//floatButton
        FloatingActionButton ubicacion = (FloatingActionButton) findViewById(R.id.fab);
         ubicacion.setOnClickListener(new View.OnClickListener() {
             @Override
