@@ -83,7 +83,12 @@
         <activity
             android:name=".clasesJAVAMelvin.Mostrar_Perfiles"
             android:label="@string/title_activity_mostrar__perfiles"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
+            android:parentActivityName=".clasesJAVAAlan.Panel_de_Control">
+            <meta-data
+                android:name="android:support.PARENT_ACTIVITY"
+                android:value=".clasesJAVAAlan.Panel_de_Control" />
+        </activity>
+
     </application>
 
 </manifest>
