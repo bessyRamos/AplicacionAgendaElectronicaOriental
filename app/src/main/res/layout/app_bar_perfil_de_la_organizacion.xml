@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="hn.aeo.aeoperfil.PerfilDeLaOrganizacion">
+    tools:context="unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVASheyli.PerfilDeLaOrganizacion">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -21,4 +21,15 @@
     </android.support.design.widget.AppBarLayout>
 
     <include layout="@layout/content_perfil_de_la_organizacion" />
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom|end"
+        app:backgroundTint="#fff"
+        app:srcCompat="@drawable/ubicacion"
+        android:layout_margin="16dp"/>
+
+
+
 </android.support.design.widget.CoordinatorLayout>

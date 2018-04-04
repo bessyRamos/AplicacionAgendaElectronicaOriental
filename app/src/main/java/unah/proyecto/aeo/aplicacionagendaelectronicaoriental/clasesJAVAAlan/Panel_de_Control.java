@@ -15,6 +15,7 @@ import android.widget.ListView;
 
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.ListaDeContactos;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.Mostrar_Perfiles;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.AcercaDe;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.Login;
 
@@ -36,8 +37,8 @@ public class Panel_de_Control extends AppCompatActivity implements NavigationVie
 
 
             Fuente_Panel_de_control fuente_panel_de_control[]={
-                    new Fuente_Panel_de_control(R.drawable.administracioncuenta,"Administración de  Cuenta",0)
-                    //new Fuente_Panel_de_control(R.drawable.administracionperfil,"Administración de Perfil",0)
+                    new Fuente_Panel_de_control(R.drawable.administracioncuenta,"Administración de  Cuenta",0),
+                    new Fuente_Panel_de_control(R.drawable.administracionperfil,"Administración de Perfil",0)
                    // new Fuente_Panel_de_control(R.drawable.celular,"Solicitudes Nuevas",0),
                    // new Fuente_Panel_de_control(R.drawable.celular,"Solicitudes Aprovadas",0),
                    // new Fuente_Panel_de_control(R.drawable.celular,"Solicitudes Eliminadas",0)
@@ -58,7 +59,7 @@ public class Panel_de_Control extends AppCompatActivity implements NavigationVie
                        }
                         startActivityForResult(intent,0);
                     }else if(position==1){
-                        Intent intent = new Intent(view.getContext(),Mostrar_Usuarios.class);
+                        Intent intent = new Intent(view.getContext(),Mostrar_Perfiles.class);
                         startActivityForResult(intent,0);
                     }else if(position==2){
                         Intent intent = new Intent(view.getContext(),ListaDeContactos.class);

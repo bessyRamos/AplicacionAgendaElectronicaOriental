@@ -36,9 +36,6 @@ public class ActivityCategorias extends AppCompatActivity
     ConexionSQLiteHelper conn;
     Adaptador_Categoria myAdapter;
 
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

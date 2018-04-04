@@ -191,11 +191,8 @@ public class ListaDeContactos extends AppCompatActivity
 
             //se añade los datos al array
             listaOrganizaciones.add(perfilContacto);
-
         }
         //cierra la conexión a la base de datos
         db.close();
     }
-
-
 }
