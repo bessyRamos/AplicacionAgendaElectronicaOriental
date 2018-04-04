@@ -50,7 +50,7 @@ Adaptador_mostrarusuarios adaptador;
 
         setContentView(R.layout.mostrar_usuario);
         new ArrayList<>();
-        //flecha atraz
+        //flecha atras
         android.support.v7.app.ActionBar actionBar= getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         //fin de flecha
@@ -143,9 +143,12 @@ public void removerusuario(final int pos) {
                      Toast.makeText(Mostrar_Usuarios.this,R.string.usuario_eliminado,Toast.LENGTH_SHORT).show();
                      startActivity(new Intent(getBaseContext(), ActivityCategorias.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP));
                      finish();
+                 }else{
+                     eliminarUsuario();
+                     Toast.makeText(Mostrar_Usuarios.this,R.string.usuario_eliminado,Toast.LENGTH_SHORT).show();
+                     adaptador.notifyDataSetChanged();
                  }
 
-                    adaptador.notifyDataSetChanged();
             }else  {
 
                 Toast.makeText(getApplicationContext(),"No se puede eliminar el usuario Administrador",Toast.LENGTH_SHORT).show();
