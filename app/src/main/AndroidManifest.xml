@@ -29,7 +29,8 @@
         <activity
             android:name=".clasesJAVAMelvin.ListaDeContactos"
             android:label="@string/lista_contactos"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="screenSize|orientation"/>
         <activity
             android:name=".clasesJAVAVirgilio.AcercaDe"
             android:label="@string/acercadeapp"
@@ -63,7 +64,8 @@
         <activity
             android:name=".clasesJAVAMelvin.BusquedaAvanzada"
             android:label="Búsqueda Avanzada"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:configChanges="screenSize|orientation"/>
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
