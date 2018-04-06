@@ -24,8 +24,6 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import org.json.JSONArray;
-import org.json.JSONObject;
-
 import java.io.BufferedReader;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -175,7 +173,6 @@ Adaptador_mostrarusuarios adaptador;
                     }else{
                         new eliminarUsuario().execute();
                        // eliminarUsuario();
-                        Toast.makeText(Mostrar_Usuarios.this,R.string.usuario_eliminado,Toast.LENGTH_SHORT).show();
                         adaptador.notifyDataSetChanged();
                     }
 
