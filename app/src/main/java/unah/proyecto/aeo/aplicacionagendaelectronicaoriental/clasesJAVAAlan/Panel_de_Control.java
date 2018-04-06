@@ -57,13 +57,13 @@ public class Panel_de_Control extends AppCompatActivity implements NavigationVie
                            id_usuario_resibido = getIntent().getExtras().getInt("id_usuario_enviado");
                            intent.putExtra("usuario_ingreso",id_usuario_resibido);
                        }
-                        startActivityForResult(intent,0);
+                        startActivity(intent);
                     }else if(position==1){
-                        Intent intent = new Intent(view.getContext(),AdministracionDePerfiles.class);
-                        startActivityForResult(intent,0);
+                     //   Intent intent = new Intent(view.getContext(),AdministracionDePerfiles.class);
+                       // startActivityForResult(intent,0);
                     }else if(position==2){
                         Intent intent = new Intent(view.getContext(),ListaDeContactos.class);
-                        startActivityForResult(intent,0);
+                        startActivity(intent);
                     }
 
                 }

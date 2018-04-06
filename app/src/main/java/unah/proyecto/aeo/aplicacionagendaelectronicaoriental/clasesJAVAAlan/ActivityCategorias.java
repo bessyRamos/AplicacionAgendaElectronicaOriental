@@ -3,6 +3,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.BitmapFactory;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -15,18 +19,34 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Surface;
 import android.view.WindowManager;
+import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import cz.msebera.android.httpclient.HttpEntity;
+import cz.msebera.android.httpclient.HttpResponse;
+import cz.msebera.android.httpclient.client.HttpClient;
+import cz.msebera.android.httpclient.client.methods.HttpGet;
+import cz.msebera.android.httpclient.client.methods.HttpPost;
+import cz.msebera.android.httpclient.entity.BufferedHttpEntity;
+import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
+import cz.msebera.android.httpclient.util.EntityUtils;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.ConexionSQLiteHelper;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.EntidadesBD.Categorias;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.BusquedaAvanzada;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.PerfilBreve;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.AcercaDe;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.Login;
 
@@ -35,44 +55,18 @@ public class ActivityCategorias extends AppCompatActivity
     ArrayList<Fuente_Categoria> lista;
     ConexionSQLiteHelper conn;
     Adaptador_Categoria myAdapter;
+    Adaptador_Categoria adaptadorCategoria;
+    RecyclerView contenedor;
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_categorias);
         lista= new ArrayList<Fuente_Categoria>();
-
-
-
-
-        //Conexión a la base de datos
-        conn = new ConexionSQLiteHelper(getApplicationContext(),"bdaeo",null,1);
-
-        consultarListaCategorias();
-//metodo contenedor de la pcicion de las pantallas horizontal y verical
-        RecyclerView contenedor = (RecyclerView) findViewById(R.id.contenedor);
-        myAdapter = new Adaptador_Categoria(this.lista);
-        contenedor.setHasFixedSize(true);
-
-
-       if(getRotation(getApplicationContext())== "vertical"){
-           LinearLayoutManager layout = new LinearLayoutManager(getApplicationContext());
-           layout.setOrientation(LinearLayoutManager.VERTICAL);
-           contenedor.setAdapter(myAdapter);
-           contenedor.setLayoutManager(layout);
-       }else{
-
-           contenedor.setLayoutManager(new GridLayoutManager(this,2));
-           contenedor.setAdapter(myAdapter);
-
-       }
-
-
-
-
-
-        conn.close();
-
+        adaptadorCategoria = new Adaptador_Categoria(lista);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -84,6 +78,35 @@ public class ActivityCategorias extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+       /* if(!compruebaConexion(getApplicationContext())){
+            Toast.makeText(getApplicationContext(),"No hay Internet",Toast.LENGTH_SHORT).show();
+
+        }else {
+            Toast.makeText(getApplicationContext(),"Hay Internet",Toast.LENGTH_SHORT).show();
+        }*/
+       new ObtenerRegistrosEnBaseDeDatosWeb().execute();
+
+
+    }
+
+
+    public static boolean compruebaConexion(Context context) {
+
+        boolean connected = false;
+
+        ConnectivityManager connec = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        // Recupera todas las redes (tanto móviles como wifi)
+        NetworkInfo[] redes = connec.getAllNetworkInfo();
+
+        for (int i = 0; i < redes.length; i++) {
+            // Si alguna red tiene conexión, se devuelve true
+            if (redes[i].getState() == NetworkInfo.State.CONNECTED) {
+                connected = true;
+            }
+        }
+        return connected;
     }
 
     public String getRotation(Context context){
@@ -109,7 +132,6 @@ public class ActivityCategorias extends AppCompatActivity
             super.onBackPressed();
         }
     }
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.lista_de_contactos,menu);
@@ -173,15 +195,123 @@ public class ActivityCategorias extends AppCompatActivity
             fuente_categoria = new Fuente_Categoria();
             fuente_categoria.setId(cursor.getInt(0));
             fuente_categoria.setTitulo(cursor.getString(1));
-            fuente_categoria.setImagen(cursor.getInt(2));
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inSampleSize = 2;
+            fuente_categoria.setImagen(BitmapFactory.decodeResource(getResources(),cursor.getInt(2),options));
             fuente_categoria.setCantidad(cursor.getInt(3));
-
 
             //se añade los datos al array
             lista.add(fuente_categoria);
 
         }
     }
+
+
+    private class ObtenerRegistrosEnBaseDeDatosWeb extends AsyncTask<String, Integer, Boolean>{
+        private ObtenerRegistrosEnBaseDeDatosWeb(){}
+
+        @Override
+        protected Boolean doInBackground(String... strings) {
+            boolean resul = true;
+            try{
+                HttpGet httpGet =  new HttpGet("https://shessag.000webhostapp.com/ConsultarTodasLasCategorias.php");
+                HttpClient httpClient = new DefaultHttpClient();
+                HttpResponse response = (HttpResponse)httpClient.execute(httpGet);
+                HttpEntity entity = response.getEntity();
+                BufferedHttpEntity buffer = new BufferedHttpEntity(entity);
+                InputStream iStream = buffer.getContent();
+
+                String aux = "";
+
+                BufferedReader r = new BufferedReader(new InputStreamReader(iStream));
+                StringBuilder total = new StringBuilder();
+                String line;
+                while ((line = r.readLine()) != null) {
+                    aux += line;
+                }
+
+                // Parseamos la respuesta obtenida del servidor a un objeto JSON
+                JSONObject jsonObject = new JSONObject(aux);
+                JSONArray categorias = jsonObject.getJSONArray("categorias");
+
+
+                for(int i = 0; i < categorias.length(); i++) {
+                    JSONObject categoria = categorias.getJSONObject(i);
+
+                    // Creamos el objeto City
+                    Fuente_Categoria c = new Fuente_Categoria();
+                    c.setTitulo(categoria.getString("nombre_categoria"));
+                    c.setId(categoria.getInt("id_categoria"));
+                    c.setDato(categoria.getString("imagen_categoria"));
+                    c.setCantidad(categoria.getInt("count"));
+
+                    // Almacenamos el objeto en el array que hemos creado anteriormente
+                    lista.add(c);
+                }
+            }catch (Exception ex){
+                ex.printStackTrace();
+                resul = false;
+            }
+
+            return resul;
+
+        }
+
+        protected void onPostExecute(Boolean result) {
+            if (result.booleanValue()) {
+                adaptadorCategoria = new Adaptador_Categoria(lista);
+                contenedor = (RecyclerView) findViewById(R.id.contenedor);
+                contenedor.setHasFixedSize(true);
+
+
+                if(getRotation(getApplicationContext())== "vertical"){
+                    LinearLayoutManager layout = new LinearLayoutManager(getApplicationContext());
+                    layout.setOrientation(LinearLayoutManager.VERTICAL);
+                    contenedor.setAdapter(adaptadorCategoria);
+                    contenedor.setLayoutManager(layout);
+                }else{
+
+                    contenedor.setLayoutManager(new GridLayoutManager(getApplicationContext(),2));
+                    contenedor.setAdapter(adaptadorCategoria);
+
+                }
+                return;
+            }else {
+                Toast.makeText(getApplicationContext(), "Problemas de conexión \n Mostrando datos de base de datos local", Toast.LENGTH_SHORT).show();
+
+                //Conexión a la base de datos
+                conn = new ConexionSQLiteHelper(getApplicationContext(),"bdaeo",null,1);
+
+                consultarListaCategorias();
+                conn.close();
+                //metodo contenedor de la pcicion de las pantallas horizontal y verical
+
+                adaptadorCategoria = new Adaptador_Categoria(lista);
+                contenedor = (RecyclerView) findViewById(R.id.contenedor);
+                contenedor.setHasFixedSize(true);
+
+
+                if(getRotation(getApplicationContext())== "vertical"){
+                    LinearLayoutManager layout = new LinearLayoutManager(getApplicationContext());
+                    layout.setOrientation(LinearLayoutManager.VERTICAL);
+                    contenedor.setAdapter(adaptadorCategoria);
+                    contenedor.setLayoutManager(layout);
+                }else{
+
+                    contenedor.setLayoutManager(new GridLayoutManager(getApplicationContext(),2));
+                    contenedor.setAdapter(adaptadorCategoria);
+
+                }
+
+
+            }
+        }
+
+    }
+
+
+
+
 
 
     @Override
@@ -202,7 +332,10 @@ public class ActivityCategorias extends AppCompatActivity
             }
 
         }
-        myAdapter.setFilter(newList);
+        adaptadorCategoria.setFilter(newList);
         return true;
     }
 }
+
+
+
