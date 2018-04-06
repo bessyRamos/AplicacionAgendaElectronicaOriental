@@ -59,7 +59,7 @@ public class Panel_de_Control extends AppCompatActivity implements NavigationVie
                        }
                         startActivityForResult(intent,0);
                     }else if(position==1){
-                        Intent intent = new Intent(view.getContext(),Mostrar_Perfiles.class);
+                        Intent intent = new Intent(view.getContext(),AdministracionDePerfiles.class);
                         startActivityForResult(intent,0);
                     }else if(position==2){
                         Intent intent = new Intent(view.getContext(),ListaDeContactos.class);

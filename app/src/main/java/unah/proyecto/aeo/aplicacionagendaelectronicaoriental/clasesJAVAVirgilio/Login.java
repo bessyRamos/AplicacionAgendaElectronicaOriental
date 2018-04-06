@@ -1,6 +1,8 @@
 package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -157,6 +159,7 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
                 Intent intent = new Intent(this,Panel_de_Control.class);
                 usuario.setText("");
                 contrasena.setText("");
+
                 startActivity(intent);
             }else{
                 Toast.makeText(getApplicationContext(),"usuario o contrase;a erronea",Toast.LENGTH_SHORT).show();
@@ -164,6 +167,7 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
         }
 
     }
+
 
     public void permisoAdmin(){
         SQLiteDatabase permiso = basedatos.getReadableDatabase();
@@ -181,6 +185,9 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
             startActivity(p);
         }
     }
+
+
+
 
 
 }
