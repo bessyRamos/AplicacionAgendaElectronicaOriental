@@ -242,7 +242,7 @@ public class PerfilDeLaOrganizacion extends AppCompatActivity implements Navigat
             }else {
                Toast.makeText(getApplicationContext(), "Problemas de conexión \n Mostrando datos de base de datos local", Toast.LENGTH_SHORT).show();
 
-                //llenado desde la base de datos local
+                //llenado desde la base de datos local sqlite
                 SQLiteDatabase db = conn.getReadableDatabase();
                 Cursor cursor = db.rawQuery("SELECT imagen, nombre_organizacion,numero_fijo,numero_movil,e_mail,direccion,descripcion_organizacion FROM CONTACTOS WHERE id_contacto = "+id_organizacion,null );
                 while(cursor.moveToNext())
@@ -280,7 +280,7 @@ public class PerfilDeLaOrganizacion extends AppCompatActivity implements Navigat
                     }
                 }//fin de while
 
-                //llenado desde la base de datos local
+                //llenado desde la base de datos local sqlite
               ubicacion.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
