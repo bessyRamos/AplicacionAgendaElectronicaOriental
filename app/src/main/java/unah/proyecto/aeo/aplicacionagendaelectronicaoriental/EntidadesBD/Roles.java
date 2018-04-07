@@ -6,9 +6,9 @@ package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.EntidadesBD;
 
 public class Roles {
     private int id_rol;
-    private int descripcion_rol;
+    private String descripcion_rol;
 
-    public Roles(int id_rol, int descripcion_rol) {
+    public Roles() {
         this.id_rol = id_rol;
         this.descripcion_rol = descripcion_rol;
     }
@@ -21,11 +21,11 @@ public class Roles {
         this.id_rol = id_rol;
     }
 
-    public int getDescripcion_rol() {
+    public String getDescripcion_rol() {
         return descripcion_rol;
     }
 
-    public void setDescripcion_rol(int descripcion_rol) {
+    public void setDescripcion_rol(String descripcion_rol) {
         this.descripcion_rol = descripcion_rol;
     }
 }
