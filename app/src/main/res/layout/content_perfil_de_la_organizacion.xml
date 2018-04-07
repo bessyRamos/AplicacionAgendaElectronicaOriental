@@ -9,7 +9,7 @@
     tools:context="unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVASheyli.PerfilDeLaOrganizacion"
     tools:showIn="@layout/app_bar_perfil_de_la_organizacion"
     >
-<LinearLayout
+    <LinearLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
@@ -50,7 +50,7 @@
             android:layout_marginLeft="5dp"
             android:layout_marginTop="10dp"
             android:layout_toEndOf="@+id/nombreO"
-            android:text="hola"
+            android:text="Cargando..."
             android:textColor="#000"
             android:textSize="17sp" />
 
@@ -80,7 +80,7 @@
             android:layout_height="wrap_content"
             android:layout_alignBaseline="@+id/telefono"
             android:layout_toEndOf="@+id/telefono"
-            android:text="hola"
+            android:text="Cargando..."
             android:textColor="#000"
             android:textSize="15sp"
             android:layout_marginLeft="3dp"/>
@@ -114,7 +114,7 @@
             android:layout_below="@id/t"
             android:layout_marginLeft="3dp"
             android:layout_toEndOf="@+id/celular"
-            android:text="hola"
+            android:text="Cargando..."
             android:textColor="#000"
             android:textSize="15sp" />
 
@@ -144,11 +144,8 @@
             android:id="@+id/e"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBaseline="@+id/email"
-            android:layout_below="@+id/tcelular"
-            android:layout_marginLeft="3dp"
-            android:layout_toEndOf="@+id/email"
-            android:text="hola"
+            android:layout_below="@+id/email"
+            android:text="Cargando..."
             android:textColor="#000"
             android:textSize="15sp" />
 
@@ -158,7 +155,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignStart="@+id/imageemail"
-            android:layout_below="@+id/imageemail"
+            android:layout_below="@+id/e"
             android:layout_marginTop="10dp"
             app:srcCompat="@drawable/direccion" />
 
@@ -167,8 +164,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_above="@+id/d"
-            android:layout_alignStart="@+id/telefono"
-            android:layout_toEndOf="@+id/d"
+            android:layout_toEndOf="@+id/imagedireccion"
             android:text="@string/direccion"
             android:textColor="#000"
             android:textSize="15sp"
@@ -181,7 +177,7 @@
             android:layout_alignStart="@+id/imagedireccion"
             android:layout_below="@+id/imagedireccion"
             android:layout_marginTop="5dp"
-            android:text="hola"
+            android:text="Cargando..."
             android:textColor="#000"
             android:textSize="15sp" />
 
@@ -191,9 +187,9 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/d"
             android:layout_marginTop="30dp"
-            android:text="zxcvbnmlkjhgfdsaqwertyuiop"
+            android:text="Cargando..."
             android:textColor="#000"
             android:textSize="15sp" />
-        </RelativeLayout>
+    </RelativeLayout>
     </LinearLayout>
 </ScrollView>
