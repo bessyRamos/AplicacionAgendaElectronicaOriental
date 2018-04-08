@@ -225,7 +225,7 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
                 if (rol == 1) {
                     Intent intent = new Intent(getApplicationContext(), Panel_de_Control.class);
                     intent.putExtra("usuario_ingreso",id_usuario);
-                    //Toast.makeText(getApplicationContext(), "" + id_usuario, Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(), "" + id_usuario, Toast.LENGTH_LONG).show();
                     usuario.setText("");
                     contrasena.setText("");
                     startActivity(intent);
