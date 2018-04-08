@@ -54,7 +54,7 @@ public class Panel_de_Control extends AppCompatActivity implements NavigationVie
                     if(position==0){
                        Intent intent = new Intent(view.getContext(),Mostrar_Usuarios.class);
                        if (getIntent().getExtras()!=null){
-                           id_usuario_resibido = getIntent().getExtras().getInt("id_usuario_enviado");
+                           id_usuario_resibido = getIntent().getExtras().getInt("usuario_ingreso");
                            intent.putExtra("usuario_ingreso",id_usuario_resibido);
                        }
                         startActivity(intent);

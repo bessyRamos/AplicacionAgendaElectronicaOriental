@@ -207,6 +207,9 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
                 if (id_usuario != 0 && rol != 0 && estado_usuario != 0) {
                     resul = true;
                 } else {
+                    if(id_usuario != 0 && rol ==1 && estado_usuario == 2){
+                        resul = false;
+                    }
                     resul = false;
                 }
 
@@ -222,10 +225,11 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
         protected void onPostExecute(Boolean result) {
             if (resul) {
 
-                if (rol == 1) {
+                if (rol == 1 && estado_usuario ==1) {
                     Intent intent = new Intent(getApplicationContext(), Panel_de_Control.class);
-                    intent.putExtra("usuario_ingreso",id_usuario);
+
                     Toast.makeText(getApplicationContext(), "" + id_usuario, Toast.LENGTH_LONG).show();
+                    intent.putExtra("usuario_ingreso",id_usuario);
                     usuario.setText("");
                     contrasena.setText("");
                     startActivity(intent);
@@ -241,7 +245,13 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
                         finish();
 
                          */
-                    Toast.makeText(getApplicationContext()," usuario ",Toast.LENGTH_LONG).show();
+                        if (rol == 1 && estado_usuario==2){
+                            Toast.makeText(getApplicationContext(), "Usuario y/o Contraseña incorrecta", Toast.LENGTH_SHORT).show();
+                        }
+                        else {
+                            Toast.makeText(getApplicationContext()," usuario ",Toast.LENGTH_LONG).show();
+                        }
+
                 }
 
             } else {
