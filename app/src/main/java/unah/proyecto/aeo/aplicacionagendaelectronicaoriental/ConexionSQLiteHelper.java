@@ -52,7 +52,7 @@ public class ConexionSQLiteHelper extends SQLiteOpenHelper {
             " longitud, id_usuario, id_categoria, id_estado, id_region) values" +
 
             "(1,'Policía','2763-2063','', 'Barrio Las Colinas Segunda Etapa dos cuadras arriba de la escuela Gabriela Albarado  a mano derecha', 'redes.sociales@seguridad.gob.hn', 'Nos pueden contactar las 24 horas y estamos para servir y proteger ',14.024732,-86.568221," +
-            " 1, 1,2, 3),"+
+            " 1, 1,4, 3),"+
             "(2,'Policía','2793-0286','', 'Barrio El Calvario cuadra y media de agro comercial Gaitan contiguo el cementerio', 'redes.sociales@seguridad.gob.hn', 'Nos pueden contactar las 24 horas y estamos para servir y proteger',13.859826,-86.55470179999998," +
             " 1, 1,2, 4)," +
            "(3,'Centro Tecnico Vocacional Pedro Nufio','2763-3195','', 'Barrio El Quiquisque', '', 'Instituto Público', 14.011955, -86.569433," +

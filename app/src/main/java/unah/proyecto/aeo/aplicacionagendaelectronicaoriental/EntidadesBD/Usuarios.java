@@ -12,7 +12,7 @@ public class Usuarios {
     private int estado_usuario;
     private int rol;
 
-    public Usuarios(int id_usuario, String nombre_usuario, String nombre_propio, String contrasena, int estado_usuario, int rol) {
+    public Usuarios() {
 
         setId_usuario(id_usuario);
         setNombre_usuario(nombre_usuario);

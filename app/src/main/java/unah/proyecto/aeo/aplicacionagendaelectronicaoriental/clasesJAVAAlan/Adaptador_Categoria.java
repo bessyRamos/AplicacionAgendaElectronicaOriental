@@ -32,8 +32,8 @@ public class Adaptador_Categoria extends RecyclerView.Adapter  <viewHolder_Categ
     @Override
     public void onBindViewHolder(viewHolder_Categoria holder, int position) {
         holder.titulo.setText(ListaObjetos.get(position).getTitulo().toString());
-        holder.imagen.setImageResource(ListaObjetos.get(position).getImagen());
-        holder.cantidad.setText("Contactos " + ListaObjetos.get(position).getCantidad());
+        holder.imagen.setImageBitmap(ListaObjetos.get(position).getImagen());
+        holder.cantidad.setText(  ListaObjetos.get(position).getCantidad()+" Contactos");
         holder.id_categoria.setText(""+ListaObjetos.get(position).getId());
         holder.setOnClickListener();
     }

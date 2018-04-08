@@ -7,10 +7,12 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.ActionMode;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -18,13 +20,23 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import cz.msebera.android.httpclient.client.methods.HttpPost;
+import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
+import cz.msebera.android.httpclient.util.EntityUtils;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.ConexionSQLiteHelper;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.EntidadesBD.Usuarios;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.Fuente_mostrarPerfiles;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.AdministracionDePerfiles;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.FormularioRegistroLogin;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.Login;
 
@@ -38,10 +50,12 @@ public class Mostrar_Usuarios extends AppCompatActivity {
     private ListView lista;
     private int usuarioselecionado = -1;
     private  Object mActionMode;
-    String usuarioLogiado;
-    String usuarioEnClick;
+    int id_usuario;
+    String nombre_usuario;
     private int id_usuario_resibido;
 Adaptador_mostrarusuarios adaptador;
+    ProgressBar barra;
+    int idusario;//es el id del usuario del web server.
 
     public  void onCreate(Bundle b){
         super.onCreate(b);
@@ -49,19 +63,23 @@ Adaptador_mostrarusuarios adaptador;
         mostrar_usuarios= new ArrayList<Fuente_mostrarUsuarios>();
 
         setContentView(R.layout.mostrar_usuario);
-        new ArrayList<>();
+       new ArrayList<>();
         //flecha atras
         android.support.v7.app.ActionBar actionBar= getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
         //fin de flecha
         lista=(ListView)findViewById(R.id.idmostrar_usuario);
+        barra = findViewById(R.id.progressBarUsuarios);
+        //RECIVIMOS EL USUARIO QUE SE LOGUIO EN LA AAPLICACIÓN.
         Bundle extras =getIntent().getExtras();
-
         if (getIntent().getExtras()!=null){
             id_usuario_resibido = getIntent().getExtras().getInt("usuario_ingreso");
-
         }
-        llenarLista();
+        //LLENAMOS LA LISTA QUEVIENE DESDE EL SERVIDOR.
+        new llenarLista().execute();
+       // llenarLista();
+        onclick();
+
         FloatingActionButton floatingActionButton = (FloatingActionButton)findViewById(R.id.fab);
         floatingActionButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -71,7 +89,7 @@ Adaptador_mostrarusuarios adaptador;
                 finish();
             }
         });
-        onclick();
+
 
     }
     public void onclick(){
@@ -87,6 +105,135 @@ Adaptador_mostrarusuarios adaptador;
             }
         });
     }
+
+    //LLENAR EL LIST VIEW DESDE EL WEB SERVER.
+    private class llenarLista extends AsyncTask<String, Integer, Boolean> {
+        private llenarLista(){}
+        boolean resul = true;
+
+        @Override
+        protected Boolean doInBackground(String... strings) {
+
+            try {
+                JSONArray respJSON = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("https://shessag.000webhostapp.com/ConsultarTodosLosUsuarios.php")).getEntity()));
+                for (int i = 0; i < respJSON.length(); i++) {
+                    id_usuario = respJSON.getJSONObject(i).getInt("id_usuario");
+                    nombre_usuario = respJSON.getJSONObject(i).getString("nombre_usuario");
+                    mostrar_usuarios.add(new Fuente_mostrarUsuarios(id_usuario, nombre_usuario));
+
+                }
+            } catch (Exception ex) {
+                Log.e("ServicioRest", "Error!", ex);
+                resul = false;
+            }
+            return Boolean.valueOf(resul);
+
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+            barra.setProgress(values[0]);
+        }
+
+        protected void onPostExecute(Boolean result) {
+
+            if (result.booleanValue()) {
+                barra.setVisibility(View.INVISIBLE);
+                adaptador = new Adaptador_mostrarusuarios( mostrar_usuarios,getApplicationContext());
+                lista.setAdapter(adaptador);
+                return;
+            }
+            Toast.makeText(getApplicationContext(), "Problemas de conexión", Toast.LENGTH_SHORT).show();
+        }
+
+
+    }
+
+
+    //METODO PARA ELIMINAR USUARIO  ATRAVES  DE UN CUADRO DE DIALOGO
+    public void removerusuario(final int pos) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle(R.string.eliminar_usuario);
+        String fmt= getResources().getString(R.string.mensaje_para_eliminar);
+        builder.setMessage(String.format(fmt,mostrar_usuarios.get(pos).getUsuario()));
+        builder.setPositiveButton(R.string.eliminar, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //  usuarios.remove(pos);
+
+
+                if(!mostrar_usuarios.get(pos).getUsuario().contains("Admin")){
+                    if (mostrar_usuarios.get(pos).getId()==id_usuario_resibido){
+                     //   eliminarUsuario();
+                        //PASAMOS EL NOMBRE DE LA CLASE QUE EJECUTA LA SENTENCIA SQL DEL WEB SERVISE
+                        new eliminarUsuario().execute();
+                        Toast.makeText(Mostrar_Usuarios.this,R.string.usuario_eliminado,Toast.LENGTH_SHORT).show();
+                        startActivity(new Intent(getBaseContext(), ActivityCategorias.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP));
+                        finish();
+                    }else{
+                        new eliminarUsuario().execute();
+                       // eliminarUsuario();
+                        adaptador.notifyDataSetChanged();
+                    }
+
+                }else  {
+
+                    Toast.makeText(getApplicationContext(),"No se puede eliminar el usuario Administrador",Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        builder.setNegativeButton(R.string.canselar,new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+
+            }
+        });
+        builder.create().show();
+
+    }
+
+    //ELIMINAR UN USUARIO DESDE EL WEB SERVISE.
+    private class eliminarUsuario extends AsyncTask<String, Integer, Boolean> {
+        private eliminarUsuario(){}
+        boolean resul = true;
+
+        @Override
+        protected Boolean doInBackground(String... strings) {
+
+            try {
+                Fuente_mostrarUsuarios perf = mostrar_usuarios.get(usuarioselecionado);
+                idusario=perf.getId();
+                EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("https://shessag.000webhostapp.com/eliminacion_de_un_usuario.php?id_usuario="+idusario)).getEntity());
+
+                resul = true;
+            } catch (Exception ex) {
+                Log.e("ServicioRest", "Error!", ex);
+                resul = false;
+            }
+            return resul;
+
+        }
+
+        protected void onPostExecute(Boolean result) {
+
+            if (resul) {
+                Toast.makeText(getApplicationContext(),"Usuario Eliminado",Toast.LENGTH_SHORT).show();
+                mostrar_usuarios.removeAll(mostrar_usuarios);
+                new llenarLista().execute();
+                adaptador.notifyDataSetChanged();
+            }else {
+                Toast.makeText(getApplicationContext(), "Problemas de conexión", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+
+    }
+
+
+//CREACION DE EL MENU DONDE SE ENCUENTRA E BOTEN DE ELIMINAR Y EDITAR.
     private ActionMode.Callback amc = new ActionMode.Callback() {
         @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
@@ -106,9 +253,6 @@ Adaptador_mostrarusuarios adaptador;
             if(item.getItemId()== R.id.EliminarItem){
                 removerusuario(usuarioselecionado);
                 mode.finish();
-
-
-
             }else
             if(item.getItemId()==R.id.EditarItem){
                 Fuente_mostrarUsuarios usu = mostrar_usuarios.get(usuarioselecionado);
@@ -127,49 +271,10 @@ Adaptador_mostrarusuarios adaptador;
         }
     };
 
-//METODO PARA ELIMINAR USUARIO  ATRAVES  DE UN CUADRO DE DIALOGO
-public void removerusuario(final int pos) {
-    AlertDialog.Builder builder = new AlertDialog.Builder(this);
-    builder.setTitle(R.string.eliminar_usuario);
-    String fmt= getResources().getString(R.string.mensaje_para_eliminar);
-    builder.setMessage(String.format(fmt,mostrar_usuarios.get(pos).getUsuario()));
-    builder.setPositiveButton(R.string.eliminar, new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-          //  usuarios.remove(pos);
 
-             if(!mostrar_usuarios.get(pos).getUsuario().contains("Admin")){
-                 if (mostrar_usuarios.get(pos).getId()==id_usuario_resibido){
-                     eliminarUsuario();
-                     Toast.makeText(Mostrar_Usuarios.this,R.string.usuario_eliminado,Toast.LENGTH_SHORT).show();
-                     startActivity(new Intent(getBaseContext(), ActivityCategorias.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP));
-                     finish();
-                 }else{
-                     eliminarUsuario();
-                     Toast.makeText(Mostrar_Usuarios.this,R.string.usuario_eliminado,Toast.LENGTH_SHORT).show();
-                     adaptador.notifyDataSetChanged();
-                 }
-
-            }else  {
-
-                Toast.makeText(getApplicationContext(),"No se puede eliminar el usuario Administrador",Toast.LENGTH_SHORT).show();
-            }
-        }
-    });
-
-    builder.setNegativeButton(R.string.canselar,new DialogInterface.OnClickListener() {
-        @Override
-        public void onClick(DialogInterface dialogInterface, int i) {
-
-
-        }
-    });
-    builder.create().show();
-
-}
 
     //LLENAR El LIST VIEW CON LA BSASE DE DATOS
-
+/*
     public  void llenarLista(){
         ConexionSQLiteHelper bh = new ConexionSQLiteHelper(Mostrar_Usuarios.this,"bdaeo",null,1);
 
@@ -214,5 +319,8 @@ public void removerusuario(final int pos) {
                 Toast.makeText(Mostrar_Usuarios.this,"Fallo",Toast.LENGTH_LONG).show();
             }
         }
+
+*/
+
     }
 

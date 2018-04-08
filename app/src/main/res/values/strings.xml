@@ -51,6 +51,7 @@
     <string name="usuario_no_eliminado">El usuario no fue Eliminado</string>
     <string name="eliminar_usuario">Eliminar Usuario</string>
     <string name="mensaje_para_eliminar">\"Se Eliminará el usuario". \'%1$s'\ \"</string>
+    <string name="eliminarPerfil">\"Se Eliminará el perfil". \'%1$s'\ \"</string>
     <string name="eliminar">Eliminar</string>
     <string name="confirmar_borrar">\"Desea Eliminar todo.\"</string>
     <string name="canselar">Cancelar</string>
@@ -58,6 +59,7 @@
 
     <string name="title_activity_mapa">Map</string>
     <string name="title_activity_mostrar__perfiles">Perfiles</string>
+    <string name="title_activity_administracion_de_perfiles">AdministracionDePerfiles</string>
 
 
 </resources>

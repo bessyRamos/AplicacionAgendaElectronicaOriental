@@ -29,6 +29,7 @@
         </activity>
         <activity
             android:name=".clasesJAVAMelvin.ListaDeContactos"
+            android:configChanges="screenSize|orientation"
             android:label="@string/lista_contactos"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -69,6 +70,7 @@
             android:label="Formulario de Registro" />
         <activity
             android:name=".clasesJAVAMelvin.BusquedaAvanzada"
+            android:configChanges="screenSize|orientation"
             android:label="Búsqueda Avanzada"
             android:theme="@style/AppTheme.NoActionBar" />
 
@@ -95,7 +97,10 @@
                 android:name="android:support.PARENT_ACTIVITY"
                 android:value=".clasesJAVAAlan.Panel_de_Control" />
         </activity>
-
+        <activity
+            android:name=".clasesJAVAMelvin.AdministracionDePerfiles"
+            android:label="@string/title_activity_administracion_de_perfiles"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
