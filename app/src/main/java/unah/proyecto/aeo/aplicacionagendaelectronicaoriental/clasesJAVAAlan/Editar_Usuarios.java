@@ -4,16 +4,24 @@ import android.content.ContentValues;
 import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+
+import cz.msebera.android.httpclient.client.methods.HttpPost;
+import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
+import cz.msebera.android.httpclient.util.EntityUtils;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.ConexionSQLiteHelper;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
+
 
 /**
  * Created by alan fabricio on 15/03/2018.
@@ -22,42 +30,47 @@ import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 public class Editar_Usuarios extends AppCompatActivity {
 
     private int usuarioEditar;
-    private EditText nombreusuario,nombrepropio,contraseña;
+    private EditText nombreusuario,nombrepropio,contrasena;
+    String nombreusuariobar,nombrepropiobar,contrasenabar;
     Button bottonvalidar;
+    String nombre_usuario,nombre_propio,contra;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.editar_usuarios);
+
         bottonvalidar = (Button)findViewById(R.id.editar);
-        bottonvalidar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                validar();
-                if (nombreusuario.getError()==null && nombrepropio.getError()==null && contraseña.getError()==null){
-                     Intent intent = new Intent(Editar_Usuarios.this,Mostrar_Usuarios.class);
-                    startActivity(intent);
-                    finish();
-                }
 
-
-
-
-            }
-        });
-
-//manda la informacion de las clases pra ser editadas
+        //RECIVIMOS EL ID QUE VIENE DE LA CLASE MOSTRAR USUARIOS.
         Bundle extras = this.getIntent().getExtras();
         if(extras!=null) {
             usuarioEditar = extras.getInt("id");
 
         }
+        bottonvalidar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                new actualizarUsuarios().execute();
+
+
+            }
+        });
 
         nombreusuario = (EditText)findViewById(R.id.EditUsuario);
         nombrepropio = (EditText)findViewById(R.id.EditNombre);
-        contraseña= (EditText)findViewById(R.id.Editcontrasena);
+        contrasena= (EditText)findViewById(R.id.Editcontrasena);
 
-        reflejarCampos();
+
+        // reflejarCampos();
+        //SE OPTIENEN LOS DATOS DEL SERVER Y SE PASAN A VARIABLES
+        new llenarlosEditTextdelServer().execute();
+        nombreusuariobar=nombreusuario.getText().toString();
+        nombrepropiobar=nombrepropio.getText().toString();
+        contrasenabar=contrasena.getText().toString();
+
     }
+    /*
     public void reflejarCampos(){
         ConexionSQLiteHelper bh = new ConexionSQLiteHelper(Editar_Usuarios.this,"bdaeo",null,1);
         if(bh!=null){
@@ -78,20 +91,21 @@ public class Editar_Usuarios extends AppCompatActivity {
         }
 
     }
-
+*/
 
 
     private void validar(){
+
         //id.setError(null);
         nombreusuario.setError(null);
         nombrepropio.setError(null);
-        contraseña.setError(null);
+        contrasena.setError(null);
 
 
         // String idd = id.getText().toString();
         String nombusus = nombreusuario.getText().toString();
         String nomb = nombrepropio.getText().toString();
-        String cont = contraseña.getText().toString();
+        String cont = contrasena.getText().toString();
 
 
         if(TextUtils.isEmpty(nombusus)){
@@ -105,12 +119,14 @@ public class Editar_Usuarios extends AppCompatActivity {
             return;
 
         }if(TextUtils.isEmpty(cont)){
-            contraseña.setError(getString(R.string.error_contrasena));
-            contraseña.requestFocus();
+            contrasena.setError(getString(R.string.error_contrasena));
+            contrasena.requestFocus();
             return;
 
         }
 
+
+/*
         ConexionSQLiteHelper bh = new ConexionSQLiteHelper(Editar_Usuarios.this,"bdaeo",null,1);
         if (bh!=null){
             SQLiteDatabase db = bh.getWritableDatabase();
@@ -132,12 +148,92 @@ public class Editar_Usuarios extends AppCompatActivity {
             }
 
         }
+        */
     }
 
 
 
+    //ACTUALIZACION DE UN USUARIO DESDE EL WEB SERVER
+    private class actualizarUsuarios extends AsyncTask<String, Integer, Boolean> {
+        private actualizarUsuarios(){}
+        boolean resul = true;
 
+        @Override
+        protected Boolean doInBackground(String... strings) {
+
+            try {
+                nombreusuariobar=nombreusuario.getText().toString();
+                nombrepropiobar=nombrepropio.getText().toString();
+                contrasenabar=contrasena.getText().toString();
+
+                EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("https://shessag.000webhostapp.com/actualizacion_de_un_usuario.php?id_usuario="+usuarioEditar+"&nombre_usuario="+nombreusuariobar+"&nombre_propio="+nombrepropiobar+"&contrasena="+contrasenabar)).getEntity());
+
+                resul = true;
+            } catch (Exception ex) {
+                Log.e("ServicioRest", "Error!", ex);
+                resul = false;
+            }
+            return resul;
+
+        }
+
+        protected void onPostExecute(Boolean result) {
+            validar();
+
+
+            if (resul) {
+                if (nombreusuario.getError()==null && nombrepropio.getError()==null && contrasena.getError()==null){
+                    Toast.makeText(getApplicationContext(),"Usuario Realizado Correctamente",Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(Editar_Usuarios.this,Mostrar_Usuarios.class);
+                    startActivity(intent);
+                    finish();
+                }
+
+            }else {
+                Toast.makeText(getApplicationContext(), "Problemas de conexión", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+
+    }
+    //METODO PARA LLENAR CUANDO SE ACTUALIZARON LOS USUARIOS DESDE EL WEB SERVER.
+    private class llenarlosEditTextdelServer extends AsyncTask<String, Integer, Boolean> {
+        private llenarlosEditTextdelServer(){}
+        boolean resul = true;
+
+        @Override
+        protected Boolean doInBackground(String... strings) {
+
+            try {
+                JSONArray respJSON = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("https://shessag.000webhostapp.com/Mostar_Los_Usuarios_Editados.php?id_usuario="+usuarioEditar)).getEntity()));
+                for (int i = 0; i < respJSON.length(); i++) {
+                    nombre_usuario = respJSON.getJSONObject(i).getString("nombre_usuario");
+                    nombre_propio = respJSON.getJSONObject(i).getString("nombre_propio");
+                    contra = respJSON.getJSONObject(i).getString("contrasena");
+                }
+
+                resul = true;
+            } catch (Exception ex) {
+                Log.e("ServicioRest", "Error!", ex);
+                resul = false;
+            }
+            return resul;
+
+        }
+
+        protected void onPostExecute(Boolean result) {
+
+            if (resul) {
+                nombreusuario.setText(nombre_usuario);
+                nombrepropio.setText(nombre_propio);
+                contrasena.setText(contra);
+            }else {
+                Toast.makeText(getApplicationContext(), "Problemas de conexión", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+
+    }
 
 }
-
 

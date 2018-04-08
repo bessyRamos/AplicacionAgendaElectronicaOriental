@@ -96,12 +96,13 @@ public class FormularioRegistroLogin extends AppCompatActivity {
             long insertado = db.insert("USUARIOS",null,valores);
             db.close();
             if(insertado>0 ){
-
                 Toast.makeText(FormularioRegistroLogin.this,"Agregado con exito",Toast.LENGTH_SHORT).show();
                 Intent intent = new Intent(this,Login.class);
                 nombre.setText("");
                 nombre_usuario.setText("");
                 contrasena.setText("");
+                rol.setText("");
+                estado_del_usuario.setText("");
                 startActivity(intent);
                 finish();
 

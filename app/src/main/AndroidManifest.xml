@@ -8,6 +8,7 @@
          location permissions for the 'MyLocation' functionality. 
     -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -44,7 +45,13 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".clasesJAVAAlan.Editar_Usuarios"
-            android:label="Edición de Cuenta" />
+            android:label="Edición de Cuenta"
+            android:parentActivityName=".clasesJAVAAlan.Mostrar_Usuarios">
+            <meta-data
+                android:name="android:support.PARENT_ACTIVITY"
+                android:value=".clasesJAVAAlan.Mostrar_Usuarios" />
+
+        </activity>
         <activity
             android:name=".clasesJAVAAlan.Mostrar_Usuarios"
             android:label="Usuarios"
