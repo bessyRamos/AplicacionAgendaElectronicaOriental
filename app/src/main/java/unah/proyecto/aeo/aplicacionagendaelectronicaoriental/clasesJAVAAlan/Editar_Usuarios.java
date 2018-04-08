@@ -163,7 +163,7 @@ public class Editar_Usuarios extends AppCompatActivity {
 
             try {
                 nombreusuariobar=nombreusuario.getText().toString();
-                nombrepropiobar=nombrepropio.getText().toString();
+                nombrepropiobar=nombrepropio.getText().toString().replace(" ","%20");
                 contrasenabar=contrasena.getText().toString();
 
                 EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("https://shessag.000webhostapp.com/actualizacion_de_un_usuario.php?id_usuario="+usuarioEditar+"&nombre_usuario="+nombreusuariobar+"&nombre_propio="+nombrepropiobar+"&contrasena="+contrasenabar)).getEntity());

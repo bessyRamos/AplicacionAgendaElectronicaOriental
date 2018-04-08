@@ -223,7 +223,7 @@ public class FormularioRegistroLogin extends AppCompatActivity {
 
             try {
                 nombreusuariobar=nombreusuario_insertar.getText().toString();
-                nombrepropiobar=nombrepropio_isertar.getText().toString();
+                nombrepropiobar=nombrepropio_isertar.getText().toString().replace(" ","%20");
                 contrasenabar=contrasena_insertar.getText().toString();
 
 

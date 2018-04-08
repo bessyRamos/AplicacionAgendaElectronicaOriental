@@ -1,6 +1,8 @@
 package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -8,6 +10,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
@@ -25,12 +28,16 @@ public class Panel_de_Control extends AppCompatActivity implements NavigationVie
     private DrawerLayout mdrawerLayout;
     private ActionBarDrawerToggle mToggle;
     private int id_usuario_resibido;
+    private SharedPreferences preferences_2;
+    private SharedPreferences.Editor editor_2;
 
    public Fuente_Panel_de_control[] fuente_panel_de_control;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_panel_de_control);
+
+
 
         lista=(ListView)findViewById(R.id.listViewPneldeControl);
 
@@ -81,6 +88,13 @@ public class Panel_de_Control extends AppCompatActivity implements NavigationVie
         navigationView.setNavigationItemSelectedListener(this);
 
     }
+
+
+
+
+
+
+
 
     @Override
     public void onBackPressed() {
