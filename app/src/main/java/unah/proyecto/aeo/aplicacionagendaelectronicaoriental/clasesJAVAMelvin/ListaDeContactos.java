@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -11,12 +12,28 @@ import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
+
+import cz.msebera.android.httpclient.HttpEntity;
+import cz.msebera.android.httpclient.HttpResponse;
+import cz.msebera.android.httpclient.client.HttpClient;
+import cz.msebera.android.httpclient.client.methods.HttpGet;
+import cz.msebera.android.httpclient.entity.BufferedHttpEntity;
+import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.ConexionSQLiteHelper;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.AcercaDe;
@@ -29,6 +46,7 @@ public class ListaDeContactos extends AppCompatActivity
     int id_categoria;
     String nombre_categoria;
     AdaptadorPerfilBreve adaptadorPerfilBreve;
+    RecyclerView contenedor;
 
 
     @Override
@@ -65,24 +83,7 @@ public class ListaDeContactos extends AppCompatActivity
         //Inicializacion del array
         listaOrganizaciones = new ArrayList<PerfilBreve>();
 
-        //Inicializacion del RecyclerView
-        RecyclerView contenedor = (RecyclerView) findViewById(R.id.recyclerViewPerfilBreve);
-        contenedor.setHasFixedSize(true);
-        LinearLayoutManager layout = new LinearLayoutManager(getApplicationContext());
-        layout.setOrientation(LinearLayoutManager.VERTICAL);
-
-
-        //Llamada al método para consultar los contactos en la base de datos
-        consultarListaContactos();
-
-        //Declaracion y seteo del adaptador al contenedor
-        adaptadorPerfilBreve = new AdaptadorPerfilBreve(listaOrganizaciones);
-        contenedor.setAdapter(adaptadorPerfilBreve);
-        contenedor.setLayoutManager(layout);
-
-        //cierre de la conexión a la base de datos
-        conn.close();
-
+        new mostrarPerfilesRegistrados().execute();
     }
 
 
@@ -194,5 +195,99 @@ public class ListaDeContactos extends AppCompatActivity
         }
         //cierra la conexión a la base de datos
         db.close();
+    }
+
+    private class mostrarPerfilesRegistrados extends AsyncTask<String, Integer, Boolean> {
+        private mostrarPerfilesRegistrados(){}
+
+        @Override
+        protected Boolean doInBackground(String... strings) {
+            boolean resul = true;
+            try{
+                HttpGet httpGet =  new HttpGet("https://shessag.000webhostapp.com/consultarContactosParaMostrar.php?id_categoria="+id_categoria);
+                HttpClient httpClient = new DefaultHttpClient();
+                HttpResponse response = (HttpResponse)httpClient.execute(httpGet);
+                HttpEntity entity = response.getEntity();
+                BufferedHttpEntity buffer = new BufferedHttpEntity(entity);
+                InputStream iStream = buffer.getContent();
+
+                String aux = "";
+
+                BufferedReader r = new BufferedReader(new InputStreamReader(iStream));
+                StringBuilder total = new StringBuilder();
+                String line;
+                while ((line = r.readLine()) != null) {
+                    aux += line;
+                }
+
+                // Parseamos la respuesta obtenida del servidor a un objeto JSON
+                JSONObject jsonObject = new JSONObject(aux);
+                JSONArray perfiles = jsonObject.getJSONArray("perfiles");
+
+
+                for(int i = 0; i < perfiles.length(); i++) {
+                    JSONObject perfil = perfiles.getJSONObject(i);
+
+                    // Creamos el objeto City
+                    PerfilBreve c = new PerfilBreve();
+                    c.setNombre(perfil.getString("nombre_organizacion"));
+
+                    if(!perfil.getString("numero_fijo").isEmpty()){
+                        c.setNumeroTelefono(perfil.getString("numero_fijo"));
+                    }else{
+                        c.setNumeroTelefono(perfil.getString("numero_movil"));
+                    }
+                    c.setDireccion(perfil.getString("nombre_region"));
+
+                    if(!perfil.getString("imagen").isEmpty()){
+                        c.setDato(perfil.getString("imagen"));
+                    }else {
+                        c.setImagen(BitmapFactory.decodeResource(getResources(),R.drawable.iconocontactowhite));
+                    }
+
+                    // Almacenamos el objeto en el array que hemos creado anteriormente
+                    listaOrganizaciones.add(c);
+                }
+            }catch (Exception ex){
+                ex.printStackTrace();
+                resul = false;
+            }
+
+            return resul;
+
+        }
+
+        protected void onPostExecute(Boolean result) {
+            if (result.booleanValue()) {
+                adaptadorPerfilBreve = new AdaptadorPerfilBreve(listaOrganizaciones);
+                contenedor = (RecyclerView) findViewById(R.id.recyclerViewPerfilBreve);
+                contenedor.setHasFixedSize(true);
+
+                LinearLayoutManager layout = new LinearLayoutManager(getApplicationContext());
+                layout.setOrientation(LinearLayoutManager.VERTICAL);
+                contenedor.setAdapter(adaptadorPerfilBreve);
+                contenedor.setLayoutManager(layout);
+                return;
+            }else {
+                Toast.makeText(getApplicationContext(), "Problemas de conexión \n Mostrando datos de base de datos local", Toast.LENGTH_SHORT).show();
+
+                //Conexión a la base de datos
+                conn = new ConexionSQLiteHelper(getApplicationContext(),"bdaeo",null,1);
+
+                consultarListaContactos();
+                conn.close();
+                //metodo contenedor de la pcicion de las pantallas horizontal y verical
+
+                adaptadorPerfilBreve = new AdaptadorPerfilBreve(listaOrganizaciones);
+                contenedor = (RecyclerView) findViewById(R.id.recyclerViewPerfilBreve);
+                contenedor.setHasFixedSize(true);
+
+                    LinearLayoutManager layout = new LinearLayoutManager(getApplicationContext());
+                    layout.setOrientation(LinearLayoutManager.VERTICAL);
+                    contenedor.setAdapter(adaptadorPerfilBreve);
+                    contenedor.setLayoutManager(layout);
+            }
+        }
+
     }
 }
