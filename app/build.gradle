@@ -35,4 +35,5 @@ dependencies {
     compile 'de.hdodenhof:circleimageview:2.2.0'
     compile 'com.loopj.android:android-async-http:1.4.9'
     compile group: 'cz.msebera.android', name: 'httpclient', version: '4.4.1.1'
+
 }

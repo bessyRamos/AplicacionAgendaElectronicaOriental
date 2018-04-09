@@ -257,7 +257,7 @@ Adaptador_mostrarusuarios adaptador;
             if(item.getItemId()==R.id.EditarItem){
                 Fuente_mostrarUsuarios usu = mostrar_usuarios.get(usuarioselecionado);
                 Intent in = new Intent(Mostrar_Usuarios.this,Editar_Usuarios.class);
-               in.putExtra("id",usu.getId());
+                in.putExtra("id",usu.getId());
                 startActivity(in);
                 mode.finish();
 

@@ -58,8 +58,19 @@
 
 
     <string name="title_activity_mapa">Map</string>
+    <string name="title_activity_nuevo_perfil">Nuevo Perfil</string>
     <string name="title_activity_mostrar__perfiles">Perfiles</string>
-    <string name="title_activity_administracion_de_perfiles">AdministracionDePerfiles</string>
+    <string name="title_activity_administracion_de_perfiles">Perfiles Activos</string>
+    <string name="title_activity_nuevas_solicitudes">Nuevas Solicitudes</string>
+    <string name="title_activity_perfiles_eliminados">Perfiles Eliminados</string>
+    <string name="title_activity_solicitudes_rechazadas">Solicitudes Rechazadas</string>
+    <string name="title_activity_editar_perfil">Edición de Perfil</string>
+    <string name="errNombreOrg">Por favor ingrese el nombre de la organización</string>
+    <string name="errNumero">Por favor ingrese al menos un tipo de número telefónico</string>
+    <string name="errDir">Por favor ingrese la dirección de su organización</string>
+    <string name="errDesc">Por favor haga una descripción de su organización</string>
+    <string name="errLat">Por favor ingrese la latitud</string>
+    <string name="errLong">Por favor ingrese la longitud</string>
 
 
 </resources>

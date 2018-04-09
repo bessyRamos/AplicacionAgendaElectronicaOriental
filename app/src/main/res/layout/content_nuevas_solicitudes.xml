@@ -5,12 +5,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context="unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.AdministracionDePerfiles"
-    tools:showIn="@layout/app_bar_administracion_de_perfiles"
+    tools:context="unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.NuevasSolicitudes"
+    tools:showIn="@layout/app_bar_nuevas_solicitudes"
     android:orientation="vertical">
 
     <ListView
-        android:id="@+id/listviewperfiles"
+        android:id="@+id/listviewperfilesPendientes"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         />
