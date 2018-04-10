@@ -16,8 +16,10 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -41,9 +43,9 @@ public class NuevoPerfil extends AppCompatActivity {
     FloatingActionButton botonGuardar;
     TextInputEditText etnombreeorganizacion, etnumerofijo, etnumerocel, etdireccion, etemail, etdescripcion, etlatitud, etlongitud;
     Spinner spcategorias, spregiones, spusuario;
-    ArrayList listaCategorias, listaRegiones, listaUsuarios;
+    ArrayList<ModeloSpinner> listaCategorias, listaRegiones, listaUsuarios;
 
-    int id_categoria, id_region;
+    int id_categoria, id_region, id_usuario;
 
     private static final int PICK_IMAGE = 100;
     Uri imageUri;
@@ -71,10 +73,12 @@ public class NuevoPerfil extends AppCompatActivity {
         spregiones = findViewById(R.id.spinerregionPerfil);
         spusuario= findViewById(R.id.spinerusuariosPerfil);
         spusuario.setVisibility(View.VISIBLE);
+        TextView titleUsuario = findViewById(R.id.tvus);
+        titleUsuario.setVisibility(View.VISIBLE);
 
-        listaCategorias=new ArrayList();
-        listaRegiones=new ArrayList();
-        listaUsuarios=new ArrayList();
+        listaCategorias=new ArrayList<ModeloSpinner>();
+        listaRegiones=new ArrayList<ModeloSpinner>();
+        listaUsuarios=new ArrayList<ModeloSpinner>();
 
         new llenarSpinnersNuevoPerfil().execute();
 
@@ -86,13 +90,48 @@ public class NuevoPerfil extends AppCompatActivity {
 
 
         }
+        spcategorias.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                id_categoria = listaCategorias.get(position).getId();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        spregiones.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                id_region = listaRegiones.get(position).getId();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        spusuario.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                id_usuario = listaUsuarios.get(position).getId();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
 
         botonGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 validar();
                 Toast.makeText(getApplicationContext(),"Procesando...",Toast.LENGTH_SHORT).show();
-                switch (spcategorias.getSelectedItem().toString()){
+                /*switch (spcategorias.getSelectedItem().toString()){
                     case "Emergencia":
                         id_categoria=1;
                         break;
@@ -135,7 +174,7 @@ public class NuevoPerfil extends AppCompatActivity {
                     case "El Paraíso":
                         id_region=4;
                         break;
-                }
+                }*/
 
 
 //                imagenBitmap = ((BitmapDrawable)imagenOrg.getDrawable()).getBitmap();
@@ -281,13 +320,13 @@ public class NuevoPerfil extends AppCompatActivity {
                 JSONArray usuariosWS = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("https://shessag.000webhostapp.com/ConsultarTodosLosUsuarios.php")).getEntity()));
 
                 for (int i = 0; i < regionesWS.length(); i++) {
-                    listaRegiones.add(regionesWS.getJSONObject(i).getString("nombre_region"));
-                }
+                    listaRegiones.add(new ModeloSpinner(regionesWS.getJSONObject(i).getString("nombre_region"),Integer.parseInt(regionesWS.getJSONObject(i).getString("id_region")))
+                    );                }
                 for (int i=0;i<categoriasWS.length();i++){
-                    listaCategorias.add(categoriasWS.getJSONObject(i).getString("nombre_categoria"));
+                    listaCategorias.add(new ModeloSpinner(categoriasWS.getJSONObject(i).getString("nombre_categoria"), Integer.parseInt(categoriasWS.getJSONObject(i).getString("id_categoria"))));
                 }
                 for (int i=0;i<usuariosWS.length();i++){
-                    listaUsuarios.add(usuariosWS.getJSONObject(i).getString("id_usuario"));
+                    listaUsuarios.add(new ModeloSpinner(usuariosWS.getJSONObject(i).getString("nombre_usuario"),Integer.parseInt(usuariosWS.getJSONObject(i).getString("id_usuario"))));
                 }
 
                 resul = true;
@@ -301,9 +340,9 @@ public class NuevoPerfil extends AppCompatActivity {
 
         protected void onPostExecute(Boolean result) {
             if (resul) {
-                ArrayAdapter adaptadorCategorias = new ArrayAdapter<>(getApplicationContext(),R.layout.adaptacion_spinner,listaCategorias);
-                ArrayAdapter adaptadorRegiones = new ArrayAdapter<>(getApplicationContext(),R.layout.adaptacion_spinner,listaRegiones);
-                ArrayAdapter adaptadorUsuarios = new ArrayAdapter<>(getApplicationContext(),R.layout.adaptacion_spinner,listaUsuarios);
+                AdaptadorPersonalizadoSpinner adaptadorCategorias = new AdaptadorPersonalizadoSpinner(NuevoPerfil.this,R.layout.plantilla_spiners_personalizados_id_nombre,R.id.item_id_spinner,listaCategorias);
+                AdaptadorPersonalizadoSpinner adaptadorRegiones = new AdaptadorPersonalizadoSpinner(NuevoPerfil.this,R.layout.plantilla_spiners_personalizados_id_nombre,R.id.item_id_spinner,listaRegiones);
+                AdaptadorPersonalizadoSpinner adaptadorUsuarios = new AdaptadorPersonalizadoSpinner(NuevoPerfil.this,R.layout.plantilla_spiners_personalizados_id_nombre,R.id.item_id_spinner,listaUsuarios);
                 spcategorias.setAdapter(adaptadorCategorias);
                 spregiones.setAdapter(adaptadorRegiones);
                 spusuario.setAdapter(adaptadorUsuarios);
@@ -340,7 +379,7 @@ public class NuevoPerfil extends AppCompatActivity {
                 parametros.add(new BasicNameValuePair("longitud_rec",etlongitud.getText().toString()));
                 parametros.add(new BasicNameValuePair("id_categoria",String.valueOf(id_categoria)));
                 parametros.add(new BasicNameValuePair("id_region",String.valueOf(id_region)));
-                parametros.add(new BasicNameValuePair("id_usuario",spusuario.getSelectedItem().toString()));
+                parametros.add(new BasicNameValuePair("id_usuario",String.valueOf(id_usuario)));
 
                 parametros.add(new BasicNameValuePair("imagen_rec",encodeImagen));
 

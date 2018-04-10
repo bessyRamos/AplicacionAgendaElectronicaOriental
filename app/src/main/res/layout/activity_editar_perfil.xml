@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android">
-<ScrollView android:layout_width="match_parent"
+<ScrollView
+    android:id="@+id/scview"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -154,13 +156,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:spinnerMode="dropdown"/>
+            <TextView
+                android:id="@+id/tvus"
+                android:layout_below="@id/spinerregionPerfil"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Usuario"
+                android:visibility="invisible"/>
             <Spinner
                 android:id="@+id/spinerusuariosPerfil"
-                android:layout_below="@+id/spinerregionPerfil"
+                android:layout_below="@+id/tvus"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:spinnerMode="dropdown"
                 android:visibility="invisible"/>
+
+            <TextView
+                android:layout_below="@id/spinerusuariosPerfil"
+                android:visibility="invisible"
+                android:layout_width="match_parent"
+                android:layout_height="60dp" />
         </RelativeLayout>
 
 </ScrollView>

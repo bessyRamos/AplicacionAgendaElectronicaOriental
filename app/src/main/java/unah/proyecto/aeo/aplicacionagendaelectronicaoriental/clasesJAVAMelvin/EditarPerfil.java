@@ -20,6 +20,7 @@ import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -70,7 +71,7 @@ public class EditarPerfil extends AppCompatActivity {
     //controla si existe imagen en el contacto traido desde el webservice
     boolean tieneImagen;
     //
-    ArrayList listaCategorias, listaRegiones;
+    ArrayList<ModeloSpinner> listaCategorias, listaRegiones;
 
     int id_categoria, id_region;
 
@@ -102,8 +103,8 @@ public class EditarPerfil extends AppCompatActivity {
         spcategorias = findViewById(R.id.spinercategoriaPerfil);
         spregiones = findViewById(R.id.spinerregionPerfil);
 
-        listaCategorias=new ArrayList();
-        listaRegiones=new ArrayList();
+        listaCategorias=new ArrayList<ModeloSpinner>();
+        listaRegiones=new ArrayList<ModeloSpinner>();
 
 
         Bundle a = getIntent().getExtras();
@@ -134,11 +135,36 @@ public class EditarPerfil extends AppCompatActivity {
             }
         });*/
 
+        spcategorias.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                id_categoria = listaCategorias.get(position).getId();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
+        spregiones.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                id_region = listaRegiones.get(position).getId();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+
+            }
+        });
+
         botonGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 validar();
                 Toast.makeText(getApplicationContext(),"Procesando...",Toast.LENGTH_SHORT).show();
+                /*
                 switch (spcategorias.getSelectedItem().toString()){
                     case "Emergencia":
                         id_categoria=1;
@@ -183,7 +209,7 @@ public class EditarPerfil extends AppCompatActivity {
                         id_region=4;
                         break;
                 }
-
+                */
 
 //                imagenBitmap = ((BitmapDrawable)imagenOrg.getDrawable()).getBitmap();
 
@@ -465,10 +491,11 @@ public class EditarPerfil extends AppCompatActivity {
                 JSONArray categoriasWS = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("https://shessag.000webhostapp.com/consultarCategorias.php")).getEntity()));
 
                 for (int i = 0; i < regionesWS.length(); i++) {
-                    listaRegiones.add(regionesWS.getJSONObject(i).getString("nombre_region"));
+                    listaRegiones.add(new ModeloSpinner(regionesWS.getJSONObject(i).getString("nombre_region"),Integer.parseInt(regionesWS.getJSONObject(i).getString("id_region")))
+                    );
                 }
                 for (int i=0;i<categoriasWS.length();i++){
-                    listaCategorias.add(categoriasWS.getJSONObject(i).getString("nombre_categoria"));
+                    listaCategorias.add(new ModeloSpinner(categoriasWS.getJSONObject(i).getString("nombre_categoria"), Integer.parseInt(categoriasWS.getJSONObject(i).getString("id_categoria"))));
                 }
 
                 resul = true;
@@ -482,51 +509,26 @@ public class EditarPerfil extends AppCompatActivity {
 
         protected void onPostExecute(Boolean result) {
             if (resul) {
-                ArrayAdapter adaptadorCategorias = new ArrayAdapter<>(getApplicationContext(),R.layout.adaptacion_spinner,listaCategorias);
-                ArrayAdapter adaptadorRegiones = new ArrayAdapter<>(getApplicationContext(),R.layout.adaptacion_spinner,listaRegiones);
+                AdaptadorPersonalizadoSpinner adaptadorCategorias = new AdaptadorPersonalizadoSpinner(EditarPerfil.this,R.layout.plantilla_spiners_personalizados_id_nombre,R.id.item_id_spinner,listaCategorias);
+                AdaptadorPersonalizadoSpinner adaptadorRegiones = new AdaptadorPersonalizadoSpinner(EditarPerfil.this,R.layout.plantilla_spiners_personalizados_id_nombre,R.id.item_id_spinner,listaRegiones);
                 spcategorias.setAdapter(adaptadorCategorias);
                 spregiones.setAdapter(adaptadorRegiones);
-                if(idregion_rec==3){
-                    spregiones.setSelection(0);
-                }else if(idregion_rec==4){
-                    spregiones.setSelection(1);
+
+
+                for(int i=0; i < adaptadorCategorias.getCount(); i++) {
+                    if(idcategoria_rec==adaptadorCategorias.getItem(i).getId()){
+                        spcategorias.setSelection(i);
+                        break;
+                    }
                 }
 
-                switch (idcategoria_rec){
-                    case 1:
-                        spcategorias.setSelection(0);
+                for(int i=0; i < adaptadorRegiones.getCount(); i++) {
+                    if(idregion_rec==adaptadorRegiones.getItem(i).getId()){
+                        spregiones.setSelection(i);
                         break;
-                    case 2:
-                        spcategorias.setSelection(1);
-                        break;
-                    case 3:
-                        spcategorias.setSelection(2);
-                        break;
-                    case 4:
-                        spcategorias.setSelection(3);
-                        break;
-                    case 5:
-                        spcategorias.setSelection(4);
-                        break;
-                    case 6:
-                        spcategorias.setSelection(5);
-                        break;
-                    case 7:
-                        spcategorias.setSelection(6);
-                        break;
-                    case 8:
-                        spcategorias.setSelection(7);
-                        break;
-                    case 9:
-                        spcategorias.setSelection(8);
-                        break;
-                    case 10:
-                        spcategorias.setSelection(9);
-                        break;
-                    case 11:
-                        spcategorias.setSelection(10);
-                        break;
+                    }
                 }
+
 
             }else {
                 Toast.makeText(getApplicationContext(), "Problemas de conexión", Toast.LENGTH_SHORT).show();
