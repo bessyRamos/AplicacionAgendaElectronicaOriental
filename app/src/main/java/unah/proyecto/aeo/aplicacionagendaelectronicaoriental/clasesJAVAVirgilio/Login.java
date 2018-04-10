@@ -228,7 +228,7 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
                 if (rol == 1 && estado_usuario ==1) {
                     Intent intent = new Intent(getApplicationContext(), Panel_de_Control.class);
 
-                    Toast.makeText(getApplicationContext(), "" + id_usuario, Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getApplicationContext(), "" + id_usuario, Toast.LENGTH_LONG).show();
                     intent.putExtra("usuario_ingreso",id_usuario);
                     usuario.setText("");
                     contrasena.setText("");

@@ -245,6 +245,7 @@ public class ListaDeContactos extends AppCompatActivity
                         c.setImagen(BitmapFactory.decodeResource(getResources(),R.drawable.iconocontactowhite));
                     }
 
+                    c.setId(Integer.parseInt(perfil.getString("id_contacto")));
                     // Almacenamos el objeto en el array que hemos creado anteriormente
                     listaOrganizaciones.add(c);
                 }
