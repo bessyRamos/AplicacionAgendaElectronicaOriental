@@ -71,6 +71,8 @@
     <string name="errDesc">Por favor haga una descripción de su organización</string>
     <string name="errLat">Por favor ingrese la latitud</string>
     <string name="errLong">Por favor ingrese la longitud</string>
+    <string name="Descripcion">Descripción:</string>
+    <string name="password">Recuperación de contraseña</string>
 
 
 </resources>

@@ -26,7 +26,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        app:backgroundTint="#fff"
+        app:backgroundTint="#c1ffffff"
         app:srcCompat="@drawable/ubicacion"
         android:layout_margin="16dp"/>
 
