@@ -125,6 +125,15 @@
         </activity>
         <activity android:name=".clasesJAVAMelvin.NuevoPerfil"
             android:label="@string/title_activity_nuevo_perfil"></activity>
+        <activity android:name=".clasesJAVAVirgilio.EditarUsuario"
+                    android:label="Editar Cuenta">
+        </activity>
+        <activity android:name=".clasesJAVAVirgilio.FormularioRegistroUsuario">
+        </activity>
+        <activity android:name=".clasesJAVAVirgilio.PanelDeControlUsuarios"
+                  android:label="Panel de Control"
+                  android:theme="@style/AppTheme.NoActionBar"/>
+
     </application>
 
 </manifest>
