@@ -119,8 +119,8 @@
             android:textAllCaps="false"
             android:text="Registrarse"
             android:onClick="Formulario_Registrarse_login"
-            android:layout_width="0dp"
-            android:layout_height="0dp" />
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
     </LinearLayout>
     </ScrollView>

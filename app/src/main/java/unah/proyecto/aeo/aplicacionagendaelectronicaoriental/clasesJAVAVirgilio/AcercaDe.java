@@ -42,11 +42,16 @@ public class AcercaDe extends AppCompatActivity implements NavigationView.OnNavi
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+    private SesionUsuario sesionUsuario;
+    private Sesion sesion;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.app_bar_acerca_de);
+
+        sesion = new Sesion(this);
+        sesionUsuario = new SesionUsuario(this);
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -123,7 +128,21 @@ public class AcercaDe extends AppCompatActivity implements NavigationView.OnNavi
         }else if (id == R.id.login) {
             Intent intent = new Intent(this, Login.class);
             startActivity(intent);
+        }if (id == R.id.cerrarsecion){
+
+            if (sesion.logindim()) {
+                sesion.setLogin(false);
+                startActivity(new Intent(this, Login.class));
+                finish();
+            }else {
+                if(sesionUsuario.logindimUsuario()){
+                    sesionUsuario.setLoginUsuario(false);
+                    startActivity(new Intent(this, Login.class));
+                    finish();
+                }
+            }
         }
+
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

@@ -1,7 +1,9 @@
 package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio;
 
+import android.content.Context;
 import android.content.Entity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
@@ -14,6 +16,7 @@ import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -65,9 +68,23 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
     private int rol;
     private int estado_usuario;
     private JSONObject jsonObject;
-    private Button acceder;
+    private Button acceder,registrarse;
 
+    // preferencia de administrador
+    private SharedPreferences preferences;
+    private SharedPreferences.Editor editor;
+    Context context=this;
+    String usuari;
+    String contrase;
+    private Sesion session;
+    //
 
+    //preferencia de usuario
+    private SesionUsuario  sessionUsuario;
+    private SharedPreferences preferencesUsuario;
+    private SharedPreferences.Editor editorUsuario;
+
+    //
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,18 +92,24 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
         setContentView(R.layout.activity_login);
         usuario = (EditText) findViewById(R.id.usuario_login);
         contrasena = (EditText) findViewById(R.id.contrasena_login);
+        //Preferencias de administrador y usuario
+        session = new Sesion(this);
+        sessionUsuario = new SesionUsuario(this);
+        //
         acceder = (Button) findViewById(R.id.ingresar_login);
         recuperar = (TextView) findViewById(R.id.recuperacion);//para recuperacion de contrasenia
         acceder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (usuario.getText().toString().isEmpty() || contrasena.getText().toString().isEmpty()) {
-                    Toast.makeText(getApplicationContext(), "Favor ingresar todos los Campos", Toast.LENGTH_SHORT).show();
 
-                } else {                          //si existe el usuario y la contraseña son correctas el accedera
-                    new LoginValidadoWeb().execute();
+                    if (usuario.getText().toString().isEmpty() || contrasena.getText().toString().isEmpty()) {
+                        Toast.makeText(getApplicationContext(), "Favor ingresar todos los Campos", Toast.LENGTH_SHORT).show();
 
-                }//fin else
+                    } else {                          //si existe el usuario y la contraseña son correctas el accedera
+
+                        new LoginValidadoWeb().execute();
+
+                    }//fin else
 
 
             }
@@ -140,20 +163,22 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
             startActivity(intent);
 
         } else if (id == R.id.login) {
+
+
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
 
-/*
+//Metodo para ingresar al formulario de registrar una nueva cuenta de usuario
     public void Formulario_Registrarse_login(View v) {   //metodo que habre el formulario para registrarse
-        Intent intent = new Intent(this, FormularioRegistroLogin.class);
+        Intent intent = new Intent(this, FormularioRegistroUsuario.class);
         usuario.setText("");
         contrasena.setText("");
         startActivity(intent);
     }
-    */
+
 
     public void Ingresar_Login(View v) { // metodo que verificaque se ingresen datos en los campos usuario y contraseña
 
@@ -175,6 +200,11 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
         usuario_resibido = usuario.getText().toString();
         password_resibido = contrasena.getText().toString();
 
+        //
+        usuari = usuario_resibido;
+        contrase = password_resibido;
+        //
+
         Cursor fila = conexion.rawQuery("select nombre_usuario,contrasena,id_usuario,estado_usuario from Usuarios WHERE nombre_usuario= '" + usuario_resibido + "'and contrasena='" + password_resibido + "'", null);
 
         while (fila.moveToNext()) {
@@ -191,7 +221,7 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
         }
 
     }
-
+//METODO DE VERIFICADE DESDE EL SERVIDOR
     private class LoginValidadoWeb extends AsyncTask<String, Integer, Boolean> {
         private LoginValidadoWeb() {
         }
@@ -217,7 +247,7 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
                 if (id_usuario != 0 && rol != 0 && estado_usuario != 0) {
                     resul = true;
                 } else {
-                    if(id_usuario != 0 && rol ==1 && estado_usuario == 2){
+                    if((id_usuario != 0 && rol ==1 && estado_usuario == 2) || (id_usuario != 0 && rol ==2 && estado_usuario == 2)) {
                         resul = false;
                     }
                     resul = false;
@@ -236,9 +266,10 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
             if (resul) {
 
                 if (rol == 1 && estado_usuario ==1) {
-                    Intent intent = new Intent(getApplicationContext(), Panel_de_Control.class);
-
-                    //Toast.makeText(getApplicationContext(), "" + id_usuario, Toast.LENGTH_LONG).show();
+                    //preferencia logeado con exito
+                    session.setLogin(true);
+                    //instancia y envio de usuario logeado
+                    Intent intent = new Intent(Login.this, Panel_de_Control.class);
                     intent.putExtra("usuario_ingreso",id_usuario);
                     usuario.setText("");
                     contrasena.setText("");
@@ -255,17 +286,36 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
                         finish();
 
                          */
-                        if (rol == 1 && estado_usuario==2){
-                            Toast.makeText(getApplicationContext(), "Usuario y/o Contraseña incorrecta", Toast.LENGTH_SHORT).show();
-                        }
-                        else {
-                            Toast.makeText(getApplicationContext()," usuario ",Toast.LENGTH_LONG).show();
-                        }
-
+                    if ( (rol == 1 && estado_usuario==2) || (rol ==2 && estado_usuario ==2)){
+                        Toast.makeText(getApplicationContext(), "Usuario y/o Contraseña incorrecta ", Toast.LENGTH_SHORT).show();
+                    }
+                    else if (rol ==2 && estado_usuario ==1){
+                        //preferencia logeado con exito usuario
+                        sessionUsuario.setLoginUsuario(true);
+                        //instancia y envio de usuario logeado
+                        Intent intent = new Intent(Login.this,PanelDeControlUsuarios.class);
+                        intent.putExtra("id",id_usuario);
+                        //limpieza de variables
+                        usuario.setText("");
+                        contrasena.setText("");
+                        //
+                        startActivity(intent);
+                        finish();
+                    }else {
+                        Toast.makeText(getApplicationContext()," ",Toast.LENGTH_LONG).show();
+                    }
                 }
 
             } else {
-                Toast.makeText(getApplicationContext(), "Usuario y/o Contraseña incorrecta", Toast.LENGTH_SHORT).show();
+                //numero de intentos
+                contador=contador+1;
+                if (contador ==3){
+                    usuario.setText("");
+                    contrasena.setText("");
+                    Toast.makeText(getApplicationContext(), "Limite de intentos agotados", Toast.LENGTH_SHORT).show();
+                    finish();
+                }else {//
+                    Toast.makeText(getApplicationContext(), "Usuario y/o Contraseña incorrecta", Toast.LENGTH_SHORT).show();
 
 
             }//fin de else fallo conexion, buscar sqlite

@@ -49,6 +49,9 @@ import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.BusquedaAvanzada;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.AcercaDe;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.Login;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.PanelDeControlUsuarios;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.Sesion;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.SesionUsuario;
 
 public class ActivityCategorias extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener {
@@ -58,7 +61,9 @@ public class ActivityCategorias extends AppCompatActivity
     Adaptador_Categoria adaptadorCategoria;
     RecyclerView contenedor;
 
-
+    //
+    private Sesion session;
+    private SesionUsuario sesionUsuario;
 
 
     @Override
@@ -67,6 +72,11 @@ public class ActivityCategorias extends AppCompatActivity
         setContentView(R.layout.activity_main_categorias);
         lista= new ArrayList<Fuente_Categoria>();
         adaptadorCategoria = new Adaptador_Categoria(lista);
+
+        //
+        session = new Sesion(this);
+        sesionUsuario = new SesionUsuario(this);
+        //
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -168,8 +178,20 @@ public class ActivityCategorias extends AppCompatActivity
             startActivity(intent);
 
         }else if (id == R.id.login) {
-            Intent intent = new Intent(this, Login.class);
-            startActivity(intent);
+            if (session.logindim()){
+                startActivity(new Intent(ActivityCategorias.this,Panel_de_Control.class));
+                finish();
+            }else{
+                if (sesionUsuario.logindimUsuario()){
+                    startActivity(new Intent(ActivityCategorias.this,PanelDeControlUsuarios.class));
+                    finish();
+                }else {
+                    Intent intent = new Intent(this, Login.class);
+                    startActivity(intent);
+                }
+
+            }
+
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

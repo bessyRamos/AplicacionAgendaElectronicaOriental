@@ -53,6 +53,7 @@
             <meta-data
                 android:name="android:support.PARENT_ACTIVITY"
                 android:value=".clasesJAVAAlan.Mostrar_Usuarios" />
+
         </activity>
         <activity
             android:name=".clasesJAVAAlan.Mostrar_Usuarios"
@@ -92,7 +93,7 @@
             android:label="@string/title_activity_mapa" />
         <activity
             android:name=".clasesJAVAMelvin.AdministracionDePerfiles"
-            android:label="@string/title_activity_administracion_de_perfiles" />
+            android:label="@string/title_activity_administracion_de_perfiles"></activity>
         <activity
             android:name=".clasesJAVAMelvin.EditarPerfil"
             android:configChanges="screenSize|orientation"
@@ -131,5 +132,18 @@
             android:label="@string/recuperacion">
         </activity>
 
+        <activity android:name=".clasesJAVAMelvin.NuevoPerfil"
+            android:label="@string/title_activity_nuevo_perfil"></activity>
+
+        <activity android:name=".clasesJAVAVirgilio.EditarUsuario"
+                    android:label="Editar Cuenta">
+        </activity>
+        <activity android:name=".clasesJAVAVirgilio.FormularioRegistroUsuario">
+        </activity>
+        <activity android:name=".clasesJAVAVirgilio.PanelDeControlUsuarios"
+                  android:label="Panel de Control"
+                  android:theme="@style/AppTheme.NoActionBar"/>
+
     </application>
+
 </manifest>

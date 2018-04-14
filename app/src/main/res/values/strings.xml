@@ -11,7 +11,7 @@
     <string name="email">E-mail:</string>
     <string name="apperfil">Perfil</string>
     <string name="principal">Principal</string>
-    <string name="acercadeapp">Acerca de:</string>
+    <string name="acercadeapp">Acerca de...</string>
     <string name="app_correo">AEO@Gmail.com</string>
     <string name="title_activity_acerca_de">AcercaDe</string>
     <string name="section_format">Hello World from section: %1$d</string>
@@ -30,7 +30,7 @@
         el Paraíso pertenecientes al departamento de El Paraíso en Honduras.
     </string>
     <string name="info_desarrolladores">Nosotros WebEver, equipo de desarrolladores de la App Agenda
-        Electrónica Oriental somos los únicos responsables de aceptar o denegar solicitudes de
+        Electrónica Oriental somos los únicos responsables de acceptar o denegar solicitudes de
         actualización de las empresas aquí registradas o por registrar en el futuro.
     </string>
     <string name="version">Version 1.1.1.0</string>
@@ -77,6 +77,11 @@
     <string name="recuperacion">Recuperación de contraseña</string>
     <string name="olvidaste">¿Olvidaste tu contraseña?</string>
     <string name="nota">Nota: Recuerda tus respuestas deben coincidir con las respuestas que nos brindaste al momento de registrarte con nosotros.</string>
+
+    <string name="error_usuario">Ingrese el Usuario</string>
+    <string name="error_nombre_contrasena">Ingrese la Contraseña</string>
+    <string name="cerrarsecion">Cerrar Seción</string>
+    <string name="editarcuenta">Editar Cuenta</string>
 
 
 </resources>
