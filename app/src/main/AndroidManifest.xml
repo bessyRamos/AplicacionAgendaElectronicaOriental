@@ -53,7 +53,6 @@
             <meta-data
                 android:name="android:support.PARENT_ACTIVITY"
                 android:value=".clasesJAVAAlan.Mostrar_Usuarios" />
-
         </activity>
         <activity
             android:name=".clasesJAVAAlan.Mostrar_Usuarios"
@@ -93,7 +92,7 @@
             android:label="@string/title_activity_mapa" />
         <activity
             android:name=".clasesJAVAMelvin.AdministracionDePerfiles"
-            android:label="@string/title_activity_administracion_de_perfiles"></activity>
+            android:label="@string/title_activity_administracion_de_perfiles" />
         <activity
             android:name=".clasesJAVAMelvin.EditarPerfil"
             android:configChanges="screenSize|orientation"
@@ -105,8 +104,7 @@
         </activity>
         <activity
             android:name=".clasesJAVAMelvin.NuevasSolicitudes"
-            android:label="@string/title_activity_nuevas_solicitudes"
-            />
+            android:label="@string/title_activity_nuevas_solicitudes" />
         <activity
             android:name=".clasesJAVAMelvin.PerfilesEliminados"
             android:label="@string/title_activity_perfiles_eliminados"
@@ -123,8 +121,15 @@
                 android:name="android:support.PARENT_ACTIVITY"
                 android:value=".clasesJAVAMelvin.AdministracionDePerfiles" />
         </activity>
-        <activity android:name=".clasesJAVAMelvin.NuevoPerfil"
-            android:label="@string/title_activity_nuevo_perfil"></activity>
-    </application>
+        <activity
+            android:name=".clasesJAVAMelvin.NuevoPerfil"
+            android:label="@string/title_activity_nuevo_perfil" >
+        </activity>
 
+
+        <activity android:name=".clasesJAVASheyli.RecuperacionDePassword"
+            android:label="@string/recuperacion">
+        </activity>
+
+    </application>
 </manifest>

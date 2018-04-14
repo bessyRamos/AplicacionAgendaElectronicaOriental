@@ -18,6 +18,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -48,10 +49,12 @@ import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.ConexionSQLiteHelpe
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.ActivityCategorias;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.Panel_de_Control;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVASheyli.RecuperacionDePassword;
 
 public class Login extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     public EditText usuario, contrasena;
     public Button button;
+    public TextView recuperar;//para recuperacion de contrasenia
     ConexionSQLiteHelper basedatos = new ConexionSQLiteHelper(this, "bdaeo", null, 1);
     SQLiteDatabase conexion;
     String usuarioPermiso, contrasenaPermiso;
@@ -73,6 +76,7 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
         usuario = (EditText) findViewById(R.id.usuario_login);
         contrasena = (EditText) findViewById(R.id.contrasena_login);
         acceder = (Button) findViewById(R.id.ingresar_login);
+        recuperar = (TextView) findViewById(R.id.recuperacion);//para recuperacion de contrasenia
         acceder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -113,6 +117,12 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
         } else {
             super.onBackPressed();
         }
+    }
+    //abrira activity recuperar contrasenia
+    public void recuperar1(View v){
+
+        Intent password = new Intent(this, RecuperacionDePassword.class);
+        startActivity(password);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

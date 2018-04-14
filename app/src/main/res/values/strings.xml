@@ -73,6 +73,10 @@
     <string name="errLong">Por favor ingrese la longitud</string>
     <string name="Descripcion">Descripción:</string>
     <string name="password">Recuperación de contraseña</string>
+    <string name="recuperar">Recuperar contraseña</string>
+    <string name="recuperacion">Recuperación de contraseña</string>
+    <string name="olvidaste">¿Olvidaste tu contraseña?</string>
+    <string name="nota">Nota: Recuerda tus respuestas deben coincidir con las respuestas que nos brindaste al momento de registrarte con nosotros.</string>
 
 
 </resources>
