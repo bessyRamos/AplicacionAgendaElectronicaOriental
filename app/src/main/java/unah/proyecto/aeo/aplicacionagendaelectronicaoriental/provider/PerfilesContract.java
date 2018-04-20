@@ -60,13 +60,6 @@ public class PerfilesContract {
         public static final String COLUMN_ID_REGION="id_region";
 
 
-        //___________________________________________________________________________
-        public final static String TABLA_CATEGORIAS="categorias";
-
-        public static final String COLUMN_ID_CATEGORIA="id_categoria";
-        public static final String COLUMN_NOMBRE_CATEGORIA="nombre_categoria";
-        public static final String COLUMN_IMAGEN_CATEGORIA="imagen_categoria";
-
 
 
     }
