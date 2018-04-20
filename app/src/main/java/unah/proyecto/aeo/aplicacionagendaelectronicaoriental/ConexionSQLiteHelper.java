@@ -144,11 +144,11 @@ public class ConexionSQLiteHelper extends SQLiteOpenHelper {
         db.execSQL(CREAR_TABLA_ESTADO_CONTACTOS);
         db.execSQL(CREAR_TABLA_CONTACTOS);
         db.execSQL(INSERTAR_ROL);
-        db.execSQL(INSERTAR_USUARIOS);
-        db.execSQL(INSERTAR_CATEGORIAS);
-        db.execSQL(INSERTAR_REGIONES);
+        //db.execSQL(INSERTAR_USUARIOS);
+        //db.execSQL(INSERTAR_CATEGORIAS);
+        //db.execSQL(INSERTAR_REGIONES);
         db.execSQL(INSERTAR_ESTADO_CONTACTOS);
-        db.execSQL(INSERTAR_CONTACTOS);
+        //db.execSQL(INSERTAR_CONTACTOS);
     }
 
     @Override
@@ -162,4 +162,5 @@ public class ConexionSQLiteHelper extends SQLiteOpenHelper {
         onCreate(db);
 
     }
+
 }

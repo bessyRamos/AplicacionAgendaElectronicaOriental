@@ -71,6 +71,7 @@
     <string name="errDesc">Por favor haga una descripción de su organización</string>
     <string name="errLat">Por favor ingrese la latitud</string>
     <string name="errLong">Por favor ingrese la longitud</string>
+    <string name="content_authority">unah.proyecto.aeo.aplicacionagendaelectronicaoriental</string>
 
 
 </resources>
