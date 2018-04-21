@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -51,10 +52,12 @@ import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.ConexionSQLiteHelpe
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.ActivityCategorias;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.Panel_de_Control;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVASheyli.RecuperacionDePassword;
 
 public class Login extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     public EditText usuario, contrasena;
     public Button button;
+    public TextView recuperar;//para recuperacion de contrasenia
     ConexionSQLiteHelper basedatos = new ConexionSQLiteHelper(this, "bdaeo", null, 1);
     SQLiteDatabase conexion;
     String usuarioPermiso, contrasenaPermiso;
@@ -94,7 +97,7 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
         sessionUsuario = new SesionUsuario(this);
         //
         acceder = (Button) findViewById(R.id.ingresar_login);
-
+        recuperar = (TextView) findViewById(R.id.recuperacion);//para recuperacion de contrasenia
         acceder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,6 +110,7 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
                         new LoginValidadoWeb().execute();
 
                     }//fin else
+
 
             }
         });
@@ -136,6 +140,12 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
         } else {
             super.onBackPressed();
         }
+    }
+    //abrira activity recuperar contrasenia
+    public void recuperar1(View v){
+
+        Intent password = new Intent(this, RecuperacionDePassword.class);
+        startActivity(password);
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -261,10 +271,8 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
                     //instancia y envio de usuario logeado
                     Intent intent = new Intent(Login.this, Panel_de_Control.class);
                     intent.putExtra("usuario_ingreso",id_usuario);
-                    //Limpiar variables
                     usuario.setText("");
                     contrasena.setText("");
-                    //
                     startActivity(intent);
                     finish();
                 } else {
@@ -309,15 +317,12 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
                 }else {//
                     Toast.makeText(getApplicationContext(), "Problemas de Conexion", Toast.LENGTH_SHORT).show();
 
-                }
-
 
             }//fin de else fallo conexion, buscar sqlite
         }//fin de onPostExecute
 
     }//fin boolean
 
-    //Metodo de permiso de el administrador logueado
     public void permisoAdmin() {
         SQLiteDatabase permiso = basedatos.getReadableDatabase();
         idRol = 1;
@@ -375,5 +380,5 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
     }
 
 
-
+}
 }

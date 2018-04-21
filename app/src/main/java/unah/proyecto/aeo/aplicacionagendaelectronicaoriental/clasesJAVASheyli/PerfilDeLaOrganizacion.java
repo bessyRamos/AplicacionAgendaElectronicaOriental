@@ -22,6 +22,8 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -44,15 +46,17 @@ import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.Fuen
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVABessy.Mapa;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.AcercaDe;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.Login;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.provider.AEODbHelper;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.provider.PerfilesContract;
 
 public class PerfilDeLaOrganizacion extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     private ImageView organizacion;
-    private TextView nombre,direccion,telefono,email,descripcion,movil;
-    ConexionSQLiteHelper conn;
+    private TextView nombre, direccion, telefono, email, descripcion, movil;
+    AEODbHelper conn;
     int id_organizacion;
-    double x,y;
+    double x, y;
     FloatingActionButton ubicacion;
-    String organizacionP,nombreP,direccionP,telefonoP,emailP,descripcionP,movilP;
+    String organizacionP, nombreP, direccionP, telefonoP, emailP, descripcionP, movilP;
     boolean imagenContacto;
 
     @Override
@@ -71,8 +75,6 @@ public class PerfilDeLaOrganizacion extends AppCompatActivity implements Navigat
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        new PerfilesEnBaseDeDatosWeb().execute();
-        //new ObtenerUbicacionEnBaseDeDatosWeb().execute();
 
         //recuperacion de variables
         organizacion = (ImageView) findViewById(R.id.imagenOrganizacion);
@@ -84,11 +86,90 @@ public class PerfilDeLaOrganizacion extends AppCompatActivity implements Navigat
         descripcion = (TextView) findViewById(R.id.descripcion);
         ubicacion = (FloatingActionButton) findViewById(R.id.fab);
 
-       Bundle extras = getIntent().getExtras();
-        if (extras!=null){
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
             id_organizacion = extras.getInt("id_organizacion");
         }
-        conn = new ConexionSQLiteHelper(this,"bdaeo",null,1);
+        conn = new AEODbHelper(this);
+
+        String[] projection = {
+                PerfilesContract.ContactosEntry.COLUMN_IMAGEN_PATH,
+                PerfilesContract.ContactosEntry.COLUMN_NOMBRE,
+                PerfilesContract.ContactosEntry.COLUMN_NUMERO_TELEFONO,
+                PerfilesContract.ContactosEntry.COLUMN_NUMERO_CELULAR,
+                PerfilesContract.ContactosEntry.COLUMN_E_MAIL,
+                PerfilesContract.ContactosEntry.COLUMN_DIRECCION,
+                PerfilesContract.ContactosEntry.COLUMN_DESCRIPCION,
+                PerfilesContract.ContactosEntry.COLUMN_LATITUD,
+                PerfilesContract.ContactosEntry.COLUMN_LONGITUD
+        };
+
+        SQLiteDatabase db = conn.getReadableDatabase();
+        Cursor cursor = db.query(PerfilesContract.ContactosEntry.TABLE_NAME,
+                projection,
+                PerfilesContract.ContactosEntry.COLUMN_PERFILID + " = ?",
+                new String[]{String.valueOf(id_organizacion)},
+                null,
+                null,
+                null);
+
+
+        while (cursor.moveToNext()) {
+            if (!cursor.getString(cursor.getColumnIndex(PerfilesContract.ContactosEntry.COLUMN_IMAGEN_PATH)).isEmpty()) {
+                Glide.with(this).
+                        load(cursor.getString(cursor.getColumnIndex(PerfilesContract.ContactosEntry.COLUMN_IMAGEN_PATH))).
+                        into(organizacion);
+            } else {
+                Glide.with(this).
+                        load(R.drawable.iconocontactowhite).
+                        into(organizacion);
+            }
+
+            nombre.setText(cursor.getString(cursor.getColumnIndex(PerfilesContract.ContactosEntry.COLUMN_NOMBRE)));
+            if (cursor.getString(cursor.getColumnIndex(PerfilesContract.ContactosEntry.COLUMN_NUMERO_TELEFONO)).isEmpty()) {
+                telefono.setText("No disponible");
+            } else {
+                telefono.setText(cursor.getString(cursor.getColumnIndex(PerfilesContract.ContactosEntry.COLUMN_NUMERO_TELEFONO)));
+            }
+
+            if (cursor.getString(cursor.getColumnIndex(PerfilesContract.ContactosEntry.COLUMN_NUMERO_CELULAR)).isEmpty()) {
+                movil.setText("No disponible");
+            } else {
+                movil.setText(cursor.getString(cursor.getColumnIndex(PerfilesContract.ContactosEntry.COLUMN_NUMERO_CELULAR)));
+            }
+
+            if (cursor.getString(cursor.getColumnIndex(PerfilesContract.ContactosEntry.COLUMN_E_MAIL)).isEmpty()) {
+                email.setText("No disponible");
+            } else {
+                email.setText(cursor.getString(cursor.getColumnIndex(PerfilesContract.ContactosEntry.COLUMN_E_MAIL)));
+            }
+
+            if (cursor.getString(cursor.getColumnIndex(PerfilesContract.ContactosEntry.COLUMN_DIRECCION)).isEmpty()) {
+                direccion.setText("Ninguna");
+            } else {
+                direccion.setText(cursor.getString(cursor.getColumnIndex(PerfilesContract.ContactosEntry.COLUMN_DIRECCION)));
+            }
+
+            if (cursor.getString(cursor.getColumnIndex(PerfilesContract.ContactosEntry.COLUMN_DESCRIPCION)).isEmpty()) {
+                descripcion.setText("No disponible");
+            } else {
+                descripcion.setText(cursor.getString(cursor.getColumnIndex(PerfilesContract.ContactosEntry.COLUMN_DESCRIPCION)));
+            }
+
+            x = Double.valueOf(cursor.getString(cursor.getColumnIndex(PerfilesContract.ContactosEntry.COLUMN_LATITUD)));
+            y = Double.valueOf(cursor.getString(cursor.getColumnIndex(PerfilesContract.ContactosEntry.COLUMN_LONGITUD)));
+
+        }
+        ubicacion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent ubicacion1 = new Intent(getApplicationContext(), Mapa.class);
+                ubicacion1.putExtra("latitud", x);
+                ubicacion1.putExtra("longitud", y);
+                ubicacion1.putExtra("nombre", nombre.getText().toString());
+                startActivity(ubicacion1);
+            }
+        });
     }
 
     @Override
@@ -137,10 +218,10 @@ public class PerfilDeLaOrganizacion extends AppCompatActivity implements Navigat
                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP));
             finish();
         } else if (id == R.id.acercadeinfodos) {
-            Intent intent = new Intent(this,AcercaDe.class);
+            Intent intent = new Intent(this, AcercaDe.class);
             startActivity(intent);
 
-        }else if (id == R.id.login) {
+        } else if (id == R.id.login) {
             Intent intent = new Intent(this, Login.class);
             startActivity(intent);
         }
@@ -148,156 +229,6 @@ public class PerfilDeLaOrganizacion extends AppCompatActivity implements Navigat
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
-    }//fin de boolean
-
-    //obtener datos de perfiles de organizacion mediante la base de datos en la web
-    private class PerfilesEnBaseDeDatosWeb extends AsyncTask<String, Integer, Boolean> {
-        private PerfilesEnBaseDeDatosWeb(){}
-        @Override
-        protected Boolean doInBackground(String... strings) {
-            boolean resul = true;
-
-            try{
-                // Parseamos la respuesta obtenida del servidor a un objeto JSON
-                JSONObject jsonObject = new JSONObject(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("https://shessag.000webhostapp.com/mostrar_perfil.php?id_contacto="+id_organizacion)).getEntity()));
-                JSONArray jsonArray = jsonObject.getJSONArray("perfilOrganizacion");
-                for(int i = 0; i < jsonArray.length(); i++) {
-
-                    if (jsonArray.getJSONObject(i).getString("imagen").isEmpty()){
-                        imagenContacto = false;
-                    }else{
-                        organizacionP = jsonArray.getJSONObject(i).getString("imagen");
-                        imagenContacto=true;
-                    }
-                    nombreP = jsonArray.getJSONObject(i).getString("nombre_organizacion");
-                    telefonoP = jsonArray.getJSONObject(i).getString("numero_fijo");
-                    movilP = jsonArray.getJSONObject(i).getString("numero_movil");
-                    emailP= jsonArray.getJSONObject(i).getString("e_mail");
-                    direccionP = jsonArray.getJSONObject(i).getString("direccion");
-                    descripcionP = jsonArray.getJSONObject(i).getString("descripcion_organizacion");
-                    x = jsonArray.getJSONObject(i).getDouble("latitud");
-                    y = jsonArray.getJSONObject(i).getDouble("longitud");
-
-                    resul  = true;
-                }
-            }catch (Exception ex){
-                ex.printStackTrace();
-                resul = false;
-            }
-
-            return resul;
-        }
-        protected void onPostExecute(Boolean result) {
-            if (result)
-            {
-
-                if (imagenContacto==true){
-                  byte[]byteCode = Base64.decode(organizacionP,Base64.DEFAULT);
-                  organizacion.setImageBitmap(BitmapFactory.decodeByteArray(byteCode,0,byteCode.length));
-                }else{
-                    organizacion.setImageResource(R.drawable.iconocontactowhite);
-                }
-
-                if(nombreP.isEmpty()){
-                   nombre.setText("No disponible");
-                }else{
-                    nombre.setText(nombreP);
-                }
-                if(telefonoP.isEmpty()){
-                    telefono.setText("No disponible");
-                }else{
-                    telefono.setText(telefonoP);
-                }
-                if(movilP.isEmpty()){
-                    movil.setText("No disponible");
-                }else{
-                    movil.setText(movilP);
-                }
-                if(emailP.isEmpty()){
-                    email.setText("No disponible");
-                }else{
-                    email.setText(emailP);
-                }
-                if(direccionP.isEmpty()){
-                    direccion.setText("No disponible");
-                }else{
-                    direccion.setText(direccionP);
-                }
-                if(descripcionP.isEmpty()){
-                    descripcion.setText("No disponible");
-                }else{
-                    descripcion.setText(descripcionP);
-                }
-
-               ubicacion.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                Intent ubicacion1 = new Intent(getApplicationContext(),Mapa.class);
-                ubicacion1.putExtra("latitud",x);
-                ubicacion1.putExtra("longitud",y);
-                ubicacion1.putExtra("nombre",nombre.getText().toString());
-                startActivity(ubicacion1);}
-                });
-
-            }else {
-               Toast.makeText(getApplicationContext(), "Problemas de conexión \n Mostrando datos de base de datos local", Toast.LENGTH_SHORT).show();
-
-                //llenado desde la base de datos local sqlite
-                SQLiteDatabase db = conn.getReadableDatabase();
-                Cursor cursor = db.rawQuery("SELECT imagen, nombre_organizacion,numero_fijo,numero_movil,e_mail,direccion,descripcion_organizacion FROM CONTACTOS WHERE id_contacto = "+id_organizacion,null );
-                while(cursor.moveToNext())
-                {
-                    organizacion.setImageResource(cursor.getInt(0));
-                    nombre.setText(cursor.getString(1));
-                    if(cursor.getString(2).isEmpty()) {
-                        telefono.setText("(No disponible)");
-                    }else{
-                        telefono.setText(cursor.getString(2));
-                    }
-
-                    if(cursor.getString(3).isEmpty()) {
-                        movil.setText("(No disponible)");
-                    }else{
-                        movil.setText(cursor.getString(3));
-                    }
-
-                    if(cursor.getString(4).isEmpty()) {
-                        email.setText("(No disponible)");
-                    }else{
-                        email.setText(cursor.getString(4));
-                    }
-
-                    if(cursor.getString(5).isEmpty()) {
-                        direccion.setText("(Ninguna)");
-                    }else{
-                        direccion.setText(cursor.getString(5));
-                    }
-
-                    if(cursor.getString(6).isEmpty()) {
-                        descripcion.setText("(No disponible)");
-                    }else{
-                        descripcion.setText(cursor.getString(6));
-                    }
-                }//fin de while
-
-                //llenado desde la base de datos local sqlite
-              ubicacion.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        SQLiteDatabase db = conn.getReadableDatabase();
-                        Cursor cursor1 = db.rawQuery("SELECT latitud, longitud FROM CONTACTOS WHERE id_contacto = "+id_organizacion,null);
-                        while(cursor1.moveToNext()){
-                            x = cursor1.getDouble(0);
-                            y = cursor1.getDouble(1);
-                        }
-                        Intent ubicacion1 = new Intent(getApplicationContext(),Mapa.class);
-                        ubicacion1.putExtra("latitud",x);
-                        ubicacion1.putExtra("longitud",y);
-                        ubicacion1.putExtra("nombre",nombre.getText().toString());
-                        startActivity(ubicacion1);
-                    }
-                });
-            }//fin de else fallo conexion, buscar sqlite
-        }//fin de onPostExecute
-    }//fin de PerfilesEnBaseDeDatosWeb
+    }
 }
+

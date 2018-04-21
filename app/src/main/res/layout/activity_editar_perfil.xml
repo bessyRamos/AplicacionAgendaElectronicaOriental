@@ -16,14 +16,16 @@
             tools:context="unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.EditarPerfil"
             android:padding="5dp"
             android:id="@+id/rl1">
-          <!--   <de.hdodenhof.circleimageview.CircleImageView
+          <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/imagenDeOrganizacion"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
-                android:src="@mipmap/ic_launcher"/>-->
-            <!--android:layout_below="@id/imagenDeOrganizacion"-->
-            <android.support.design.widget.TextInputLayout
+                android:layout_width="200dp"
+                android:layout_height="160dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerInParent="true"
+                android:src="@mipmap/ic_launcher"/>
 
+            <android.support.design.widget.TextInputLayout
+                android:layout_below="@id/imagenDeOrganizacion"
                 android:id="@+id/iptlnombreorg"
 
                 android:layout_width="match_parent"
@@ -176,6 +178,16 @@
                 android:visibility="invisible"
                 android:layout_width="match_parent"
                 android:layout_height="60dp" />
+
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/botonFoto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/iptlnumfijo"
+                android:layout_alignEnd="@+id/imagenDeOrganizacion"
+                android:layout_marginBottom="44dp"
+                android:layout_marginEnd="20dp"
+                android:src="@drawable/ic_menu_camera" />
         </RelativeLayout>
 
 </ScrollView>
@@ -187,4 +199,6 @@
         android:layout_height="wrap_content"
         android:src="@drawable/ic_save_white_24dp"
         />
+
+
 </RelativeLayout>

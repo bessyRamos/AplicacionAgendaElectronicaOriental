@@ -91,10 +91,19 @@
                 />
         </android.support.design.widget.TextInputLayout>
 
+        <TextView
+            android:id="@+id/recuperacion"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/olvidaste"
+            android:textColor="#662203"
+            android:layout_marginTop="10dp"
+            android:onClick="recuperar1"/>
+
         <Button
             android:id="@+id/ingresar_login"
             android:background="@drawable/rec_gradient"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="15dp"
             android:textAllCaps="false"
             android:text="Ingresar"
             android:onClick="Ingresar_Login"
@@ -112,8 +121,6 @@
             android:onClick="Formulario_Registrarse_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
-
-
 
     </LinearLayout>
     </ScrollView>

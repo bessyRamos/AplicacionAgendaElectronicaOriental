@@ -16,6 +16,7 @@ public class Contactos {
     private double latitud;
     private double longitud;
 
+
     public Contactos(int id_contacto, String nombre_organizacion, String numero_fijo, String numero_movil, String direccion, int imagen, String e_mail, String descripcion_organizacion, double latitud, double longitud) {
         this.id_contacto = id_contacto;
         this.nombre_organizacion = nombre_organizacion;
@@ -27,7 +28,11 @@ public class Contactos {
         this.descripcion_organizacion = descripcion_organizacion;
         this.latitud = latitud;
         this.longitud = longitud;
+
+
     }
+
+
 
     public int getId_contacto() {
         return id_contacto;

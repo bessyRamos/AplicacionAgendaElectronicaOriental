@@ -1,12 +1,10 @@
 package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan;
+import android.app.LoaderManager;
 import android.content.Context;
+import android.content.CursorLoader;
 import android.content.Intent;
+import android.content.Loader;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.graphics.BitmapFactory;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -19,64 +17,33 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Base64;
-import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Surface;
 import android.view.WindowManager;
-import android.widget.Toast;
 
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.util.ArrayList;
-
-import cz.msebera.android.httpclient.HttpEntity;
-import cz.msebera.android.httpclient.HttpResponse;
-import cz.msebera.android.httpclient.client.HttpClient;
-import cz.msebera.android.httpclient.client.methods.HttpGet;
-import cz.msebera.android.httpclient.client.methods.HttpPost;
-import cz.msebera.android.httpclient.entity.BufferedHttpEntity;
-import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
-import cz.msebera.android.httpclient.util.EntityUtils;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.ConexionSQLiteHelper;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.EntidadesBD.Categorias;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.BusquedaAvanzada;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.AcercaDe;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.Login;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.PanelDeControlUsuarios;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.Sesion;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.SesionUsuario;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.provider.CategoriasContract;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.sync.SyncAdapter;
 
 public class ActivityCategorias extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener {
-    ArrayList<Fuente_Categoria> lista;
-    ConexionSQLiteHelper conn;
-    Adaptador_Categoria myAdapter;
+        implements NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener, LoaderManager.LoaderCallbacks<Cursor> {
+
     Adaptador_Categoria adaptadorCategoria;
     RecyclerView contenedor;
+    private static final int CATEGORIA_LOADER=0;
 
-    //
-    private Sesion session;
-    private SesionUsuario sesionUsuario;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_categorias);
-        lista= new ArrayList<Fuente_Categoria>();
-        adaptadorCategoria = new Adaptador_Categoria(lista);
 
-        //
-        session = new Sesion(this);
-        sesionUsuario = new SesionUsuario(this);
-        //
+
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -89,35 +56,31 @@ public class ActivityCategorias extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-       /* if(!compruebaConexion(getApplicationContext())){
-            Toast.makeText(getApplicationContext(),"No hay Internet",Toast.LENGTH_SHORT).show();
+        contenedor = (RecyclerView) findViewById(R.id.contenedor);
+        contenedor.setHasFixedSize(true);
 
-        }else {
-            Toast.makeText(getApplicationContext(),"Hay Internet",Toast.LENGTH_SHORT).show();
-        }*/
-       new ObtenerRegistrosEnBaseDeDatosWeb().execute();
+        adaptadorCategoria = new Adaptador_Categoria(ActivityCategorias.this,null);
 
 
-    }
+        if(getRotation(getApplicationContext())== "vertical"){
+            LinearLayoutManager layout = new LinearLayoutManager(getApplicationContext());
+            layout.setOrientation(LinearLayoutManager.VERTICAL);
+            contenedor.setLayoutManager(layout);
+        }else{
 
-
-    public static boolean compruebaConexion(Context context) {
-
-        boolean connected = false;
-
-        ConnectivityManager connec = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        // Recupera todas las redes (tanto móviles como wifi)
-        NetworkInfo[] redes = connec.getAllNetworkInfo();
-
-        for (int i = 0; i < redes.length; i++) {
-            // Si alguna red tiene conexión, se devuelve true
-            if (redes[i].getState() == NetworkInfo.State.CONNECTED) {
-                connected = true;
-            }
+            contenedor.setLayoutManager(new GridLayoutManager(getApplicationContext(),2));
         }
-        return connected;
+        contenedor.setAdapter(adaptadorCategoria);
+
+
+
+        SyncAdapter.initializeSyncAdapter(this);
+
+        getLoaderManager().initLoader(CATEGORIA_LOADER,null,this);
+
+
     }
+
 
     public String getRotation(Context context){
         final int rotation = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getOrientation();
@@ -160,6 +123,10 @@ public class ActivityCategorias extends AppCompatActivity
             case R.id.accion_buscarAvanzado:
                 Intent aBusquedaAvanzada= new Intent(getApplicationContext(),BusquedaAvanzada.class);
                 startActivity(aBusquedaAvanzada);
+                break;
+            case R.id.sincronizar:
+                SyncAdapter.syncImmediately(this);
+                break;
         }
         return super.onOptionsItemSelected(item);
     }
@@ -178,20 +145,8 @@ public class ActivityCategorias extends AppCompatActivity
             startActivity(intent);
 
         }else if (id == R.id.login) {
-            if (session.logindim()){
-                startActivity(new Intent(ActivityCategorias.this,Panel_de_Control.class));
-                finish();
-            }else{
-                if (sesionUsuario.logindimUsuario()){
-                    startActivity(new Intent(ActivityCategorias.this,PanelDeControlUsuarios.class));
-                    finish();
-                }else {
-                    Intent intent = new Intent(this, Login.class);
-                    startActivity(intent);
-                }
-
-            }
-
+            Intent intent = new Intent(this, Login.class);
+            startActivity(intent);
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -199,137 +154,36 @@ public class ActivityCategorias extends AppCompatActivity
     }
 
 
+    @Override
+    public Loader<Cursor> onCreateLoader(int id, Bundle args) {
+        String[] projection ={
+                CategoriasContract.CategoriasEntry.COLUMN_ID_CATEGORIA,
+                CategoriasContract.CategoriasEntry.COLUMN_NOMBRE_CATEGORIA,
+                CategoriasContract.CategoriasEntry.COLUMN_CANTIDAD,
+                CategoriasContract.CategoriasEntry.COLUMN_IMAGEN_CATEGORIA,
+        };
 
-    //Metodo que consulta a la base de datos para ver las  categorias
-    private void consultarListaCategorias(){
 
-        //Obtener la base de datos
-        SQLiteDatabase db = conn.getReadableDatabase();
 
-        Fuente_Categoria fuente_categoria = null;
+        return new CursorLoader(this,
+                CategoriasContract.CategoriasEntry.CONTENT_URI,
+                projection,
+                null,
+                null,
+                CategoriasContract.CategoriasEntry.COLUMN_ID_CATEGORIA);
+    }
 
-        //Asignar la consulta sql
-        Cursor cursor =  db.rawQuery("SELECT A.id_categoria,A.nombre_categoria, A.imagen_categoria,COUNT(*) FROM CATEGORIAS AS A " +
-                "JOIN CONTACTOS AS C ON A.id_categoria=C.id_categoria GROUP BY A.id_categoria ",null);
+    @Override
+    public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
+        adaptadorCategoria.swapCursor(data);
+    }
 
-        //se obtienen los objetos de la consulta y se asignan a los componentes visuales
-        while (cursor.moveToNext()){
-            fuente_categoria = new Fuente_Categoria();
-            fuente_categoria.setId(cursor.getInt(0));
-            fuente_categoria.setTitulo(cursor.getString(1));
-            BitmapFactory.Options options = new BitmapFactory.Options();
-            options.inSampleSize = 2;
-            fuente_categoria.setImagen(BitmapFactory.decodeResource(getResources(),cursor.getInt(2),options));
-            fuente_categoria.setCantidad(cursor.getInt(3));
-
-            //se añade los datos al array
-            lista.add(fuente_categoria);
-
-        }
+    @Override
+    public void onLoaderReset(Loader<Cursor> loader) {
+        adaptadorCategoria.swapCursor(null);
     }
 
 
-    private class ObtenerRegistrosEnBaseDeDatosWeb extends AsyncTask<String, Integer, Boolean>{
-        private ObtenerRegistrosEnBaseDeDatosWeb(){}
-
-        @Override
-        protected Boolean doInBackground(String... strings) {
-            boolean resul = true;
-            try{
-                HttpGet httpGet =  new HttpGet("https://shessag.000webhostapp.com/ConsultarTodasLasCategorias.php");
-                HttpClient httpClient = new DefaultHttpClient();
-                HttpResponse response = (HttpResponse)httpClient.execute(httpGet);
-                HttpEntity entity = response.getEntity();
-                BufferedHttpEntity buffer = new BufferedHttpEntity(entity);
-                InputStream iStream = buffer.getContent();
-
-                String aux = "";
-
-                BufferedReader r = new BufferedReader(new InputStreamReader(iStream));
-                StringBuilder total = new StringBuilder();
-                String line;
-                while ((line = r.readLine()) != null) {
-                    aux += line;
-                }
-
-                // Parseamos la respuesta obtenida del servidor a un objeto JSON
-                JSONObject jsonObject = new JSONObject(aux);
-                JSONArray categorias = jsonObject.getJSONArray("categorias");
-
-
-                for(int i = 0; i < categorias.length(); i++) {
-                    JSONObject categoria = categorias.getJSONObject(i);
-
-                    // Creamos el objeto City
-                    Fuente_Categoria c = new Fuente_Categoria();
-                    c.setTitulo(categoria.getString("nombre_categoria"));
-                    c.setId(categoria.getInt("id_categoria"));
-                    c.setDato(categoria.getString("imagen_categoria"));
-                    c.setCantidad(categoria.getInt("count"));
-
-                    // Almacenamos el objeto en el array que hemos creado anteriormente
-                    lista.add(c);
-                }
-            }catch (Exception ex){
-                ex.printStackTrace();
-                resul = false;
-            }
-
-            return resul;
-
-        }
-
-        protected void onPostExecute(Boolean result) {
-            if (result.booleanValue()) {
-                adaptadorCategoria = new Adaptador_Categoria(lista);
-                contenedor = (RecyclerView) findViewById(R.id.contenedor);
-                contenedor.setHasFixedSize(true);
-
-
-                if(getRotation(getApplicationContext())== "vertical"){
-                    LinearLayoutManager layout = new LinearLayoutManager(getApplicationContext());
-                    layout.setOrientation(LinearLayoutManager.VERTICAL);
-                    contenedor.setAdapter(adaptadorCategoria);
-                    contenedor.setLayoutManager(layout);
-                }else{
-
-                    contenedor.setLayoutManager(new GridLayoutManager(getApplicationContext(),2));
-                    contenedor.setAdapter(adaptadorCategoria);
-
-                }
-                return;
-            }else {
-                Toast.makeText(getApplicationContext(), "Problemas de conexión \n Mostrando datos de base de datos local", Toast.LENGTH_SHORT).show();
-
-                //Conexión a la base de datos
-                conn = new ConexionSQLiteHelper(getApplicationContext(),"bdaeo",null,1);
-
-                consultarListaCategorias();
-                conn.close();
-                //metodo contenedor de la pcicion de las pantallas horizontal y verical
-
-                adaptadorCategoria = new Adaptador_Categoria(lista);
-                contenedor = (RecyclerView) findViewById(R.id.contenedor);
-                contenedor.setHasFixedSize(true);
-
-
-                if(getRotation(getApplicationContext())== "vertical"){
-                    LinearLayoutManager layout = new LinearLayoutManager(getApplicationContext());
-                    layout.setOrientation(LinearLayoutManager.VERTICAL);
-                    contenedor.setAdapter(adaptadorCategoria);
-                    contenedor.setLayoutManager(layout);
-                }else{
-
-                    contenedor.setLayoutManager(new GridLayoutManager(getApplicationContext(),2));
-                    contenedor.setAdapter(adaptadorCategoria);
-
-                }
-
-
-            }
-        }
-
-    }
 
 
 
@@ -343,7 +197,7 @@ public class ActivityCategorias extends AppCompatActivity
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        newText = newText.toLowerCase();
+       /* newText = newText.toLowerCase();
         ArrayList<Fuente_Categoria> newList = new ArrayList<>();
         for (Fuente_Categoria fuentecategoria :  lista){
             String nombre = fuentecategoria.getTitulo().toLowerCase();
@@ -355,7 +209,8 @@ public class ActivityCategorias extends AppCompatActivity
 
         }
         adaptadorCategoria.setFilter(newList);
-        return true;
+        return true;*/
+       return false;
     }
 }
 

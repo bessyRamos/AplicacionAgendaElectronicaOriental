@@ -51,8 +51,9 @@ public class EditarPerfil extends AppCompatActivity {
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1 ;
 
     int id_perfilEditar;
+    Bitmap imagenBitmap;
     CircleImageView imagenOrg;
-     Bitmap imagenBitmap;
+    FloatingActionButton botonFoto;
     FloatingActionButton botonGuardar;
     TextInputEditText etnombreeorganizacion, etnumerofijo, etnumerocel, etdireccion, etemail, etdescripcion, etlatitud, etlongitud;
     Spinner spcategorias, spregiones;
@@ -89,7 +90,9 @@ public class EditarPerfil extends AppCompatActivity {
         android.support.v7.app.ActionBar actionBar= getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-        //imagenOrg = findViewById(R.id.imagenDeOrganizacion);
+
+        imagenOrg = findViewById(R.id.imagenDeOrganizacion);
+        botonFoto = findViewById(R.id.botonFoto);
         botonGuardar= findViewById(R.id.botonGuardar);
         etnombreeorganizacion = findViewById(R.id.etnombreeorganizacion);
         etnumerofijo = findViewById(R.id.etnumerofijo);
@@ -127,13 +130,13 @@ public class EditarPerfil extends AppCompatActivity {
 
         }
         //validar();
-        /*imagenOrg.setOnClickListener(new View.OnClickListener() {
+        botonFoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
                 requestRead();
             }
-        });*/
+        });
 
         spcategorias.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -211,20 +214,20 @@ public class EditarPerfil extends AppCompatActivity {
                 }
                 */
 
-//                imagenBitmap = ((BitmapDrawable)imagenOrg.getDrawable()).getBitmap();
+              imagenBitmap = ((BitmapDrawable)imagenOrg.getDrawable()).getBitmap();
 
-               /* new AsyncTask<Void, Void, String>(){
+                new AsyncTask<Void, Void, String>(){
                     @Override
                     protected String doInBackground(Void... voids) {
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
                         imagenBitmap.compress(Bitmap.CompressFormat.JPEG,100,baos);
                         byte b []= baos.toByteArray();
 
-                        encodeImagen = Base64.encodeToString(b,Base64.DEFAULT);
+                        encodeImagen = Base64.encodeToString(b,0);
 
                         return null;
                     }
-                }.execute();*/
+                }.execute();
 
 
 
@@ -432,19 +435,15 @@ public class EditarPerfil extends AppCompatActivity {
                 parametros.add(new BasicNameValuePair("longitud_rec",etlongitud.getText().toString()));
                 parametros.add(new BasicNameValuePair("id_categoria",String.valueOf(id_categoria)));
                 parametros.add(new BasicNameValuePair("id_region",String.valueOf(id_region)));
-                parametros.add(new BasicNameValuePair("imagen_rec",encodeImagen));
+                parametros.add(new BasicNameValuePair("imagen",encodeImagen));
+                parametros.add(new BasicNameValuePair("nombre_imagen",etnombreeorganizacion.getText().toString().replace(" ","_")+".jpg"));
+
 
                 httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));
 
                 httpclient.execute(httppost);
 
-               /* EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("?id_contacto="+id_perfilEditar
-                        +"&nomborg_rec="+etnombreeorganizacion.getText().toString().replace(" ","%20")+
-                        "&numtel_rec="+etnumerofijo.getText().toString()+"&numcel_rec="+etnumerocel.getText().toString()+"&direccion_rec="+
-                        etdireccion.getText().toString().replace(" ","%20")+"&email_rec="+etemail.getText().toString()+"&desc_rec="
-                        +etdescripcion.getText().toString().replace(" ","%20")+"&lat_rec="+etlatitud.getText().toString()+
-                        "&longitud_rec="+etlongitud.getText().toString().replace("-","%2D")+"&id_categoria="+id_categoria+"&id_region="+id_region+"&imagen_rec="+  encodeImagen.toString())).getEntity());
-                */
+
                 resul = true;
             } catch (Exception ex) {
                 Log.e("ServicioRest", "Error!", ex);
