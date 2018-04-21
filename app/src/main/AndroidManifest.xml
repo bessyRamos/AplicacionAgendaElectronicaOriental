@@ -1,16 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="unah.proyecto.aeo.aplicacionagendaelectronicaoriental">
+          package="unah.proyecto.aeo.aplicacionagendaelectronicaoriental">
 
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
          location permissions for the 'MyLocation' functionality. 
     -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
 
     <application
         android:allowBackup="true"
@@ -24,36 +24,35 @@
             android:name=".clasesJAVAAlan.ActivityCategorias"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
             android:name=".clasesJAVAMelvin.ListaDeContactos"
             android:configChanges="screenSize|orientation"
             android:label="@string/lista_contactos"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".clasesJAVAVirgilio.AcercaDe"
             android:label="@string/acercadeapp"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".clasesJAVASheyli.PerfilDeLaOrganizacion"
             android:label="@string/apperfil"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".clasesJAVAAlan.Panel_de_Control"
             android:label="Panel de Control"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".clasesJAVAAlan.Editar_Usuarios"
             android:label="Edición de Cuenta"
             android:parentActivityName=".clasesJAVAAlan.Mostrar_Usuarios">
             <meta-data
                 android:name="android:support.PARENT_ACTIVITY"
-                android:value=".clasesJAVAAlan.Mostrar_Usuarios" />
-
+                android:value=".clasesJAVAAlan.Mostrar_Usuarios"/>
         </activity>
         <activity
             android:name=".clasesJAVAAlan.Mostrar_Usuarios"
@@ -61,20 +60,20 @@
             android:parentActivityName=".clasesJAVAAlan.Panel_de_Control">
             <meta-data
                 android:name="android:support.PARENT_ACTIVITY"
-                android:value=".clasesJAVAAlan.Panel_de_Control" />
+                android:value=".clasesJAVAAlan.Panel_de_Control"/>
         </activity>
         <activity
             android:name=".clasesJAVAVirgilio.Login"
             android:label="@string/login"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".clasesJAVAVirgilio.FormularioRegistroLogin"
-            android:label="Formulario de Registro" />
+            android:label="Formulario de Registro"/>
         <activity
             android:name=".clasesJAVAMelvin.BusquedaAvanzada"
             android:configChanges="screenSize|orientation"
             android:label="Búsqueda Avanzada"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -86,14 +85,14 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
+            android:value="@string/google_maps_key"/>
 
         <activity
             android:name=".clasesJAVABessy.Mapa"
-            android:label="@string/title_activity_mapa" />
+            android:label="@string/title_activity_mapa"/>
         <activity
             android:name=".clasesJAVAMelvin.AdministracionDePerfiles"
-            android:label="@string/title_activity_administracion_de_perfiles"></activity>
+            android:label="@string/title_activity_administracion_de_perfiles"/>
         <activity
             android:name=".clasesJAVAMelvin.EditarPerfil"
             android:configChanges="screenSize|orientation"
@@ -101,19 +100,18 @@
             android:parentActivityName=".clasesJAVAMelvin.AdministracionDePerfiles">
             <meta-data
                 android:name="android:support.PARENT_ACTIVITY"
-                android:value=".clasesJAVAMelvin.AdministracionDePerfiles" />
+                android:value=".clasesJAVAMelvin.AdministracionDePerfiles"/>
         </activity>
         <activity
             android:name=".clasesJAVAMelvin.NuevasSolicitudes"
-            android:label="@string/title_activity_nuevas_solicitudes"
-            />
+            android:label="@string/title_activity_nuevas_solicitudes"/>
         <activity
             android:name=".clasesJAVAMelvin.PerfilesEliminados"
             android:label="@string/title_activity_perfiles_eliminados"
             android:parentActivityName=".clasesJAVAMelvin.AdministracionDePerfiles">
             <meta-data
                 android:name="android:support.PARENT_ACTIVITY"
-                android:value=".clasesJAVAMelvin.AdministracionDePerfiles" />
+                android:value=".clasesJAVAMelvin.AdministracionDePerfiles"/>
         </activity>
         <activity
             android:name=".clasesJAVAMelvin.SolicitudesRechazadas"
@@ -121,19 +119,23 @@
             android:parentActivityName=".clasesJAVAMelvin.AdministracionDePerfiles">
             <meta-data
                 android:name="android:support.PARENT_ACTIVITY"
-                android:value=".clasesJAVAMelvin.AdministracionDePerfiles" />
+                android:value=".clasesJAVAMelvin.AdministracionDePerfiles"/>
         </activity>
-        <activity android:name=".clasesJAVAMelvin.NuevoPerfil"
-            android:label="@string/title_activity_nuevo_perfil"></activity>
-        <activity android:name=".clasesJAVAVirgilio.EditarUsuario"
-                    android:label="Editar Cuenta">
+        <activity
+            android:name=".clasesJAVAMelvin.NuevoPerfil"
+            android:label="@string/title_activity_nuevo_perfil"/>
+        <activity
+            android:name=".clasesJAVAVirgilio.EditarUsuario"
+            android:label="Editar Cuenta">
         </activity>
         <activity android:name=".clasesJAVAVirgilio.FormularioRegistroUsuario">
         </activity>
-        <activity android:name=".clasesJAVAVirgilio.PanelDeControlUsuarios"
-                  android:label="Panel de Control"
-                  android:theme="@style/AppTheme.NoActionBar"/>
-
+        <activity
+            android:name=".clasesJAVAVirgilio.PanelDeControlUsuarios"
+            android:label="Panel de Control"
+            android:theme="@style/AppTheme.NoActionBar"/>
+        <activity android:name=".clasesJAVAVirgilio.FormularioNuevaOrganizacion">
+        </activity>
     </application>
 
 </manifest>

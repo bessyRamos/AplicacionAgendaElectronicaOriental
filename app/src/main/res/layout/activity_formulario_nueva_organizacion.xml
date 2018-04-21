@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.FormularioNuevaOrganizacion">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+       >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="10dp">
+            <TextView
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Imagen de la Organizacion"
+                android:textStyle="bold"
+                android:textSize="20dp"
+                android:gravity="center"
+
+            />
+
+            <ImageView
+                android:id="@+id/imgimagenOrganizacion"
+                android:layout_width="match_parent"
+                android:layout_height="100dp"
+                app:srcCompat="@drawable/camara"
+            />
+            <Button
+                android:id="@+id/btnTomarImagen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Insertar Imagen "
+                app:srcCompat="@drawable/camara"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal"
+
+            />
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="10dp"
+            >
+
+                <EditText
+                    android:id="@+id/txtNombreOrganizacion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Nombre de la Organización"
+
+                />
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/txtNumeroTelefonoFijo"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Número fijo"
+                    android:inputType="text"
+                    android:digits="1234567890-"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/txtNumeroTelefonoCelular"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Número móvil"
+                    android:inputType="text"
+                    android:digits="1234567890-"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/txtDireccion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Dirección"
+                    android:inputType="textMultiLine"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/txtEmail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="e-mail"
+                    android:inputType="textEmailAddress" />
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/txtDescripcion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Descripción de la Organizacion"
+                    android:inputType="textMultiLine"
+                />
+            </android.support.design.widget.TextInputLayout>
+            <TextView
+                android:id="@+id/viewCategoria"
+                android:layout_below="@id/iptllong"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Categoría"/>
+
+            <Spinner
+                android:id="@+id/spinercategoriaOrganizacion"
+                android:layout_below="@+id/tvcat"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:spinnerMode="dialog"/>
+            <TextView
+                android:id="@+id/viewRegion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Región" />
+            <Spinner
+                android:id="@+id/spinerregionOrganizacion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:spinnerMode="dropdown"/>
+
+            <TextView
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Ubicacion de la Organizacion"
+                android:textStyle="bold"
+                android:textSize="20dp"
+                android:gravity="center"
+
+            />
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/iptllatit"
+                android:layout_below="@+id/iptldescript"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/txtlatitudOrganizacion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Latitud"
+                    android:inputType="number"
+                    android:digits="1234567890.-"/>
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/iptllong"
+                android:layout_below="@+id/iptllatit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/txtlongitudOrganizacion"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Longitud"
+                    android:inputType="number"
+                    android:digits="1234567890-."/>
+            </android.support.design.widget.TextInputLayout>
+
+
+
+
+
+           <ImageView
+               android:id="@+id/imgUbicacionOrganizacion"
+               android:layout_width="match_parent"
+               android:layout_height="100dp"
+               app:srcCompat="@drawable/ubicacion_organizacion"
+           />
+            <Button
+                android:id="@+id/btnUbicacionOrganizacion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Insertar Imagen "
+                app:srcCompat="@drawable/ubicacion_organizacion"
+                android:gravity="center"
+                android:layout_gravity="center_horizontal"
+
+            />
+
+
+
+        </LinearLayout>
+    </ScrollView>
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/btnGuardar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentEnd="true"
+        android:layout_gravity="bottom|end"
+        android:layout_margin="16dp"
+        app:srcCompat="@drawable/enviar" />
+
+
+
+</RelativeLayout>

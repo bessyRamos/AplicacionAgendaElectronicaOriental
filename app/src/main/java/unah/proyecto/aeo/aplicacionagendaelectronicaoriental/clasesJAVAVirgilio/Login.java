@@ -294,7 +294,7 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
                         startActivity(intent);
                         finish();
                     }else {
-                        Toast.makeText(getApplicationContext()," ",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(),"Problemas de Conexion",Toast.LENGTH_LONG).show();
                     }
                 }
 
@@ -307,7 +307,7 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
                     Toast.makeText(getApplicationContext(), "Limite de intentos agotados", Toast.LENGTH_SHORT).show();
                     finish();
                 }else {//
-                    Toast.makeText(getApplicationContext(), "Usuario y/o Contraseña incorrecta", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Problemas de Conexion", Toast.LENGTH_SHORT).show();
 
                 }
 

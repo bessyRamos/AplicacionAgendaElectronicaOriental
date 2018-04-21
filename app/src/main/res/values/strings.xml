@@ -76,6 +76,8 @@
     <string name="error_nombre_contrasena">Ingrese la Contraseña</string>
     <string name="cerrarsecion">Cerrar Seción</string>
     <string name="editarcuenta">Editar Cuenta</string>
+    <string name="erremail">Ingrese el Email</string>
+    <string name="errNumeroCelular">Ingrese el Numero Celular</string>
 
 
 </resources>
