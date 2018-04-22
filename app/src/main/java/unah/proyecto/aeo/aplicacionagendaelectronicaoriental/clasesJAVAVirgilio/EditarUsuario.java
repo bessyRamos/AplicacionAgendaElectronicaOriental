@@ -64,28 +64,6 @@ public class EditarUsuario extends AppCompatActivity {
         contrasenabar=contrasena.getText().toString();
 
     }
-    /*
-    public void reflejarCampos(){
-        ConexionSQLiteHelper bh = new ConexionSQLiteHelper(Editar_Usuarios.this,"bdaeo",null,1);
-        if(bh!=null){
-            SQLiteDatabase db = bh.getReadableDatabase();
-            Cursor c = db.rawQuery("SELECT * FROM Usuarios WHERE id_usuario="+usuarioEditar,null);
-
-            try {
-                if(c.moveToNext()){
-
-                    nombreusuario.setText(c.getString(1));
-                    nombrepropio.setText(c.getString(2));
-                    contraseña.setText(c.getString(3));
-                }
-
-            }finally {
-
-            }
-        }
-
-    }
-*/
 
 
     private void validar(){
@@ -120,29 +98,6 @@ public class EditarUsuario extends AppCompatActivity {
         }
 
 
-/*
-        ConexionSQLiteHelper bh = new ConexionSQLiteHelper(Editar_Usuarios.this,"bdaeo",null,1);
-        if (bh!=null){
-            SQLiteDatabase db = bh.getWritableDatabase();
-            ContentValues values = new ContentValues();
-
-            // values.put("cod_clases",Integer.parseInt(codigo.getText().toString()));
-            values.put("nombre_usuario",nombreusuario.getText().toString());
-            values.put("nombre_propio",nombrepropio.getText().toString());
-            values.put("contrasena",contraseña.getText().toString());
-            long respuesta = db.update("USUARIOS",values,"id_usuario="+usuarioEditar,null);
-            if(respuesta >0){
-                Toast.makeText(Editar_Usuarios.this,"Editado con exito",Toast.LENGTH_LONG).show();
-                nombreusuario.setText("");
-                nombrepropio.setText("");
-                contraseña.setText("");
-
-            }else  {
-                Toast.makeText(Editar_Usuarios.this,"Ocurrio un error",Toast.LENGTH_LONG).show();
-            }
-
-        }
-        */
     }
 
 

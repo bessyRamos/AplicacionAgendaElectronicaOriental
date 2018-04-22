@@ -392,6 +392,33 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
 
     }
 
+    private void validar(){
+
+        //id.setError(null);
+        usuario.setError(null);
+        contrasena.setError(null);
+
+
+        // String idd = id.getText().toString();
+
+        String us = usuario.getText().toString();
+        String cont = contrasena.getText().toString();
+
+
+        if(TextUtils.isEmpty(us)){
+            usuario.setError(getString(R.string.error_usuario));
+            usuario.requestFocus();
+            return;
+        }if(TextUtils.isEmpty(cont)){
+            contrasena.setError(getString(R.string.error_contrasena));
+            contrasena.requestFocus();
+            return;
+
+        }
+
+
+    }
+
 
 }
 }

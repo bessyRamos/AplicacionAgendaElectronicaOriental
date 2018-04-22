@@ -172,6 +172,17 @@
         <activity
             android:name=".clasesJAVABessy.Ingresar_Ubicacion"
             android:label="@string/title_activity_ingresar__ubicacion"></activity>
+
+
+     <activity android:name=".clasesJAVAVirgilio.FormularioNuevaOrganizacion"
+               android:label="Registro Contacto">
+     </activity>
+
+        <activity android:name=".clasesJAVAVirgilio.EditarPerfilOrganizacion"
+                  android:label="Editar Contacto">
+
+        </activity>
+
     </application>
 
 </manifest>

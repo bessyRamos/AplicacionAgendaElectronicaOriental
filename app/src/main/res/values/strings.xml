@@ -87,6 +87,7 @@
     <string name="errNumeroCelular">Ingrese el Numero Celular</string>
     <string name="title_activity_ingresar__ubicacion">Ubica la Organización</string>
     <string name="detalle_de_marcas">(%1$.2f, %2$2f)</string>
+    <string name="panelcontrolUsuario">Panel de Control</string>
 
 
 </resources>

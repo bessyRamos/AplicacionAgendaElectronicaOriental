@@ -76,6 +76,7 @@ public class EditarPerfilOrganizacion extends AppCompatActivity {
     Uri imageUri;
 
     String encodeImagen;
+    int id_usuario_resibido_usuario;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -97,6 +98,10 @@ public class EditarPerfilOrganizacion extends AppCompatActivity {
 
         listaCategorias=new ArrayList<ModeloSpinner>();
         listaRegiones=new ArrayList<ModeloSpinner>();
+
+        if (getIntent().getExtras()!=null){
+            id_usuario_resibido_usuario = getIntent().getExtras().getInt("id_usuario");
+        }
 
 
         Bundle a = getIntent().getExtras();
@@ -408,7 +413,10 @@ public class EditarPerfilOrganizacion extends AppCompatActivity {
                         etlatitud.getError()==null &&
                         etlongitud.getError()==null){
                     Toast.makeText(getApplicationContext(),"Perfil Actualizado Correctamente",Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(getApplicationContext(),PanelDeControlUsuarios.class));
+                    Intent intent = new Intent(EditarPerfilOrganizacion.this,PanelDeControlUsuarios.class);
+                    intent.putExtra("id",id_usuario_resibido_usuario);
+                    startActivity(intent);
+                    //startActivity(new Intent(getApplicationContext(),PanelDeControlUsuarios.class));
                     finish();
                 }
 

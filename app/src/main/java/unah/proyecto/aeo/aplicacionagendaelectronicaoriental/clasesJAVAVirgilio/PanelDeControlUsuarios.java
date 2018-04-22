@@ -81,11 +81,10 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(PanelDeControlUsuarios.this,FormularioNuevaOrganizacion.class);
-
                 //se asegura que el extra no este vacio
                 if (getIntent().getExtras()!=null){
                     id_usuario_resibido_usuario = getIntent().getExtras().getInt("id");
-                    id= getIntent().getExtras().getInt("id");
+                    id = getIntent().getExtras().getInt("id");
                     Toast.makeText(getApplicationContext(),""+id_usuario_resibido_usuario,Toast.LENGTH_SHORT).show();
 
                     intent.putExtra("id",id_usuario_resibido_usuario);
@@ -121,6 +120,7 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
                             EntidadOrganizacion per = mostrar_perfiles.get(perfilselecionado);
                             Intent intent= new Intent(getApplicationContext(),EditarPerfilOrganizacion.class);
                             intent.putExtra("id",per.getId());
+                            intent.putExtra("id_usuario",id_usuario_resibido_usuario);
                             startActivity(intent);
 
                             finish();
@@ -193,21 +193,10 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
         } else if (id == R.id.acercadeinfodos) {
             Intent intent = new Intent(this,AcercaDe.class);
             startActivity(intent);
+            finish();
 
         }else if (id == R.id.login) {
-            if (sesion.logindim()){
-                startActivity(new Intent(PanelDeControlUsuarios.this,Panel_de_Control.class));
-                finish();
-            }else{
-                if (sesionUsuario.logindimUsuario()){
-                    startActivity(new Intent(PanelDeControlUsuarios.this,PanelDeControlUsuarios.class));
-                    finish();
-                }else {
-                    Intent intent = new Intent(this, Login.class);
-                    startActivity(intent);
-                }
 
-            }
         }else if (id ==R.id.cerrarsecion){
             //cerrar secion y borrado de preferencias
             if (sesion.logindim()) {
