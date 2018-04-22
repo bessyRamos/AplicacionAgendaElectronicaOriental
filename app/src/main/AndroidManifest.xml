@@ -131,9 +131,13 @@
         </activity>
         <activity
             android:name=".clasesJAVASheyli.RecuperacionDePassword"
-            android:label="@string/recuperacion">
-
+            android:label="@string/recuperacion"
+            android:parentActivityName=".clasesJAVAVirgilio.Login">
+            <meta-data
+                android:name="android:support.PARENT_ACTIVITY"
+                android:value=".clasesJAVAVirgilio.Login" />
         </activity>
+
         <service android:name=".sync.AuthenticatorService">
             <intent-filter>
                 <action android:name="android.accounts.AccountAuthenticator" />
