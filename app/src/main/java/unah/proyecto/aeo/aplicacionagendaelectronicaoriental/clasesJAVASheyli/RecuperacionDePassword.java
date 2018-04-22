@@ -23,7 +23,7 @@ public class RecuperacionDePassword extends AppCompatActivity {
     private Button recuperarContrasena;
     String usuario,contra,res1,res2,res3;
 
-
+//
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
