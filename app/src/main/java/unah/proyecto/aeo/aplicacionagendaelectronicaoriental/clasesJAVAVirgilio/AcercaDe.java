@@ -1,6 +1,8 @@
 package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -25,6 +27,7 @@ import android.widget.TextView;
 
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.ActivityCategorias;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.Panel_de_Control;
 
 public class AcercaDe extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener  {
 
@@ -42,16 +45,22 @@ public class AcercaDe extends AppCompatActivity implements NavigationView.OnNavi
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
-    private SesionUsuario sesionUsuario;
+
     private Sesion sesion;
+    private SesionUsuario sesionUsuario;
+    int id_usu=-1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.app_bar_acerca_de);
 
+        //envio de clase actual para las preferencias
         sesion = new Sesion(this);
         sesionUsuario = new SesionUsuario(this);
+        SharedPreferences preferences = getSharedPreferences("credencial", Context.MODE_PRIVATE);
+        id_usu  = preferences.getInt("usuario_ingreso",id_usu);
+        //
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -126,8 +135,26 @@ public class AcercaDe extends AppCompatActivity implements NavigationView.OnNavi
         } else if (id == R.id.acercadeinfodos) {
 
         }else if (id == R.id.login) {
-            Intent intent = new Intent(this, Login.class);
-            startActivity(intent);
+            if (sesion.logindim()){
+                Intent intent = new Intent(AcercaDe.this,Panel_de_Control.class);
+                intent.putExtra("usuario_ingreso",id_usu);
+                //startActivity(new Intent(ActivityCategorias.this,Panel_de_Control.class));
+                startActivity(intent);
+                finish();
+            }else{
+                if (sesionUsuario.logindimUsuario()){
+                    Intent intent = new Intent(AcercaDe.this,PanelDeControlUsuarios.class);
+                    intent.putExtra("id",id_usu);
+                    //startActivity(new Intent(ActivityCategorias.this,PanelDeControlUsuarios.class));
+                    startActivity(intent);
+                    finish();
+                }else {
+                    Intent intent = new Intent(this, Login.class);
+                    startActivity(intent);
+                    finish();
+                }
+
+            }
         }if (id == R.id.cerrarsecion){
 
             if (sesion.logindim()) {

@@ -39,12 +39,16 @@ import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.Fu
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.AdministracionDePerfiles;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.FormularioRegistroLogin;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.Login;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.Sesion;
 
 /**
  * Created by alan fabricio on 14/03/2018.
  */
 
 public class Mostrar_Usuarios extends AppCompatActivity {
+    //preferencia de administrador o usuario
+    private Sesion sesion;
+    //
 
     ArrayList<Fuente_mostrarUsuarios> mostrar_usuarios;
     private ListView lista;
@@ -63,6 +67,9 @@ Adaptador_mostrarusuarios adaptador;
         mostrar_usuarios= new ArrayList<Fuente_mostrarUsuarios>();
 
         setContentView(R.layout.mostrar_usuario);
+        //envio de clase actual para las preferencias
+        sesion = new Sesion(this);
+        //
        new ArrayList<>();
         //flecha atras
         android.support.v7.app.ActionBar actionBar= getSupportActionBar();
@@ -170,6 +177,10 @@ Adaptador_mostrarusuarios adaptador;
                         new eliminarUsuario().execute();
                         //Toast.makeText(Mostrar_Usuarios.this,R.string.usuario_eliminado,Toast.LENGTH_SHORT).show();
                         startActivity(new Intent(getBaseContext(), ActivityCategorias.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP));
+                        //elimila la preferencia
+                        if (sesion.logindim()) {
+                            sesion.setLogin(false);
+                        }
                         finish();
                     }else{
                         new eliminarUsuario().execute();

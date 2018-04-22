@@ -83,11 +83,14 @@
     <string name="error_nombre_contrasena">Ingrese la Contraseña</string>
     <string name="cerrarsecion">Cerrar Seción</string>
     <string name="editarcuenta">Editar Cuenta</string>
+    <string name="erremail">Ingrese el Email</string>
+    <string name="errNumeroCelular">Ingrese el Numero Celular</string>
     <string name="title_activity_ingresar__ubicacion">Ubica la Organización</string>
     <string name="detalle_de_marcas">(%1$.2f, %2$2f)</string>
     <string name="abc">ABCDEFGHIJKLMNÑOPQRSTUVWXYZabcdefghijklmnñopqrstuvwxyz</string>
     <string name="respuestaVacia">Debe contestar todas las preguntas</string>
     <string name="error_pregunta">Error la respuesta es incorrecta</string>
+    <string name="panelcontrolUsuario">Panel de Control</string>
 
 
 </resources>
