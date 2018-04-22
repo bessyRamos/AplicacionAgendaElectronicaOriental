@@ -103,17 +103,6 @@
                     android:hint="Descripción de la Organizacion"
                     android:inputType="textMultiLine"
                     />
-
-                <Button
-                    android:gravity="center"
-                    android:id="@+id/btnmapa"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_above="@+id/textView2"
-                    android:layout_alignParentStart="true"
-                    android:layout_weight="1"
-                    android:onClick="mapa"
-                    android:text="obtener coordenadas" />
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
