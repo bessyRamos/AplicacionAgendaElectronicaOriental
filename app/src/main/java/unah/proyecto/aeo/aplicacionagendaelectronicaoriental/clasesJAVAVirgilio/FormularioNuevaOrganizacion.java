@@ -74,7 +74,9 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity {
         emailOrganizacion = (EditText) findViewById(R.id.txtEmail);
         descrpcionOrganizacion = (EditText) findViewById(R.id.txtDescripcion);
         latitudOrganizacion = (EditText) findViewById(R.id.txtlatitudOrganizacion);
+        latitudOrganizacion.setText("123123");
         longitudOrganizacion = (EditText) findViewById(R.id.txtlongitudOrganizacion);
+        longitudOrganizacion.setText("-123334");
         imagenOrganizacion = (ImageView) findViewById(R.id.imgimagenOrganizacion);
         guardar = (FloatingActionButton) findViewById(R.id.btnGuardar);
         spinnerCategorias = (Spinner) findViewById(R.id.spinercategoriaOrganizacion);
@@ -225,7 +227,7 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity {
                 HttpPost httppost;
                 ArrayList<NameValuePair> parametros;
                 httpclient = new DefaultHttpClient();
-                httppost = new HttpPost("https://shessag.000webhostapp.com/crearPerfil.php");
+                httppost = new HttpPost("https://shessag.000webhostapp.com/insertarPerfilUsuario.php");
                 parametros = new ArrayList<NameValuePair>();
                 parametros.add(new BasicNameValuePair("nomborg_rec",nombreOrganizacion.getText().toString()));
                 parametros.add(new BasicNameValuePair("numtel_rec",telefonoFijo.getText().toString()));
@@ -273,7 +275,11 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity {
                         latitudOrganizacion.getError()==null &&
                         longitudOrganizacion.getError()==null){
                     Toast.makeText(getApplicationContext(),"Perfil Creado Correctamente",Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(FormularioNuevaOrganizacion.this,PanelDeControlUsuarios.class));
+                    Intent intent = new Intent(FormularioNuevaOrganizacion.this,PanelDeControlUsuarios.class);
+                    //startActivity(new Intent(FormularioNuevaOrganizacion.this,PanelDeControlUsuarios.class));
+                    intent.putExtra("id",id_usuario);
+                    startActivity(intent);
+
                     finish();
                 }
 

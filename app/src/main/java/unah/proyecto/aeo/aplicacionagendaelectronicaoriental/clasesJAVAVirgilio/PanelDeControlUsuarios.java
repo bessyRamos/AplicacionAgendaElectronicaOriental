@@ -1,7 +1,6 @@
 package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.AsyncTask;
@@ -15,34 +14,18 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
-import android.view.ActionMode;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
-import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
 import java.util.ArrayList;
 
-import cz.msebera.android.httpclient.HttpEntity;
-import cz.msebera.android.httpclient.HttpResponse;
-import cz.msebera.android.httpclient.client.ClientProtocolException;
-import cz.msebera.android.httpclient.client.HttpClient;
-import cz.msebera.android.httpclient.client.methods.HttpGet;
 import cz.msebera.android.httpclient.client.methods.HttpPost;
 import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
 import cz.msebera.android.httpclient.util.EntityUtils;
@@ -59,7 +42,7 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
     private Button salir;
     int id_usuario_resibido_usuario;
     private int id;
-    String descripcion;
+    String estadoOrganizacion;
     private ListView lista;
     //
     AdaptadorOrganizacion adaptadorMostrarPerfiles;
@@ -103,6 +86,7 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
                 if (getIntent().getExtras()!=null){
                     id_usuario_resibido_usuario = getIntent().getExtras().getInt("id");
                     id= getIntent().getExtras().getInt("id");
+                    Toast.makeText(getApplicationContext(),""+id_usuario_resibido_usuario,Toast.LENGTH_SHORT).show();
 
                     intent.putExtra("id",id_usuario_resibido_usuario);
                     startActivity(intent);
@@ -112,6 +96,7 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
             }
         });
 
+        // metodo para el llenado de la lista de perfiles
         lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, final int masterposition, long id) {
@@ -126,29 +111,22 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
                 builder.setView(modeloListView);
                 final Dialog dialog = builder.create();
                 dialog.show();
+                //metodo para el llenado de la lista al darle tap a cada perfil editar y borrar
                 modeloListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
                     @Override
                     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                        //Editar Contacto
-                        if (position == 0){
-                            /*
-                            Intent intent = new Intent(PanelDeControlUsuarios.this, EditarPerfil.class);
-                            intent.putExtra("id",masterposition);
-                            Toast.makeText(getApplicationContext(),"editar"+masterposition,Toast.LENGTH_SHORT).show();
-                            startActivity(intent);
-                            */
 
-
+                        if (position == 0){  //Editar Contacto
 
                             EntidadOrganizacion per = mostrar_perfiles.get(perfilselecionado);
-                            Intent intent= new Intent(getApplicationContext(),EditarPerfil.class);
+                            Intent intent= new Intent(getApplicationContext(),EditarPerfilOrganizacion.class);
                             intent.putExtra("id",per.getId());
                             startActivity(intent);
 
                             finish();
 
-
                         }else if(position ==1){ //Borrar Contacto
+
                             AlertDialog.Builder builder = new AlertDialog.Builder(PanelDeControlUsuarios.this);
                             builder.setTitle("Eliminar Perfil");
                             String fmt= getResources().getString(R.string.eliminarPerfil);
@@ -158,7 +136,6 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
                                 public void onClick(DialogInterface dialog, int which) {
                                     //  llama a la clase que borra el perfil de la base de datos remota
                                     new eliminarPerfil().execute();
-
                                 }
                             });
 
@@ -168,9 +145,11 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
 
                                 }
                             });
+
                             builder.create().show();
 
                         }
+
                         dialog.dismiss();
                     }
                 });
@@ -283,10 +262,20 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
 
                     id_contacto = respJSON.getJSONObject(i).getInt("id_contacto");
                     nombre_organizacion = respJSON.getJSONObject(i).getString("nombre_organizacion");
-                    descripcion = respJSON.getJSONObject(i).getString("descripcion_organizacion");
+                    estadoOrganizacion = respJSON.getJSONObject(i).getString("id_estado");
 
+                    //comprueba el estado de la organizacion
+                    if(1 == Integer.parseInt(estadoOrganizacion)){
+                        estadoOrganizacion ="Pendiente";
+                    }else if (2 == Integer.parseInt(estadoOrganizacion)){
+                        estadoOrganizacion ="Activo";
+                    }else if(3 == Integer.parseInt(estadoOrganizacion)){
+                        estadoOrganizacion = "Rechazado";
+                    }else if (4 == Integer.parseInt(estadoOrganizacion)){
+                        estadoOrganizacion ="Eliminado";
+                    }
                     //envia los datos ala clase pojo de el item lista
-                    mostrar_perfiles.add(new EntidadOrganizacion(id_contacto , nombre_organizacion,descripcion));
+                    mostrar_perfiles.add(new EntidadOrganizacion(id_contacto , nombre_organizacion, estadoOrganizacion));
 
                 }
             } catch (Exception ex) {

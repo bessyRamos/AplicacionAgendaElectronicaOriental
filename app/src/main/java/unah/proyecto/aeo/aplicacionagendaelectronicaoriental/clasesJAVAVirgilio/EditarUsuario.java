@@ -34,6 +34,7 @@ public class EditarUsuario extends AppCompatActivity {
 
         bottonvalidar = (Button)findViewById(R.id.editar);
 
+
         //RECIVIMOS EL ID QUE VIENE DE LA CLASE MOSTRAR USUARIOS.
         Bundle extras = this.getIntent().getExtras();
         if(extras!=null) {

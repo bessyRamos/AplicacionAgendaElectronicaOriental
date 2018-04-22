@@ -71,20 +71,24 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
     private Button acceder,registrarse;
 
     // preferencia de administrador
-    private SharedPreferences preferences;
-    private SharedPreferences.Editor editor;
+    //private SharedPreferences preferences;
+    //private SharedPreferences.Editor editor;
     Context context=this;
     String usuari;
     String contrase;
-    private Sesion session;
+
     //
 
     //preferencia de usuario
     private SesionUsuario  sessionUsuario;
+    private Sesion session;
     private SharedPreferences preferencesUsuario;
     private SharedPreferences.Editor editorUsuario;
 
     //
+    int id_preferencia;
+    SharedPreferences preferences;
+    SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +99,11 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
         //Preferencias de administrador y usuario
         session = new Sesion(this);
         sessionUsuario = new SesionUsuario(this);
+        //
+        preferences = getSharedPreferences("credencial",Context.MODE_PRIVATE);
+        editor = preferences.edit();
+
+
         //
         acceder = (Button) findViewById(R.id.ingresar_login);
         recuperar = (TextView) findViewById(R.id.recuperacion);//para recuperacion de contrasenia
@@ -264,37 +273,32 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
 
         protected void onPostExecute(Boolean result) {
             if (resul) {
-
+                id_preferencia = id_usuario;
+                editor.putInt("usuario_ingreso",id_preferencia);
+                editor.commit();
                 if (rol == 1 && estado_usuario ==1) {
-                    //preferencia logeado con exito
-                    session.setLogin(true);
+
                     //instancia y envio de usuario logeado
                     Intent intent = new Intent(Login.this, Panel_de_Control.class);
-                    intent.putExtra("usuario_ingreso",id_usuario);
+                    intent.putExtra("usuario_ingreso",id_preferencia);
+                    //preferencia logeado con exito
+                    session.setLogin(true);
+                    //
                     usuario.setText("");
                     contrasena.setText("");
                     startActivity(intent);
                     finish();
                 } else {
-                        /*
-                        Intent intent = new Intent(getApplicationContext(),Panel_de_Control.class);
-                        intent.putExtra("usuario_ingreso",id_usuario);
-                        Toast.makeText(getApplicationContext(),""+id_usuario,Toast.LENGTH_LONG).show();
-                        usuario.setText("");
-                        contrasena.setText("");
-                        startActivity(intent);
-                        finish();
 
-                         */
                     if ( (rol == 1 && estado_usuario==2) || (rol ==2 && estado_usuario ==2)){
                         Toast.makeText(getApplicationContext(), "Usuario y/o Contraseña incorrecta ", Toast.LENGTH_SHORT).show();
                     }
                     else if (rol ==2 && estado_usuario ==1){
-                        //preferencia logeado con exito usuario
-                        sessionUsuario.setLoginUsuario(true);
                         //instancia y envio de usuario logeado
                         Intent intent = new Intent(Login.this,PanelDeControlUsuarios.class);
-                        intent.putExtra("id",id_usuario);
+                        intent.putExtra("id",id_preferencia);
+                        //preferencia logeado con exito usuario
+                        sessionUsuario.setLoginUsuario(true);
                         //limpieza de variables
                         usuario.setText("");
                         contrasena.setText("");
@@ -376,6 +380,15 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
         }
 
         return res;
+
+    }
+
+    private void cargarPreferencia (){
+
+        SharedPreferences preferences = getSharedPreferences("credencial",Context.MODE_PRIVATE);
+        int id_usu  = preferences.getInt("usuario_ingreso",-1);
+        // intent.putExtra("usuario_ingreso",id_preferencia);
+
 
     }
 

@@ -8,14 +8,6 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.ArrayList;
-
-import android.content.Context;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.BaseAdapter;
-import android.widget.TextView;
-
 import java.util.List;
 
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
@@ -59,13 +51,13 @@ public class AdaptadorOrganizacion extends BaseAdapter {
 
         //TextView textid = (TextView)v.findViewById(R.id.id);
         TextView nombre = (TextView)v.findViewById(R.id.nombreOrganizacionRegistrada);
-        TextView categoria = (TextView)v.findViewById(R.id.categoriaOrganizacionRegistrada);
+        TextView estado = (TextView)v.findViewById(R.id.estadoOrganizacionRegistrada);
         ImageView Imagen = (ImageView) v.findViewById(R.id.imagenOrganizacionRegistrada);
 
 
        // textid.setText(""+perfiles.get(i).getId());
         nombre.setText(listaobjetos.get(i).getTitulo().toString());
-        categoria.setText(listaobjetos.get(i).getCategoria().toString());
+        estado.setText(listaobjetos.get(i).getEstado().toString());
         //Imagen.setImageResource(R.drawable.telefono);
 
         return v;
