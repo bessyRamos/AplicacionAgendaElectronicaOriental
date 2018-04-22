@@ -35,6 +35,7 @@ import cz.msebera.android.httpclient.message.BasicNameValuePair;
 import cz.msebera.android.httpclient.util.EntityUtils;
 import de.hdodenhof.circleimageview.CircleImageView;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVABessy.Ingresar_Ubicacion;
 
 public class NuevoPerfil extends AppCompatActivity {
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1 ;
@@ -90,6 +91,8 @@ public class NuevoPerfil extends AppCompatActivity {
 
 
         }
+
+
         spcategorias.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -203,6 +206,11 @@ public class NuevoPerfil extends AppCompatActivity {
 
     }
 
+    public  void  mapa(View view){
+        Intent ubicacion1 = new Intent(getApplicationContext(),Ingresar_Ubicacion.class);
+        startActivityForResult(ubicacion1,1);
+    }
+
     public void requestRead() {
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -239,6 +247,15 @@ public class NuevoPerfil extends AppCompatActivity {
         if(resultCode == RESULT_OK && requestCode == PICK_IMAGE){
             imageUri = data.getData();
             imagenOrg.setImageURI(imageUri);
+        }else if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+
+                String latitud = data.getStringExtra("latitud");
+                String longitud = data.getStringExtra("longitud");
+                etlatitud.setText(latitud);
+                etlongitud.setText(longitud);
+
+            }
         }
     }
 
