@@ -40,7 +40,7 @@ public class Mapa extends FragmentActivity implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
 
-        mMap.setMapType(googleMap.MAP_TYPE_SATELLITE);
+        mMap.setMapType(googleMap.MAP_TYPE_HYBRID);
 
         LatLng coordenadas = new LatLng(x,y);
         mMap.addMarker(new MarkerOptions().position(coordenadas).title(n));

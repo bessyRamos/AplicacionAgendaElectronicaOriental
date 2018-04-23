@@ -1,4 +1,4 @@
-package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.AdministracionDePerfilesAdmin;
+package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio;
 
 import android.Manifest;
 import android.content.Intent;
@@ -15,14 +15,15 @@ import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
-import android.util.Base64;
+
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
@@ -36,32 +37,52 @@ import cz.msebera.android.httpclient.message.BasicNameValuePair;
 import cz.msebera.android.httpclient.util.EntityUtils;
 import de.hdodenhof.circleimageview.CircleImageView;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVABessy.Ingresar_Ubicacion;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.AdaptadorPersonalizadoSpinner;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.EditarPerfil;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.ModeloSpinner;
 
-public class NuevoPerfil extends AppCompatActivity {
+
+public class EditarPerfilOrganizacion extends AppCompatActivity {
+
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1 ;
-    CircleImageView imagenOrg;
-    Bitmap imagenBitmap;
-    FloatingActionButton botonGuardar;
-    FloatingActionButton botonFoto;
-    TextInputEditText etnombreeorganizacion, etnumerofijo, etnumerocel, etdireccion, etemail, etdescripcion, etlatitud, etlongitud;
-    Spinner spcategorias, spregiones, spusuario;
-    ArrayList<ModeloSpinner> listaCategorias, listaRegiones, listaUsuarios;
 
-    int id_categoria, id_region, id_usuario;
+    int id_perfilEditar;
+    Bitmap imagenBitmap;
+    CircleImageView imagenOrg;
+    FloatingActionButton botonFoto;
+    FloatingActionButton botonGuardar;
+    TextInputEditText etnombreeorganizacion, etnumerofijo, etnumerocel, etdireccion, etemail, etdescripcion, etlatitud, etlongitud;
+    Spinner spcategorias, spregiones;
+    //variables que almacenaran los datos traidos del webservice
+    String nomborg_rec ;
+    String numtel_rec ;
+    String numcel_rec ;
+    String direccion_rec ;
+    String email_rec ;
+    String desc_rec ;
+    String lati_rec ;
+    String longitud_rec ;
+    String imagen_rec ;
+    int idregion_rec ;
+    int idcategoria_rec ;
+    //controla si existe imagen en el contacto traido desde el webservice
+    boolean tieneImagen;
+    //
+    ArrayList<ModeloSpinner> listaCategorias, listaRegiones;
+
+    int id_categoria, id_region;
 
     private static final int PICK_IMAGE = 100;
     Uri imageUri;
 
     String encodeImagen;
-
+    int id_usuario_resibido_usuario;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_editar_perfil);
-
-        botonFoto = findViewById(R.id.botonFoto);
+        setContentView(R.layout.activity_editar_perfil_organizacion);
         imagenOrg = findViewById(R.id.imagenDeOrganizacion);
+        botonFoto = findViewById(R.id.botonFoto);
         botonGuardar= findViewById(R.id.botonGuardar);
         etnombreeorganizacion = findViewById(R.id.etnombreeorganizacion);
         etnumerofijo = findViewById(R.id.etnumerofijo);
@@ -74,16 +95,25 @@ public class NuevoPerfil extends AppCompatActivity {
 
         spcategorias = findViewById(R.id.spinercategoriaPerfil);
         spregiones = findViewById(R.id.spinerregionPerfil);
-        spusuario= findViewById(R.id.spinerusuariosPerfil);
-        spusuario.setVisibility(View.VISIBLE);
-        TextView titleUsuario = findViewById(R.id.tvus);
-        titleUsuario.setVisibility(View.VISIBLE);
 
         listaCategorias=new ArrayList<ModeloSpinner>();
         listaRegiones=new ArrayList<ModeloSpinner>();
-        listaUsuarios=new ArrayList<ModeloSpinner>();
 
-        new llenarSpinnersNuevoPerfil().execute();
+        if (getIntent().getExtras()!=null){
+            id_usuario_resibido_usuario = getIntent().getExtras().getInt("id_usuario");
+        }
+
+
+        Bundle a = getIntent().getExtras();
+        id_perfilEditar=a.getInt("id");
+
+        Toast.makeText(getApplicationContext(),"Cargando...",Toast.LENGTH_SHORT).show();
+
+        new llenarEditTexEditarPerfil().execute();
+
+        new llenarSpinnersPerfil().execute();
+
+
 
         int permissionCheck = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
         int permissionCheck1 = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE);
@@ -93,7 +123,14 @@ public class NuevoPerfil extends AppCompatActivity {
 
 
         }
+        //validar();
+        botonFoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
 
+                requestRead();
+            }
+        });
 
         spcategorias.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -119,41 +156,22 @@ public class NuevoPerfil extends AppCompatActivity {
             }
         });
 
-        spusuario.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                id_usuario = listaUsuarios.get(position).getId();
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-
-        botonFoto.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                requestRead();
-            }
-        });
-
         botonGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                botonGuardar.setClickable(false);
                 validar();
                 Toast.makeText(getApplicationContext(),"Procesando...",Toast.LENGTH_SHORT).show();
-             imagenBitmap = ((BitmapDrawable)imagenOrg.getDrawable()).getBitmap();
+
+                imagenBitmap = ((BitmapDrawable)imagenOrg.getDrawable()).getBitmap();
 
                 new AsyncTask<Void, Void, String>(){
                     @Override
                     protected String doInBackground(Void... voids) {
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        imagenBitmap.compress(Bitmap.CompressFormat.JPEG,70,baos);
+                        imagenBitmap.compress(Bitmap.CompressFormat.JPEG,100,baos);
                         byte b []= baos.toByteArray();
 
-                        encodeImagen = Base64.encodeToString(b,Base64.DEFAULT);
+                        encodeImagen = Base64.encodeToString(b,0);
 
                         return null;
                     }
@@ -162,11 +180,10 @@ public class NuevoPerfil extends AppCompatActivity {
 
 
 
-                new crearPerfil().execute();
+                new actualizarPerfil().execute();
 
             }
         });
-
 
     }
 
@@ -206,15 +223,6 @@ public class NuevoPerfil extends AppCompatActivity {
         if(resultCode == RESULT_OK && requestCode == PICK_IMAGE){
             imageUri = data.getData();
             imagenOrg.setImageURI(imageUri);
-        }else if (requestCode == 1) {
-            if (resultCode == RESULT_OK) {
-
-                String latitud = data.getStringExtra("latitud");
-                String longitud = data.getStringExtra("longitud");
-                etlatitud.setText(latitud);
-                etlongitud.setText(longitud);
-
-            }
         }
     }
 
@@ -282,27 +290,34 @@ public class NuevoPerfil extends AppCompatActivity {
 
     }
 
-    private class llenarSpinnersNuevoPerfil extends AsyncTask<String, Integer, Boolean> {
-        private llenarSpinnersNuevoPerfil(){}
+    private class llenarEditTexEditarPerfil extends AsyncTask<String, Integer, Boolean> {
+        private llenarEditTexEditarPerfil(){}
         boolean resul = true;
 
         @Override
         protected Boolean doInBackground(String... strings) {
 
             try {
+                JSONObject respJSON = new JSONObject(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("https://shessag.000webhostapp.com/consultarDatosDePerfilParaEditar.php?id_contacto="+id_perfilEditar)).getEntity()));
+                JSONArray jsonArray = respJSON.getJSONArray("perfiles");
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    nomborg_rec = jsonArray.getJSONObject(i).getString("nombre_organizacion");
+                    numtel_rec = jsonArray.getJSONObject(i).getString("numero_fijo");
+                    numcel_rec = jsonArray.getJSONObject(i).getString("numero_movil");
+                    direccion_rec = jsonArray.getJSONObject(i).getString("direccion");
+                    if(jsonArray.getJSONObject(i).getString("imagen").isEmpty()){
+                        tieneImagen=false;
+                    }else{
+                        imagen_rec = jsonArray.getJSONObject(i).getString("imagen");
+                        tieneImagen=true;
+                    }
 
-                JSONArray regionesWS = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("https://shessag.000webhostapp.com/consultarRegiones.php")).getEntity()));
-                JSONArray categoriasWS = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("https://shessag.000webhostapp.com/consultarCategorias.php")).getEntity()));
-                JSONArray usuariosWS = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("https://shessag.000webhostapp.com/ConsultarTodosLosUsuarios.php")).getEntity()));
-
-                for (int i = 0; i < regionesWS.length(); i++) {
-                    listaRegiones.add(new ModeloSpinner(regionesWS.getJSONObject(i).getString("nombre_region"),Integer.parseInt(regionesWS.getJSONObject(i).getString("id_region")))
-                    );                }
-                for (int i=0;i<categoriasWS.length();i++){
-                    listaCategorias.add(new ModeloSpinner(categoriasWS.getJSONObject(i).getString("nombre_categoria"), Integer.parseInt(categoriasWS.getJSONObject(i).getString("id_categoria"))));
-                }
-                for (int i=0;i<usuariosWS.length();i++){
-                    listaUsuarios.add(new ModeloSpinner(usuariosWS.getJSONObject(i).getString("nombre_usuario"),Integer.parseInt(usuariosWS.getJSONObject(i).getString("id_usuario"))));
+                    email_rec = jsonArray.getJSONObject(i).getString("e_mail");
+                    desc_rec = jsonArray.getJSONObject(i).getString("descripcion_organizacion");
+                    lati_rec = jsonArray.getJSONObject(i).getString("latitud");
+                    longitud_rec = jsonArray.getJSONObject(i).getString("longitud");
+                    idregion_rec = jsonArray.getJSONObject(i).getInt("id_region");
+                    idcategoria_rec = jsonArray.getJSONObject(i).getInt("id_categoria");
                 }
 
                 resul = true;
@@ -315,24 +330,36 @@ public class NuevoPerfil extends AppCompatActivity {
         }
 
         protected void onPostExecute(Boolean result) {
+
             if (resul) {
-                AdaptadorPersonalizadoSpinner adaptadorCategorias = new AdaptadorPersonalizadoSpinner(NuevoPerfil.this,R.layout.plantilla_spiners_personalizados_id_nombre,R.id.item_id_spinner,listaCategorias);
-                AdaptadorPersonalizadoSpinner adaptadorRegiones = new AdaptadorPersonalizadoSpinner(NuevoPerfil.this,R.layout.plantilla_spiners_personalizados_id_nombre,R.id.item_id_spinner,listaRegiones);
-                AdaptadorPersonalizadoSpinner adaptadorUsuarios = new AdaptadorPersonalizadoSpinner(NuevoPerfil.this,R.layout.plantilla_spiners_personalizados_id_nombre,R.id.item_id_spinner,listaUsuarios);
-                spcategorias.setAdapter(adaptadorCategorias);
-                spregiones.setAdapter(adaptadorRegiones);
-                spusuario.setAdapter(adaptadorUsuarios);
+                /*if(tieneImagen==true){
+                    byte[] byteCode = Base64.decode(imagen_rec, Base64.DEFAULT);
+                    imagenOrg.setImageBitmap(BitmapFactory.decodeByteArray(byteCode,0,byteCode.length));
+                }else {
+                    imagenOrg.setImageResource(R.drawable.iconocontactowhite);
+                }*/
+
+                etnombreeorganizacion.setText(nomborg_rec);
+                etnumerofijo.setText(numtel_rec);
+                etnumerocel.setText(numcel_rec);
+                etdireccion.setText(direccion_rec);
+                etemail.setText(email_rec);
+                etdescripcion.setText(desc_rec);
+                etlatitud.setText(lati_rec);
+                etlongitud.setText(longitud_rec);
+
+
 
             }else {
                 Toast.makeText(getApplicationContext(), "Problemas de conexión", Toast.LENGTH_SHORT).show();
             }
         }
-
-
     }
 
-    private class crearPerfil extends AsyncTask<String, Integer, Boolean> {
-        private crearPerfil(){}
+
+
+    private class actualizarPerfil extends AsyncTask<String, Integer, Boolean> {
+        private actualizarPerfil(){}
         boolean resul = true;
 
         @Override
@@ -343,8 +370,9 @@ public class NuevoPerfil extends AppCompatActivity {
                 HttpPost httppost;
                 ArrayList<NameValuePair> parametros;
                 httpclient = new DefaultHttpClient();
-                httppost = new HttpPost("https://shessag.000webhostapp.com/crearPerfil.php");
+                httppost = new HttpPost("https://shessag.000webhostapp.com/actualizarPerfil.php");
                 parametros = new ArrayList<NameValuePair>();
+                parametros.add(new BasicNameValuePair("id_contacto", String.valueOf(id_perfilEditar)));
                 parametros.add(new BasicNameValuePair("nomborg_rec",etnombreeorganizacion.getText().toString()));
                 parametros.add(new BasicNameValuePair("numtel_rec",etnumerofijo.getText().toString()));
                 parametros.add(new BasicNameValuePair("numcel_rec",etnumerocel.getText().toString()));
@@ -355,21 +383,15 @@ public class NuevoPerfil extends AppCompatActivity {
                 parametros.add(new BasicNameValuePair("longitud_rec",etlongitud.getText().toString()));
                 parametros.add(new BasicNameValuePair("id_categoria",String.valueOf(id_categoria)));
                 parametros.add(new BasicNameValuePair("id_region",String.valueOf(id_region)));
-                parametros.add(new BasicNameValuePair("id_usuario",String.valueOf(id_usuario)));
+                parametros.add(new BasicNameValuePair("imagen",encodeImagen));
+                parametros.add(new BasicNameValuePair("nombre_imagen",etnombreeorganizacion.getText().toString().replace(" ","_")+".jpg"));
 
-                parametros.add(new BasicNameValuePair("imagen_rec",encodeImagen));
 
                 httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));
 
                 httpclient.execute(httppost);
 
-               /* EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("?id_contacto="+id_perfilEditar
-                        +"&nomborg_rec="+etnombreeorganizacion.getText().toString().replace(" ","%20")+
-                        "&numtel_rec="+etnumerofijo.getText().toString()+"&numcel_rec="+etnumerocel.getText().toString()+"&direccion_rec="+
-                        etdireccion.getText().toString().replace(" ","%20")+"&email_rec="+etemail.getText().toString()+"&desc_rec="
-                        +etdescripcion.getText().toString().replace(" ","%20")+"&lat_rec="+etlatitud.getText().toString()+
-                        "&longitud_rec="+etlongitud.getText().toString().replace("-","%2D")+"&id_categoria="+id_categoria+"&id_region="+id_region+"&imagen_rec="+  encodeImagen.toString())).getEntity());
-                */
+
                 resul = true;
             } catch (Exception ex) {
                 Log.e("ServicioRest", "Error!", ex);
@@ -390,8 +412,11 @@ public class NuevoPerfil extends AppCompatActivity {
                         etdescripcion.getError()==null &&
                         etlatitud.getError()==null &&
                         etlongitud.getError()==null){
-                    Toast.makeText(getApplicationContext(),"Perfil Creado Correctamente",Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(getApplicationContext(),AdministracionDePerfiles.class));
+                    Toast.makeText(getApplicationContext(),"Perfil Actualizado Correctamente",Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(EditarPerfilOrganizacion.this,PanelDeControlUsuarios.class);
+                    intent.putExtra("id",id_usuario_resibido_usuario);
+                    startActivity(intent);
+                    //startActivity(new Intent(getApplicationContext(),PanelDeControlUsuarios.class));
                     finish();
                 }
 
@@ -399,6 +424,67 @@ public class NuevoPerfil extends AppCompatActivity {
                 Toast.makeText(getApplicationContext(), "Problemas de conexión", Toast.LENGTH_SHORT).show();
             }
         }
+
+    }
+
+
+    private class llenarSpinnersPerfil extends AsyncTask<String, Integer, Boolean> {
+        private llenarSpinnersPerfil(){}
+        boolean resul = true;
+
+        @Override
+        protected Boolean doInBackground(String... strings) {
+
+            try {
+
+                JSONArray regionesWS = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("https://shessag.000webhostapp.com/consultarRegiones.php")).getEntity()));
+                JSONArray categoriasWS = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("https://shessag.000webhostapp.com/consultarCategorias.php")).getEntity()));
+
+                for (int i = 0; i < regionesWS.length(); i++) {
+                    listaRegiones.add(new ModeloSpinner(regionesWS.getJSONObject(i).getString("nombre_region"),Integer.parseInt(regionesWS.getJSONObject(i).getString("id_region")))
+                    );
+                }
+                for (int i=0;i<categoriasWS.length();i++){
+                    listaCategorias.add(new ModeloSpinner(categoriasWS.getJSONObject(i).getString("nombre_categoria"), Integer.parseInt(categoriasWS.getJSONObject(i).getString("id_categoria"))));
+                }
+
+                resul = true;
+            } catch (Exception ex) {
+                Log.e("ServicioRest", "Error!", ex);
+                resul = false;
+            }
+            return resul;
+
+        }
+
+        protected void onPostExecute(Boolean result) {
+            if (resul) {
+                AdaptadorPersonalizadoSpinner adaptadorCategorias = new AdaptadorPersonalizadoSpinner(EditarPerfilOrganizacion.this,R.layout.plantilla_spiners_personalizados_id_nombre,R.id.item_id_spinner,listaCategorias);
+                AdaptadorPersonalizadoSpinner adaptadorRegiones = new AdaptadorPersonalizadoSpinner(EditarPerfilOrganizacion.this,R.layout.plantilla_spiners_personalizados_id_nombre,R.id.item_id_spinner,listaRegiones);
+                spcategorias.setAdapter(adaptadorCategorias);
+                spregiones.setAdapter(adaptadorRegiones);
+
+
+                for(int i=0; i < adaptadorCategorias.getCount(); i++) {
+                    if(idcategoria_rec==adaptadorCategorias.getItem(i).getId()){
+                        spcategorias.setSelection(i);
+                        break;
+                    }
+                }
+
+                for(int i=0; i < adaptadorRegiones.getCount(); i++) {
+                    if(idregion_rec==adaptadorRegiones.getItem(i).getId()){
+                        spregiones.setSelection(i);
+                        break;
+                    }
+                }
+
+
+            }else {
+                Toast.makeText(getApplicationContext(), "Problemas de conexión", Toast.LENGTH_SHORT).show();
+            }
+        }
+
 
     }
 }

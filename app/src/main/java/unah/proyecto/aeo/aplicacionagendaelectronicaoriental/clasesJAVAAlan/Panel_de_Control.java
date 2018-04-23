@@ -20,6 +20,7 @@ import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.Pe
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.AdministracionDePerfilesAdmin.AdministracionDePerfiles;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.AcercaDe;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.Login;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.PanelDeControlUsuarios;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.Sesion;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.SesionUsuario;
 
@@ -135,9 +136,19 @@ public class Panel_de_Control extends AppCompatActivity implements NavigationVie
             startActivity(intent);
 
         }else if (id == R.id.login) {
-            Intent intent = new Intent(this, Login.class);
-            startActivity(intent);
-            finish();
+            if (sesion.logindim()){
+                startActivity(new Intent(Panel_de_Control.this,Panel_de_Control.class));
+                finish();
+            }else{
+                if (sesionUsuario.logindimUsuario()){
+                    startActivity(new Intent(Panel_de_Control.this,PanelDeControlUsuarios.class));
+                    finish();
+                }else {
+                    Intent intent = new Intent(this, Login.class);
+                    startActivity(intent);
+                }
+
+            }
         }else if (id ==R.id.cerrarsecion){
             //
             if (sesion.logindim()) {

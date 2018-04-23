@@ -71,20 +71,24 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
     private Button acceder,registrarse;
 
     // preferencia de administrador
-    private SharedPreferences preferences;
-    private SharedPreferences.Editor editor;
+    //private SharedPreferences preferences;
+    //private SharedPreferences.Editor editor;
     Context context=this;
     String usuari;
     String contrase;
-    private Sesion session;
+
     //
 
     //preferencia de usuario
     private SesionUsuario  sessionUsuario;
+    private Sesion session;
     private SharedPreferences preferencesUsuario;
     private SharedPreferences.Editor editorUsuario;
 
     //
+    int id_preferencia;
+    SharedPreferences preferences;
+    SharedPreferences.Editor editor;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,15 +100,21 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
         session = new Sesion(this);
         sessionUsuario = new SesionUsuario(this);
         //
+        preferences = getSharedPreferences("credencial",Context.MODE_PRIVATE);
+        editor = preferences.edit();
+
+
+        //
         acceder = (Button) findViewById(R.id.ingresar_login);
         recuperar = (TextView) findViewById(R.id.recuperacion);//para recuperacion de contrasenia
         acceder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
-                    if (usuario.getText().toString().isEmpty() || contrasena.getText().toString().isEmpty()) {
-                        Toast.makeText(getApplicationContext(), "Favor ingresar todos los Campos", Toast.LENGTH_SHORT).show();
 
+                    if (usuario.getText().toString().isEmpty() || contrasena.getText().toString().isEmpty()) {
+                        //Toast.makeText(getApplicationContext(), "Favor ingresar todos los Campos", Toast.LENGTH_SHORT).show();
+                        validar();
                     } else {                          //si existe el usuario y la contraseña son correctas el accedera
 
                         new LoginValidadoWeb().execute();
@@ -264,37 +274,32 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
 
         protected void onPostExecute(Boolean result) {
             if (resul) {
-
+                id_preferencia = id_usuario;
+                editor.putInt("usuario_ingreso",id_preferencia);
+                editor.commit();
                 if (rol == 1 && estado_usuario ==1) {
-                    //preferencia logeado con exito
-                    session.setLogin(true);
+
                     //instancia y envio de usuario logeado
                     Intent intent = new Intent(Login.this, Panel_de_Control.class);
-                    intent.putExtra("usuario_ingreso",id_usuario);
+                    intent.putExtra("usuario_ingreso",id_preferencia);
+                    //preferencia logeado con exito
+                    session.setLogin(true);
+                    //
                     usuario.setText("");
                     contrasena.setText("");
                     startActivity(intent);
                     finish();
                 } else {
-                        /*
-                        Intent intent = new Intent(getApplicationContext(),Panel_de_Control.class);
-                        intent.putExtra("usuario_ingreso",id_usuario);
-                        Toast.makeText(getApplicationContext(),""+id_usuario,Toast.LENGTH_LONG).show();
-                        usuario.setText("");
-                        contrasena.setText("");
-                        startActivity(intent);
-                        finish();
 
-                         */
                     if ( (rol == 1 && estado_usuario==2) || (rol ==2 && estado_usuario ==2)){
                         Toast.makeText(getApplicationContext(), "Usuario y/o Contraseña incorrecta ", Toast.LENGTH_SHORT).show();
                     }
                     else if (rol ==2 && estado_usuario ==1){
-                        //preferencia logeado con exito usuario
-                        sessionUsuario.setLoginUsuario(true);
                         //instancia y envio de usuario logeado
                         Intent intent = new Intent(Login.this,PanelDeControlUsuarios.class);
-                        intent.putExtra("id",id_usuario);
+                        intent.putExtra("id",id_preferencia);
+                        //preferencia logeado con exito usuario
+                        sessionUsuario.setLoginUsuario(true);
                         //limpieza de variables
                         usuario.setText("");
                         contrasena.setText("");
@@ -302,7 +307,7 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
                         startActivity(intent);
                         finish();
                     }else {
-                        Toast.makeText(getApplicationContext()," ",Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(),"Problemas de Conexion",Toast.LENGTH_LONG).show();
                     }
                 }
 
@@ -315,7 +320,7 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
                     Toast.makeText(getApplicationContext(), "Limite de intentos agotados", Toast.LENGTH_SHORT).show();
                     finish();
                 }else {//
-                    Toast.makeText(getApplicationContext(), "Usuario y/o Contraseña incorrecta", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Problemas de Conexion", Toast.LENGTH_SHORT).show();
 
 
             }//fin de else fallo conexion, buscar sqlite
@@ -379,6 +384,41 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
 
     }
 
+    private void cargarPreferencia (){
+
+        SharedPreferences preferences = getSharedPreferences("credencial",Context.MODE_PRIVATE);
+        int id_usu  = preferences.getInt("usuario_ingreso",-1);
+        // intent.putExtra("usuario_ingreso",id_preferencia);
+
+
+    }
+
 
 }
+    private void validar(){
+
+        //id.setError(null);
+        usuario.setError(null);
+        contrasena.setError(null);
+
+
+        // String idd = id.getText().toString();
+
+        String us = usuario.getText().toString();
+        String cont = contrasena.getText().toString();
+
+
+        if(TextUtils.isEmpty(us)){
+            usuario.setError(getString(R.string.error_usuario));
+            usuario.requestFocus();
+            return;
+        }if(TextUtils.isEmpty(cont)){
+            contrasena.setError(getString(R.string.error_contrasenaingresada));
+            contrasena.requestFocus();
+            return;
+
+        }
+
+
+    }
 }
