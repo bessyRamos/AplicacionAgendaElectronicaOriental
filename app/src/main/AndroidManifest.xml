@@ -71,7 +71,13 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".clasesJAVAVirgilio.FormularioRegistroLogin"
-            android:label="Formulario de Registro" />
+            android:label="Formulario de Registro"
+            android:parentActivityName=".clasesJAVAAlan.Mostrar_Usuarios">
+            <meta-data
+                android:name="android:support.PARENT_ACTIVITY"
+                android:value=".clasesJAVAAlan.Mostrar_Usuarios" />
+
+        </activity>
         <activity
             android:name=".clasesJAVAMelvin.BusquedaAvanzada"
             android:configChanges="screenSize|orientation"
@@ -169,8 +175,14 @@
             android:name=".clasesJAVAVirgilio.EditarUsuario"
             android:label="Editar Cuenta"
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".clasesJAVAVirgilio.FormularioRegistroUsuario"></activity>
-        <activity
+        <activity android:name=".clasesJAVAVirgilio.FormularioRegistroUsuario"
+                    android:label="Formulario de Registro"
+                  android:parentActivityName=".clasesJAVAVirgilio.Login">
+            <meta-data
+                android:name="android:support.PARENT_ACTIVITY"
+                android:value=".clasesJAVAVirgilio.Login" />
+
+        </activity> <activity
             android:name=".clasesJAVAVirgilio.PanelDeControlUsuarios"
             android:label="Panel de Control"
             android:theme="@style/AppTheme.NoActionBar" />

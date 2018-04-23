@@ -38,18 +38,23 @@ import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.Most
 
 public class FormularioRegistroLogin extends AppCompatActivity {
     private EditText id,nombrepropio_isertar,nombreusuario_insertar,contrasena_insertar,rol_insertar,estado_del_usuario;
-    String nombreusuariobar,nombrepropiobar,contrasenabar;
+    String nombreusuariobar,nombrepropiobar,contrasenabar,respuesta1bar_usuario,respuesta2bar_usuario,respuesta3bar_usuario;
     int id_rol;
     private Spinner  tipousu;
     private AsyncHttpClient cliente;
     Button bottonvalidar;
     ArrayList lista = new ArrayList<>();
+    private EditText respuesta1,respuesta2,respuesta3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_formulario_registro_login);
 
+        //flecha atras
+        android.support.v7.app.ActionBar actionBar= getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        //fin de flecha
 
         bottonvalidar = (Button)findViewById(R.id.registrar_usuario);
         bottonvalidar.setOnClickListener(new View.OnClickListener() {
@@ -68,8 +73,9 @@ public class FormularioRegistroLogin extends AppCompatActivity {
         contrasena_insertar = (EditText) findViewById(R.id.txtcontrasena_registro_login);
         rol_insertar = (EditText) findViewById(R.id.txtrol_registro_login);
         estado_del_usuario = (EditText) findViewById(R.id.txtestado_registro_login);
-      //  rol_insertar.setText("1");
-        //estado_del_usuario.setText("1");
+        respuesta1 = (EditText) findViewById(R.id.txtrespuesta1);
+        respuesta2 = (EditText) findViewById(R.id.txtrespuesta2);
+        respuesta3 = (EditText) findViewById(R.id.txtrespuesta3);
 
 
 //EJECUTAMOS LA CLASE DE LLENADO DE EL SPINNER
@@ -103,12 +109,18 @@ public class FormularioRegistroLogin extends AppCompatActivity {
         nombrepropio_isertar.setError(null);
         nombreusuario_insertar.setError(null);
         contrasena_insertar.setError(null);
+        respuesta1.setError(null);
+        respuesta2.setError(null);
+        respuesta3.setError(null);
 
 //VARIABLES QUE SE USAN EN LA CONEXION DE LA BASE DE DATOS LOCAL.
         // String idd = id.getText().toString();
         String nombusus = nombrepropio_isertar.getText().toString();
         String nomb = nombreusuario_insertar.getText().toString();
         String cont = contrasena_insertar.getText().toString();
+        String resp1=respuesta1.getText().toString();
+        String resp2=respuesta2.getText().toString();
+        String resp3=respuesta3.getText().toString();
 
 
 //server
@@ -131,6 +143,21 @@ public class FormularioRegistroLogin extends AppCompatActivity {
         }if(TextUtils.isEmpty(cont)){
             contrasena_insertar.setError(getString(R.string.error_contrasena));
             contrasena_insertar.requestFocus();
+            return;
+
+        }if(TextUtils.isEmpty(resp1)){
+            respuesta1.setError(getString(R.string.error_respuesta1));
+            respuesta1.requestFocus();
+            return;
+
+        }if(TextUtils.isEmpty(resp2)){
+            respuesta2.setError(getString(R.string.error_respuesta2));
+            respuesta2.requestFocus();
+            return;
+
+        }if(TextUtils.isEmpty(resp3)){
+            respuesta3.setError(getString(R.string.error_respuesta3));
+            respuesta3.requestFocus();
             return;
 
         }
@@ -225,9 +252,12 @@ public class FormularioRegistroLogin extends AppCompatActivity {
                 nombreusuariobar=nombreusuario_insertar.getText().toString();
                 nombrepropiobar=nombrepropio_isertar.getText().toString().replace(" ","%20");
                 contrasenabar=contrasena_insertar.getText().toString();
+                respuesta1bar_usuario = respuesta1.getText().toString();
+                respuesta2bar_usuario = respuesta2.getText().toString();
+                respuesta3bar_usuario = respuesta3.getText().toString();
 
+                EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("https://shessag.000webhostapp.com/insertarUsuarioRespDeSeguridad.php?nombre_usuario="+nombreusuariobar+"&nombre_propio="+nombrepropiobar+"&contrasena="+contrasenabar+"&rol="+id_rol+"&respuesta_uno="+respuesta1bar_usuario+"&respuesta_dos="+respuesta2bar_usuario+"&respuesta_tres="+respuesta3bar_usuario)).getEntity());
 
-                EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("https://shessag.000webhostapp.com/insercion_de_usuario.php?nombre_usuario="+nombreusuariobar+"&nombre_propio="+nombrepropiobar+"&contrasena="+contrasenabar+"&rol="+id_rol)).getEntity());
                 resul = true;
 
             } catch (Exception ex) {

@@ -93,7 +93,7 @@ Adaptador_mostrarusuarios adaptador;
             public void onClick(View view) {
                 Intent intent = new Intent(Mostrar_Usuarios.this, FormularioRegistroLogin.class);
                 startActivity(intent);
-                finish();
+
             }
         });
 

@@ -81,7 +81,7 @@
 
     <string name="error_usuario">Ingrese el Usuario</string>
     <string name="error_nombre_contrasena">Ingrese la Contraseña</string>
-    <string name="cerrarsecion">Cerrar Seción</string>
+    <string name="cerrarsecion">Cerrar Sesión</string>
     <string name="editarcuenta">Editar Cuenta</string>
     <string name="erremail">Ingrese el Email</string>
     <string name="errNumeroCelular">Ingrese el Numero Celular</string>
@@ -92,6 +92,9 @@
     <string name="error_pregunta">Error la respuesta es incorrecta</string>
     <string name="panelcontrolUsuario">Panel de Control</string>
     <string name="error_contrasenaingresada">Ingrese su Contraseña</string>
+    <string name="error_respuesta1">Ingrese Cuál es el nombre de tu ciudad natal</string>
+    <string name="error_respuesta2">Ingrese Cuál es el nombre de tu abuelo</string>
+    <string name="error_respuesta3">Ingrese Cuál es tu deporte favorito</string>
 
 
 </resources>

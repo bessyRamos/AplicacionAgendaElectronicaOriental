@@ -1,9 +1,11 @@
 package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin;
 
 import android.app.LoaderManager;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -19,8 +21,12 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.*;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.Panel_de_Control;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.AcercaDe;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.Login;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.PanelDeControlUsuarios;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.Sesion;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.SesionUsuario;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.provider.*;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.sync.*;
 
@@ -34,6 +40,12 @@ public class ListaDeContactos extends AppCompatActivity
     RecyclerView contenedor;
     private static final int PERFIL_LOADER=0;
 
+    //preferencias
+    private Sesion sesion;
+    private SesionUsuario sesionUsuario;
+    int id_usu=-1;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +53,12 @@ public class ListaDeContactos extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //Obtiene el id de la categoria de la cual se mostrarán los contactos
         Bundle extras = getIntent().getExtras();
+        //envio de clase actual para las preferencias
+        sesion = new Sesion(this);
+        sesionUsuario = new SesionUsuario(this);
+        SharedPreferences preferences = getSharedPreferences("credencial", Context.MODE_PRIVATE);
+        id_usu  = preferences.getInt("usuario_ingreso",id_usu);
+        //
         if (extras!=null){
             id_categoria = extras.getInt("id_categoria");
             nombre_categoria = extras.getString("nombre_categoria");
@@ -144,8 +162,27 @@ public class ListaDeContactos extends AppCompatActivity
             Intent intent = new Intent(this,AcercaDe.class);
             startActivity(intent);
         }else if (id == R.id.login) {
-            Intent intent = new Intent(this, Login.class);
-            startActivity(intent);
+            if (sesion.logindim()){
+                Intent intent = new Intent(ListaDeContactos.this,Panel_de_Control.class);
+                intent.putExtra("usuario_ingreso",id_usu);
+                //startActivity(new Intent(ActivityCategorias.this,Panel_de_Control.class));
+                startActivity(intent);
+                finish();
+            }else{
+                if (sesionUsuario.logindimUsuario()){
+                    Intent intent = new Intent(ListaDeContactos.this,PanelDeControlUsuarios.class);
+                    intent.putExtra("id",id_usu);
+                    //startActivity(new Intent(ActivityCategorias.this,PanelDeControlUsuarios.class));
+                    startActivity(intent);
+                    finish();
+
+                }else {
+                    Intent intent = new Intent(this, Login.class);
+                    startActivity(intent);
+                    finish();
+                }
+
+            }
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

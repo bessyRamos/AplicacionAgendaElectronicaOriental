@@ -69,6 +69,7 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
     private int estado_usuario;
     private JSONObject jsonObject;
     private Button acceder,registrarse;
+    String nombre_traido,contrasena_traida;
 
     // preferencia de administrador
     //private SharedPreferences preferences;
@@ -110,8 +111,6 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
         acceder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-
                     if (usuario.getText().toString().isEmpty() || contrasena.getText().toString().isEmpty()) {
                         //Toast.makeText(getApplicationContext(), "Favor ingresar todos los Campos", Toast.LENGTH_SHORT).show();
                         validar();
@@ -120,8 +119,6 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
                         new LoginValidadoWeb().execute();
 
                     }//fin else
-
-
             }
         });
 
@@ -253,14 +250,18 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
                     id_usuario = jsonArray.getJSONObject(i).getInt("id_usuario");
                     rol = jsonArray.getJSONObject(i).getInt("rol");
                     estado_usuario = jsonArray.getJSONObject(i).getInt("estado_usuario");
+
                 }
                 if (id_usuario != 0 && rol != 0 && estado_usuario != 0) {
                     resul = true;
                 } else {
-                    if((id_usuario != 0 && rol ==1 && estado_usuario == 2) || (id_usuario != 0 && rol ==2 && estado_usuario == 2)) {
+                    if((id_usuario != 0 && rol==1 && estado_usuario==2) || (id_usuario != 0 && rol==2 && estado_usuario==2)) {
+                        resul = false;
+                    }else if (id_usuario==0){
+                        resul = false;
+                    }else {
                         resul = false;
                     }
-                    resul = false;
                 }
 
             } catch (Exception ex) {
@@ -272,46 +273,25 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
             return resul;
         }
 
-        protected void onPostExecute(Boolean result) {
-            if (resul) {
-                id_preferencia = id_usuario;
-                editor.putInt("usuario_ingreso",id_preferencia);
-                editor.commit();
-                if (rol == 1 && estado_usuario ==1) {
+    protected void onPostExecute(Boolean result) {
+        if (resul) {
+            id_preferencia = id_usuario;
+            editor.putInt("usuario_ingreso",id_preferencia);
+            editor.commit();
 
-                    //instancia y envio de usuario logeado
-                    Intent intent = new Intent(Login.this, Panel_de_Control.class);
-                    intent.putExtra("usuario_ingreso",id_preferencia);
-                    //preferencia logeado con exito
-                    session.setLogin(true);
-                    //
-                    usuario.setText("");
-                    contrasena.setText("");
-                    startActivity(intent);
-                    finish();
-                } else {
+            if (rol == 1 && estado_usuario ==1) {
+                //instancia y envio de usuario logeado
+                Intent intent = new Intent(Login.this, Panel_de_Control.class);
+                intent.putExtra("usuario_ingreso",id_preferencia);
+                //preferencia logeado con exito
+                session.setLogin(true);
+                //
+                usuario.setText("");
+                contrasena.setText("");
+                startActivity(intent);
+                finish();
+            } else if ( (rol == 1 && estado_usuario==2) || (rol ==2 && estado_usuario ==2)){
 
-                    if ( (rol == 1 && estado_usuario==2) || (rol ==2 && estado_usuario ==2)){
-                        Toast.makeText(getApplicationContext(), "Usuario y/o Contraseña incorrecta ", Toast.LENGTH_SHORT).show();
-                    }
-                    else if (rol ==2 && estado_usuario ==1){
-                        //instancia y envio de usuario logeado
-                        Intent intent = new Intent(Login.this,PanelDeControlUsuarios.class);
-                        intent.putExtra("id",id_preferencia);
-                        //preferencia logeado con exito usuario
-                        sessionUsuario.setLoginUsuario(true);
-                        //limpieza de variables
-                        usuario.setText("");
-                        contrasena.setText("");
-                        //
-                        startActivity(intent);
-                        finish();
-                    }else {
-                        Toast.makeText(getApplicationContext(),"Problemas de Conexion",Toast.LENGTH_LONG).show();
-                    }
-                }
-
-            } else {
                 //numero de intentos
                 contador=contador+1;
                 if (contador ==3){
@@ -319,14 +299,87 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
                     contrasena.setText("");
                     Toast.makeText(getApplicationContext(), "Limite de intentos agotados", Toast.LENGTH_SHORT).show();
                     finish();
-                }else {//
-                    Toast.makeText(getApplicationContext(), "Problemas de Conexion", Toast.LENGTH_SHORT).show();
+                }else {
+                    Toast.makeText(getApplicationContext(), "Usuario y/o Contraseña incorrecta borrado ", Toast.LENGTH_SHORT).show();
+                }
+            } else if (rol ==2 && estado_usuario ==1){
+                    //instancia y envio de usuario logeado
+                    Intent intent = new Intent(Login.this,PanelDeControlUsuarios.class);
+                    intent.putExtra("id",id_preferencia);
+                    //preferencia logeado con exito usuario
+                    sessionUsuario.setLoginUsuario(true);
+                    //limpieza de variables
+                    usuario.setText("");
+                    contrasena.setText("");
+                    //
+                    startActivity(intent);
+                    finish();
+                }else {
+                    Toast.makeText(getApplicationContext(),"Problemas de Conexion uno ",Toast.LENGTH_LONG).show();
+                }
 
+
+        } else {
+            if (id_usuario ==0){
+                //numero de intentos
+                contador=contador+1;
+                if (contador ==3){
+                    usuario.setText("");
+                    contrasena.setText("");
+                    Toast.makeText(getApplicationContext(), "Limite de intentos agotados", Toast.LENGTH_SHORT).show();
+                    finish();
+                }else {
+                    Toast.makeText(getApplicationContext(), "Usuario y/o Contraseña incorrecta no existe ", Toast.LENGTH_SHORT).show();
+                }
+
+            }else  if((id_usuario != 0 && rol==1 && estado_usuario==2) || (id_usuario != 0 && rol==2 && estado_usuario==2)){
+                Toast.makeText(getApplicationContext(), "Usuario y/o Contraseña incorrecta  existe borrado ", Toast.LENGTH_SHORT).show();
+
+             }
+
+            else {
+                Toast.makeText(getApplicationContext(), "Problemas de Conexion dos", Toast.LENGTH_SHORT).show();
 
             }//fin de else fallo conexion, buscar sqlite
+
         }//fin de onPostExecute
 
+    }//fin boolean result
+
     }//fin boolean
+
+
+
+
+
+    private void validar(){
+
+        //id.setError(null);
+        usuario.setError(null);
+        contrasena.setError(null);
+
+
+        // String idd = id.getText().toString();
+
+        String us = usuario.getText().toString();
+        String cont = contrasena.getText().toString();
+
+
+        if(TextUtils.isEmpty(us)){
+            usuario.setError(getString(R.string.error_usuario));
+            usuario.requestFocus();
+            return;
+        }if(TextUtils.isEmpty(cont)){
+            contrasena.setError(getString(R.string.error_contrasenaingresada));
+            contrasena.requestFocus();
+            return;
+
+        }
+
+
+    }
+
+
 
     public void permisoAdmin() {
         SQLiteDatabase permiso = basedatos.getReadableDatabase();
@@ -393,32 +446,4 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
 
     }
 
-
-}
-    private void validar(){
-
-        //id.setError(null);
-        usuario.setError(null);
-        contrasena.setError(null);
-
-
-        // String idd = id.getText().toString();
-
-        String us = usuario.getText().toString();
-        String cont = contrasena.getText().toString();
-
-
-        if(TextUtils.isEmpty(us)){
-            usuario.setError(getString(R.string.error_usuario));
-            usuario.requestFocus();
-            return;
-        }if(TextUtils.isEmpty(cont)){
-            contrasena.setError(getString(R.string.error_contrasenaingresada));
-            contrasena.requestFocus();
-            return;
-
-        }
-
-
-    }
 }

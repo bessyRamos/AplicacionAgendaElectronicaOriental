@@ -44,7 +44,8 @@ public class ActivityCategorias extends AppCompatActivity
     private Sesion sesion;
     private SesionUsuario sesionUsuario;
     int id_usu=-1;
-    //
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -162,7 +163,6 @@ public class ActivityCategorias extends AppCompatActivity
                 intent.putExtra("usuario_ingreso",id_usu);
                 //startActivity(new Intent(ActivityCategorias.this,Panel_de_Control.class));
                 startActivity(intent);
-
             }else{
                 if (sesionUsuario.logindimUsuario()){
                     Intent intent = new Intent(ActivityCategorias.this,PanelDeControlUsuarios.class);

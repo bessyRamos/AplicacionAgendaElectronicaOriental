@@ -6,13 +6,15 @@ package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio
 
 public class EntidadOrganizacion {
 
-    private int id,imagen;
+    private int id;
+    private String imagen;
     private String titulo, estado;
 
-    public EntidadOrganizacion(int id, String titulo, String estado) {
+    public EntidadOrganizacion(int id, String titulo, String estado,String imagen) {
         this.id = id;
         this.titulo = titulo;
         this.estado = estado;
+        this.imagen=imagen;
     }
 
     public int getId() {
@@ -23,11 +25,11 @@ public class EntidadOrganizacion {
         this.id = id;
     }
 
-    public int getImagen() {
+    public String getImagen() {
         return imagen;
     }
 
-    public void setImagen(int imagen) {
+    public void setImagen(String imagen) {
         this.imagen = imagen;
     }
 

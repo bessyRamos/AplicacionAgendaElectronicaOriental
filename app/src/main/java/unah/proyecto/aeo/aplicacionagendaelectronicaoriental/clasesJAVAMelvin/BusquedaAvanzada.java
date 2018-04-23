@@ -1,6 +1,8 @@
 package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.BitmapFactory;
@@ -47,10 +49,14 @@ import cz.msebera.android.httpclient.util.EntityUtils;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.ConexionSQLiteHelper;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.ActivityCategorias;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.Panel_de_Control;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.AdaptadorPerfilBreve;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.PerfilBreve;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.AcercaDe;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.Login;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.PanelDeControlUsuarios;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.Sesion;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.SesionUsuario;
 
 public class BusquedaAvanzada extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -66,12 +72,24 @@ public class BusquedaAvanzada extends AppCompatActivity
     boolean unaRegionSeleccionada, unaCategoriaSeleccionada;
     int id_categoria, id_region;
 
+    //preferencias
+    private Sesion sesion;
+    private SesionUsuario sesionUsuario;
+    int id_usu=-1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_busqueda_avanzada);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        //envio de clase actual para las preferencias
+        sesion = new Sesion(this);
+        sesionUsuario = new SesionUsuario(this);
+        SharedPreferences preferences = getSharedPreferences("credencial", Context.MODE_PRIVATE);
+        id_usu  = preferences.getInt("usuario_ingreso",id_usu);
+        //
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -138,9 +156,28 @@ public class BusquedaAvanzada extends AppCompatActivity
         } else if (id == R.id.acercadeinfodos) {
             Intent intent = new Intent(this,AcercaDe.class);
             startActivity(intent);
+            finish();
         }else if (id == R.id.login) {
-            Intent intent = new Intent(this, Login.class);
-            startActivity(intent);
+            if (sesion.logindim()){
+                Intent intent = new Intent(BusquedaAvanzada.this,Panel_de_Control.class);
+                intent.putExtra("usuario_ingreso",id_usu);
+                //startActivity(new Intent(ActivityCategorias.this,Panel_de_Control.class));
+                startActivity(intent);
+                finish();
+            }else{
+                if (sesionUsuario.logindimUsuario()){
+                    Intent intent = new Intent(BusquedaAvanzada.this,PanelDeControlUsuarios.class);
+                    intent.putExtra("id",id_usu);
+                    //startActivity(new Intent(ActivityCategorias.this,PanelDeControlUsuarios.class));
+                    startActivity(intent);
+                    finish();
+
+                }else {
+                    Intent intent = new Intent(this, Login.class);
+                    startActivity(intent);
+                }
+
+            }
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

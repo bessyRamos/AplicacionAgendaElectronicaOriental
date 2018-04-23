@@ -80,8 +80,8 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity  implements N
     int id_usu=-1;
     //
 
-    double latitud;
-    double longitud;
+    double latitudResibida;
+    double longitudResibida;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -229,17 +229,19 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity  implements N
             finish();
 
         }else if (id == R.id.login) {
+            if (sesion.logindim()){
+                startActivity(new Intent(FormularioNuevaOrganizacion.this,Panel_de_Control.class));
+                finish();
+            }else{
                 if (sesionUsuario.logindimUsuario()){
-                    Intent intent = new Intent(FormularioNuevaOrganizacion.this,PanelDeControlUsuarios.class);
-                    intent.putExtra("id",id_usu);
-                    //startActivity(new Intent(ActivityCategorias.this,PanelDeControlUsuarios.class));
-                    startActivity(intent);
+                    startActivity(new Intent(FormularioNuevaOrganizacion.this,PanelDeControlUsuarios.class));
                     finish();
-
                 }else {
                     Intent intent = new Intent(this, Login.class);
                     startActivity(intent);
                 }
+
+            }
 
         }else if (id ==R.id.cerrarsecion){
                 //cerrar secion y borrado de preferencias
@@ -361,8 +363,14 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity  implements N
                 parametros.add(new BasicNameValuePair("direccion_rec",direccionOrganizacion.getText().toString()));
                 parametros.add(new BasicNameValuePair("email_rec",emailOrganizacion.getText().toString()));
                 parametros.add(new BasicNameValuePair("desc_rec",descrpcionOrganizacion.getText().toString()));
-                parametros.add(new BasicNameValuePair("lat_rec",latitudOrganizacion.getText().toString()));
-                parametros.add(new BasicNameValuePair("longitud_rec",longitudOrganizacion.getText().toString()));
+               // parametros.add(new BasicNameValuePair("lat_rec",latitudOrganizacion.getText().toString()));
+
+                parametros.add(new BasicNameValuePair("lat_rec",(String.valueOf(latitudResibida))));
+
+               // parametros.add(new BasicNameValuePair("longitud_rec",longitudOrganizacion.getText().toString()));
+
+                parametros.add(new BasicNameValuePair("longitud_rec",String.valueOf(longitudResibida)));
+
                 parametros.add(new BasicNameValuePair("id_categoria",String.valueOf(id_categoria)));
                 parametros.add(new BasicNameValuePair("id_region",String.valueOf(id_region)));
                 parametros.add(new BasicNameValuePair("id_usuario",String.valueOf(id_usuario)));

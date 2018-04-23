@@ -1,6 +1,8 @@
 package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVASheyli;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.BitmapFactory;
@@ -43,9 +45,13 @@ import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.ConexionSQLiteHelpe
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.ActivityCategorias;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.Fuente_Categoria;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.Panel_de_Control;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVABessy.Mapa;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.AcercaDe;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.Login;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.PanelDeControlUsuarios;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.Sesion;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.SesionUsuario;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.provider.AEODbHelper;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.provider.PerfilesContract;
 
@@ -59,12 +65,25 @@ public class PerfilDeLaOrganizacion extends AppCompatActivity implements Navigat
     String organizacionP, nombreP, direccionP, telefonoP, emailP, descripcionP, movilP;
     boolean imagenContacto;
 
+
+    //preferencias
+    private Sesion sesion;
+    private SesionUsuario sesionUsuario;
+    int id_usu=-1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil_de_la_organizacion);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+
+        //envio de clase actual para las preferencias
+        sesion = new Sesion(this);
+        sesionUsuario = new SesionUsuario(this);
+        SharedPreferences preferences = getSharedPreferences("credencial", Context.MODE_PRIVATE);
+        id_usu  = preferences.getInt("usuario_ingreso",id_usu);
+        //
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -222,8 +241,27 @@ public class PerfilDeLaOrganizacion extends AppCompatActivity implements Navigat
             startActivity(intent);
 
         } else if (id == R.id.login) {
-            Intent intent = new Intent(this, Login.class);
-            startActivity(intent);
+            if (sesion.logindim()){
+                Intent intent = new Intent(PerfilDeLaOrganizacion.this,Panel_de_Control.class);
+                intent.putExtra("usuario_ingreso",id_usu);
+                //startActivity(new Intent(ActivityCategorias.this,Panel_de_Control.class));
+                startActivity(intent);
+
+            }else{
+                if (sesionUsuario.logindimUsuario()){
+                    Intent intent = new Intent(PerfilDeLaOrganizacion.this,PanelDeControlUsuarios.class);
+                    intent.putExtra("id",id_usu);
+                    //startActivity(new Intent(ActivityCategorias.this,PanelDeControlUsuarios.class));
+                    startActivity(intent);
+
+
+                }else {
+                    Intent intent = new Intent(this, Login.class);
+                    startActivity(intent);
+                    finish();
+                }
+
+            }
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

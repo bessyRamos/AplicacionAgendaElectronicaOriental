@@ -1,8 +1,10 @@
 package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
@@ -51,6 +53,9 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
     int id_contacto;
     int perfilselecionado=-1;
     int idperf;
+    String imagen;
+
+    int id_usu=-1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +65,8 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
         //envio de clase actual para las preferencias
         sesion = new Sesion(this);
         sesionUsuario = new SesionUsuario(this);
+        SharedPreferences preferences = getSharedPreferences("credencial", Context.MODE_PRIVATE);
+        id_usu  = preferences.getInt("usuario_ingreso",id_usu);
         //
         mostrar_perfiles= new ArrayList<EntidadOrganizacion>();
         FloatingActionButton agregar = (FloatingActionButton) findViewById(R.id.agregarContacto);
@@ -198,6 +205,26 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
 
         }else if (id == R.id.login) {
 
+            if (sesion.logindim()){
+                Intent intent = new Intent(PanelDeControlUsuarios.this,Panel_de_Control.class);
+                intent.putExtra("usuario_ingreso",id_usu);
+                //startActivity(new Intent(PanelDeControlUsuarios.this,Panel_de_Control.class));
+                startActivity(intent);
+                finish();
+            }else{
+                if (sesionUsuario.logindimUsuario()){
+                    Intent intent = new Intent(PanelDeControlUsuarios.this,PanelDeControlUsuarios.class);
+                    intent.putExtra("id",id_usu);
+                    //startActivity(new Intent(PanelDeControlUsuarios.this,PanelDeControlUsuarios.class));
+                    startActivity(intent);
+                    finish();
+                }else {
+                    Intent intent = new Intent(this, Login.class);
+                    startActivity(intent);
+                }
+
+            }
+
         }else if (id ==R.id.cerrarsecion){
             //cerrar secion y borrado de preferencias
             if (sesion.logindim()) {
@@ -254,6 +281,7 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
                     id_contacto = respJSON.getJSONObject(i).getInt("id_contacto");
                     nombre_organizacion = respJSON.getJSONObject(i).getString("nombre_organizacion");
                     estadoOrganizacion = respJSON.getJSONObject(i).getString("id_estado");
+                    imagen =respJSON.getJSONObject(i).getString("imagen");
 
                     //comprueba el estado de la organizacion
                     if(1 == Integer.parseInt(estadoOrganizacion)){
@@ -266,7 +294,7 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
                         estadoOrganizacion ="Eliminado";
                     }
                     //envia los datos ala clase pojo de el item lista
-                    mostrar_perfiles.add(new EntidadOrganizacion(id_contacto , nombre_organizacion, estadoOrganizacion));
+                    mostrar_perfiles.add(new EntidadOrganizacion(id_contacto , nombre_organizacion, estadoOrganizacion,imagen));
 
                 }
             } catch (Exception ex) {

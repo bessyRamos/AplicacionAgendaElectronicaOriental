@@ -134,6 +134,7 @@ public class AcercaDe extends AppCompatActivity implements NavigationView.OnNavi
 
         } else if (id == R.id.acercadeinfodos) {
 
+
         }else if (id == R.id.login) {
             if (sesion.logindim()){
                 Intent intent = new Intent(AcercaDe.this,Panel_de_Control.class);

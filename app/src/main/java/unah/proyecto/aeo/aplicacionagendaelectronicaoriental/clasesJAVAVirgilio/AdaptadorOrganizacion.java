@@ -8,6 +8,8 @@ import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.List;
 
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
@@ -58,7 +60,7 @@ public class AdaptadorOrganizacion extends BaseAdapter {
        // textid.setText(""+perfiles.get(i).getId());
         nombre.setText(listaobjetos.get(i).getTitulo().toString());
         estado.setText(listaobjetos.get(i).getEstado().toString());
-        //Imagen.setImageResource(R.drawable.telefono);
+        Glide.with(context).load(listaobjetos.get(i).getImagen()).into(Imagen);
 
         return v;
     }
