@@ -191,7 +191,7 @@ public class ActivityCategorias extends AppCompatActivity
                 }else {
                     Intent intent = new Intent(this, Login.class);
                     startActivity(intent);
-                    finish();
+
                 }
 
             }

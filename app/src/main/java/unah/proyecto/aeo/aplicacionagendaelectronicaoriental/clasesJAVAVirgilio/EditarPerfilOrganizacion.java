@@ -70,6 +70,7 @@ public class EditarPerfilOrganizacion extends AppCompatActivity {
     int i=0;
     //controla si existe imagen en el contacto traido desde el webservice
     boolean tieneImagen;
+    boolean editarfoto=false;
     //
     ArrayList<ModeloSpinner> listaCategorias, listaRegiones;
 
@@ -106,8 +107,9 @@ public class EditarPerfilOrganizacion extends AppCompatActivity {
 
 
 
+        if (getIntent().getExtras()!=null){
             id_usuario_resibido_usuario = getIntent().getExtras().getInt("id_usuario");
-
+        }
 
 
         Bundle a = getIntent().getExtras();
@@ -133,6 +135,7 @@ public class EditarPerfilOrganizacion extends AppCompatActivity {
         botonFoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                editarfoto=true;
 
                 requestRead();
             }
@@ -165,23 +168,31 @@ public class EditarPerfilOrganizacion extends AppCompatActivity {
         botonGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if (editarfoto==true){
+
+                    imagenBitmap = ((BitmapDrawable)imagenOrg.getDrawable()).getBitmap();
+
+                    new AsyncTask<Void, Void, String>(){
+                        @Override
+                        protected String doInBackground(Void... voids) {
+                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                            imagenBitmap.compress(Bitmap.CompressFormat.JPEG,100,baos);
+                            byte b []= baos.toByteArray();
+
+                            encodeImagen = Base64.encodeToString(b,0);
+
+                            return null;
+                        }
+                    }.execute();
+
+
+                }
 
 
 
-                imagenBitmap = ((BitmapDrawable)imagenOrg.getDrawable()).getBitmap();
 
-                new AsyncTask<Void, Void, String>(){
-                    @Override
-                    protected String doInBackground(Void... voids) {
-                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        imagenBitmap.compress(Bitmap.CompressFormat.JPEG,100,baos);
-                        byte b []= baos.toByteArray();
 
-                        encodeImagen = Base64.encodeToString(b,0);
 
-                        return null;
-                    }
-                }.execute();
 
                 validar();
 
@@ -410,7 +421,11 @@ public class EditarPerfilOrganizacion extends AppCompatActivity {
                 parametros.add(new BasicNameValuePair("longitud_rec",etlongitud.getText().toString()));
                 parametros.add(new BasicNameValuePair("id_categoria",String.valueOf(id_categoria)));
                 parametros.add(new BasicNameValuePair("id_region",String.valueOf(id_region)));
-                parametros.add(new BasicNameValuePair("imagen",encodeImagen));
+                if (editarfoto==true){
+                    parametros.add(new BasicNameValuePair("imagen",encodeImagen));
+                }else {
+                    parametros.add(new BasicNameValuePair("imagen",imagen_rec));
+                }
                 parametros.add(new BasicNameValuePair("nombre_imagen",etnombreeorganizacion.getText().toString().replace(" ","_")+i+".jpg"));
 
 
