@@ -74,7 +74,7 @@ public class Ingresar_Ubicacion extends AppCompatActivity implements GoogleMap.O
             data.putExtra("longitud", lo);
             setResult(NuevoPerfil.RESULT_OK, data);
             finish();
-
+//extras para Formulario de nuevas organizaciones
         } else if (marker.equals(marcas)) {
             Toast.makeText(this, "Ubicacion Exitosa.", Toast.LENGTH_SHORT).show();
 
