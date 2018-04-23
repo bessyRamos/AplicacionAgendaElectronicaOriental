@@ -67,7 +67,6 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
         sesion = new Sesion(this);
         sesionUsuario = new SesionUsuario(this);
         SharedPreferences preferences = getSharedPreferences("credencial", Context.MODE_PRIVATE);
-
         id_usu  = preferences.getInt("usuario_ingreso",id_usu);
         //
         mostrar_perfiles= new ArrayList<EntidadOrganizacion>();
@@ -299,9 +298,9 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
                     //envia los datos ala clase pojo de el item lista
 
                     if (respJSON.getJSONObject(i).getInt("id_usuario")!=1){
-                        mostrar_perfiles.add(new EntidadOrganizacion(id_contacto , nombre_organizacion, estadoOrganizacion,imagen));
 
                     }
+                    mostrar_perfiles.add(new EntidadOrganizacion(id_contacto , nombre_organizacion, estadoOrganizacion,imagen));
 
                 }
             } catch (Exception ex) {
