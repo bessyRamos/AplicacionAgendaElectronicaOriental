@@ -54,6 +54,7 @@
                     android:hint="Número fijo"
                     android:inputType="text"
                     android:digits="1234567890-"/>
+
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
