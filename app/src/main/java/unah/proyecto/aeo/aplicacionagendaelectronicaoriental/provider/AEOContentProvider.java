@@ -26,6 +26,12 @@ public class AEOContentProvider extends ContentProvider {
 
     private static final int CATEGORIA_ID = 2;
 
+    private static final int REGION_ID = 3;
+
+    private static final int REGIONES= 4;
+
+
+
     private static final UriMatcher sUriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
     static {
@@ -33,7 +39,8 @@ public class AEOContentProvider extends ContentProvider {
         sUriMatcher.addURI(PerfilesContract.CONTENT_AUTHORITY, PerfilesContract.PATH_PERFILES + "/#", PERFIL_ID);
         sUriMatcher.addURI(CategoriasContract.CONTENT_AUTHORITY, CategoriasContract.PATH_CATEGORIAS, CATEGORIAS);
         sUriMatcher.addURI(CategoriasContract.CONTENT_AUTHORITY, CategoriasContract.PATH_CATEGORIAS + "/#", CATEGORIA_ID);
-
+        sUriMatcher.addURI(RegionesContract.CONTENT_AUTHORITY, RegionesContract.PATH_REGIONES, REGIONES);
+        sUriMatcher.addURI(RegionesContract.CONTENT_AUTHORITY, RegionesContract.PATH_REGIONES + "/#", REGION_ID);
     }
 
     private AEODbHelper mDbHelper;
@@ -57,6 +64,10 @@ public class AEOContentProvider extends ContentProvider {
                 return CategoriasContract.CategoriasEntry.CONTENT_TYPE;
             case  CATEGORIA_ID:
                 return CategoriasContract.CategoriasEntry.CONTENT_ITEM_TYPE;
+            case REGIONES:
+                return RegionesContract.RegionesEntry.CONTENT_TYPE;
+            case  REGION_ID:
+                return RegionesContract.RegionesEntry.CONTENT_ITEM_TYPE;
             default:
                 throw new IllegalArgumentException("Invalid URI!");
         }
@@ -110,6 +121,26 @@ public class AEOContentProvider extends ContentProvider {
                         null,
                         sortOrder);
                 break;
+
+            case REGIONES:
+                c = database.query(RegionesContract.RegionesEntry.TABLE_NAME,
+                        projection,
+                        selection,
+                        selectionArgs,
+                        null,
+                        null,
+                        sortOrder);
+                break;
+            case REGION_ID:
+                long id_caso_region = ContentUris.parseId(uri);
+                c = database.query(RegionesContract.RegionesEntry.TABLE_NAME,
+                        projection,
+                        RegionesContract.RegionesEntry._ID + "=?",
+                        new String[] { String.valueOf(id_caso_region) },
+                        null,
+                        null,
+                        sortOrder);
+                break;
             default: throw new IllegalArgumentException("Invalid URI!");
         }
 
@@ -138,6 +169,10 @@ public class AEOContentProvider extends ContentProvider {
                 _id = database.insert(CategoriasContract.CategoriasEntry.TABLE_NAME, null, values);
                 returnUri = ContentUris.withAppendedId(CategoriasContract.CategoriasEntry.CONTENT_URI, _id);
                 break;
+            case REGIONES:
+                _id = database.insert(RegionesContract.RegionesEntry.TABLE_NAME, null, values);
+                returnUri = ContentUris.withAppendedId(RegionesContract.RegionesEntry.CONTENT_URI, _id);
+                break;
             default: throw new IllegalArgumentException("Invalid URI!");
         }
 
@@ -160,6 +195,9 @@ public class AEOContentProvider extends ContentProvider {
             case CATEGORIAS:
                 rows = database.delete(CategoriasContract.CategoriasEntry.TABLE_NAME, selection, selectionArgs);
                 break;
+            case REGIONES:
+                rows = database.delete(RegionesContract.RegionesEntry.TABLE_NAME, selection, selectionArgs);
+                break;
             default: throw new IllegalArgumentException("Invalid URI!");
         }
 
@@ -181,6 +219,9 @@ public class AEOContentProvider extends ContentProvider {
                 break;
             case CATEGORIAS:
                 rows = database.update(CategoriasContract.CategoriasEntry.TABLE_NAME, values, selection, selectionArgs);
+                break;
+            case REGIONES:
+                rows = database.update(RegionesContract.RegionesEntry.TABLE_NAME, values, selection, selectionArgs);
                 break;
             default: throw new IllegalArgumentException("Invalid URI!");
         }

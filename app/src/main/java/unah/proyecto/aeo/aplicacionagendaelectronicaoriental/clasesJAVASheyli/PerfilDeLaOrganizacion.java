@@ -39,6 +39,7 @@ import cz.msebera.android.httpclient.client.methods.HttpPost;
 import cz.msebera.android.httpclient.entity.BufferedHttpEntity;
 import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
 import cz.msebera.android.httpclient.util.EntityUtils;
+import de.hdodenhof.circleimageview.CircleImageView;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.ConexionSQLiteHelper;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.ActivityCategorias;
@@ -77,7 +78,7 @@ public class PerfilDeLaOrganizacion extends AppCompatActivity implements Navigat
 
 
         //recuperacion de variables
-        organizacion = (ImageView) findViewById(R.id.imagenOrganizacion);
+        organizacion =  findViewById(R.id.imagenOrganizacion);
         nombre = (TextView) findViewById(R.id.n);
         direccion = (TextView) findViewById(R.id.d);
         telefono = (TextView) findViewById(R.id.t);
@@ -118,10 +119,12 @@ public class PerfilDeLaOrganizacion extends AppCompatActivity implements Navigat
             if (!cursor.getString(cursor.getColumnIndex(PerfilesContract.ContactosEntry.COLUMN_IMAGEN_PATH)).isEmpty()) {
                 Glide.with(this).
                         load(cursor.getString(cursor.getColumnIndex(PerfilesContract.ContactosEntry.COLUMN_IMAGEN_PATH))).
+                        override(220,180).
                         into(organizacion);
             } else {
                 Glide.with(this).
                         load(R.drawable.iconocontactowhite).
+                        override(220,180).
                         into(organizacion);
             }
 

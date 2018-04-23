@@ -1,11 +1,21 @@
 package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan;
+import android.app.Activity;
+import android.app.Application;
 import android.app.LoaderManager;
+import android.content.ContentResolver;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.PersistableBundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
@@ -22,27 +32,33 @@ import android.view.MenuItem;
 import android.view.Surface;
 import android.view.WindowManager;
 
+import java.io.File;
+import java.util.ArrayList;
+
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.BusquedaAvanzada;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.HerramientaBusquedaAvanzada.BusquedaAvanzada;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.AcercaDe;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.Login;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.provider.AEODbHelper;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.provider.CategoriasContract;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.provider.PerfilesContract;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.sync.SyncAdapter;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.sync.SyncService;
 
 public class ActivityCategorias extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, SearchView.OnQueryTextListener, LoaderManager.LoaderCallbacks<Cursor> {
+        implements NavigationView.OnNavigationItemSelectedListener,
+        SearchView.OnQueryTextListener,
+        LoaderManager.LoaderCallbacks<Cursor> {
 
     Adaptador_Categoria adaptadorCategoria;
     RecyclerView contenedor;
-    private static final int CATEGORIA_LOADER=0;
-
+    private static final int CATEGORIA_LOADER = 0;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_categorias);
-
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -59,30 +75,30 @@ public class ActivityCategorias extends AppCompatActivity
         contenedor = (RecyclerView) findViewById(R.id.contenedor);
         contenedor.setHasFixedSize(true);
 
-        adaptadorCategoria = new Adaptador_Categoria(ActivityCategorias.this,null);
+
+        adaptadorCategoria = new Adaptador_Categoria(ActivityCategorias.this, null);
 
 
-        if(getRotation(getApplicationContext())== "vertical"){
+        if (getRotation(getApplicationContext()) == "vertical") {
             LinearLayoutManager layout = new LinearLayoutManager(getApplicationContext());
             layout.setOrientation(LinearLayoutManager.VERTICAL);
             contenedor.setLayoutManager(layout);
-        }else{
+        } else {
 
-            contenedor.setLayoutManager(new GridLayoutManager(getApplicationContext(),2));
+            contenedor.setLayoutManager(new GridLayoutManager(getApplicationContext(), 2));
         }
         contenedor.setAdapter(adaptadorCategoria);
 
 
-
         SyncAdapter.initializeSyncAdapter(this);
 
-        getLoaderManager().initLoader(CATEGORIA_LOADER,null,this);
+        getLoaderManager().initLoader(CATEGORIA_LOADER, null, this);
 
 
     }
 
 
-    public String getRotation(Context context){
+    public String getRotation(Context context) {
         final int rotation = ((WindowManager) context.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getOrientation();
         switch (rotation) {
             case Surface.ROTATION_0:
@@ -105,23 +121,24 @@ public class ActivityCategorias extends AppCompatActivity
             super.onBackPressed();
         }
     }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.lista_de_contactos,menu);
+        getMenuInflater().inflate(R.menu.lista_de_contactos, menu);
         MenuItem menuItem = menu.findItem(R.id.accion_buscar);
-        MenuItem itemBusquedaAvanzada   = menu.findItem(R.id.accion_buscarAvanzado);
+        MenuItem itemBusquedaAvanzada = menu.findItem(R.id.accion_buscarAvanzado);
         //Establecimeinto del SearchView para filtrar por nombre, numero de telefono o region
-        android.support.v7.widget.SearchView searchView  = (android.support.v7.widget.SearchView) MenuItemCompat.getActionView(menuItem);
+        android.support.v7.widget.SearchView searchView = (android.support.v7.widget.SearchView) MenuItemCompat.getActionView(menuItem);
         searchView.setOnQueryTextListener(this);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             //Intent para pasar a la activity de búsqueda avanzada
             case R.id.accion_buscarAvanzado:
-                Intent aBusquedaAvanzada= new Intent(getApplicationContext(),BusquedaAvanzada.class);
+                Intent aBusquedaAvanzada = new Intent(getApplicationContext(), BusquedaAvanzada.class);
                 startActivity(aBusquedaAvanzada);
                 break;
             case R.id.sincronizar:
@@ -141,10 +158,10 @@ public class ActivityCategorias extends AppCompatActivity
             // Handle the camera action
 
         } else if (id == R.id.acercadeinfodos) {
-            Intent intent = new Intent(this,AcercaDe.class);
+            Intent intent = new Intent(this, AcercaDe.class);
             startActivity(intent);
 
-        }else if (id == R.id.login) {
+        } else if (id == R.id.login) {
             Intent intent = new Intent(this, Login.class);
             startActivity(intent);
         }
@@ -156,13 +173,12 @@ public class ActivityCategorias extends AppCompatActivity
 
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        String[] projection ={
+        String[] projection = {
                 CategoriasContract.CategoriasEntry.COLUMN_ID_CATEGORIA,
                 CategoriasContract.CategoriasEntry.COLUMN_NOMBRE_CATEGORIA,
                 CategoriasContract.CategoriasEntry.COLUMN_CANTIDAD,
-                CategoriasContract.CategoriasEntry.COLUMN_IMAGEN_CATEGORIA,
+                CategoriasContract.CategoriasEntry.COLUMN_IMAGEN_CATEGORIA
         };
-
 
 
         return new CursorLoader(this,
@@ -183,36 +199,48 @@ public class ActivityCategorias extends AppCompatActivity
         adaptadorCategoria.swapCursor(null);
     }
 
-
-
-
-
-
-
-
     @Override
     public boolean onQueryTextSubmit(String query) {
-        return false;
+
+        Cursor contacts = getListOfContacts(query);
+
+       Adaptador_Categoria adaptador_categoria1 = new Adaptador_Categoria(this,contacts);
+
+        contenedor.setAdapter(adaptador_categoria1);
+        return true;
+    }
+
+    public Cursor getListOfContacts(String searchText) {
+
+        Cursor cur = null;
+        ContentResolver cr = getContentResolver();
+
+        String[] projection = {
+                CategoriasContract.CategoriasEntry.COLUMN_ID_CATEGORIA,
+                CategoriasContract.CategoriasEntry.COLUMN_NOMBRE_CATEGORIA,
+                CategoriasContract.CategoriasEntry.COLUMN_CANTIDAD,
+                CategoriasContract.CategoriasEntry.COLUMN_IMAGEN_CATEGORIA
+        };
+
+        Uri uri = CategoriasContract.CategoriasEntry.CONTENT_URI;
+
+        String selection = CategoriasContract.CategoriasEntry.COLUMN_NOMBRE_CATEGORIA + " LIKE ?";
+        String[] selectionArgs = new String[]{"%"+searchText+"%"};
+
+        cur = cr.query(uri, projection, selection, selectionArgs, CategoriasContract.CategoriasEntry.COLUMN_ID_CATEGORIA);
+
+        return cur;
     }
 
     @Override
     public boolean onQueryTextChange(String newText) {
-       /* newText = newText.toLowerCase();
-        ArrayList<Fuente_Categoria> newList = new ArrayList<>();
-        for (Fuente_Categoria fuentecategoria :  lista){
-            String nombre = fuentecategoria.getTitulo().toLowerCase();
+        Cursor contacts = getListOfContacts(newText);
 
 
-            if(nombre.contains(newText)){
-                newList.add(fuentecategoria);
-            }
+        Adaptador_Categoria adaptador_categoria1 = new Adaptador_Categoria(this,contacts);
 
-        }
-        adaptadorCategoria.setFilter(newList);
-        return true;*/
-       return false;
+        contenedor.setAdapter(adaptador_categoria1);
+        return true;
     }
+
 }
-
-
-

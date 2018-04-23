@@ -1,12 +1,7 @@
 package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan;
 
-import android.app.ActionBar;
-import android.app.Dialog;
-import android.content.ContentValues;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -18,27 +13,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.ListView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import org.json.JSONArray;
-import java.io.BufferedReader;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.client.methods.HttpPost;
 import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
 import cz.msebera.android.httpclient.util.EntityUtils;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.ConexionSQLiteHelper;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.EntidadesBD.Usuarios;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.Fuente_mostrarPerfiles;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.AdministracionDePerfiles;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.FormularioRegistroLogin;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.Login;
 
 /**
  * Created by alan fabricio on 14/03/2018.

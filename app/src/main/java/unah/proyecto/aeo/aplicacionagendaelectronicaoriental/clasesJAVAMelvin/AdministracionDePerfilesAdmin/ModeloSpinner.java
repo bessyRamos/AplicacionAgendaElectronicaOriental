@@ -1,4 +1,4 @@
-package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin;
+package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.AdministracionDePerfilesAdmin;
 
 /**
  * Created by melvinrivera on 9/4/18.

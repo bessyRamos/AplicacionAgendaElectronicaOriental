@@ -1,5 +1,4 @@
-package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin;
-
+package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.PerfilesBreves;
 
 import android.database.Cursor;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.provider.*;
@@ -28,5 +27,47 @@ public class PerfilBreve {
         this.id = cursor.getInt(cursor.getColumnIndex(PerfilesContract.ContactosEntry.COLUMN_PERFILID));
     }
 
+    public PerfilBreve(){
 
+    }
+
+    public String getNombre() {
+        return nombre;
+    }
+
+    public void setNombre(String nombre) {
+        this.nombre = nombre;
+    }
+
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
+    }
+
+    public String getNumeroTelefono() {
+        return numeroTelefono;
+    }
+
+    public void setNumeroTelefono(String numeroTelefono) {
+        this.numeroTelefono = numeroTelefono;
+    }
+
+    public String getDireccion() {
+        return direccion;
+    }
+
+    public void setDireccion(String direccion) {
+        this.direccion = direccion;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 }

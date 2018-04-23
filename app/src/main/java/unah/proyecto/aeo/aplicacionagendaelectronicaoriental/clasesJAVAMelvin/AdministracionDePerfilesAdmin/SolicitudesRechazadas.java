@@ -1,4 +1,5 @@
-package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin;
+package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.AdministracionDePerfilesAdmin;
+
 import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
@@ -7,7 +8,6 @@ import android.os.AsyncTask;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -26,8 +26,7 @@ import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
 import cz.msebera.android.httpclient.util.EntityUtils;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 
-public class PerfilesEliminados extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener{
-
+public class SolicitudesRechazadas extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     ArrayList<Fuente_mostrarPerfiles> mostrar_perfiles;
     private ListView lista;
     AdaptadorMostrarPerfiles adaptadorMostrarPerfiles;
@@ -38,14 +37,14 @@ public class PerfilesEliminados extends AppCompatActivity  implements Navigation
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_perfiles_eliminados);
+        setContentView(R.layout.activity_solicitudes_rechazadas);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        barra = findViewById(R.id.progressBarPerfilesEliminados);
+        barra = findViewById(R.id.progressBarPerfilesRechazados);
         mostrar_perfiles= new ArrayList<Fuente_mostrarPerfiles>();
-        lista = (ListView) findViewById(R.id.listviewperfilesEliminados);
-
-       /* DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        lista = (ListView) findViewById(R.id.listviewperfilesRechazados);
+/*
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, null, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
@@ -54,8 +53,9 @@ public class PerfilesEliminados extends AppCompatActivity  implements Navigation
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        new llenarListaEliminados().execute();
+        new llenarListaRechazadas().execute();
     }
+
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
@@ -64,14 +64,13 @@ public class PerfilesEliminados extends AppCompatActivity  implements Navigation
             Intent i = new Intent(getApplicationContext(),NuevasSolicitudes.class);
             startActivity(i);
             finish();
-
         } else if (id == R.id.menusolicitudesrechazadas) {
-           Intent i = new Intent(getApplicationContext(),SolicitudesRechazadas.class);
-            startActivity(i);
-            finish();
-        } else if (id == R.id.menuperfileliminados) {
             DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
             drawer.closeDrawer(GravityCompat.START);
+        } else if (id == R.id.menuperfileliminados) {
+            Intent i = new Intent(getApplicationContext(),PerfilesEliminados.class);
+            startActivity(i);
+            finish();
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -79,13 +78,9 @@ public class PerfilesEliminados extends AppCompatActivity  implements Navigation
         return true;
     }
 
+    @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
+        super.onBackPressed();
     }
 
     public static boolean compruebaConexion(Context context) {
@@ -106,15 +101,15 @@ public class PerfilesEliminados extends AppCompatActivity  implements Navigation
         return connected;
     }
 
-    private class llenarListaEliminados extends AsyncTask<String, Integer, Boolean> {
-        private llenarListaEliminados(){}
+    private class llenarListaRechazadas extends AsyncTask<String, Integer, Boolean> {
+        private llenarListaRechazadas(){}
         boolean resul = true;
 
         @Override
         protected Boolean doInBackground(String... strings) {
 
             try {
-                JSONArray respJSON = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("https://shessag.000webhostapp.com/consultarPerfilesParaAdministracionPerfiles.php?id_estado=4")).getEntity()));
+                JSONArray respJSON = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("https://shessag.000webhostapp.com/consultarPerfilesParaAdministracionPerfiles.php?id_estado=3")).getEntity()));
                 for (int i = 0; i < respJSON.length(); i++) {
                     id_contacto = respJSON.getJSONObject(i).getInt("id_contacto");
                     nombre_organizacion = respJSON.getJSONObject(i).getString("nombre_organizacion");
@@ -145,7 +140,7 @@ public class PerfilesEliminados extends AppCompatActivity  implements Navigation
             }else {
                 barra.setVisibility(View.INVISIBLE);
                 if(compruebaConexion(getApplicationContext())){
-                    Toast.makeText(getApplicationContext(), "No hay Perfiles Eliminadas", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "No hay solicitudes rechazadas", Toast.LENGTH_SHORT).show();
                 }else{
                     Toast.makeText(getApplicationContext(), "Problemas de conexión", Toast.LENGTH_SHORT).show();
                 }

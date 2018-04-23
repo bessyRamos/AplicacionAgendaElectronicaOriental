@@ -1,9 +1,10 @@
-package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin;
+package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.AdministracionDePerfilesAdmin;
 
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
@@ -17,13 +18,13 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import android.util.Base64;
 import org.json.JSONArray;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.NameValuePair;
@@ -41,6 +42,7 @@ public class NuevoPerfil extends AppCompatActivity {
     CircleImageView imagenOrg;
     Bitmap imagenBitmap;
     FloatingActionButton botonGuardar;
+    FloatingActionButton botonFoto;
     TextInputEditText etnombreeorganizacion, etnumerofijo, etnumerocel, etdireccion, etemail, etdescripcion, etlatitud, etlongitud;
     Spinner spcategorias, spregiones, spusuario;
     ArrayList<ModeloSpinner> listaCategorias, listaRegiones, listaUsuarios;
@@ -57,8 +59,8 @@ public class NuevoPerfil extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editar_perfil);
 
-
-        //imagenOrg = findViewById(R.id.imagenDeOrganizacion);
+        botonFoto = findViewById(R.id.botonFoto);
+        imagenOrg = findViewById(R.id.imagenDeOrganizacion);
         botonGuardar= findViewById(R.id.botonGuardar);
         etnombreeorganizacion = findViewById(R.id.etnombreeorganizacion);
         etnumerofijo = findViewById(R.id.etnumerofijo);
@@ -126,71 +128,33 @@ public class NuevoPerfil extends AppCompatActivity {
             }
         });
 
+        botonFoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                requestRead();
+            }
+        });
+
         botonGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                botonGuardar.setClickable(false);
                 validar();
                 Toast.makeText(getApplicationContext(),"Procesando...",Toast.LENGTH_SHORT).show();
-                /*switch (spcategorias.getSelectedItem().toString()){
-                    case "Emergencia":
-                        id_categoria=1;
-                        break;
-                    case "Educación":
-                        id_categoria=2;
-                        break;
-                    case "Centros Asistenciales":
-                        id_categoria=3;
-                        break;
-                    case "Bancos":
-                        id_categoria=4;
-                        break;
-                    case "Hostelería y Turismo":
-                        id_categoria=5;
-                        break;
-                    case "Instituciones Públicas":
-                        id_categoria=6;
-                        break;
-                    case "Comercio de Bienes":
-                        id_categoria=7;
-                        break;
-                    case "Comercio de Servicios":
-                        id_categoria=8;
-                        break;
-                    case "Bienes y Raíces":
-                        id_categoria=9;
-                        break;
-                    case "Asesoría Legal":
-                        id_categoria=10;
-                        break;
-                    case "Funerarias":
-                        id_categoria=11;
-                        break;
-                }
+             imagenBitmap = ((BitmapDrawable)imagenOrg.getDrawable()).getBitmap();
 
-                switch (spregiones.getSelectedItem().toString()){
-                    case "Danlí":
-                        id_region=3;
-                        break;
-                    case "El Paraíso":
-                        id_region=4;
-                        break;
-                }*/
-
-
-//                imagenBitmap = ((BitmapDrawable)imagenOrg.getDrawable()).getBitmap();
-
-               /* new AsyncTask<Void, Void, String>(){
+                new AsyncTask<Void, Void, String>(){
                     @Override
                     protected String doInBackground(Void... voids) {
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        imagenBitmap.compress(Bitmap.CompressFormat.JPEG,100,baos);
+                        imagenBitmap.compress(Bitmap.CompressFormat.JPEG,70,baos);
                         byte b []= baos.toByteArray();
 
                         encodeImagen = Base64.encodeToString(b,Base64.DEFAULT);
 
                         return null;
                     }
-                }.execute();*/
+                }.execute();
 
 
 

@@ -1,10 +1,11 @@
-package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin;
-
+package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.PerfilesBreves;
 import android.app.LoaderManager;
+import android.content.ContentResolver;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -19,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.*;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.HerramientaBusquedaAvanzada.BusquedaAvanzada;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.AcercaDe;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.Login;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.provider.*;
@@ -107,30 +109,9 @@ public class ListaDeContactos extends AppCompatActivity
                 break;
             case R.id.sincronizar:
                 SyncAdapter.syncImmediately(this);
+                break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        return false;
-    }
-
-    @Override
-    //Metodo que establece el filtro del adaptador según se va escribiendo en el SearchView
-    public boolean onQueryTextChange(String newText) {
-        /*newText = newText.toLowerCase();
-        ArrayList<PerfilBreve> newList = new ArrayList<>();
-        for (PerfilBreve perfilBreve: listaOrganizaciones){
-            String nombre = perfilBreve.getNombre().toLowerCase();
-            String numeroTel = perfilBreve.getNumeroTelefono().toLowerCase();
-            String region = perfilBreve.getDireccion().toLowerCase();
-
-            if(nombre.contains(newText) || numeroTel.contains(newText) || region.contains(newText))
-                newList.add(perfilBreve);
-        }
-        //adaptadorPerfilBreve.setFilter(newList);*/
-        return true;
     }
 
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -164,8 +145,6 @@ public class ListaDeContactos extends AppCompatActivity
                 PerfilesContract.ContactosEntry.COLUMN_IMAGEN_PATH
         };
 
-
-
         return new CursorLoader(this,
                 PerfilesContract.ContactosEntry.CONTENT_URI,
                 projection,
@@ -182,6 +161,67 @@ public class ListaDeContactos extends AppCompatActivity
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         adaptadorPerfilBreve.swapCursor(null);
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+
+        Cursor contacts = getListOfContacts(query);
+
+        AdaptadorPerfilBreve adaptador_perfil1 = new AdaptadorPerfilBreve(this,contacts);
+
+        contenedor.setAdapter(adaptador_perfil1);
+        return true;
+    }
+
+    public Cursor getListOfContacts(String searchText) {
+
+        Cursor cur = null;
+        ContentResolver cr = getContentResolver();
+
+        String[] projection ={
+                PerfilesContract.ContactosEntry.COLUMN_PERFILID,
+                PerfilesContract.ContactosEntry.COLUMN_NOMBRE,
+                PerfilesContract.ContactosEntry.COLUMN_NUMERO_TELEFONO,
+                PerfilesContract.ContactosEntry.COLUMN_NUMERO_CELULAR,
+                PerfilesContract.ContactosEntry.COLUMN_NOMBRE_REGION,
+                PerfilesContract.ContactosEntry.COLUMN_IMAGEN_PATH
+        };
+
+        Uri uri = PerfilesContract.ContactosEntry.CONTENT_URI;
+
+        String selection =
+                PerfilesContract.ContactosEntry.COLUMN_NOMBRE + " LIKE ? AND "+
+                PerfilesContract.ContactosEntry.COLUMN_CATEGORIA +" = ? AND " +
+                PerfilesContract.ContactosEntry.COLUMN_ESTADO +" = ? or "+
+                PerfilesContract.ContactosEntry.COLUMN_NUMERO_TELEFONO + " LIKE ? AND "+
+                PerfilesContract.ContactosEntry.COLUMN_CATEGORIA +" = ? AND " +
+                PerfilesContract.ContactosEntry.COLUMN_ESTADO +" = ? or "+
+                PerfilesContract.ContactosEntry.COLUMN_NUMERO_CELULAR + " LIKE ? AND "+
+                PerfilesContract.ContactosEntry.COLUMN_CATEGORIA +" = ? AND " +
+                PerfilesContract.ContactosEntry.COLUMN_ESTADO +" = ? or "+
+                PerfilesContract.ContactosEntry.COLUMN_NOMBRE_REGION + " LIKE ?  AND "+
+                PerfilesContract.ContactosEntry.COLUMN_CATEGORIA +" = ? AND " +
+                PerfilesContract.ContactosEntry.COLUMN_ESTADO +" = ? ";
+        String[] selectionArgs = new String[]{"" +
+                "%"+searchText+"%", ""+id_categoria, "2",
+                "%"+searchText+"%", ""+id_categoria, "2",
+                "%"+searchText+"%", ""+id_categoria, "2",
+                "%"+searchText+"%", ""+id_categoria, "2"};
+
+        cur = cr.query(uri, projection, selection, selectionArgs, null);
+
+        return cur;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        Cursor contacts = getListOfContacts(newText);
+
+        AdaptadorPerfilBreve adaptador_categoria1 = new AdaptadorPerfilBreve(this,contacts);
+
+        contenedor.setAdapter(adaptador_categoria1);
+        return true;
     }
 
 }

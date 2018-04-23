@@ -33,7 +33,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".clasesJAVAMelvin.ListaDeContactos"
+            android:name=".clasesJAVAMelvin.PerfilesBreves.ListaDeContactos"
             android:configChanges="screenSize|orientation"
             android:label="@string/lista_contactos"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -74,7 +74,7 @@
             android:name=".clasesJAVAVirgilio.FormularioRegistroLogin"
             android:label="Formulario de Registro" />
         <activity
-            android:name=".clasesJAVAMelvin.BusquedaAvanzada"
+            android:name=".clasesJAVAMelvin.HerramientaBusquedaAvanzada.BusquedaAvanzada"
             android:configChanges="screenSize|orientation"
             android:label="Búsqueda Avanzada"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -95,39 +95,35 @@
             android:name=".clasesJAVABessy.Mapa"
             android:label="@string/title_activity_mapa" />
         <activity
-            android:name=".clasesJAVAMelvin.AdministracionDePerfiles"
+            android:name=".clasesJAVAMelvin.AdministracionDePerfilesAdmin.AdministracionDePerfiles"
             android:label="@string/title_activity_administracion_de_perfiles"></activity>
         <activity
-            android:name=".clasesJAVAMelvin.EditarPerfil"
+            android:name=".clasesJAVAMelvin.AdministracionDePerfilesAdmin.EditarPerfil"
             android:configChanges="screenSize|orientation"
             android:label="@string/title_activity_editar_perfil"
-            android:parentActivityName=".clasesJAVAMelvin.AdministracionDePerfiles">
+            android:parentActivityName=".clasesJAVAMelvin.AdministracionDePerfilesAdmin.AdministracionDePerfiles">
             <meta-data
                 android:name="android:support.PARENT_ACTIVITY"
                 android:value=".clasesJAVAMelvin.AdministracionDePerfiles" />
         </activity>
         <activity
-            android:name=".clasesJAVAMelvin.NuevasSolicitudes"
+            android:name=".clasesJAVAMelvin.AdministracionDePerfilesAdmin.NuevasSolicitudes"
             android:label="@string/title_activity_nuevas_solicitudes" />
         <activity
-            android:name=".clasesJAVAMelvin.PerfilesEliminados"
+            android:name=".clasesJAVAMelvin.AdministracionDePerfilesAdmin.PerfilesEliminados"
             android:label="@string/title_activity_perfiles_eliminados"
-            android:parentActivityName=".clasesJAVAMelvin.AdministracionDePerfiles">
+            android:parentActivityName=".clasesJAVAMelvin.AdministracionDePerfilesAdmin.AdministracionDePerfiles">
             <meta-data
                 android:name="android:support.PARENT_ACTIVITY"
                 android:value=".clasesJAVAMelvin.AdministracionDePerfiles" />
         </activity>
         <activity
-            android:name=".clasesJAVAMelvin.SolicitudesRechazadas"
+            android:name=".clasesJAVAMelvin.AdministracionDePerfilesAdmin.SolicitudesRechazadas"
             android:label="@string/title_activity_solicitudes_rechazadas"
-            android:parentActivityName=".clasesJAVAMelvin.AdministracionDePerfiles">
+            android:parentActivityName=".clasesJAVAMelvin.AdministracionDePerfilesAdmin.AdministracionDePerfiles">
             <meta-data
                 android:name="android:support.PARENT_ACTIVITY"
                 android:value=".clasesJAVAMelvin.AdministracionDePerfiles" />
-        </activity>
-        <activity
-            android:name=".clasesJAVAMelvin.NuevoPerfil"
-            android:label="@string/title_activity_nuevo_perfil" >
         </activity>
 
 
@@ -135,7 +131,7 @@
             android:label="@string/recuperacion">
         </activity>
 
-        <activity android:name=".clasesJAVAMelvin.NuevoPerfil"
+        <activity android:name=".clasesJAVAMelvin.AdministracionDePerfilesAdmin.NuevoPerfil"
             android:label="@string/title_activity_nuevo_perfil"></activity>
 
         <service

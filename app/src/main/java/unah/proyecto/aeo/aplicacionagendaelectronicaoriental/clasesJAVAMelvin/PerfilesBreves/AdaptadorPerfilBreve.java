@@ -1,4 +1,4 @@
-package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin;
+package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.PerfilesBreves;
 
 import android.app.Activity;
 import android.content.Context;
@@ -87,10 +87,16 @@ public class AdaptadorPerfilBreve extends RecyclerView.Adapter<AdaptadorPerfilBr
 
         holder.id_perfilBreve.setText(""+dataCursor.getInt(dataCursor.getColumnIndex(PerfilesContract.ContactosEntry.COLUMN_PERFILID)));
 
-
+    if (!dataCursor.getString(dataCursor.getColumnIndex(PerfilesContract.ContactosEntry.COLUMN_IMAGEN_PATH)).isEmpty()){
         Glide.with(context).
-                load(R.drawable.iconocontactowhite).placeholder(R.drawable.pleasewaitoverlay).
+                load(dataCursor.getString(dataCursor.getColumnIndex(PerfilesContract.ContactosEntry.COLUMN_IMAGEN_PATH))).
                 into(holder.imagenPerfilBreve);
+    }else {
+        Glide.with(context).
+                load(R.drawable.iconocontactowhite).
+                into(holder.imagenPerfilBreve);
+    }
+
     }
 
     public Cursor swapCursor(Cursor cursor){
@@ -118,12 +124,5 @@ public class AdaptadorPerfilBreve extends RecyclerView.Adapter<AdaptadorPerfilBr
         }
         return  null;
     }
-/*
-        public void setFilter(ArrayList<PerfilBreve>  newList){
-            listaObjetos = new ArrayList<PerfilBreve>();
-            listaObjetos.addAll(newList);
-            notifyDataSetChanged();
-        }*/
-
-    }
+}
 

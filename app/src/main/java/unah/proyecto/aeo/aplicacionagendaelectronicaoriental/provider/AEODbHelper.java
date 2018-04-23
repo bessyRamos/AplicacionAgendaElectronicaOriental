@@ -47,7 +47,13 @@ public class AEODbHelper extends SQLiteOpenHelper {
                 CategoriasContract.CategoriasEntry.COLUMN_CANTIDAD+" TEXT NOT NULL, " +
                 CategoriasContract.CategoriasEntry.COLUMN_IMAGEN_CATEGORIA +" TEXT);";
 
+        final String SQL_CREATE_REGIONES_TABLE = "CREATE TABLE " +RegionesContract.RegionesEntry.TABLE_NAME+"("+
+                CategoriasContract.CategoriasEntry._ID +" INTEGER PRIMARY KEY AUTOINCREMENT,"+
+                RegionesContract.RegionesEntry.COLUMN_ID_REGION+" INTEGER UNIQUE NOT NULL,"+
+                RegionesContract.RegionesEntry.COLUMN_NOMBRE_REGION +" TEXT);";
+
         db.execSQL(SQL_CREATE_PERFILES_TABLE);
+        db.execSQL(SQL_CREATE_REGIONES_TABLE);
         db.execSQL(SQL_CREATE_CATEGORIAS_TABLE);
 
 
@@ -58,6 +64,7 @@ public class AEODbHelper extends SQLiteOpenHelper {
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + PerfilesContract.ContactosEntry.TABLE_NAME);
         db.execSQL("DROP TABLE IF EXISTS " + CategoriasContract.CategoriasEntry.TABLE_NAME);
+        db.execSQL("DROP TABLE IF EXISTS " + RegionesContract.RegionesEntry.TABLE_NAME);
         onCreate(db);
 
     }
