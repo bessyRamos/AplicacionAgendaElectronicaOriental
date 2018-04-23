@@ -90,6 +90,7 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
     int id_preferencia;
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
+    int id_usu=-1;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -100,6 +101,7 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
         //Preferencias de administrador y usuario
         session = new Sesion(this);
         sessionUsuario = new SesionUsuario(this);
+        id_usu  = preferences.getInt("usuario_ingreso",id_usu);
         //
         preferences = getSharedPreferences("credencial",Context.MODE_PRIVATE);
         editor = preferences.edit();
@@ -275,14 +277,17 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
 
     protected void onPostExecute(Boolean result) {
         if (resul) {
-            id_preferencia = id_usuario;
-            editor.putInt("usuario_ingreso",id_preferencia);
-            editor.commit();
+            if(id_usuario!=0){
+                id_preferencia = id_usuario;
+                editor.putInt("usuario_ingreso",id_usuario);
+                editor.commit();
+            }
+
 
             if (rol == 1 && estado_usuario ==1) {
                 //instancia y envio de usuario logeado
                 Intent intent = new Intent(Login.this, Panel_de_Control.class);
-                intent.putExtra("usuario_ingreso",id_preferencia);
+                intent.putExtra("usuario_ingreso",id_usuario);
                 //preferencia logeado con exito
                 session.setLogin(true);
                 //
@@ -293,7 +298,7 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
             } else if (rol ==2 && estado_usuario ==1){
                     //instancia y envio de usuario logeado
                     Intent intent = new Intent(Login.this,PanelDeControlUsuarios.class);
-                    intent.putExtra("id",id_preferencia);
+                    intent.putExtra("id",id_usuario);
                     //preferencia logeado con exito usuario
                     sessionUsuario.setLoginUsuario(true);
                     //limpieza de variables

@@ -102,8 +102,11 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity  implements N
         sesion = new Sesion(this);
         sesionUsuario = new SesionUsuario(this);
         SharedPreferences preferences = getSharedPreferences("credencial", Context.MODE_PRIVATE);
-        id_usu  = preferences.getInt("usuario_ingreso",id_usu);
-        //
+        if (getIntent().getExtras()!=null) {
+            id_usu  = preferences.getInt("usuario_ingreso",id_usu);
+            //
+        }
+
 
         nombreOrganizacion = (EditText) findViewById(R.id.txtNombreOrganizacion);
         telefonoFijo = (EditText) findViewById(R.id.txtNumeroTelefonoFijo);
@@ -309,15 +312,23 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity  implements N
 
         }else if (id == R.id.login) {
             if (sesion.logindim()){
-                startActivity(new Intent(FormularioNuevaOrganizacion.this,Panel_de_Control.class));
+                Intent intent = new Intent(FormularioNuevaOrganizacion.this,Panel_de_Control.class);
+                intent.putExtra("usuario_ingreso",id_usu);
+                //startActivity(new Intent(ActivityCategorias.this,Panel_de_Control.class));
+                startActivity(intent);
                 finish();
             }else{
                 if (sesionUsuario.logindimUsuario()){
-                    startActivity(new Intent(FormularioNuevaOrganizacion.this,PanelDeControlUsuarios.class));
+                    Intent intent = new Intent(FormularioNuevaOrganizacion.this,PanelDeControlUsuarios.class);
+                    intent.putExtra("id",id_usu);
+                    //startActivity(new Intent(ActivityCategorias.this,PanelDeControlUsuarios.class));
+                    startActivity(intent);
                     finish();
+
                 }else {
                     Intent intent = new Intent(this, Login.class);
                     startActivity(intent);
+                    finish();
                 }
 
             }

@@ -197,9 +197,14 @@
      </activity>
 
         <activity android:name=".clasesJAVAVirgilio.EditarPerfilOrganizacion"
-                  android:label="Editar Contacto">
+                  android:label="Editar Contacto"
+                  android:parentActivityName=".clasesJAVAVirgilio.PanelDeControlUsuarios">
+            <meta-data
+                android:name="android:support.PARENT_ACTIVITY"
+                android:value=".clasesJAVAVirgilio.PanelDeControlUsuarios" />
 
         </activity>
+
 
     </application>
 

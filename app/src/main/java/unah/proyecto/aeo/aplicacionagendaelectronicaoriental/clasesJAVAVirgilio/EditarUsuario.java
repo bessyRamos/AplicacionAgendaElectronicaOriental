@@ -54,8 +54,11 @@ public class EditarUsuario extends AppCompatActivity implements NavigationView.O
         sesion = new Sesion(this);
         sesionUsuario = new SesionUsuario(this);
         SharedPreferences preferences = getSharedPreferences("credencial", Context.MODE_PRIVATE);
-        id_usu  = preferences.getInt("usuario_ingreso",id_usu);
-        //
+
+            id_usu  = preferences.getInt("usuario_ingreso",id_usu);
+            //
+
+
 
 
         //RECIVIMOS EL ID QUE VIENE DE LA CLASE MOSTRAR USUARIOS.
@@ -131,6 +134,7 @@ public class EditarUsuario extends AppCompatActivity implements NavigationView.O
                 intent.putExtra("usuario_ingreso",id_usu);
                 //startActivity(new Intent(ActivityCategorias.this,Panel_de_Control.class));
                 startActivity(intent);
+                finish();
 
             }else{
                 if (sesionUsuario.logindimUsuario()){
@@ -138,10 +142,12 @@ public class EditarUsuario extends AppCompatActivity implements NavigationView.O
                     intent.putExtra("id",id_usu);
                     //startActivity(new Intent(ActivityCategorias.this,PanelDeControlUsuarios.class));
                     startActivity(intent);
+                    finish();
 
                 }else {
                     Intent intent = new Intent(this, Login.class);
                     startActivity(intent);
+                    finish();
                 }
 
             }
@@ -251,6 +257,7 @@ public class EditarUsuario extends AppCompatActivity implements NavigationView.O
                 if (nombreusuario.getError()==null && nombrepropio.getError()==null && contrasena.getError()==null){
                     Toast.makeText(getApplicationContext(),"Usuario Realizado Correctamente",Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(EditarUsuario.this,PanelDeControlUsuarios.class);
+                    intent.putExtra("id",id_usu);
                     startActivity(intent);
                     finish();
                 }

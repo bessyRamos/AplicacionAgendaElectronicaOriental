@@ -179,16 +179,19 @@ public class ActivityCategorias extends AppCompatActivity
                 intent.putExtra("usuario_ingreso",id_usu);
                 //startActivity(new Intent(ActivityCategorias.this,Panel_de_Control.class));
                 startActivity(intent);
+                finish();
             }else{
                 if (sesionUsuario.logindimUsuario()){
                     Intent intent = new Intent(ActivityCategorias.this,PanelDeControlUsuarios.class);
                     intent.putExtra("id",id_usu);
                     //startActivity(new Intent(ActivityCategorias.this,PanelDeControlUsuarios.class));
                     startActivity(intent);
+                    finish();
 
                 }else {
                     Intent intent = new Intent(this, Login.class);
                     startActivity(intent);
+                    finish();
                 }
 
             }

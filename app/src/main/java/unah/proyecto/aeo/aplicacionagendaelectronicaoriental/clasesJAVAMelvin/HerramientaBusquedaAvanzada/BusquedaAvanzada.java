@@ -1,9 +1,11 @@
 package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.HerramientaBusquedaAvanzada;
 
 import android.app.LoaderManager;
+import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -27,12 +29,16 @@ import java.util.ArrayList;
 
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.ActivityCategorias;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.Panel_de_Control;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.AdministracionDePerfilesAdmin.AdaptadorPersonalizadoSpinner;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.PerfilesBreves.AdaptadorPerfilBreve;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.AdministracionDePerfilesAdmin.ModeloSpinner;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.PerfilesBreves.PerfilBreve;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.AcercaDe;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.Login;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.PanelDeControlUsuarios;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.Sesion;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.SesionUsuario;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.provider.AEODbHelper;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.provider.CategoriasContract;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.provider.PerfilesContract;
@@ -59,6 +65,12 @@ public class BusquedaAvanzada extends AppCompatActivity
     int id_categoria, id_region;
     ArrayList<PerfilBreve> lista =new ArrayList<PerfilBreve>();
 
+    //preferencias
+    private Sesion sesion;
+    private SesionUsuario sesionUsuario;
+    int id_usu=-1;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
          /* *********************************************************
@@ -66,6 +78,12 @@ public class BusquedaAvanzada extends AppCompatActivity
         ********************************************************* */
         super.onCreate(savedInstanceState);
 
+        //envio de clase actual para las preferencias
+        sesion = new Sesion(this);
+        sesionUsuario = new SesionUsuario(this);
+        SharedPreferences preferences = getSharedPreferences("credencial", Context.MODE_PRIVATE);
+        id_usu  = preferences.getInt("usuario_ingreso",id_usu);
+        //
 
         setContentView(R.layout.activity_busqueda_avanzada);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -312,8 +330,27 @@ public class BusquedaAvanzada extends AppCompatActivity
             Intent intent = new Intent(this,AcercaDe.class);
             startActivity(intent);
         }else if (id == R.id.login) {
-            Intent intent = new Intent(this, Login.class);
-            startActivity(intent);
+            if (sesion.logindim()){
+                Intent intent = new Intent(BusquedaAvanzada.this,Panel_de_Control.class);
+                intent.putExtra("usuario_ingreso",id_usu);
+                //startActivity(new Intent(ActivityCategorias.this,Panel_de_Control.class));
+                startActivity(intent);
+                finish();
+            }else{
+                if (sesionUsuario.logindimUsuario()){
+                    Intent intent = new Intent(BusquedaAvanzada.this,PanelDeControlUsuarios.class);
+                    intent.putExtra("id",id_usu);
+                    //startActivity(new Intent(ActivityCategorias.this,PanelDeControlUsuarios.class));
+                    startActivity(intent);
+                    finish();
+                }else {
+                    Intent intent = new Intent(this, Login.class);
+                    startActivity(intent);
+                    finish();
+                }
+
+            }
+
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

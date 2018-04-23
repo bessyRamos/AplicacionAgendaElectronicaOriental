@@ -22,6 +22,8 @@ import android.widget.AdapterView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -100,9 +102,12 @@ public class EditarPerfilOrganizacion extends AppCompatActivity {
         listaCategorias=new ArrayList<ModeloSpinner>();
         listaRegiones=new ArrayList<ModeloSpinner>();
 
-        if (getIntent().getExtras()!=null){
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+
+
             id_usuario_resibido_usuario = getIntent().getExtras().getInt("id_usuario");
-        }
+
 
 
         Bundle a = getIntent().getExtras();
@@ -351,6 +356,15 @@ public class EditarPerfilOrganizacion extends AppCompatActivity {
                 }else {
                     imagenOrg.setImageResource(R.drawable.iconocontactowhite);
                 }*/
+                if(tieneImagen==true){
+                    Glide.with(getApplicationContext()).
+                            load(imagen_rec).
+                            into(imagenOrg);
+                }else{
+                    Glide.with(getApplicationContext()).
+                            load(R.drawable.iconocontactowhite).
+                            into(imagenOrg);
+                }
 
                 etnombreeorganizacion.setText(nomborg_rec);
                 etnumerofijo.setText(numtel_rec);

@@ -56,6 +56,7 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
     String imagen;
 
     int id_usu=-1;
+    int id_usuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +67,7 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
         sesion = new Sesion(this);
         sesionUsuario = new SesionUsuario(this);
         SharedPreferences preferences = getSharedPreferences("credencial", Context.MODE_PRIVATE);
+
         id_usu  = preferences.getInt("usuario_ingreso",id_usu);
         //
         mostrar_perfiles= new ArrayList<EntidadOrganizacion>();
@@ -282,6 +284,7 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
                     nombre_organizacion = respJSON.getJSONObject(i).getString("nombre_organizacion");
                     estadoOrganizacion = respJSON.getJSONObject(i).getString("id_estado");
                     imagen =respJSON.getJSONObject(i).getString("imagen");
+                    id_usuario = respJSON.getJSONObject(i).getInt("id_usuario");
 
                     //comprueba el estado de la organizacion
                     if(1 == Integer.parseInt(estadoOrganizacion)){
@@ -294,7 +297,11 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
                         estadoOrganizacion ="Eliminado";
                     }
                     //envia los datos ala clase pojo de el item lista
-                    mostrar_perfiles.add(new EntidadOrganizacion(id_contacto , nombre_organizacion, estadoOrganizacion,imagen));
+
+                    if (respJSON.getJSONObject(i).getInt("id_usuario")!=1){
+                        mostrar_perfiles.add(new EntidadOrganizacion(id_contacto , nombre_organizacion, estadoOrganizacion,imagen));
+
+                    }
 
                 }
             } catch (Exception ex) {

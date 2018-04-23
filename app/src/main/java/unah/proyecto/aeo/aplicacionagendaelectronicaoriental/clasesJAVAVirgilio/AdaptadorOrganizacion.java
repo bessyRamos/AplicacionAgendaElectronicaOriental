@@ -60,7 +60,16 @@ public class AdaptadorOrganizacion extends BaseAdapter {
        // textid.setText(""+perfiles.get(i).getId());
         nombre.setText(listaobjetos.get(i).getTitulo().toString());
         estado.setText(listaobjetos.get(i).getEstado().toString());
-        Glide.with(context).load(listaobjetos.get(i).getImagen()).into(Imagen);
+        if (listaobjetos.get(i).getImagen().isEmpty()){
+            Imagen.setImageResource(R.drawable.iconocontactowhite);
+
+        }else {
+            Glide.with(context).load(listaobjetos.get(i).getImagen()).into(Imagen);
+        }
+
+
+
+
 
         return v;
     }
