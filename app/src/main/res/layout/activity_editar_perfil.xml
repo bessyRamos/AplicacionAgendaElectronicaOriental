@@ -107,26 +107,7 @@
                     />
             </android.support.design.widget.TextInputLayout>
 
-            <ImageView
-                android:layout_below="@id/iptldescript"
-                android:id="@+id/imgUbicacionOrganizacion"
-                android:layout_width="match_parent"
-                android:layout_height="90dp"
-                app:srcCompat="@drawable/ubicacion_organizacion"
-                />
-            <Button
-                android:layout_below="@id/imgUbicacionOrganizacion"
-                android:id="@+id/btnUbicacionOrganizacion"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Insertar Ubicacion"
-                app:srcCompat="@drawable/ubicacion_organizacion"
-                android:layout_centerInParent="true"
-                android:layout_gravity="center_horizontal"
-                android:onClick="guardarUbicacionOrganizacion"
-                android:layout_marginBottom="25dp"
 
-                />
 
             <TextView
                 android:id="@+id/tvcat"
@@ -210,6 +191,27 @@
                 android:layout_marginBottom="74dp"
                 android:layout_marginEnd="20dp"
                 android:src="@drawable/ic_menu_camera" />
+
+            <ImageView
+                android:layout_below="@id/iptldescript"
+                android:id="@+id/imgUbicacionOrganizacion"
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                app:srcCompat="@drawable/ubicacion_organizacion"
+                />
+            <Button
+                android:layout_below="@id/imgUbicacionOrganizacion"
+                android:id="@+id/btnUbicacionOrganizacion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Insertar Ubicacion"
+                app:srcCompat="@drawable/ubicacion_organizacion"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center_horizontal"
+                android:onClick="guardarUbicacionOrganizacion"
+                android:layout_marginBottom="25dp"
+
+                />
 
         </RelativeLayout>
 
