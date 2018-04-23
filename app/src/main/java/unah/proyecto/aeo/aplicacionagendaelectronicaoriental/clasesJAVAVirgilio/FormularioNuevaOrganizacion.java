@@ -143,9 +143,6 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity  implements N
         }
 
 
-
-
-
         spinnerCategorias.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -201,6 +198,18 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity  implements N
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+    }
+    protected void onActivityResult(int requestCode,int resultCode, Intent data){
+        if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+
+                String latitud = data.getStringExtra("latitud");
+                String longitud = data.getStringExtra("longitud");
+                latitudOrganizacion.setText(latitud);
+                longitudOrganizacion.setText(longitud);
+
+            }
+        }
     }
 
     @Override

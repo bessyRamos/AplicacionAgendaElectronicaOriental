@@ -44,6 +44,7 @@ public class Mapa extends FragmentActivity implements OnMapReadyCallback {
 
         LatLng coordenadas = new LatLng(x,y);
         mMap.addMarker(new MarkerOptions().position(coordenadas).title(n));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(coordenadas,18));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(coordenadas,16));
+        mMap.getUiSettings().setZoomControlsEnabled(true);
     }
 }
