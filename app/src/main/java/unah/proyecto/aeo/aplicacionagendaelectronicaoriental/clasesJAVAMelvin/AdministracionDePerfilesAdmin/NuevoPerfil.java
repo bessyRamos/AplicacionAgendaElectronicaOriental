@@ -184,6 +184,11 @@ public class NuevoPerfil extends AppCompatActivity {
 
 
     }
+    public  void  guardarUbicacionOrganizacion(View view){
+
+        Intent ubicacion1 = new Intent(getApplicationContext(),Ingresar_Ubicacion.class);
+        startActivityForResult(ubicacion1,1);
+    }
 
     public void requestRead() {
         if (ContextCompat.checkSelfPermission(this,
