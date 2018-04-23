@@ -12,6 +12,7 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+
 import java.util.Locale;
 
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
@@ -59,7 +60,6 @@ public class Ingresar_Ubicacion extends AppCompatActivity implements GoogleMap.O
             setTitle(nuevoTitulo);
         }
     }
-
     @Override
     public void onMarkerDragEnd(Marker marker) {
         if (marker.equals(marcas)) {
@@ -88,7 +88,6 @@ public class Ingresar_Ubicacion extends AppCompatActivity implements GoogleMap.O
             setResult(FormularioNuevaOrganizacion.RESULT_OK, data);
             finish();
         }
-
-
     }
+
 }

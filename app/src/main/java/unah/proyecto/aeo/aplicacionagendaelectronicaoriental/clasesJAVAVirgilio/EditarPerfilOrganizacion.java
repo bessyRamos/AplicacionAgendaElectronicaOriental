@@ -65,6 +65,7 @@ public class EditarPerfilOrganizacion extends AppCompatActivity {
     String imagen_rec ;
     int idregion_rec ;
     int idcategoria_rec ;
+    int i=0;
     //controla si existe imagen en el contacto traido desde el webservice
     boolean tieneImagen;
     //
@@ -159,8 +160,8 @@ public class EditarPerfilOrganizacion extends AppCompatActivity {
         botonGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                validar();
-                Toast.makeText(getApplicationContext(),"Procesando...",Toast.LENGTH_SHORT).show();
+
+
 
                 imagenBitmap = ((BitmapDrawable)imagenOrg.getDrawable()).getBitmap();
 
@@ -177,10 +178,22 @@ public class EditarPerfilOrganizacion extends AppCompatActivity {
                     }
                 }.execute();
 
+                validar();
+
+                if (etnombreeorganizacion.getError()==null &&
+                        etnumerofijo.getError()==null &&
+                        etnumerocel.getError()==null &&
+                        etdireccion.getError()==null &&
+                        etemail.getError()==null &&
+                        etdescripcion.getError()==null &&
+                        etlatitud.getError()==null &&
+                        etlongitud.getError()==null){
+                    i ++;
+                    new actualizarPerfil().execute();
+                }
 
 
 
-                new actualizarPerfil().execute();
 
             }
         });
@@ -384,7 +397,7 @@ public class EditarPerfilOrganizacion extends AppCompatActivity {
                 parametros.add(new BasicNameValuePair("id_categoria",String.valueOf(id_categoria)));
                 parametros.add(new BasicNameValuePair("id_region",String.valueOf(id_region)));
                 parametros.add(new BasicNameValuePair("imagen",encodeImagen));
-                parametros.add(new BasicNameValuePair("nombre_imagen",etnombreeorganizacion.getText().toString().replace(" ","_")+".jpg"));
+                parametros.add(new BasicNameValuePair("nombre_imagen",etnombreeorganizacion.getText().toString().replace(" ","_")+i+".jpg"));
 
 
                 httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));
@@ -404,21 +417,16 @@ public class EditarPerfilOrganizacion extends AppCompatActivity {
 
         protected void onPostExecute(Boolean result) {
             if (resul) {
-                if (etnombreeorganizacion.getError()==null &&
-                        etnumerofijo.getError()==null &&
-                        etnumerocel.getError()==null &&
-                        etdireccion.getError()==null &&
-                        etemail.getError()==null &&
-                        etdescripcion.getError()==null &&
-                        etlatitud.getError()==null &&
-                        etlongitud.getError()==null){
+
+                    Toast.makeText(getApplicationContext(),"Procesando...",Toast.LENGTH_SHORT).show();
+
                     Toast.makeText(getApplicationContext(),"Perfil Actualizado Correctamente",Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(EditarPerfilOrganizacion.this,PanelDeControlUsuarios.class);
                     intent.putExtra("id",id_usuario_resibido_usuario);
                     startActivity(intent);
                     //startActivity(new Intent(getApplicationContext(),PanelDeControlUsuarios.class));
                     finish();
-                }
+
 
             }else {
                 Toast.makeText(getApplicationContext(), "Problemas de conexión", Toast.LENGTH_SHORT).show();

@@ -126,7 +126,7 @@
                 android:value=".clasesJAVAMelvin.AdministracionDePerfiles" />
         </activity>
         <activity
-            android:name=".clasesJAVAMelvin.NuevoPerfil"
+            android:name=".clasesJAVAMelvin.AdministracionDePerfilesAdmin.NuevoPerfil"
             android:label="@string/title_activity_nuevo_perfil">
 
         </activity>

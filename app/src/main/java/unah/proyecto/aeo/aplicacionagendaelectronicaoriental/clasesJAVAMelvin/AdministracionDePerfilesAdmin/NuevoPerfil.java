@@ -141,10 +141,7 @@ public class NuevoPerfil extends AppCompatActivity {
         botonGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                botonGuardar.setClickable(false);
-                validar();
-                Toast.makeText(getApplicationContext(),"Procesando...",Toast.LENGTH_SHORT).show();
-             imagenBitmap = ((BitmapDrawable)imagenOrg.getDrawable()).getBitmap();
+                imagenBitmap = ((BitmapDrawable)imagenOrg.getDrawable()).getBitmap();
 
                 new AsyncTask<Void, Void, String>(){
                     @Override
@@ -159,10 +156,28 @@ public class NuevoPerfil extends AppCompatActivity {
                     }
                 }.execute();
 
+                validar();
+                if (etnombreeorganizacion.getError()==null &&
+                        etnumerofijo.getError()==null &&
+                        etnumerocel.getError()==null &&
+                        etdireccion.getError()==null &&
+                        etemail.getError()==null &&
+                        etdescripcion.getError()==null &&
+                        etlatitud.getError()==null &&
+                        etlongitud.getError()==null) {
+                    new crearPerfil().execute();
+                }
+               /* if(etnombreeorganizacion.getText().toString().isEmpty() || etnumerofijo.getText().toString().isEmpty() || etnumerocel.getText().toString().isEmpty() ||
+                        etdireccion.getText().toString().isEmpty() || etemail.getText().toString().isEmpty() || etdescripcion.getText().toString().isEmpty() ||
+                        etlatitud.getText().toString().isEmpty() || etlongitud.getText().toString().isEmpty() ){
+                    validar();}else {
+                    Toast.makeText(getApplicationContext(),"Procesando...",Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(getApplicationContext()," "+id_usuario,Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(getApplicationContext()," "+id_categoria,Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext()," "+id_region,Toast.LENGTH_SHORT).show();
 
 
-
-                new crearPerfil().execute();
+                }*/
 
             }
         });
@@ -357,19 +372,17 @@ public class NuevoPerfil extends AppCompatActivity {
                 parametros.add(new BasicNameValuePair("id_region",String.valueOf(id_region)));
                 parametros.add(new BasicNameValuePair("id_usuario",String.valueOf(id_usuario)));
 
-                parametros.add(new BasicNameValuePair("imagen_rec",encodeImagen));
+                parametros.add(new BasicNameValuePair("imagen",encodeImagen));
+                parametros.add(new BasicNameValuePair("nombre_imagen",etnombreeorganizacion.getText().toString().replace(" ","_") +".jpg"));
 
                 httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));
 
-                httpclient.execute(httppost);
 
-               /* EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("?id_contacto="+id_perfilEditar
-                        +"&nomborg_rec="+etnombreeorganizacion.getText().toString().replace(" ","%20")+
-                        "&numtel_rec="+etnumerofijo.getText().toString()+"&numcel_rec="+etnumerocel.getText().toString()+"&direccion_rec="+
-                        etdireccion.getText().toString().replace(" ","%20")+"&email_rec="+etemail.getText().toString()+"&desc_rec="
-                        +etdescripcion.getText().toString().replace(" ","%20")+"&lat_rec="+etlatitud.getText().toString()+
-                        "&longitud_rec="+etlongitud.getText().toString().replace("-","%2D")+"&id_categoria="+id_categoria+"&id_region="+id_region+"&imagen_rec="+  encodeImagen.toString())).getEntity());
-                */
+                    httpclient.execute(httppost);
+
+
+
+
                 resul = true;
             } catch (Exception ex) {
                 Log.e("ServicioRest", "Error!", ex);
@@ -382,18 +395,10 @@ public class NuevoPerfil extends AppCompatActivity {
 
         protected void onPostExecute(Boolean result) {
             if (resul) {
-                if (etnombreeorganizacion.getError()==null &&
-                        etnumerofijo.getError()==null &&
-                        etnumerocel.getError()==null &&
-                        etdireccion.getError()==null &&
-                        etemail.getError()==null &&
-                        etdescripcion.getError()==null &&
-                        etlatitud.getError()==null &&
-                        etlongitud.getError()==null){
+                    Toast.makeText(getApplicationContext(),"Procesando...",Toast.LENGTH_SHORT).show();
                     Toast.makeText(getApplicationContext(),"Perfil Creado Correctamente",Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(getApplicationContext(),AdministracionDePerfiles.class));
                     finish();
-                }
 
             }else {
                 Toast.makeText(getApplicationContext(), "Problemas de conexión", Toast.LENGTH_SHORT).show();
