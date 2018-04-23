@@ -255,7 +255,7 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
                 if (id_usuario != 0 && rol != 0 && estado_usuario != 0) {
                     resul = true;
                 } else {
-                    if((id_usuario != 0 && rol==1 && estado_usuario==2) || (id_usuario != 0 && rol==2 && estado_usuario==2)) {
+                    if(   (    ((id_usuario != 0) && (rol==1 && estado_usuario==2)) ||  ( (id_usuario != 0 && rol==2) && (estado_usuario==2) ) ) ) {
                         resul = false;
                     }else if (id_usuario==0){
                         resul = false;
@@ -290,18 +290,6 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
                 contrasena.setText("");
                 startActivity(intent);
                 finish();
-            } else if ( (rol == 1 && estado_usuario==2) || (rol ==2 && estado_usuario ==2)){
-
-                //numero de intentos
-                contador=contador+1;
-                if (contador ==3){
-                    usuario.setText("");
-                    contrasena.setText("");
-                    Toast.makeText(getApplicationContext(), "Limite de intentos agotados", Toast.LENGTH_SHORT).show();
-                    finish();
-                }else {
-                    Toast.makeText(getApplicationContext(), "Usuario y/o Contraseña incorrecta borrado ", Toast.LENGTH_SHORT).show();
-                }
             } else if (rol ==2 && estado_usuario ==1){
                     //instancia y envio de usuario logeado
                     Intent intent = new Intent(Login.this,PanelDeControlUsuarios.class);
@@ -315,12 +303,25 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
                     startActivity(intent);
                     finish();
                 }else {
-                    Toast.makeText(getApplicationContext(),"Problemas de Conexion uno ",Toast.LENGTH_LONG).show();
+                    Toast.makeText(getApplicationContext(),"Usuario y/o Contraseña incorrecta ",Toast.LENGTH_LONG).show();
                 }
 
 
         } else {
-            if (id_usuario ==0){
+            if ( (rol == 1 && estado_usuario==2) || (rol ==2 && estado_usuario ==2)) {
+
+                //numero de intentos
+                contador = contador + 1;
+                if (contador == 3) {
+                    usuario.setText("");
+                    contrasena.setText("");
+                    Toast.makeText(getApplicationContext(), "Limite de intentos agotados", Toast.LENGTH_SHORT).show();
+                    finish();
+                } else {
+                    Toast.makeText(getApplicationContext(), "Usuario y/o Contraseña incorrecta", Toast.LENGTH_SHORT).show();
+                }
+
+            }else if (id_usuario ==0){
                 //numero de intentos
                 contador=contador+1;
                 if (contador ==3){
@@ -329,16 +330,15 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
                     Toast.makeText(getApplicationContext(), "Limite de intentos agotados", Toast.LENGTH_SHORT).show();
                     finish();
                 }else {
-                    Toast.makeText(getApplicationContext(), "Usuario y/o Contraseña incorrecta no existe ", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getApplicationContext(), "Usuario y/o Contraseña incorrecta", Toast.LENGTH_SHORT).show();
                 }
 
             }else  if((id_usuario != 0 && rol==1 && estado_usuario==2) || (id_usuario != 0 && rol==2 && estado_usuario==2)){
-                Toast.makeText(getApplicationContext(), "Usuario y/o Contraseña incorrecta  existe borrado ", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Usuario y/o Contraseña incorrecta", Toast.LENGTH_SHORT).show();
 
-             }
+             } else if (result!=true){
+                Toast.makeText(getApplicationContext(), "Problemas de Conexion", Toast.LENGTH_SHORT).show();
 
-            else {
-                Toast.makeText(getApplicationContext(), "Problemas de Conexion dos", Toast.LENGTH_SHORT).show();
 
             }//fin de else fallo conexion, buscar sqlite
 
