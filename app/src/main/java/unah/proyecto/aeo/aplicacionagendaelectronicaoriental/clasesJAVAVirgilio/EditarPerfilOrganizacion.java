@@ -39,6 +39,7 @@ import cz.msebera.android.httpclient.message.BasicNameValuePair;
 import cz.msebera.android.httpclient.util.EntityUtils;
 import de.hdodenhof.circleimageview.CircleImageView;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVABessy.Ingresar_Ubicacion;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.AdministracionDePerfilesAdmin.AdaptadorPersonalizadoSpinner;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.AdministracionDePerfilesAdmin.EditarPerfil;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.AdministracionDePerfilesAdmin.ModeloSpinner;
@@ -215,6 +216,11 @@ public class EditarPerfilOrganizacion extends AppCompatActivity {
         });
 
     }
+    public void guardarUbicacionOrganizacion(View v){
+        Intent ubicacion1 = new Intent(getApplicationContext(), Ingresar_Ubicacion.class);
+        startActivityForResult(ubicacion1,1);
+    }
+
 
     public void requestRead() {
         if (ContextCompat.checkSelfPermission(this,

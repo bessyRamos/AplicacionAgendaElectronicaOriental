@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context="unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.EditarPerfilOrganizacion">
-
+<RelativeLayout android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                xmlns:android="http://schemas.android.com/apk/res/android">
     <ScrollView
         android:id="@+id/scview"
         android:layout_width="match_parent"
@@ -18,7 +13,7 @@
                           xmlns:tools="http://schemas.android.com/tools"
                           android:layout_width="match_parent"
                           android:layout_height="wrap_content"
-                          tools:context="unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.EditarPerfil"
+                          tools:context="unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.AdministracionDePerfilesAdmin.EditarPerfil"
                           android:padding="5dp"
                           android:id="@+id/rl1">
             <de.hdodenhof.circleimageview.CircleImageView
@@ -27,12 +22,14 @@
                 android:layout_height="160dp"
                 android:layout_alignParentTop="true"
                 android:layout_centerInParent="true"
-                android:src="@mipmap/ic_launcher"/>
+                android:src="@mipmap/ic_launcher"
+                android:scaleType="centerCrop"
+            />
 
             <android.support.design.widget.TextInputLayout
                 android:layout_below="@id/imagenDeOrganizacion"
                 android:id="@+id/iptlnombreorg"
-
+                android:layout_marginTop="15dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
                 <android.support.design.widget.TextInputEditText
@@ -54,7 +51,6 @@
                     android:hint="Número fijo"
                     android:inputType="text"
                     android:digits="1234567890-"/>
-
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -111,37 +107,30 @@
                 />
             </android.support.design.widget.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/iptllatit"
-                android:layout_below="@+id/iptldescript"
+            <ImageView
+                android:layout_below="@id/iptldescript"
+                android:id="@+id/imgUbicacionOrganizacion"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <android.support.design.widget.TextInputEditText
-                    android:id="@+id/etlatitud"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Latitud"
-                    android:inputType="number"
-                    android:digits="1234567890.-"/>
-            </android.support.design.widget.TextInputLayout>
+                android:layout_height="90dp"
+                app:srcCompat="@drawable/ubicacion_organizacion"
+            />
+            <Button
+                android:layout_below="@id/imgUbicacionOrganizacion"
+                android:id="@+id/btnUbicacionOrganizacion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Insertar Ubicacion"
+                app:srcCompat="@drawable/ubicacion_organizacion"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center_horizontal"
+                android:onClick="guardarUbicacionOrganizacion"
+                android:layout_marginBottom="25dp"
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/iptllong"
-                android:layout_below="@+id/iptllatit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
-                <android.support.design.widget.TextInputEditText
-                    android:id="@+id/etlongitud"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Longitud"
-                    android:inputType="number"
-                    android:digits="1234567890-."/>
-            </android.support.design.widget.TextInputLayout>
+            />
 
             <TextView
                 android:id="@+id/tvcat"
-                android:layout_below="@id/iptllong"
+                android:layout_below="@id/btnUbicacionOrganizacion"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Categoría"/>
@@ -179,11 +168,38 @@
                 android:spinnerMode="dropdown"
                 android:visibility="invisible"/>
 
-            <TextView
-                android:layout_below="@id/spinerusuariosPerfil"
-                android:visibility="invisible"
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/iptllatit"
+                android:layout_below="@+id/spinerusuariosPerfil"
                 android:layout_width="match_parent"
-                android:layout_height="60dp" />
+                android:layout_height="wrap_content">
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/etlatitud"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Latitud"
+                    android:visibility="invisible"
+                    android:clickable="false"
+                    android:inputType="number"
+                    android:digits="1234567890.-"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/iptllong"
+                android:layout_below="@+id/iptllatit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+                <android.support.design.widget.TextInputEditText
+                    android:id="@+id/etlongitud"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Longitud"
+                    android:visibility="invisible"
+                    android:clickable="false"
+                    android:inputType="number"
+                    android:digits="1234567890-."/>
+            </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/botonFoto"
@@ -191,9 +207,12 @@
                 android:layout_height="wrap_content"
                 android:layout_above="@+id/iptlnumfijo"
                 android:layout_alignEnd="@+id/imagenDeOrganizacion"
-                android:layout_marginBottom="44dp"
+                android:layout_marginBottom="74dp"
                 android:layout_marginEnd="20dp"
                 android:src="@drawable/ic_menu_camera" />
+
+
+
         </RelativeLayout>
 
     </ScrollView>
