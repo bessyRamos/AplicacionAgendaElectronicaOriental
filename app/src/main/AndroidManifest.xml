@@ -163,7 +163,8 @@
 
         <activity
             android:name=".clasesJAVAVirgilio.EditarUsuario"
-            android:label="Editar Cuenta"></activity>
+            android:label="Editar Cuenta"
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity android:name=".clasesJAVAVirgilio.FormularioRegistroUsuario"></activity>
         <activity
             android:name=".clasesJAVAVirgilio.PanelDeControlUsuarios"
@@ -175,7 +176,8 @@
 
 
      <activity android:name=".clasesJAVAVirgilio.FormularioNuevaOrganizacion"
-               android:label="Registro Contacto">
+               android:label="Registro Contacto"
+               android:theme="@style/AppTheme.NoActionBar">
      </activity>
 
         <activity android:name=".clasesJAVAVirgilio.EditarPerfilOrganizacion"

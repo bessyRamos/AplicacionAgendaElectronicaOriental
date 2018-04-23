@@ -1,20 +1,28 @@
 package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.NavigationView;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v4.view.GravityCompat;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -36,11 +44,13 @@ import cz.msebera.android.httpclient.message.BasicNameValuePair;
 import cz.msebera.android.httpclient.util.EntityUtils;
 import de.hdodenhof.circleimageview.CircleImageView;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.ActivityCategorias;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.Panel_de_Control;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.AdaptadorPersonalizadoSpinner;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.ModeloSpinner;
 
 
-public class FormularioNuevaOrganizacion extends AppCompatActivity {
+public class FormularioNuevaOrganizacion extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener{
 
     EditText nombreOrganizacion;
     EditText telefonoFijo;
@@ -61,11 +71,23 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity {
     int id_categoria, id_region, id_usuario;
 
 
+    //preferencias
+    private Sesion sesion;
+    private SesionUsuario sesionUsuario;
+    int id_usu=-1;
+    //
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_formulario_nueva_organizacion);
+
+        //envio de clase actual para las preferencias
+        sesion = new Sesion(this);
+        sesionUsuario = new SesionUsuario(this);
+        SharedPreferences preferences = getSharedPreferences("credencial", Context.MODE_PRIVATE);
+        id_usu  = preferences.getInt("usuario_ingreso",id_usu);
+        //
 
         nombreOrganizacion = (EditText) findViewById(R.id.txtNombreOrganizacion);
         telefonoFijo = (EditText) findViewById(R.id.txtNumeroTelefonoFijo);
@@ -139,7 +161,82 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity {
         });
 
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.setDrawerListener(toggle);
+        toggle.syncState();
 
+        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+
+    }
+
+    @Override
+    public void onBackPressed() {
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START);
+        } else {
+            super.onBackPressed();
+        }
+    }
+
+    @SuppressWarnings("StatementWithEmptyBody")
+    public boolean onNavigationItemSelected(MenuItem item) {
+        // Handle navigation view item clicks here.
+        int id = item.getItemId();
+
+        if (id == R.id.principaldos) {
+            startActivity(new Intent(getBaseContext(), ActivityCategorias.class)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP));
+            finish();
+
+        } else if (id == R.id.acercadeinfodos) {
+            Intent intent = new Intent(this,AcercaDe.class);
+            startActivity(intent);
+            finish();
+
+        }else if (id == R.id.login) {
+                if (sesionUsuario.logindimUsuario()){
+                    Intent intent = new Intent(FormularioNuevaOrganizacion.this,PanelDeControlUsuarios.class);
+                    intent.putExtra("id",id_usu);
+                    //startActivity(new Intent(ActivityCategorias.this,PanelDeControlUsuarios.class));
+                    startActivity(intent);
+                    finish();
+
+                }else {
+                    Intent intent = new Intent(this, Login.class);
+                    startActivity(intent);
+                }
+
+        }else if (id ==R.id.cerrarsecion){
+                //cerrar secion y borrado de preferencias
+                if(sesionUsuario.logindimUsuario()){
+                    sesionUsuario.setLoginUsuario(false);
+                    startActivity(new Intent(this, Login.class));
+                    finish();
+                }
+
+
+        }else if (id == R.id.ediciondeCuenta){
+            Intent intent = new Intent(this,EditarUsuario.class);
+            if (getIntent().getExtras()!=null){
+                //id_usuario_resibido_usuario = getIntent().getExtras().getInt("id");
+                intent.putExtra("id",id_usu);
+                startActivity(intent);
+                finish();
+            }else {
+                Toast.makeText(getApplicationContext(),"Error en id de usuario",Toast.LENGTH_SHORT).show();
+            }
+
+
+        }
+        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+        drawer.closeDrawer(GravityCompat.START);
+        return true;
     }
 
 

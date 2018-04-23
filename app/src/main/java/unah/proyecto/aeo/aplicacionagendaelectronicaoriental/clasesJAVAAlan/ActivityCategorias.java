@@ -40,10 +40,11 @@ public class ActivityCategorias extends AppCompatActivity
     RecyclerView contenedor;
     private static final int CATEGORIA_LOADER=0;
 
+    //preferencias
     private Sesion sesion;
     private SesionUsuario sesionUsuario;
     int id_usu=-1;
-
+    //
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

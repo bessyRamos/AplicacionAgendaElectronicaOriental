@@ -85,10 +85,11 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
                 if (getIntent().getExtras()!=null){
                     id_usuario_resibido_usuario = getIntent().getExtras().getInt("id");
                     id = getIntent().getExtras().getInt("id");
-                    Toast.makeText(getApplicationContext(),""+id_usuario_resibido_usuario,Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext(),""+id_usuario_resibido_usuario,Toast.LENGTH_SHORT).show();
 
                     intent.putExtra("id",id_usuario_resibido_usuario);
                     startActivity(intent);
+                    finish();
                 }
 
                 //startActivity(intent);
@@ -219,6 +220,7 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
 
                 intent.putExtra("id",id_usuario_resibido_usuario);
                 startActivity(intent);
+                finish();
             }else {
                 Toast.makeText(getApplicationContext(),"Error en id de usuario",Toast.LENGTH_SHORT).show();
             }

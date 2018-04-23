@@ -111,9 +111,10 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
             @Override
             public void onClick(View v) {
 
-                    if (usuario.getText().toString().isEmpty() || contrasena.getText().toString().isEmpty()) {
-                        Toast.makeText(getApplicationContext(), "Favor ingresar todos los Campos", Toast.LENGTH_SHORT).show();
 
+                    if (usuario.getText().toString().isEmpty() || contrasena.getText().toString().isEmpty()) {
+                        //Toast.makeText(getApplicationContext(), "Favor ingresar todos los Campos", Toast.LENGTH_SHORT).show();
+                        validar();
                     } else {                          //si existe el usuario y la contraseña son correctas el accedera
 
                         new LoginValidadoWeb().execute();
@@ -392,6 +393,8 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
 
     }
 
+
+}
     private void validar(){
 
         //id.setError(null);
@@ -410,7 +413,7 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
             usuario.requestFocus();
             return;
         }if(TextUtils.isEmpty(cont)){
-            contrasena.setError(getString(R.string.error_contrasena));
+            contrasena.setError(getString(R.string.error_contrasenaingresada));
             contrasena.requestFocus();
             return;
 
@@ -418,7 +421,4 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
 
 
     }
-
-
-}
 }

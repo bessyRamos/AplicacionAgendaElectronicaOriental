@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-  >
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <group android:checkableBehavior="none">
         <item
@@ -16,12 +15,6 @@
             android:id="@+id/acercadeinfodos"
             android:icon="@drawable/acerca"
             android:title="@string/acercadeapp"/>
-        <item
-            android:id="@+id/ediciondeCuenta"
-            android:icon="@drawable/editar"
-            android:title="@string/editarcuenta"
-            android:visible="true"
-        />
         <item
             android:id="@+id/cerrarsecion"
             android:icon="@drawable/cerrar"

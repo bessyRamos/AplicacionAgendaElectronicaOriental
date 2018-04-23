@@ -88,6 +88,7 @@
     <string name="title_activity_ingresar__ubicacion">Ubica la Organización</string>
     <string name="detalle_de_marcas">(%1$.2f, %2$2f)</string>
     <string name="panelcontrolUsuario">Panel de Control</string>
+    <string name="error_contrasenaingresada">Ingrese su Contraseña</string>
 
 
 </resources>
