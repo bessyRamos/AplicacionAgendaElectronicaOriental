@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
@@ -21,12 +22,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -34,6 +37,7 @@ import android.widget.Toast;
 
 import org.json.JSONArray;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.NameValuePair;
@@ -48,8 +52,8 @@ import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.ActivityCategorias;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.Panel_de_Control;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVABessy.Ingresar_Ubicacion;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.AdaptadorPersonalizadoSpinner;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.ModeloSpinner;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.AdministracionDePerfilesAdmin.AdaptadorPersonalizadoSpinner;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.AdministracionDePerfilesAdmin.ModeloSpinner;
 
 
 public class FormularioNuevaOrganizacion extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener{
@@ -64,14 +68,20 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity  implements N
     EditText longitudOrganizacion;
     ImageView imagenOrganizacion,ubicacionOrganizacion;
     FloatingActionButton guardar;
+    ImageButton imageButton;
     //int id_usuario;
-    String encodeImagen;
     Button ubicacion;
+    private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1 ;
+    Bitmap imagenBitmap;
 
     ArrayList<ModeloSpinner> listaCategorias, listaRegiones, listaUsuarios;
     private Spinner  spinnerCategorias,spinnerRgiones;
 
     int id_categoria, id_region, id_usuario;
+    private static final int PICK_IMAGE = 100;
+    Uri imageUri;
+
+    String encodeImagen;
 
 
     //preferencias
@@ -102,6 +112,7 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity  implements N
         emailOrganizacion = (EditText) findViewById(R.id.txtEmail);
         descrpcionOrganizacion = (EditText) findViewById(R.id.txtDescripcion);
         latitudOrganizacion = (EditText) findViewById(R.id.txtlatitudOrganizacion);
+        imageButton = findViewById(R.id.imagenOrganizacionUsuario);
 
         latitudOrganizacion.setText("123123");  ///ingresar la latitud que el usuario selecciono
 
@@ -143,6 +154,9 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity  implements N
         }
 
 
+
+
+
         spinnerCategorias.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -166,19 +180,37 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity  implements N
             }
         });
 
+        imageButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                requestRead();
+            }
+        });
+
         guardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(nombreOrganizacion.getText().toString().isEmpty() || telefonoFijo.getText().toString().isEmpty() || telefonoCelular.getText().toString().isEmpty() ||
-                        direccionOrganizacion.getText().toString().isEmpty() || emailOrganizacion.getText().toString().isEmpty() || descrpcionOrganizacion.getText().toString().isEmpty() ||
-                        latitudOrganizacion.getText().toString().isEmpty() || longitudOrganizacion.getText().toString().isEmpty() ){
-                    validar();
-                }else {
-                    Toast.makeText(getApplicationContext(),"Procesando...",Toast.LENGTH_SHORT).show();
-                    // Toast.makeText(getApplicationContext()," "+id_usuario,Toast.LENGTH_SHORT).show();
-                    // Toast.makeText(getApplicationContext()," "+id_categoria,Toast.LENGTH_SHORT).show();
-                    //Toast.makeText(getApplicationContext()," "+id_region,Toast.LENGTH_SHORT).show();
 
+                imagenBitmap = ((BitmapDrawable)imagenOrganizacion.getDrawable()).getBitmap();
+
+                new AsyncTask<Void, Void, String>(){
+                    @Override
+                    protected String doInBackground(Void... voids) {
+                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                        imagenBitmap.compress(Bitmap.CompressFormat.JPEG,100,baos);
+                        byte b []= baos.toByteArray();
+
+                        encodeImagen = Base64.encodeToString(b,0);
+
+                        return null;
+                    }
+                }.execute();
+
+                validar();
+
+
+                if (nombreOrganizacion.getError()==null && telefonoFijo.getError()==null && telefonoCelular.getError()==null && direccionOrganizacion.getError()==null && emailOrganizacion.getError()==null && descrpcionOrganizacion.getError()==null && latitudOrganizacion.getError()==null && longitudOrganizacion.getError()==null){
+                    Toast.makeText(getApplicationContext(),"Procesando... Por favor espere",Toast.LENGTH_SHORT).show();
                     new crearPerfil().execute();
                 }
 
@@ -210,6 +242,44 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity  implements N
 
             }
         }
+
+        if(resultCode == RESULT_OK && requestCode == PICK_IMAGE){
+            imageUri = data.getData();
+            imagenOrganizacion.setImageURI(imageUri);
+        }
+    }
+
+    public void requestRead() {
+        if (ContextCompat.checkSelfPermission(this,
+                Manifest.permission.READ_EXTERNAL_STORAGE)
+                != PackageManager.PERMISSION_GRANTED) {
+
+            ActivityCompat.requestPermissions(this,
+                    new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE);
+        } else {
+            openGallery();
+        }
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+
+        if (requestCode == MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE) {
+            if (grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                openGallery();
+            } else {
+                // Permission Denied
+                Toast.makeText(getApplicationContext(), "Permission Denied", Toast.LENGTH_SHORT).show();
+            }
+            return;
+        }
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    }
+
+    private void openGallery(){
+        Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
+        startActivityForResult(gallery, PICK_IMAGE);
     }
 
     @Override
