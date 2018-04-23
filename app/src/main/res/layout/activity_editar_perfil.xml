@@ -128,8 +128,6 @@
 
                 />
 
-
-
             <TextView
                 android:id="@+id/tvcat"
                 android:layout_below="@id/btnUbicacionOrganizacion"
