@@ -25,6 +25,7 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
@@ -46,6 +47,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.ActivityCategorias;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.Panel_de_Control;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVABessy.Ingresar_Ubicacion;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.AdaptadorPersonalizadoSpinner;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.ModeloSpinner;
 
@@ -64,6 +66,7 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity  implements N
     FloatingActionButton guardar;
     //int id_usuario;
     String encodeImagen;
+    Button ubicacion;
 
     ArrayList<ModeloSpinner> listaCategorias, listaRegiones, listaUsuarios;
     private Spinner  spinnerCategorias,spinnerRgiones;
@@ -76,6 +79,9 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity  implements N
     private SesionUsuario sesionUsuario;
     int id_usu=-1;
     //
+
+    double latitud;
+    double longitud;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -96,14 +102,31 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity  implements N
         emailOrganizacion = (EditText) findViewById(R.id.txtEmail);
         descrpcionOrganizacion = (EditText) findViewById(R.id.txtDescripcion);
         latitudOrganizacion = (EditText) findViewById(R.id.txtlatitudOrganizacion);
-        latitudOrganizacion.setText("123123");
+
+        latitudOrganizacion.setText("123123");  ///ingresar la latitud que el usuario selecciono
+
         longitudOrganizacion = (EditText) findViewById(R.id.txtlongitudOrganizacion);
-        longitudOrganizacion.setText("-123334");
+
+        longitudOrganizacion.setText("-123334");    //ingresar la longitud que el usuario selecciono
+
         imagenOrganizacion = (ImageView) findViewById(R.id.imgimagenOrganizacion);
         guardar = (FloatingActionButton) findViewById(R.id.btnGuardar);
         spinnerCategorias = (Spinner) findViewById(R.id.spinercategoriaOrganizacion);
         spinnerRgiones = (Spinner) findViewById(R.id.spinerregionOrganizacion);
+        ubicacion = (Button) findViewById(R.id.btnUbicacionOrganizacion);
 
+        //Ingresar la ubicacion
+        ubicacion.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(FormularioNuevaOrganizacion.this, Ingresar_Ubicacion.class);
+
+
+                startActivityForResult(intent,1);
+
+
+            }
+        });
 
 
         //llenado de spiner categorias y regiones
@@ -149,13 +172,19 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity  implements N
         guardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                validar();
-             Toast.makeText(getApplicationContext(),"Procesando...",Toast.LENGTH_SHORT).show();
-               // Toast.makeText(getApplicationContext()," "+id_usuario,Toast.LENGTH_SHORT).show();
-               // Toast.makeText(getApplicationContext()," "+id_categoria,Toast.LENGTH_SHORT).show();
-                //Toast.makeText(getApplicationContext()," "+id_region,Toast.LENGTH_SHORT).show();
+                if(nombreOrganizacion.getText().toString().isEmpty() || telefonoFijo.getText().toString().isEmpty() || telefonoCelular.getText().toString().isEmpty() ||
+                        direccionOrganizacion.getText().toString().isEmpty() || emailOrganizacion.getText().toString().isEmpty() || descrpcionOrganizacion.getText().toString().isEmpty() ||
+                        latitudOrganizacion.getText().toString().isEmpty() || longitudOrganizacion.getText().toString().isEmpty() ){
+                    validar();
+                }else {
+                    Toast.makeText(getApplicationContext(),"Procesando...",Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(getApplicationContext()," "+id_usuario,Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(getApplicationContext()," "+id_categoria,Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext()," "+id_region,Toast.LENGTH_SHORT).show();
 
-                new crearPerfil().execute();
+                    new crearPerfil().execute();
+                }
+
 
             }
         });
@@ -363,20 +392,13 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity  implements N
 
         protected void onPostExecute(Boolean result) {
             if (resul) {
-                if (nombreOrganizacion.getError()==null &&
-                        telefonoFijo.getError()==null &&
-                        telefonoCelular.getError()==null &&
-                        direccionOrganizacion.getError()==null &&
-                        emailOrganizacion.getError()==null &&
-                        descrpcionOrganizacion.getError()==null &&
-                        latitudOrganizacion.getError()==null &&
-                        longitudOrganizacion.getError()==null){
+                validar();
+                if (nombreOrganizacion.getError()==null && telefonoFijo.getError()==null && telefonoCelular.getError()==null && direccionOrganizacion.getError()==null && emailOrganizacion.getError()==null && descrpcionOrganizacion.getError()==null && latitudOrganizacion.getError()==null && longitudOrganizacion.getError()==null){
                     Toast.makeText(getApplicationContext(),"Perfil Creado Correctamente",Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(FormularioNuevaOrganizacion.this,PanelDeControlUsuarios.class);
                     //startActivity(new Intent(FormularioNuevaOrganizacion.this,PanelDeControlUsuarios.class));
                     intent.putExtra("id",id_usuario);
                     startActivity(intent);
-
                     finish();
                 }
 
