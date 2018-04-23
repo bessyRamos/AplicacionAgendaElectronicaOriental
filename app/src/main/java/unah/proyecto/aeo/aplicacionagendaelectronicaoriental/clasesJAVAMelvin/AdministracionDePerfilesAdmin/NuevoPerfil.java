@@ -1,9 +1,10 @@
-package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin;
+package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.AdministracionDePerfilesAdmin;
 
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
@@ -17,13 +18,13 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import android.util.Base64;
 import org.json.JSONArray;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.NameValuePair;
@@ -42,6 +43,7 @@ public class NuevoPerfil extends AppCompatActivity {
     CircleImageView imagenOrg;
     Bitmap imagenBitmap;
     FloatingActionButton botonGuardar;
+    FloatingActionButton botonFoto;
     TextInputEditText etnombreeorganizacion, etnumerofijo, etnumerocel, etdireccion, etemail, etdescripcion, etlatitud, etlongitud;
     Spinner spcategorias, spregiones, spusuario;
     ArrayList<ModeloSpinner> listaCategorias, listaRegiones, listaUsuarios;
@@ -58,8 +60,8 @@ public class NuevoPerfil extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editar_perfil);
 
-
-        //imagenOrg = findViewById(R.id.imagenDeOrganizacion);
+        botonFoto = findViewById(R.id.botonFoto);
+        imagenOrg = findViewById(R.id.imagenDeOrganizacion);
         botonGuardar= findViewById(R.id.botonGuardar);
         etnombreeorganizacion = findViewById(R.id.etnombreeorganizacion);
         etnumerofijo = findViewById(R.id.etnumerofijo);
@@ -129,76 +131,53 @@ public class NuevoPerfil extends AppCompatActivity {
             }
         });
 
+        botonFoto.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                requestRead();
+            }
+        });
+
         botonGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                validar();
-                Toast.makeText(getApplicationContext(),"Procesando...",Toast.LENGTH_SHORT).show();
-                /*switch (spcategorias.getSelectedItem().toString()){
-                    case "Emergencia":
-                        id_categoria=1;
-                        break;
-                    case "Educación":
-                        id_categoria=2;
-                        break;
-                    case "Centros Asistenciales":
-                        id_categoria=3;
-                        break;
-                    case "Bancos":
-                        id_categoria=4;
-                        break;
-                    case "Hostelería y Turismo":
-                        id_categoria=5;
-                        break;
-                    case "Instituciones Públicas":
-                        id_categoria=6;
-                        break;
-                    case "Comercio de Bienes":
-                        id_categoria=7;
-                        break;
-                    case "Comercio de Servicios":
-                        id_categoria=8;
-                        break;
-                    case "Bienes y Raíces":
-                        id_categoria=9;
-                        break;
-                    case "Asesoría Legal":
-                        id_categoria=10;
-                        break;
-                    case "Funerarias":
-                        id_categoria=11;
-                        break;
-                }
+                imagenBitmap = ((BitmapDrawable)imagenOrg.getDrawable()).getBitmap();
 
-                switch (spregiones.getSelectedItem().toString()){
-                    case "Danlí":
-                        id_region=3;
-                        break;
-                    case "El Paraíso":
-                        id_region=4;
-                        break;
-                }*/
-
-
-//                imagenBitmap = ((BitmapDrawable)imagenOrg.getDrawable()).getBitmap();
-
-               /* new AsyncTask<Void, Void, String>(){
+                new AsyncTask<Void, Void, String>(){
                     @Override
                     protected String doInBackground(Void... voids) {
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        imagenBitmap.compress(Bitmap.CompressFormat.JPEG,100,baos);
+                        imagenBitmap.compress(Bitmap.CompressFormat.JPEG,70,baos);
                         byte b []= baos.toByteArray();
 
                         encodeImagen = Base64.encodeToString(b,Base64.DEFAULT);
 
                         return null;
                     }
-                }.execute();*/
+                }.execute();
+
+                validar();
+                if (etnombreeorganizacion.getError()==null &&
+                        etnumerofijo.getError()==null &&
+                        etnumerocel.getError()==null &&
+                        etdireccion.getError()==null &&
+                        etemail.getError()==null &&
+                        etdescripcion.getError()==null &&
+                        etlatitud.getError()==null &&
+                        etlongitud.getError()==null) {
+                    new crearPerfil().execute();
+                }
+               /* if(etnombreeorganizacion.getText().toString().isEmpty() || etnumerofijo.getText().toString().isEmpty() || etnumerocel.getText().toString().isEmpty() ||
+                        etdireccion.getText().toString().isEmpty() || etemail.getText().toString().isEmpty() || etdescripcion.getText().toString().isEmpty() ||
+                        etlatitud.getText().toString().isEmpty() || etlongitud.getText().toString().isEmpty() ){
+                    validar();}else {
+                    Toast.makeText(getApplicationContext(),"Procesando...",Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(getApplicationContext()," "+id_usuario,Toast.LENGTH_SHORT).show();
+                    // Toast.makeText(getApplicationContext()," "+id_categoria,Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(getApplicationContext()," "+id_region,Toast.LENGTH_SHORT).show();
 
 
-
-
-                new crearPerfil().execute();
+                }*/
 
             }
         });
@@ -393,19 +372,17 @@ public class NuevoPerfil extends AppCompatActivity {
                 parametros.add(new BasicNameValuePair("id_region",String.valueOf(id_region)));
                 parametros.add(new BasicNameValuePair("id_usuario",String.valueOf(id_usuario)));
 
-                parametros.add(new BasicNameValuePair("imagen_rec",encodeImagen));
+                parametros.add(new BasicNameValuePair("imagen",encodeImagen));
+                parametros.add(new BasicNameValuePair("nombre_imagen",etnombreeorganizacion.getText().toString().replace(" ","_") +".jpg"));
 
                 httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));
 
-                httpclient.execute(httppost);
 
-               /* EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("?id_contacto="+id_perfilEditar
-                        +"&nomborg_rec="+etnombreeorganizacion.getText().toString().replace(" ","%20")+
-                        "&numtel_rec="+etnumerofijo.getText().toString()+"&numcel_rec="+etnumerocel.getText().toString()+"&direccion_rec="+
-                        etdireccion.getText().toString().replace(" ","%20")+"&email_rec="+etemail.getText().toString()+"&desc_rec="
-                        +etdescripcion.getText().toString().replace(" ","%20")+"&lat_rec="+etlatitud.getText().toString()+
-                        "&longitud_rec="+etlongitud.getText().toString().replace("-","%2D")+"&id_categoria="+id_categoria+"&id_region="+id_region+"&imagen_rec="+  encodeImagen.toString())).getEntity());
-                */
+                    httpclient.execute(httppost);
+
+
+
+
                 resul = true;
             } catch (Exception ex) {
                 Log.e("ServicioRest", "Error!", ex);
@@ -418,18 +395,10 @@ public class NuevoPerfil extends AppCompatActivity {
 
         protected void onPostExecute(Boolean result) {
             if (resul) {
-                if (etnombreeorganizacion.getError()==null &&
-                        etnumerofijo.getError()==null &&
-                        etnumerocel.getError()==null &&
-                        etdireccion.getError()==null &&
-                        etemail.getError()==null &&
-                        etdescripcion.getError()==null &&
-                        etlatitud.getError()==null &&
-                        etlongitud.getError()==null){
+                    Toast.makeText(getApplicationContext(),"Procesando...",Toast.LENGTH_SHORT).show();
                     Toast.makeText(getApplicationContext(),"Perfil Creado Correctamente",Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(getApplicationContext(),AdministracionDePerfiles.class));
                     finish();
-                }
 
             }else {
                 Toast.makeText(getApplicationContext(), "Problemas de conexión", Toast.LENGTH_SHORT).show();

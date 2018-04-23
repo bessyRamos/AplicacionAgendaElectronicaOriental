@@ -32,10 +32,13 @@ import java.util.Map;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.provider.CategoriasContract;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.provider.PerfilesContract;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.provider.RegionesContract;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.web.Categoria;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.web.CategoriaParser;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.web.Perfil;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.web.PerfilParser;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.web.Region;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.web.RegionParser;
 
 /**
  * Created by melvinrivera on 14/4/18.
@@ -93,6 +96,8 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         }
 
         Log.w(TAG, "Finished synchronization!");
+
+
     }
 
     /**
@@ -325,6 +330,89 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         Log.i(TAG, "Merge solution ready, applying batch update...");
         resolver.applyBatch(CategoriasContract.CONTENT_AUTHORITY, batch1);
         resolver.notifyChange(CategoriasContract.CategoriasEntry.CONTENT_URI, // URI where data was modified
+                null, // No local observer
+                false); // IMPORTANT: Do not sync to network
+
+         /* **********************************************************************************
+        *                       OPERACIONES PARA SINCRONIZAR REGIONES                      *
+        *************************************************************************************/
+        final String rssFeedEndpointRegiones= "https://shessag.000webhostapp.com/ParaSincronizarRegiones.php";
+        Map<String, Region> networkEntriesRegion = new HashMap<>();
+
+        // Parse the pretend json news feed
+        String jsonFeedRegion = download(rssFeedEndpointRegiones);
+        JSONArray regionesArray = new JSONArray(jsonFeedRegion);
+
+
+        for (int i = 0; i < regionesArray.length(); i++) {
+            Region region = RegionParser.parse(regionesArray.optJSONObject(i));
+            networkEntriesRegion.put(region.getID_REGION(), region);
+        }
+
+        // Create list for batching ContentProvider transactions
+        ArrayList<ContentProviderOperation> batch2 = new ArrayList<>();
+
+        // Compare the hash table of network entries to all the local entries
+        Log.i(TAG, "Fetching local entries...");
+        Cursor c2 = resolver.query(RegionesContract.RegionesEntry.CONTENT_URI, null, null, null, null, null);
+        assert c2 != null;
+        c2.moveToFirst();
+
+        String id_region, nombre_region;
+
+        for (int i = 0; i < c2.getCount(); i++) {
+            syncResult.stats.numEntries++;
+
+            // Create local article entry
+            id_region = c2.getString(c2.getColumnIndex(RegionesContract.RegionesEntry.COLUMN_ID_REGION));
+            nombre_region = c2.getString(c2.getColumnIndex(RegionesContract.RegionesEntry.COLUMN_NOMBRE_REGION));
+
+            Region found2;
+
+            // Try to retrieve the local entry from network entries
+            found2 = networkEntriesRegion.get(id_region);
+            if (found2 != null) {
+                // The entry exists, remove from hash table to prevent re-inserting it
+                networkEntriesRegion.remove(id_region);
+
+                // Check to see if it needs to be updated
+                if (!nombre_region.equals(found2.getNOMBRE_REGION())
+                        ) {
+                    // Batch an update for the existing record
+                    Log.i(TAG, "Scheduling update: " + nombre_region);
+                    batch1.add(ContentProviderOperation.newUpdate(RegionesContract.RegionesEntry.CONTENT_URI)
+                            .withSelection(RegionesContract.RegionesEntry.COLUMN_ID_REGION + "='" + id_region + "'", null)
+                            .withValue(RegionesContract.RegionesEntry.COLUMN_NOMBRE_REGION,found2.getNOMBRE_REGION())
+                            .build());
+                    syncResult.stats.numUpdates++;
+
+                }
+            } else {
+                // Entry doesn't exist, remove it from the local database
+                Log.i(TAG, "Scheduling delete: " + nombre_region);
+                batch1.add(ContentProviderOperation.newDelete(RegionesContract.RegionesEntry.CONTENT_URI)
+                        .withSelection(RegionesContract.RegionesEntry.COLUMN_ID_REGION + "='" + id_region + "'", null)
+                        .build());
+                syncResult.stats.numDeletes++;
+            }
+            c2.moveToNext();
+        }
+        c2.close();
+
+        // Add all the new entries
+        for (Region region_recorrer : networkEntriesRegion.values()) {
+            Log.i(TAG, "Scheduling insert: " + region_recorrer.getNOMBRE_REGION());
+            batch2.add(ContentProviderOperation.newInsert(RegionesContract.RegionesEntry.CONTENT_URI)
+                    .withValue(RegionesContract.RegionesEntry.COLUMN_ID_REGION,region_recorrer.getID_REGION())
+                    .withValue(RegionesContract.RegionesEntry.COLUMN_NOMBRE_REGION,region_recorrer.getNOMBRE_REGION())
+                    .build());
+            syncResult.stats.numInserts++;
+        }
+
+        // Synchronize by performing batch update
+        Log.i(TAG, "Merge solution ready, applying batch update...");
+        resolver.applyBatch(RegionesContract.CONTENT_AUTHORITY, batch2);
+        resolver.notifyChange(RegionesContract.RegionesEntry.CONTENT_URI, // URI where data was modified
                 null, // No local observer
                 false); // IMPORTANT: Do not sync to network
 

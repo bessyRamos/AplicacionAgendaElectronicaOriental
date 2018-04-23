@@ -1,12 +1,11 @@
-package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin;
-
+package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.PerfilesBreves;
 import android.app.LoaderManager;
-import android.content.Context;
+import android.content.ContentResolver;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
-import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -21,12 +20,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.*;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.Panel_de_Control;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.HerramientaBusquedaAvanzada.BusquedaAvanzada;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.AcercaDe;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.Login;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.PanelDeControlUsuarios;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.Sesion;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.SesionUsuario;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.provider.*;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.sync.*;
 
@@ -40,12 +36,6 @@ public class ListaDeContactos extends AppCompatActivity
     RecyclerView contenedor;
     private static final int PERFIL_LOADER=0;
 
-    //preferencias
-    private Sesion sesion;
-    private SesionUsuario sesionUsuario;
-    int id_usu=-1;
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,12 +43,6 @@ public class ListaDeContactos extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         //Obtiene el id de la categoria de la cual se mostrarán los contactos
         Bundle extras = getIntent().getExtras();
-        //envio de clase actual para las preferencias
-        sesion = new Sesion(this);
-        sesionUsuario = new SesionUsuario(this);
-        SharedPreferences preferences = getSharedPreferences("credencial", Context.MODE_PRIVATE);
-        id_usu  = preferences.getInt("usuario_ingreso",id_usu);
-        //
         if (extras!=null){
             id_categoria = extras.getInt("id_categoria");
             nombre_categoria = extras.getString("nombre_categoria");
@@ -125,30 +109,9 @@ public class ListaDeContactos extends AppCompatActivity
                 break;
             case R.id.sincronizar:
                 SyncAdapter.syncImmediately(this);
+                break;
         }
         return super.onOptionsItemSelected(item);
-    }
-
-    @Override
-    public boolean onQueryTextSubmit(String query) {
-        return false;
-    }
-
-    @Override
-    //Metodo que establece el filtro del adaptador según se va escribiendo en el SearchView
-    public boolean onQueryTextChange(String newText) {
-        /*newText = newText.toLowerCase();
-        ArrayList<PerfilBreve> newList = new ArrayList<>();
-        for (PerfilBreve perfilBreve: listaOrganizaciones){
-            String nombre = perfilBreve.getNombre().toLowerCase();
-            String numeroTel = perfilBreve.getNumeroTelefono().toLowerCase();
-            String region = perfilBreve.getDireccion().toLowerCase();
-
-            if(nombre.contains(newText) || numeroTel.contains(newText) || region.contains(newText))
-                newList.add(perfilBreve);
-        }
-        //adaptadorPerfilBreve.setFilter(newList);*/
-        return true;
     }
 
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -162,27 +125,8 @@ public class ListaDeContactos extends AppCompatActivity
             Intent intent = new Intent(this,AcercaDe.class);
             startActivity(intent);
         }else if (id == R.id.login) {
-            if (sesion.logindim()){
-                Intent intent = new Intent(ListaDeContactos.this,Panel_de_Control.class);
-                intent.putExtra("usuario_ingreso",id_usu);
-                //startActivity(new Intent(ActivityCategorias.this,Panel_de_Control.class));
-                startActivity(intent);
-                finish();
-            }else{
-                if (sesionUsuario.logindimUsuario()){
-                    Intent intent = new Intent(ListaDeContactos.this,PanelDeControlUsuarios.class);
-                    intent.putExtra("id",id_usu);
-                    //startActivity(new Intent(ActivityCategorias.this,PanelDeControlUsuarios.class));
-                    startActivity(intent);
-                    finish();
-
-                }else {
-                    Intent intent = new Intent(this, Login.class);
-                    startActivity(intent);
-                    finish();
-                }
-
-            }
+            Intent intent = new Intent(this, Login.class);
+            startActivity(intent);
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -201,8 +145,6 @@ public class ListaDeContactos extends AppCompatActivity
                 PerfilesContract.ContactosEntry.COLUMN_IMAGEN_PATH
         };
 
-
-
         return new CursorLoader(this,
                 PerfilesContract.ContactosEntry.CONTENT_URI,
                 projection,
@@ -219,6 +161,67 @@ public class ListaDeContactos extends AppCompatActivity
     @Override
     public void onLoaderReset(Loader<Cursor> loader) {
         adaptadorPerfilBreve.swapCursor(null);
+    }
+
+    @Override
+    public boolean onQueryTextSubmit(String query) {
+
+        Cursor contacts = getListOfContacts(query);
+
+        AdaptadorPerfilBreve adaptador_perfil1 = new AdaptadorPerfilBreve(this,contacts);
+
+        contenedor.setAdapter(adaptador_perfil1);
+        return true;
+    }
+
+    public Cursor getListOfContacts(String searchText) {
+
+        Cursor cur = null;
+        ContentResolver cr = getContentResolver();
+
+        String[] projection ={
+                PerfilesContract.ContactosEntry.COLUMN_PERFILID,
+                PerfilesContract.ContactosEntry.COLUMN_NOMBRE,
+                PerfilesContract.ContactosEntry.COLUMN_NUMERO_TELEFONO,
+                PerfilesContract.ContactosEntry.COLUMN_NUMERO_CELULAR,
+                PerfilesContract.ContactosEntry.COLUMN_NOMBRE_REGION,
+                PerfilesContract.ContactosEntry.COLUMN_IMAGEN_PATH
+        };
+
+        Uri uri = PerfilesContract.ContactosEntry.CONTENT_URI;
+
+        String selection =
+                PerfilesContract.ContactosEntry.COLUMN_NOMBRE + " LIKE ? AND "+
+                PerfilesContract.ContactosEntry.COLUMN_CATEGORIA +" = ? AND " +
+                PerfilesContract.ContactosEntry.COLUMN_ESTADO +" = ? or "+
+                PerfilesContract.ContactosEntry.COLUMN_NUMERO_TELEFONO + " LIKE ? AND "+
+                PerfilesContract.ContactosEntry.COLUMN_CATEGORIA +" = ? AND " +
+                PerfilesContract.ContactosEntry.COLUMN_ESTADO +" = ? or "+
+                PerfilesContract.ContactosEntry.COLUMN_NUMERO_CELULAR + " LIKE ? AND "+
+                PerfilesContract.ContactosEntry.COLUMN_CATEGORIA +" = ? AND " +
+                PerfilesContract.ContactosEntry.COLUMN_ESTADO +" = ? or "+
+                PerfilesContract.ContactosEntry.COLUMN_NOMBRE_REGION + " LIKE ?  AND "+
+                PerfilesContract.ContactosEntry.COLUMN_CATEGORIA +" = ? AND " +
+                PerfilesContract.ContactosEntry.COLUMN_ESTADO +" = ? ";
+        String[] selectionArgs = new String[]{"" +
+                "%"+searchText+"%", ""+id_categoria, "2",
+                "%"+searchText+"%", ""+id_categoria, "2",
+                "%"+searchText+"%", ""+id_categoria, "2",
+                "%"+searchText+"%", ""+id_categoria, "2"};
+
+        cur = cr.query(uri, projection, selection, selectionArgs, null);
+
+        return cur;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        Cursor contacts = getListOfContacts(newText);
+
+        AdaptadorPerfilBreve adaptador_categoria1 = new AdaptadorPerfilBreve(this,contacts);
+
+        contenedor.setAdapter(adaptador_categoria1);
+        return true;
     }
 
 }

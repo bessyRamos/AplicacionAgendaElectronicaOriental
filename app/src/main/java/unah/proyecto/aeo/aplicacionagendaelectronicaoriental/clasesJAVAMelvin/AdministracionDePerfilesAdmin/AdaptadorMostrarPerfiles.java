@@ -1,4 +1,4 @@
-package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin;
+package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.AdministracionDePerfilesAdmin;
 
 import android.content.Context;
 import android.view.View;
@@ -42,6 +42,7 @@ public class AdaptadorMostrarPerfiles extends BaseAdapter {
         return i;
     }
 
+    //METODO PARA SETEAR LOS COMPONENTES VISUALES
     public View getView(int i, View view, ViewGroup viewGroup) {
         View v=view;
         v = View.inflate(context, R.layout.activity_item_listview_mostrar_perfiles,null);

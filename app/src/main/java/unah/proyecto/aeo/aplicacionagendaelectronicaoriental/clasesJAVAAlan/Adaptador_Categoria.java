@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.ListaDeContactos;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.PerfilesBreves.ListaDeContactos;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.provider.CategoriasContract;
 
 /**
@@ -34,7 +34,7 @@ public class Adaptador_Categoria extends RecyclerView.Adapter<Adaptador_Categori
         public     ImageView imagen;
         public     TextView titulo;
         public     TextView cantidad;
-         public    TextView id_categoria;
+        public    TextView id_categoria;
 
         public ViewHolder(View itemView ){
             super(itemView);
@@ -84,9 +84,9 @@ public class Adaptador_Categoria extends RecyclerView.Adapter<Adaptador_Categori
         holder.id_categoria.setText(dataCursor.getString(dataCursor.getColumnIndex(CategoriasContract.CategoriasEntry.COLUMN_ID_CATEGORIA)));
 
         if(!dataCursor.getString(dataCursor.getColumnIndex(CategoriasContract.CategoriasEntry.COLUMN_IMAGEN_CATEGORIA)).isEmpty()){
-            Glide.with(context).load(dataCursor.getString(dataCursor.getColumnIndex(CategoriasContract.CategoriasEntry.COLUMN_IMAGEN_CATEGORIA))).placeholder(R.drawable.iconocargando).into(holder.imagen);
+            Glide.with(context).load(dataCursor.getString(dataCursor.getColumnIndex(CategoriasContract.CategoriasEntry.COLUMN_IMAGEN_CATEGORIA))).into(holder.imagen);
         }else {
-            Glide.with(context).load(R.drawable.iconocargando).into(holder.imagen);
+            Glide.with(context).load(R.drawable.wait).into(holder.imagen);
         }
 
     }
@@ -117,43 +117,4 @@ public class Adaptador_Categoria extends RecyclerView.Adapter<Adaptador_Categori
         return  null;
     }
 
-
-
-
-    //VIEJO
-    /*
-    List<Fuente_Categoria> ListaObjetos;
-
-    public Adaptador_Categoria(List<Fuente_Categoria> listaObjetos) {
-
-        ListaObjetos = listaObjetos;
-    }
-
-    @Override
-    public viewHolder_Categoria onCreateViewHolder(ViewGroup parent, int viewType) {
-
-        View vista = LayoutInflater.from(parent.getContext()).inflate(R.layout.card_item_categorias,parent,false);
-        return new viewHolder_Categoria(vista);
-    }
-
-    @Override
-    public void onBindViewHolder(viewHolder_Categoria holder, int position) {
-        holder.titulo.setText(ListaObjetos.get(position).getTitulo().toString());
-
-        holder.cantidad.setText(  ListaObjetos.get(position).getCantidad()+" Contactos");
-        holder.id_categoria.setText(""+ListaObjetos.get(position).getId());
-        Glide.with(holder.context).load(ListaObjetos.get(position).getImagen()).placeholder(R.drawable.iconocargando).into(holder.imagen);
-        holder.setOnClickListener();
-    }
-
-    @Override
-    public int getItemCount() {
-        return ListaObjetos.size();
-    }
-
-    public void setFilter(ArrayList<Fuente_Categoria> newList){
-        ListaObjetos = new ArrayList<Fuente_Categoria>();
-        ListaObjetos.addAll(newList);
-        notifyDataSetChanged();
-    }*/
 }

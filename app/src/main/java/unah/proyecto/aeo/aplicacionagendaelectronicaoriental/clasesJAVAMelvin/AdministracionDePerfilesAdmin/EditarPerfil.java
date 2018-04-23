@@ -1,10 +1,9 @@
-package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin;
+package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.AdministracionDePerfilesAdmin;
 
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -13,7 +12,6 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -21,20 +19,17 @@ import android.util.Base64;
 import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
+
+import com.bumptech.glide.Glide;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.net.URLEncoder;
 import java.util.ArrayList;
 
-import cz.msebera.android.httpclient.HttpResponse;
 import cz.msebera.android.httpclient.NameValuePair;
 import cz.msebera.android.httpclient.client.HttpClient;
 import cz.msebera.android.httpclient.client.entity.UrlEncodedFormEntity;
@@ -44,8 +39,6 @@ import cz.msebera.android.httpclient.message.BasicNameValuePair;
 import cz.msebera.android.httpclient.util.EntityUtils;
 import de.hdodenhof.circleimageview.CircleImageView;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.Editar_Usuarios;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.Mostrar_Usuarios;
 
 public class EditarPerfil extends AppCompatActivity {
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1 ;
@@ -69,6 +62,7 @@ public class EditarPerfil extends AppCompatActivity {
     String imagen_rec ;
     int idregion_rec ;
     int idcategoria_rec ;
+    int i=0;
     //controla si existe imagen en el contacto traido desde el webservice
     boolean tieneImagen;
     //
@@ -165,54 +159,6 @@ public class EditarPerfil extends AppCompatActivity {
         botonGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                validar();
-                Toast.makeText(getApplicationContext(),"Procesando...",Toast.LENGTH_SHORT).show();
-                /*
-                switch (spcategorias.getSelectedItem().toString()){
-                    case "Emergencia":
-                        id_categoria=1;
-                        break;
-                    case "Educación":
-                        id_categoria=2;
-                        break;
-                    case "Centros Asistenciales":
-                        id_categoria=3;
-                        break;
-                    case "Bancos":
-                        id_categoria=4;
-                        break;
-                    case "Hostelería y Turismo":
-                        id_categoria=5;
-                        break;
-                    case "Instituciones Públicas":
-                        id_categoria=6;
-                        break;
-                    case "Comercio de Bienes":
-                        id_categoria=7;
-                        break;
-                    case "Comercio de Servicios":
-                        id_categoria=8;
-                        break;
-                    case "Bienes y Raíces":
-                        id_categoria=9;
-                        break;
-                    case "Asesoría Legal":
-                        id_categoria=10;
-                        break;
-                    case "Funerarias":
-                        id_categoria=11;
-                        break;
-                }
-
-                switch (spregiones.getSelectedItem().toString()){
-                    case "Danlí":
-                        id_region=3;
-                        break;
-                    case "El Paraíso":
-                        id_region=4;
-                        break;
-                }
-                */
 
               imagenBitmap = ((BitmapDrawable)imagenOrg.getDrawable()).getBitmap();
 
@@ -220,7 +166,7 @@ public class EditarPerfil extends AppCompatActivity {
                     @Override
                     protected String doInBackground(Void... voids) {
                         ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        imagenBitmap.compress(Bitmap.CompressFormat.JPEG,100,baos);
+                        imagenBitmap.compress(Bitmap.CompressFormat.JPEG,70,baos);
                         byte b []= baos.toByteArray();
 
                         encodeImagen = Base64.encodeToString(b,0);
@@ -228,11 +174,21 @@ public class EditarPerfil extends AppCompatActivity {
                         return null;
                     }
                 }.execute();
+                validar();
 
+                if (etnombreeorganizacion.getError()==null &&
+                        etnumerofijo.getError()==null &&
+                        etnumerocel.getError()==null &&
+                        etdireccion.getError()==null &&
+                        etemail.getError()==null &&
+                        etdescripcion.getError()==null &&
+                        etlatitud.getError()==null &&
+                        etlongitud.getError()==null) {
 
-
-
-                new actualizarPerfil().execute();
+                    Toast.makeText(getApplicationContext(),"Procesando... Por favor espere",Toast.LENGTH_SHORT).show();
+                    i ++;
+                    new actualizarPerfil().execute();
+                }
 
             }
         });
@@ -384,12 +340,15 @@ public class EditarPerfil extends AppCompatActivity {
         protected void onPostExecute(Boolean result) {
 
             if (resul) {
-                /*if(tieneImagen==true){
-                    byte[] byteCode = Base64.decode(imagen_rec, Base64.DEFAULT);
-                    imagenOrg.setImageBitmap(BitmapFactory.decodeByteArray(byteCode,0,byteCode.length));
-                }else {
-                    imagenOrg.setImageResource(R.drawable.iconocontactowhite);
-                }*/
+                if(tieneImagen==true){
+                    Glide.with(getApplicationContext()).
+                            load(imagen_rec).
+                            into(imagenOrg);
+                }else{
+                    Glide.with(getApplicationContext()).
+                            load(R.drawable.iconocontactowhite).
+                            into(imagenOrg);
+                }
 
                 etnombreeorganizacion.setText(nomborg_rec);
                 etnumerofijo.setText(numtel_rec);
@@ -418,6 +377,7 @@ public class EditarPerfil extends AppCompatActivity {
         protected Boolean doInBackground(String... strings) {
 
             try {
+
                 HttpClient httpclient;
                 HttpPost httppost;
                 ArrayList<NameValuePair> parametros;
@@ -436,7 +396,7 @@ public class EditarPerfil extends AppCompatActivity {
                 parametros.add(new BasicNameValuePair("id_categoria",String.valueOf(id_categoria)));
                 parametros.add(new BasicNameValuePair("id_region",String.valueOf(id_region)));
                 parametros.add(new BasicNameValuePair("imagen",encodeImagen));
-                parametros.add(new BasicNameValuePair("nombre_imagen",etnombreeorganizacion.getText().toString().replace(" ","_")+".jpg"));
+                parametros.add(new BasicNameValuePair("nombre_imagen",etnombreeorganizacion.getText().toString().replace(" ","_")+ ""+ i +".jpg"));
 
 
                 httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));
@@ -456,18 +416,10 @@ public class EditarPerfil extends AppCompatActivity {
 
         protected void onPostExecute(Boolean result) {
             if (resul) {
-                if (etnombreeorganizacion.getError()==null &&
-                etnumerofijo.getError()==null &&
-                etnumerocel.getError()==null &&
-                etdireccion.getError()==null &&
-                etemail.getError()==null &&
-                etdescripcion.getError()==null &&
-                etlatitud.getError()==null &&
-                etlongitud.getError()==null){
+
                     Toast.makeText(getApplicationContext(),"Perfil Actualizado Correctamente",Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(getApplicationContext(),AdministracionDePerfiles.class));
+                    //startActivity(new Intent(getApplicationContext(),AdministracionDePerfiles.class));
                     finish();
-                }
 
             }else {
                 Toast.makeText(getApplicationContext(), "Problemas de conexión", Toast.LENGTH_SHORT).show();

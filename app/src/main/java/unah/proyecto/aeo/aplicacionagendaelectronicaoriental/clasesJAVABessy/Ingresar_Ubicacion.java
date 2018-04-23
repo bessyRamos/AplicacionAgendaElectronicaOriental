@@ -16,7 +16,8 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.Locale;
 
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.NuevoPerfil;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.AdministracionDePerfilesAdmin.NuevoPerfil;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.FormularioNuevaOrganizacion;
 
 public class Ingresar_Ubicacion extends AppCompatActivity implements GoogleMap.OnMarkerDragListener,OnMapReadyCallback {
     private GoogleMap mMap;
@@ -37,16 +38,17 @@ public class Ingresar_Ubicacion extends AppCompatActivity implements GoogleMap.O
         mMap = googleMap;
         mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
         LatLng danli = new LatLng(14.041458, -86.568061);
-        marcas= googleMap.addMarker(new MarkerOptions().position(danli).title("Danlí").draggable(true));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(danli,15));
+        marcas = googleMap.addMarker(new MarkerOptions().position(danli).title("Danlí").draggable(true));
+        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(danli, 16));
         googleMap.setOnMarkerDragListener(this);
+        mMap.getUiSettings().setZoomControlsEnabled(true);
 
     }
 
     @Override
     public void onMarkerDragStart(Marker marker) {
-        if (marker.equals(marcas)){
-            Toast.makeText(this,"Ubicar",Toast.LENGTH_SHORT).show();
+        if (marker.equals(marcas)) {
+            Toast.makeText(this, "Ubicar", Toast.LENGTH_SHORT).show();
         }
     }
 
@@ -60,21 +62,32 @@ public class Ingresar_Ubicacion extends AppCompatActivity implements GoogleMap.O
     }
     @Override
     public void onMarkerDragEnd(Marker marker) {
-        if (marker.equals(marcas)){
-            Toast.makeText(this,"Ubicacion Exitosa.",Toast.LENGTH_SHORT).show();
+        if (marker.equals(marcas)) {
+            Toast.makeText(this, "Ubicacion Exitosa.", Toast.LENGTH_SHORT).show();
 
-            String la,lo;
-            la=Double.toString(marker.getPosition().latitude);
-            lo=Double.toString(marker.getPosition().longitude);
+            String la, lo;
+            la = Double.toString(marker.getPosition().latitude);
+            lo = Double.toString(marker.getPosition().longitude);
 
             Intent data = new Intent();
-            data.putExtra("latitud",la);
-            data.putExtra("longitud",lo);
-            setResult(NuevoPerfil.RESULT_OK,data);
+            data.putExtra("latitud", la);
+            data.putExtra("longitud", lo);
+            setResult(NuevoPerfil.RESULT_OK, data);
             finish();
 
+        } else if (marker.equals(marcas)) {
+            Toast.makeText(this, "Ubicacion Exitosa.", Toast.LENGTH_SHORT).show();
+
+            String la, lo;
+            la = Double.toString(marker.getPosition().latitude);
+            lo = Double.toString(marker.getPosition().longitude);
+
+            Intent data = new Intent();
+            data.putExtra("latitud", la);
+            data.putExtra("longitud", lo);
+            setResult(FormularioNuevaOrganizacion.RESULT_OK, data);
+            finish();
         }
     }
-
 
 }
