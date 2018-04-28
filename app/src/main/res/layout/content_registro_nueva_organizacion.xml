@@ -183,7 +183,6 @@
                 app:srcCompat="@drawable/ubicacion_organizacion"
                 android:layout_centerInParent="true"
                 android:layout_gravity="center_horizontal"
-                android:onClick="guardarUbicacionOrganizacion"
                 android:layout_marginBottom="25dp"
 
             />

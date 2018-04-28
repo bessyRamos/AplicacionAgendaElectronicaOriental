@@ -39,6 +39,7 @@ import cz.msebera.android.httpclient.message.BasicNameValuePair;
 import cz.msebera.android.httpclient.util.EntityUtils;
 import de.hdodenhof.circleimageview.CircleImageView;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVABessy.Ingresar_Ubicacion;
 
 public class EditarPerfil extends AppCompatActivity {
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1 ;
@@ -63,6 +64,7 @@ public class EditarPerfil extends AppCompatActivity {
     int idregion_rec ;
     int idcategoria_rec ;
     int i=0;
+    boolean editarFoto=false;
     //controla si existe imagen en el contacto traido desde el webservice
     boolean tieneImagen;
     //
@@ -127,6 +129,7 @@ public class EditarPerfil extends AppCompatActivity {
         botonFoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                editarFoto=true;
 
                 requestRead();
             }
@@ -160,20 +163,23 @@ public class EditarPerfil extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-              imagenBitmap = ((BitmapDrawable)imagenOrg.getDrawable()).getBitmap();
+                if(editarFoto==true){
+                    imagenBitmap = ((BitmapDrawable)imagenOrg.getDrawable()).getBitmap();
 
-                new AsyncTask<Void, Void, String>(){
-                    @Override
-                    protected String doInBackground(Void... voids) {
-                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        imagenBitmap.compress(Bitmap.CompressFormat.JPEG,70,baos);
-                        byte b []= baos.toByteArray();
+                    new AsyncTask<Void, Void, String>(){
+                        @Override
+                        protected String doInBackground(Void... voids) {
+                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                            imagenBitmap.compress(Bitmap.CompressFormat.JPEG,70,baos);
+                            byte b []= baos.toByteArray();
 
-                        encodeImagen = Base64.encodeToString(b,0);
+                            encodeImagen = Base64.encodeToString(b,0);
 
-                        return null;
-                    }
-                }.execute();
+                            return null;
+                        }
+                    }.execute();
+                }
+                
                 validar();
 
                 if (etnombreeorganizacion.getError()==null &&
@@ -193,6 +199,12 @@ public class EditarPerfil extends AppCompatActivity {
             }
         });
 
+    }
+
+    public  void  guardarUbicacionOrganizacion(View view){
+
+        Intent ubicacion1 = new Intent(getApplicationContext(),Ingresar_Ubicacion.class);
+        startActivityForResult(ubicacion1,1);
     }
 
     public void requestRead() {
@@ -231,6 +243,15 @@ public class EditarPerfil extends AppCompatActivity {
         if(resultCode == RESULT_OK && requestCode == PICK_IMAGE){
             imageUri = data.getData();
             imagenOrg.setImageURI(imageUri);
+        }else if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+
+                String latitud = data.getStringExtra("latitud");
+                String longitud = data.getStringExtra("longitud");
+                etlatitud.setText(latitud);
+                etlongitud.setText(longitud);
+
+            }
         }
     }
 
@@ -341,6 +362,7 @@ public class EditarPerfil extends AppCompatActivity {
 
             if (resul) {
                 if(tieneImagen==true){
+
                     Glide.with(getApplicationContext()).
                             load(imagen_rec).
                             into(imagenOrg);
@@ -395,7 +417,12 @@ public class EditarPerfil extends AppCompatActivity {
                 parametros.add(new BasicNameValuePair("longitud_rec",etlongitud.getText().toString()));
                 parametros.add(new BasicNameValuePair("id_categoria",String.valueOf(id_categoria)));
                 parametros.add(new BasicNameValuePair("id_region",String.valueOf(id_region)));
-                parametros.add(new BasicNameValuePair("imagen",encodeImagen));
+                if(editarFoto==true){
+                    parametros.add(new BasicNameValuePair("imagen",encodeImagen));
+                }else {
+                    parametros.add(new BasicNameValuePair("imagen",imagen_rec));
+                }
+
                 parametros.add(new BasicNameValuePair("nombre_imagen",etnombreeorganizacion.getText().toString().replace(" ","_")+ ""+ i +".jpg"));
 
 

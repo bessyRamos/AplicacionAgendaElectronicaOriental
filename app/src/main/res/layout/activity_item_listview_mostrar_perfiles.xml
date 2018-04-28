@@ -1,33 +1,69 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="horizontal"
-    android:padding="10dp"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:elevation="10dp"
     >
 
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:elevation="@dimen/app_top"
+
+        >
+
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:id="@+id/iconoDeContactoEnAdministrador"
+            android:layout_width="300dp"
+            android:layout_height="100dp"
+            android:layout_weight="2.1"
+            android:layout_marginLeft="10dp"
+            android:layout_gravity="center_vertical"
+            android:src="@drawable/iconocontactowhite"/>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_weight="1"
+            android:layout_gravity="center_vertical"
+            android:layout_marginRight="5dp"
+
+            >
+
+            <TextView
+                android:id="@+id/mostrarperfiles"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_weight="1"
+                android:textColor="@color/cardview_dark_background"
+                android:textStyle="bold"
+                android:text="Perfil"
+                android:textSize="20sp"
+                android:gravity="center"
+                android:maxLines="1"/>
 
 
     <TextView
         android:id="@+id/id_mostrarperfiles"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text=""
+        android:text="id"
+        android:textStyle="bold"
+        android:gravity="center"
+        android:maxLines="1"
         android:visibility="invisible"
         android:textColor="#ffffff"
         android:textSize="1sp" />
 
-    <TextView
-        android:id="@+id/mostrarperfiles"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="10dp"
-        android:layout_weight="1"
-        android:textColor="@color/cardview_dark_background"
-        android:textSize="14sp"
-        android:textStyle="bold"
-        android:text="" />
+
+
+    </LinearLayout>
+</LinearLayout>
 
 </LinearLayout>

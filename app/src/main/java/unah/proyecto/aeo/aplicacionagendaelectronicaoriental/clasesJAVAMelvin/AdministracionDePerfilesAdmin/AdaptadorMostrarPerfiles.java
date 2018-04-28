@@ -6,8 +6,11 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 
 /**
@@ -49,6 +52,13 @@ public class AdaptadorMostrarPerfiles extends BaseAdapter {
 
         TextView textid = (TextView)v.findViewById(R.id.id_mostrarperfiles);
         TextView textnombre = (TextView)v.findViewById(R.id.mostrarperfiles);
+        CircleImageView icono = v.findViewById(R.id.iconoDeContactoEnAdministrador);
+
+        if(!perfiles.get(i).getImagen().isEmpty()){
+            Glide.with(context).load(perfiles.get(i).getImagen()).into(icono);
+        }else {
+            Glide.with(context).load(R.drawable.iconocontactowhite).into(icono);
+        }
 
         textid.setText(""+perfiles.get(i).getId());
         textnombre.setText(perfiles.get(i).getPerfil());
