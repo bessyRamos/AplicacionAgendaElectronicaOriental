@@ -61,6 +61,7 @@ public class PerfilDeLaOrganizacion extends AppCompatActivity implements Navigat
     private TextView nombre, direccion, telefono, email, descripcion, movil;
     AEODbHelper conn;
     int id_organizacion;
+    String nombreOrganizacion;
     double x, y;
     FloatingActionButton ubicacion;
     String organizacionP, nombreP, direccionP, telefonoP, emailP, descripcionP, movilP;
@@ -77,7 +78,6 @@ public class PerfilDeLaOrganizacion extends AppCompatActivity implements Navigat
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_perfil_de_la_organizacion);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
 
         //envio de clase actual para las preferencias
         sesion = new Sesion(this);
@@ -109,7 +109,10 @@ public class PerfilDeLaOrganizacion extends AppCompatActivity implements Navigat
         Bundle extras = getIntent().getExtras();
         if (extras != null) {
             id_organizacion = extras.getInt("id_organizacion");
+            nombreOrganizacion = extras.getString("nombre_organizacion");
+            toolbar.setTitle(nombreOrganizacion);
         }
+        setSupportActionBar(toolbar);
         conn = new AEODbHelper(this);
 
         String[] projection = {

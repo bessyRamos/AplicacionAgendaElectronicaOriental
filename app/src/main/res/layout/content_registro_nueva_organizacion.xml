@@ -6,124 +6,84 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_marginTop="30dp"
-
     tools:context="unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.FormularioNuevaOrganizacion">
 
     <ScrollView
+        android:id="@+id/scview"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="10dp"
     >
-
-        <LinearLayout
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical"
+            android:layout_height="wrap_content"
+            android:padding="10dp"
             android:layout_marginTop="20dp"
-        >
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginTop="10dp"
+            android:id="@+id/rl1">
 
-            >
+            <de.hdodenhof.circleimageview.CircleImageView
+                android:id="@+id/imagenDeOrganizacion"
+                android:layout_width="200dp"
+                android:layout_height="160dp"
+                android:layout_alignParentTop="true"
+                android:layout_centerInParent="true"
+                android:src="@mipmap/ic_launcher"
+                android:scaleType="centerCrop"
+            />
+
+            <android.support.design.widget.TextInputLayout
+                android:layout_below="@id/imagenDeOrganizacion"
+                android:id="@+id/iptlnombreorg"
+                android:layout_marginTop="15dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
                 <EditText
                     android:id="@+id/txtNombreOrganizacion"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Nombre de la Organización"
-                    android:textStyle="bold"
-                    android:layout_marginRight="10dp"
-                    android:layout_marginLeft="10dp"
-
+                    android:inputType="textMultiLine"
 
                 />
 
             </android.support.design.widget.TextInputLayout>
 
-            <LinearLayout
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/iptlnumfijo"
+                android:layout_below="@+id/iptlnombreorg"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginTop="10dp"
-            >
-                <LinearLayout android:layout_width="wrap_content"
-                              android:layout_height="wrap_content"
-                              android:orientation="vertical"
-                              android:layout_marginTop="10dp"
-
-                >
-                    <ImageView
-                        android:id="@+id/imgimagenOrganizacion"
-                        android:layout_width="140dp"
-                        android:layout_height="130dp"
-                        app:srcCompat="@drawable/iconocontactowhite"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="2dp"
-
-                    />
-                    <ImageButton
-                        android:id="@+id/imagenOrganizacionUsuario"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_horizontal"
-                        app:srcCompat="@drawable/camara"
-                    />
-
-                </LinearLayout>
-
-
-                <LinearLayout
+                android:layout_height="wrap_content">
+                <EditText
+                    android:id="@+id/txtNumeroTelefonoFijo"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_marginTop="15dp">
+                    android:hint="Número fijo"
+                    android:inputType="text"
+                    android:digits="1234567890-"/>
 
-                    <android.support.design.widget.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="10dp"
+            </android.support.design.widget.TextInputLayout>
 
-
-                    >
-
-                        <EditText
-                            android:id="@+id/txtNumeroTelefonoFijo"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Número fijo"
-                            android:inputType="text"
-                            android:digits="1234567890-"/>
-                    </android.support.design.widget.TextInputLayout>
-
-                    <android.support.design.widget.TextInputLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginRight="10dp"
-                        android:layout_marginTop="20dp"
-                    >
-
-                        <EditText
-                            android:id="@+id/txtNumeroTelefonoCelular"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:hint="Número móvil"
-                            android:inputType="text"
-                            android:digits="1234567890-"/>
-                    </android.support.design.widget.TextInputLayout>
-
-                </LinearLayout>
-            </LinearLayout>
             <android.support.design.widget.TextInputLayout
+                android:id="@+id/iptlnumcel"
+                android:layout_below="@+id/iptlnumfijo"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-            >
+                android:layout_height="wrap_content">
+
+                <EditText
+                    android:id="@+id/txtNumeroTelefonoCelular"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Número móvil"
+                    android:inputType="text"
+                    android:digits="1234567890-"/>
+
+            </android.support.design.widget.TextInputLayout>
+
+            <android.support.design.widget.TextInputLayout
+                android:id="@+id/iptldir"
+                android:layout_below="@+id/iptlnumcel"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
                 <EditText
                     android:id="@+id/txtDireccion"
@@ -131,15 +91,14 @@
                     android:layout_height="wrap_content"
                     android:hint="Dirección"
                     android:inputType="textMultiLine"/>
+
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
+                android:id="@+id/iptlemail"
+                android:layout_below="@+id/iptldir"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="10dp"
-            >
+                android:layout_height="wrap_content">
 
                 <EditText
                     android:id="@+id/txtEmail"
@@ -147,45 +106,47 @@
                     android:layout_height="wrap_content"
                     android:hint="e-mail"
                     android:inputType="textEmailAddress" />
+
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
+                android:id="@+id/iptldescript"
+                android:layout_below="@+id/iptlemail"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="10dp"
-            >
+                android:layout_height="wrap_content">
 
                 <EditText
                     android:id="@+id/txtDescripcion"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Descripción de la Organizacion"
-                    android:inputType="textMultiLine"
+                    android:inputType="textMultiLine"/>
 
-                />
             </android.support.design.widget.TextInputLayout>
+
+
             <TextView
                 android:id="@+id/viewCategoria"
-                android:layout_below="@id/iptllong"
+                android:layout_below="@id/iptldescript"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Categoría"
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
                 android:textSize="15sp"
+
             />
 
             <Spinner
                 android:id="@+id/spinercategoriaOrganizacion"
-                android:layout_below="@+id/tvcat"
+                android:layout_below="@+id/viewCategoria"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:spinnerMode="dialog"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
+
             />
             <TextView
                 android:id="@+id/viewRegion"
@@ -195,6 +156,7 @@
                 android:layout_marginLeft="10dp"
                 android:layout_marginTop="10dp"
                 android:textSize="15sp"
+                android:layout_below="@id/spinercategoriaOrganizacion"
             />
             <Spinner
                 android:id="@+id/spinerregionOrganizacion"
@@ -203,68 +165,81 @@
                 android:spinnerMode="dropdown"
                 android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
+                android:layout_below="@+id/viewRegion"
             />
-            <TextView
-
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Ubicación de la Organización"
-                android:textStyle="bold"
-                android:textSize="20dp"
-                android:gravity="center"
-                android:layout_marginTop="10dp"
-
-            />
-
             <ImageView
+                android:layout_below="@id/spinerregionOrganizacion"
                 android:id="@+id/imgUbicacionOrganizacion"
                 android:layout_width="match_parent"
                 android:layout_height="90dp"
                 app:srcCompat="@drawable/ubicacion_organizacion"
             />
             <Button
+                android:layout_below="@id/imgUbicacionOrganizacion"
                 android:id="@+id/btnUbicacionOrganizacion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="Insertar Ubicacion"
                 app:srcCompat="@drawable/ubicacion_organizacion"
-                android:gravity="center"
+                android:layout_centerInParent="true"
                 android:layout_gravity="center_horizontal"
-                android:onClick="guardarUbicacionOrganizacion"
                 android:layout_marginBottom="25dp"
 
             />
-
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/iptllatit"
+                android:layout_below="@+id/btnUbicacionOrganizacion"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-                android:layout_width="0dp"
-                android:layout_height="0dp">
                 <EditText
                     android:id="@+id/txtlatitudOrganizacion"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:hint="Latitud"
+                    android:visibility="invisible"
+                    android:clickable="false"
                     android:inputType="number"
-                    android:digits="1234567890.-"/>
+                    android:digits="1234567890.-"
+
+                />
+
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/iptllong"
-                android:layout_width="0dp"
-                android:layout_height="0dp">
+                android:layout_below="@+id/iptllatit"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
                 <EditText
                     android:id="@+id/txtlongitudOrganizacion"
-                    android:layout_width="0dp"
-                    android:layout_height="0dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:hint="Longitud"
+                    android:visibility="invisible"
+                    android:clickable="false"
                     android:inputType="number"
                     android:digits="1234567890-."/>
+
             </android.support.design.widget.TextInputLayout>
 
+            <android.support.design.widget.FloatingActionButton
+                android:id="@+id/imagenOrganizacionUsuario"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/iptlnumfijo"
+                android:layout_alignEnd="@+id/imagenDeOrganizacion"
+                android:layout_marginBottom="74dp"
+                android:layout_marginEnd="20dp"
+                android:src="@drawable/ic_menu_camera" />
 
-        </LinearLayout>
+
+
+        </RelativeLayout>
+
     </ScrollView>
+
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/btnGuardar"
@@ -274,7 +249,7 @@
         android:layout_alignParentEnd="true"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
-        app:srcCompat="@drawable/enviar"
+        android:src="@drawable/ic_save_white_24dp"
 
     />
 

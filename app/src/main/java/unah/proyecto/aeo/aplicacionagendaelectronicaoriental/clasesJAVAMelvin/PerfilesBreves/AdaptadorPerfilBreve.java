@@ -50,6 +50,7 @@ public class AdaptadorPerfilBreve extends RecyclerView.Adapter<AdaptadorPerfilBr
                     if(pos != RecyclerView.NO_POSITION){
                         Intent intent = new Intent(context,PerfilDeLaOrganizacion.class);
                         intent.putExtra("id_organizacion", getItem(pos).id);
+                        intent.putExtra("nombre_organizacion", getItem(pos).nombre);
                         intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         context.startActivity(intent);
                     }

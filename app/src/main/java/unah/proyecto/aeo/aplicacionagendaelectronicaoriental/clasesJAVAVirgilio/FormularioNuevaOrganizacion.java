@@ -66,9 +66,10 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity  implements N
     EditText descrpcionOrganizacion;
     EditText latitudOrganizacion;
     EditText longitudOrganizacion;
-    ImageView imagenOrganizacion,ubicacionOrganizacion;
+    //ImageView imagenOrganizacion,ubicacionOrganizacion;
     FloatingActionButton guardar;
     ImageButton imageButton;
+    CircleImageView imagenOrganizacion;
     //int id_usuario;
     Button ubicacion;
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1 ;
@@ -117,13 +118,13 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity  implements N
         latitudOrganizacion = (EditText) findViewById(R.id.txtlatitudOrganizacion);
         imageButton = findViewById(R.id.imagenOrganizacionUsuario);
 
-        latitudOrganizacion.setText("123123");  ///ingresar la latitud que el usuario selecciono
+       // latitudOrganizacion.setText("123123");  ///ingresar la latitud que el usuario selecciono
 
         longitudOrganizacion = (EditText) findViewById(R.id.txtlongitudOrganizacion);
 
-        longitudOrganizacion.setText("-123334");    //ingresar la longitud que el usuario selecciono
+       // longitudOrganizacion.setText("-123334");    //ingresar la longitud que el usuario selecciono
 
-        imagenOrganizacion = (ImageView) findViewById(R.id.imgimagenOrganizacion);
+        imagenOrganizacion = (CircleImageView) findViewById(R.id.imagenDeOrganizacion);
         guardar = (FloatingActionButton) findViewById(R.id.btnGuardar);
         spinnerCategorias = (Spinner) findViewById(R.id.spinercategoriaOrganizacion);
         spinnerRgiones = (Spinner) findViewById(R.id.spinerregionOrganizacion);
@@ -135,6 +136,8 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity  implements N
             public void onClick(View v) {
                 Intent intent = new Intent(FormularioNuevaOrganizacion.this, Ingresar_Ubicacion.class);
 
+                //latitudOrganizacion = latitud_traida
+                //longitudOrganizacion = longitud_traida
 
                 startActivityForResult(intent,1);
 

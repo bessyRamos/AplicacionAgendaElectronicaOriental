@@ -107,30 +107,10 @@
                     />
             </android.support.design.widget.TextInputLayout>
 
-            <ImageView
-                android:layout_below="@id/iptldescript"
-                android:id="@+id/imgUbicacionOrganizacion"
-                android:layout_width="match_parent"
-                android:layout_height="90dp"
-                app:srcCompat="@drawable/ubicacion_organizacion"
-                />
-            <Button
-                android:layout_below="@id/imgUbicacionOrganizacion"
-                android:id="@+id/btnUbicacionOrganizacion"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Insertar Ubicacion"
-                app:srcCompat="@drawable/ubicacion_organizacion"
-                android:layout_centerInParent="true"
-                android:layout_gravity="center_horizontal"
-                android:onClick="guardarUbicacionOrganizacion"
-                android:layout_marginBottom="25dp"
-
-                />
 
             <TextView
                 android:id="@+id/tvcat"
-                android:layout_below="@id/btnUbicacionOrganizacion"
+                android:layout_below="@id/iptldescript"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Categoría"/>
@@ -177,7 +157,6 @@
                     android:id="@+id/etlatitud"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Latitud"
                     android:visibility="invisible"
                     android:clickable="false"
                     android:inputType="number"
@@ -194,12 +173,31 @@
                     android:id="@+id/etlongitud"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Longitud"
                     android:visibility="invisible"
                     android:clickable="false"
                     android:inputType="number"
                     android:digits="1234567890-."/>
             </android.support.design.widget.TextInputLayout>
+            <ImageView
+                android:layout_below="@id/iptllong"
+                android:id="@+id/imgUbicacionOrganizacion"
+                android:layout_width="match_parent"
+                android:layout_height="90dp"
+                app:srcCompat="@drawable/ubicacion_organizacion"
+                />
+            <Button
+                android:layout_below="@id/imgUbicacionOrganizacion"
+                android:id="@+id/btnUbicacionOrganizacion"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Insertar Ubicacion"
+                app:srcCompat="@drawable/ubicacion_organizacion"
+                android:layout_centerInParent="true"
+                android:layout_gravity="center_horizontal"
+                android:onClick="guardarUbicacionOrganizacion"
+                android:layout_marginBottom="25dp"
+
+                />
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/botonFoto"
