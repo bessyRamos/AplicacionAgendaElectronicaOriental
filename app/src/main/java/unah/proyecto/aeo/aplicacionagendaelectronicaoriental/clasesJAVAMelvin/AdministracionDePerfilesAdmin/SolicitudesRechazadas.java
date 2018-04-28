@@ -32,7 +32,7 @@ public class SolicitudesRechazadas extends AppCompatActivity implements Navigati
     AdaptadorMostrarPerfiles adaptadorMostrarPerfiles;
     ProgressBar barra;
     int id_contacto;
-    String nombre_organizacion;
+    String nombre_organizacion, imagen;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -113,7 +113,8 @@ public class SolicitudesRechazadas extends AppCompatActivity implements Navigati
                 for (int i = 0; i < respJSON.length(); i++) {
                     id_contacto = respJSON.getJSONObject(i).getInt("id_contacto");
                     nombre_organizacion = respJSON.getJSONObject(i).getString("nombre_organizacion");
-                    mostrar_perfiles.add(new Fuente_mostrarPerfiles(id_contacto, nombre_organizacion));
+                    imagen = respJSON.getJSONObject(i).getString("imagen");
+                    mostrar_perfiles.add(new Fuente_mostrarPerfiles(id_contacto, nombre_organizacion,imagen));
 
                 }
 

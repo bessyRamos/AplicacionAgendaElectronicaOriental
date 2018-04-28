@@ -152,7 +152,7 @@ public class NuevasSolicitudes extends AppCompatActivity
                 for (int i = 0; i < respJSON.length(); i++) {
                     id_contacto = respJSON.getJSONObject(i).getInt("id_contacto");
                     nombre_organizacion = respJSON.getJSONObject(i).getString("nombre_organizacion");
-                    mostrar_perfiles.add(new Fuente_mostrarPerfiles(id_contacto, nombre_organizacion));
+                    //mostrar_perfiles.add(new Fuente_mostrarPerfiles(id_contacto, nombre_organizacion));
 
                 }
 

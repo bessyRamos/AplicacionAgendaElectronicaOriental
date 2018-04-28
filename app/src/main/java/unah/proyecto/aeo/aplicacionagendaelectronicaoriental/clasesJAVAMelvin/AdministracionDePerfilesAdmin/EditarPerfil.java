@@ -179,8 +179,7 @@ public class EditarPerfil extends AppCompatActivity {
                         }
                     }.execute();
                 }
-
-
+                
                 validar();
 
                 if (etnombreeorganizacion.getError()==null &&

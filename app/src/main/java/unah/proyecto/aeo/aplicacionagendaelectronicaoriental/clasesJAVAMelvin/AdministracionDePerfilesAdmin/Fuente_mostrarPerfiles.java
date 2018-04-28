@@ -7,13 +7,24 @@ package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.A
 public class Fuente_mostrarPerfiles {
     private int id;
     private String perfil;
+    private String imagen;
 
-    public Fuente_mostrarPerfiles(int id, String perfil) {
+    public Fuente_mostrarPerfiles(int id, String perfil, String imagen) {
         this.id = id;
         this.perfil = perfil;
+        this.imagen = imagen;
     }
     public Fuente_mostrarPerfiles(){
     }
+
+    public String getImagen() {
+        return imagen;
+    }
+
+    public void setImagen(String imagen) {
+        this.imagen = imagen;
+    }
+
     public int getId() {
         return id;
     }
