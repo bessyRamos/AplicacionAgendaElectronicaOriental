@@ -66,9 +66,10 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity  implements N
     EditText descrpcionOrganizacion;
     EditText latitudOrganizacion;
     EditText longitudOrganizacion;
-    ImageView imagenOrganizacion,ubicacionOrganizacion;
+    //ImageView imagenOrganizacion,ubicacionOrganizacion;
     FloatingActionButton guardar;
     ImageButton imageButton;
+    CircleImageView imagenOrganizacion;
     //int id_usuario;
     Button ubicacion;
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1 ;
@@ -123,7 +124,7 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity  implements N
 
         longitudOrganizacion.setText("-123334");    //ingresar la longitud que el usuario selecciono
 
-        imagenOrganizacion = (ImageView) findViewById(R.id.imgimagenOrganizacion);
+        imagenOrganizacion = (CircleImageView) findViewById(R.id.imagenDeOrganizacion);
         guardar = (FloatingActionButton) findViewById(R.id.btnGuardar);
         spinnerCategorias = (Spinner) findViewById(R.id.spinercategoriaOrganizacion);
         spinnerRgiones = (Spinner) findViewById(R.id.spinerregionOrganizacion);
