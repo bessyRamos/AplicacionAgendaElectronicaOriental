@@ -43,7 +43,7 @@
                 android:textSize="20sp"
                 android:textStyle="bold"
                 android:gravity="center"
-                android:maxLines="1"
+
 
             />
             <TextView

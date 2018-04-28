@@ -244,7 +244,7 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
 
             try {
                 // Parseamos la respuesta obtenida del servidor a un objeto JSON
-                JSONObject jsonObject = new JSONObject(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("https://shessag.000webhostapp.com/validar_usuario.php?nombre_usuario="+ usu + "&contrasena="+pas)).getEntity()));
+                JSONObject jsonObject = new JSONObject(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/validar_usuario.php?nombre_usuario="+ usu + "&contrasena="+pas)).getEntity()));
                 JSONArray jsonArray = jsonObject.getJSONArray("datos");
                 for (int i = 0; i < jsonArray.length(); i++) {
 

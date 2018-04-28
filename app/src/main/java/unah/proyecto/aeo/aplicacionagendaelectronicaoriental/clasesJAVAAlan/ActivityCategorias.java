@@ -167,7 +167,9 @@ public class ActivityCategorias extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.principaldos) {
-            // Handle the camera action
+
+            startActivity(new Intent(getBaseContext(), ActivityCategorias.class)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP));
 
         } else if (id == R.id.acercadeinfodos) {
             Intent intent = new Intent(this,AcercaDe.class);
@@ -179,14 +181,14 @@ public class ActivityCategorias extends AppCompatActivity
                 intent.putExtra("usuario_ingreso",id_usu);
                 //startActivity(new Intent(ActivityCategorias.this,Panel_de_Control.class));
                 startActivity(intent);
-                finish();
+
             }else{
                 if (sesionUsuario.logindimUsuario()){
                     Intent intent = new Intent(ActivityCategorias.this,PanelDeControlUsuarios.class);
                     intent.putExtra("id",id_usu);
                     //startActivity(new Intent(ActivityCategorias.this,PanelDeControlUsuarios.class));
                     startActivity(intent);
-                    finish();
+
 
                 }else {
                     Intent intent = new Intent(this, Login.class);

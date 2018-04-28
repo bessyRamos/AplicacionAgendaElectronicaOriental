@@ -97,7 +97,7 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
 
                     intent.putExtra("id",id_usuario_resibido_usuario);
                     startActivity(intent);
-                    finish();
+
                 }
 
                 //startActivity(intent);
@@ -132,7 +132,6 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
                             intent.putExtra("id_usuario",id_usuario_resibido_usuario);
                             startActivity(intent);
 
-                            finish();
 
                         }else if(position ==1){ //Borrar Contacto
 
@@ -248,7 +247,7 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
 
                 intent.putExtra("id",id_usuario_resibido_usuario);
                 startActivity(intent);
-                finish();
+
             }else {
                 Toast.makeText(getApplicationContext(),"Error en id de usuario",Toast.LENGTH_SHORT).show();
             }
@@ -275,7 +274,7 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
             }
 
             try {
-                JSONArray respJSON = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("https://shessag.000webhostapp.com/consultarOrganizacionesUsuarioLogeados.php?id_usuario="+id_usuario_resibido_usuario)).getEntity()));
+                JSONArray respJSON = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/consultarOrganizacionesUsuarioLogeados.php?id_usuario="+id_usuario_resibido_usuario)).getEntity()));
                 //recorre el array para asignar los resultados a las variables
                 for (int i = 0; i < respJSON.length(); i++) {
 

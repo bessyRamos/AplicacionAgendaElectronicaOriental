@@ -333,7 +333,7 @@ public class EditarPerfilOrganizacion extends AppCompatActivity {
         protected Boolean doInBackground(String... strings) {
 
             try {
-                JSONObject respJSON = new JSONObject(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("https://shessag.000webhostapp.com/consultarDatosDePerfilParaEditar.php?id_contacto="+id_perfilEditar)).getEntity()));
+                JSONObject respJSON = new JSONObject(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/consultarDatosDePerfilParaEditar.php?id_contacto="+id_perfilEditar)).getEntity()));
                 JSONArray jsonArray = respJSON.getJSONArray("perfiles");
                 for (int i = 0; i < jsonArray.length(); i++) {
                     nomborg_rec = jsonArray.getJSONObject(i).getString("nombre_organizacion");

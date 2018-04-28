@@ -329,6 +329,7 @@ public class BusquedaAvanzada extends AppCompatActivity
         } else if (id == R.id.acercadeinfodos) {
             Intent intent = new Intent(this,AcercaDe.class);
             startActivity(intent);
+            finish();
         }else if (id == R.id.login) {
             if (sesion.logindim()){
                 Intent intent = new Intent(BusquedaAvanzada.this,Panel_de_Control.class);

@@ -264,7 +264,7 @@ public class PerfilDeLaOrganizacion extends AppCompatActivity implements Navigat
                 }else {
                     Intent intent = new Intent(this, Login.class);
                     startActivity(intent);
-                    finish();
+
                 }
 
             }
