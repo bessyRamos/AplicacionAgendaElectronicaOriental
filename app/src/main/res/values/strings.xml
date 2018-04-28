@@ -95,6 +95,7 @@
     <string name="error_respuesta1">Ingrese Cuál es el nombre de tu ciudad natal</string>
     <string name="error_respuesta2">Ingrese Cuál es el nombre de tu abuelo</string>
     <string name="error_respuesta3">Ingrese Cuál es tu deporte favorito</string>
+    <string name="Enviar">Enviar Ubicación</string>
 
 
 </resources>

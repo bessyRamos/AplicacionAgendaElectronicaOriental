@@ -3,6 +3,8 @@ package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVABessy;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -65,7 +67,7 @@ public class Ingresar_Ubicacion extends AppCompatActivity implements GoogleMap.O
         if (marker.equals(marcas)) {
             Toast.makeText(this, "Ubicacion Exitosa.", Toast.LENGTH_SHORT).show();
 
-            String la, lo;
+            /*String la, lo;
             la = Double.toString(marker.getPosition().latitude);
             lo = Double.toString(marker.getPosition().longitude);
 
@@ -86,8 +88,31 @@ public class Ingresar_Ubicacion extends AppCompatActivity implements GoogleMap.O
             data.putExtra("latitud", la);
             data.putExtra("longitud", lo);
             setResult(FormularioNuevaOrganizacion.RESULT_OK, data);
-            finish();
+            finish();*/
         }
     }
 
+
+    @Override
+    public boolean onCreateOptionsMenu (Menu menu){
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.enviar_ubicacion, menu);
+        return true;
+    }
+
+
+    @Override
+    public boolean onOptionsItemSelected (MenuItem item){
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        //noinspection SimplifiableIfStatement
+        if (id == R.id.send) {
+            return true;
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
 }
