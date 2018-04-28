@@ -13,7 +13,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
         <ImageView
-            android:background="#5D4037"
+            android:background="#b71c1c"
             android:layout_weight="1"
             android:layout_width="match_parent"
             android:layout_height="0dp" />
@@ -32,8 +32,8 @@
     <LinearLayout
         android:layout_marginTop="110dp"
         android:id="@+id/layoutInput"
-        android:layout_marginRight="20dp"
-        android:layout_marginLeft="20dp"
+        android:layout_marginRight="5dp"
+        android:layout_marginLeft="5dp"
         android:layout_centerHorizontal="true"
         android:background="@drawable/background_white"
         android:padding="20dp"
@@ -96,7 +96,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/olvidaste"
-            android:textColor="#662203"
+            android:textColor="#7f0000"
             android:layout_marginTop="10dp"
             android:onClick="recuperar1"/>
 
