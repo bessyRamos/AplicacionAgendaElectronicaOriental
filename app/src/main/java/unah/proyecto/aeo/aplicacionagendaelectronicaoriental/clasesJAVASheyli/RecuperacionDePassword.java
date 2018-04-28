@@ -99,7 +99,7 @@ public class RecuperacionDePassword extends AppCompatActivity {
             String nombre = idUsuario.getText().toString();
             try{
                 // Parseamos la respuesta obtenida del servidor a un objeto JSON
-                JSONObject jsonObject = new JSONObject(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("https://shessag.000webhostapp.com/recuperacion_contrasenia.php?nombre_usuario=" + nombre)).getEntity()));
+                JSONObject jsonObject = new JSONObject(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/recuperacion_contrasenia.php?nombre_usuario=Virgilio?nombre_usuario=" + nombre)).getEntity()));
                 JSONArray jsonArray = jsonObject.getJSONArray("password");
                 for(int i = 0; i < jsonArray.length(); i++) {
 
