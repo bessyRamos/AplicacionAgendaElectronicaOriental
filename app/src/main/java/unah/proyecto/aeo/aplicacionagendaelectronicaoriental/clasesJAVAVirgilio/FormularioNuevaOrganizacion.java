@@ -118,11 +118,11 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity  implements N
         latitudOrganizacion = (EditText) findViewById(R.id.txtlatitudOrganizacion);
         imageButton = findViewById(R.id.imagenOrganizacionUsuario);
 
-        latitudOrganizacion.setText("123123");  ///ingresar la latitud que el usuario selecciono
+       // latitudOrganizacion.setText("123123");  ///ingresar la latitud que el usuario selecciono
 
         longitudOrganizacion = (EditText) findViewById(R.id.txtlongitudOrganizacion);
 
-        longitudOrganizacion.setText("-123334");    //ingresar la longitud que el usuario selecciono
+       // longitudOrganizacion.setText("-123334");    //ingresar la longitud que el usuario selecciono
 
         imagenOrganizacion = (CircleImageView) findViewById(R.id.imagenDeOrganizacion);
         guardar = (FloatingActionButton) findViewById(R.id.btnGuardar);
@@ -136,6 +136,8 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity  implements N
             public void onClick(View v) {
                 Intent intent = new Intent(FormularioNuevaOrganizacion.this, Ingresar_Ubicacion.class);
 
+                //latitudOrganizacion = latitud_traida
+                //longitudOrganizacion = longitud_traida
 
                 startActivityForResult(intent,1);
 
