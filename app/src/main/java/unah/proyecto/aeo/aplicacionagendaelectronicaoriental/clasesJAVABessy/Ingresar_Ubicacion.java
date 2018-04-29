@@ -110,6 +110,28 @@ public class Ingresar_Ubicacion extends AppCompatActivity implements GoogleMap.O
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.send) {
+            String la, lo;
+            la = Double.toString(marcas.getPosition().latitude);
+            lo = Double.toString(marcas.getPosition().longitude);
+
+            Intent data = new Intent();
+            data.putExtra("latitud", la);
+            data.putExtra("longitud", lo);
+            setResult(FormularioNuevaOrganizacion.RESULT_OK, data);
+            finish();
+
+        }else if(id==R.id.send) {
+
+            String la, lo;
+            la = Double.toString(marcas.getPosition().latitude);
+            lo = Double.toString(marcas.getPosition().longitude);
+
+            Intent data = new Intent();
+            data.putExtra("latitud", la);
+            data.putExtra("longitud", lo);
+            setResult(NuevoPerfil.RESULT_OK, data);
+            finish();
+
             return true;
         }
 
