@@ -14,6 +14,7 @@
     <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
     <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.CALL_PHONE"></uses-permission>
 
     <application
         android:allowBackup="true"
@@ -102,7 +103,11 @@
             android:label="@string/title_activity_mapa" />
         <activity
             android:name=".clasesJAVAMelvin.AdministracionDePerfilesAdmin.AdministracionDePerfiles"
-            android:label="@string/title_activity_administracion_de_perfiles"></activity>
+            android:label="@string/title_activity_administracion_de_perfiles"
+            android:theme="@style/AppTheme.NoActionBar">
+
+        </activity>
+
         <activity
             android:name=".clasesJAVAMelvin.AdministracionDePerfilesAdmin.EditarPerfil"
             android:configChanges="screenSize|orientation"
@@ -114,7 +119,13 @@
         </activity>
         <activity
             android:name=".clasesJAVAMelvin.AdministracionDePerfilesAdmin.NuevasSolicitudes"
-            android:label="@string/title_activity_nuevas_solicitudes" />
+            android:label="@string/title_activity_nuevas_solicitudes"
+            android:parentActivityName=".clasesJAVAMelvin.AdministracionDePerfilesAdmin.AdministracionDePerfiles">
+            <meta-data
+                android:name="android:support.PARENT_ACTIVITY"
+                android:value=".clasesJAVAMelvin.AdministracionDePerfiles" />
+
+        </activity>
         <activity
             android:name=".clasesJAVAMelvin.AdministracionDePerfilesAdmin.PerfilesEliminados"
             android:label="@string/title_activity_perfiles_eliminados"

@@ -32,7 +32,7 @@ public class SolicitudesRechazadas extends AppCompatActivity implements Navigati
     AdaptadorMostrarPerfiles adaptadorMostrarPerfiles;
     ProgressBar barra;
     int id_contacto;
-    String nombre_organizacion, imagen;
+    String nombre_organizacion, imagen, usuariopropietario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,12 +109,13 @@ public class SolicitudesRechazadas extends AppCompatActivity implements Navigati
         protected Boolean doInBackground(String... strings) {
 
             try {
-                JSONArray respJSON = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("https://shessag.000webhostapp.com/consultarPerfilesParaAdministracionPerfiles.php?id_estado=3")).getEntity()));
+                JSONArray respJSON = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/consultarPerfilesParaAdministracionPerfiles.php?id_estado=3")).getEntity()));
                 for (int i = 0; i < respJSON.length(); i++) {
                     id_contacto = respJSON.getJSONObject(i).getInt("id_contacto");
                     nombre_organizacion = respJSON.getJSONObject(i).getString("nombre_organizacion");
                     imagen = respJSON.getJSONObject(i).getString("imagen");
-                    mostrar_perfiles.add(new Fuente_mostrarPerfiles(id_contacto, nombre_organizacion,imagen));
+                    usuariopropietario = respJSON.getJSONObject(i).getString("nombre_usuario");
+                    mostrar_perfiles.add(new Fuente_mostrarPerfiles(id_contacto, nombre_organizacion,imagen, usuariopropietario));
 
                 }
 

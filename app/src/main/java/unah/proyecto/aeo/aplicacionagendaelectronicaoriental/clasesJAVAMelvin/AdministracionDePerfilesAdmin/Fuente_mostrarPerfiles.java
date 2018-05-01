@@ -8,17 +8,27 @@ public class Fuente_mostrarPerfiles {
     private int id;
     private String perfil;
     private String imagen;
+    private String usuario;
 
-    public Fuente_mostrarPerfiles(int id, String perfil, String imagen) {
+    public Fuente_mostrarPerfiles(int id, String perfil, String imagen,String usuario) {
         this.id = id;
         this.perfil = perfil;
         this.imagen = imagen;
+        this.usuario = usuario;
     }
     public Fuente_mostrarPerfiles(){
     }
 
     public String getImagen() {
         return imagen;
+    }
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
     }
 
     public void setImagen(String imagen) {

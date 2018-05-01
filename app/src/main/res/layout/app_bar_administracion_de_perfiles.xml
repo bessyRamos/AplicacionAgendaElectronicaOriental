@@ -10,19 +10,6 @@
 
     <include layout="@layout/content_administracion_de_perfiles" />
 
-    <android.support.design.widget.FloatingActionButton
-        android:id="@+id/botonNuevoPerfil"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom|end"
-        android:layout_margin="@dimen/fab_margin"
-        app:srcCompat="@drawable/ic_add_white_24dp" />
 
-    <ProgressBar
-        android:id="@+id/progressBarPerfiles"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_gravity="center"
-        />
 
 </android.support.design.widget.CoordinatorLayout>

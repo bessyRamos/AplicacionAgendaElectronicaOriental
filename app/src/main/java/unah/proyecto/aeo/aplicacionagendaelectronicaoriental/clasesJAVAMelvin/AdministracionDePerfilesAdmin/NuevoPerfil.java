@@ -22,6 +22,9 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.util.Base64;
+
+import com.bumptech.glide.Glide;
+
 import org.json.JSONArray;
 
 import java.io.ByteArrayOutputStream;
@@ -83,6 +86,7 @@ public class NuevoPerfil extends AppCompatActivity {
         listaRegiones=new ArrayList<ModeloSpinner>();
         listaUsuarios=new ArrayList<ModeloSpinner>();
 
+
         new llenarSpinnersNuevoPerfil().execute();
 
         int permissionCheck = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE);
@@ -141,20 +145,22 @@ public class NuevoPerfil extends AppCompatActivity {
         botonGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                imagenBitmap = ((BitmapDrawable)imagenOrg.getDrawable()).getBitmap();
+                if(((BitmapDrawable)imagenOrg.getDrawable())!=null){
+                    imagenBitmap = ((BitmapDrawable)imagenOrg.getDrawable()).getBitmap();
+                    new AsyncTask<Void, Void, String>(){
+                        @Override
+                        protected String doInBackground(Void... voids) {
+                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                            imagenBitmap.compress(Bitmap.CompressFormat.JPEG,70,baos);
+                            byte b []= baos.toByteArray();
 
-                new AsyncTask<Void, Void, String>(){
-                    @Override
-                    protected String doInBackground(Void... voids) {
-                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        imagenBitmap.compress(Bitmap.CompressFormat.JPEG,70,baos);
-                        byte b []= baos.toByteArray();
+                            encodeImagen = Base64.encodeToString(b,Base64.DEFAULT);
 
-                        encodeImagen = Base64.encodeToString(b,Base64.DEFAULT);
+                            return null;
+                        }
+                    }.execute();
+                }
 
-                        return null;
-                    }
-                }.execute();
 
                 validar();
                 if (etnombreeorganizacion.getError()==null &&
@@ -165,13 +171,15 @@ public class NuevoPerfil extends AppCompatActivity {
                         etdescripcion.getError()==null &&
                         etlatitud.getError()==null &&
                         etlongitud.getError()==null) {
+                    botonGuardar.setClickable(false);
+                    Toast.makeText(getApplicationContext(),"Procesando... Espere",Toast.LENGTH_SHORT).show();
                     new crearPerfil().execute();
                 }
                /* if(etnombreeorganizacion.getText().toString().isEmpty() || etnumerofijo.getText().toString().isEmpty() || etnumerocel.getText().toString().isEmpty() ||
                         etdireccion.getText().toString().isEmpty() || etemail.getText().toString().isEmpty() || etdescripcion.getText().toString().isEmpty() ||
                         etlatitud.getText().toString().isEmpty() || etlongitud.getText().toString().isEmpty() ){
                     validar();}else {
-                    Toast.makeText(getApplicationContext(),"Procesando...",Toast.LENGTH_SHORT).show();
+
                     // Toast.makeText(getApplicationContext()," "+id_usuario,Toast.LENGTH_SHORT).show();
                     // Toast.makeText(getApplicationContext()," "+id_categoria,Toast.LENGTH_SHORT).show();
                     //Toast.makeText(getApplicationContext()," "+id_region,Toast.LENGTH_SHORT).show();
@@ -311,9 +319,9 @@ public class NuevoPerfil extends AppCompatActivity {
 
             try {
 
-                JSONArray regionesWS = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("https://shessag.000webhostapp.com/consultarRegiones.php")).getEntity()));
-                JSONArray categoriasWS = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("https://shessag.000webhostapp.com/consultarCategorias.php")).getEntity()));
-                JSONArray usuariosWS = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("https://shessag.000webhostapp.com/ConsultarTodosLosUsuarios.php")).getEntity()));
+                JSONArray regionesWS = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/consultarRegiones.php")).getEntity()));
+                JSONArray categoriasWS = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/consultarCategorias.php")).getEntity()));
+                JSONArray usuariosWS = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/ConsultarTodosLosUsuarios.php")).getEntity()));
 
                 for (int i = 0; i < regionesWS.length(); i++) {
                     listaRegiones.add(new ModeloSpinner(regionesWS.getJSONObject(i).getString("nombre_region"),Integer.parseInt(regionesWS.getJSONObject(i).getString("id_region")))
@@ -363,7 +371,7 @@ public class NuevoPerfil extends AppCompatActivity {
                 HttpPost httppost;
                 ArrayList<NameValuePair> parametros;
                 httpclient = new DefaultHttpClient();
-                httppost = new HttpPost("https://shessag.000webhostapp.com/crearPerfil.php");
+                httppost = new HttpPost("http://aeo.web-hn.com/crearPerfil.php");
                 parametros = new ArrayList<NameValuePair>();
                 parametros.add(new BasicNameValuePair("nomborg_rec",etnombreeorganizacion.getText().toString()));
                 parametros.add(new BasicNameValuePair("numtel_rec",etnumerofijo.getText().toString()));
@@ -376,14 +384,12 @@ public class NuevoPerfil extends AppCompatActivity {
                 parametros.add(new BasicNameValuePair("id_categoria",String.valueOf(id_categoria)));
                 parametros.add(new BasicNameValuePair("id_region",String.valueOf(id_region)));
                 parametros.add(new BasicNameValuePair("id_usuario",String.valueOf(id_usuario)));
-
                 parametros.add(new BasicNameValuePair("imagen",encodeImagen));
                 parametros.add(new BasicNameValuePair("nombre_imagen",etnombreeorganizacion.getText().toString().replace(" ","_") +".jpg"));
 
                 httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));
 
-
-                    httpclient.execute(httppost);
+                httpclient.execute(httppost);
 
 
 
@@ -400,13 +406,14 @@ public class NuevoPerfil extends AppCompatActivity {
 
         protected void onPostExecute(Boolean result) {
             if (resul) {
-                    Toast.makeText(getApplicationContext(),"Procesando...",Toast.LENGTH_SHORT).show();
+
                     Toast.makeText(getApplicationContext(),"Perfil Creado Correctamente",Toast.LENGTH_SHORT).show();
                     startActivity(new Intent(getApplicationContext(),AdministracionDePerfiles.class));
                     finish();
 
             }else {
                 Toast.makeText(getApplicationContext(), "Problemas de conexión", Toast.LENGTH_SHORT).show();
+                botonGuardar.setClickable(true);
             }
         }
 
