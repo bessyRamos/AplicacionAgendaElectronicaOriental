@@ -127,7 +127,7 @@ public class FormularioRegistroUsuario extends AppCompatActivity {
                 respuesta2bar_usuario = respuesta2.getText().toString();
                 respuesta3bar_usuario = respuesta3.getText().toString();
 
-                EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/insertarUsuarioRespDeSeguridad.php?nombre_usuario="+nombreusuariobar_usuario+"&nombre_propio="+nombrepropiobar_usuario+"&contrasena="+contrasenabar_usuario+"&rol="+rol_insertar_usuario+"&respuesta_uno="+respuesta1bar_usuario+"&respuesta_dos="+respuesta2bar_usuario+"&respuesta_tres="+respuesta3bar_usuario)).getEntity());
+                EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/insertarUsuarioRespDeSeguridad.php?nombre_usuario="+nombreusuariobar_usuario+"&nombre_propio="+nombrepropiobar_usuario+"&contrasena="+contrasenabar_usuario+"&respuesta_uno="+respuesta1bar_usuario+"&respuesta_dos="+respuesta2bar_usuario+"&respuesta_tres="+respuesta3bar_usuario)).getEntity());
 
                 resul = true;
 

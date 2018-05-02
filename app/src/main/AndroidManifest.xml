@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="unah.proyecto.aeo.aplicacionagendaelectronicaoriental">
+          package="unah.proyecto.aeo.aplicacionagendaelectronicaoriental">
 
     <!--
          The ACCESS_COARSE/FINE_LOCATION permissions are not required to use
          Google Maps Android API v2, but you must specify either coarse or fine
          location permissions for the 'MyLocation' functionality. 
     -->
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS" />
-    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS" />
-    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
-    <uses-permission android:name="android.permission.CALL_PHONE"></uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.WRITE_SYNC_SETTINGS"/>
+    <uses-permission android:name="android.permission.READ_SYNC_SETTINGS"/>
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.CALL_PHONE"/>
 
     <application
         android:allowBackup="true"
@@ -28,36 +28,35 @@
             android:name=".clasesJAVAAlan.ActivityCategorias"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
+                <action android:name="android.intent.action.MAIN"/>
 
-                <category android:name="android.intent.category.LAUNCHER" />
+                <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
         <activity
             android:name=".clasesJAVAMelvin.PerfilesBreves.ListaDeContactos"
             android:configChanges="screenSize|orientation"
             android:label="@string/lista_contactos"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".clasesJAVAVirgilio.AcercaDe"
             android:label="@string/acercadeapp"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".clasesJAVASheyli.PerfilDeLaOrganizacion"
             android:label="@string/apperfil"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".clasesJAVAAlan.Panel_de_Control"
             android:label="Panel de Control"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".clasesJAVAAlan.Editar_Usuarios"
             android:label="Edición de Cuenta"
             android:parentActivityName=".clasesJAVAAlan.Mostrar_Usuarios">
             <meta-data
                 android:name="android:support.PARENT_ACTIVITY"
-                android:value=".clasesJAVAAlan.Mostrar_Usuarios" />
-
+                android:value=".clasesJAVAAlan.Mostrar_Usuarios"/>
         </activity>
         <activity
             android:name=".clasesJAVAAlan.Mostrar_Usuarios"
@@ -65,26 +64,25 @@
             android:parentActivityName=".clasesJAVAAlan.Panel_de_Control">
             <meta-data
                 android:name="android:support.PARENT_ACTIVITY"
-                android:value=".clasesJAVAAlan.Panel_de_Control" />
+                android:value=".clasesJAVAAlan.Panel_de_Control"/>
         </activity>
         <activity
             android:name=".clasesJAVAVirgilio.Login"
             android:label="@string/login"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".clasesJAVAVirgilio.FormularioRegistroLogin"
             android:label="Formulario de Registro"
             android:parentActivityName=".clasesJAVAAlan.Mostrar_Usuarios">
             <meta-data
                 android:name="android:support.PARENT_ACTIVITY"
-                android:value=".clasesJAVAAlan.Mostrar_Usuarios" />
-
+                android:value=".clasesJAVAAlan.Mostrar_Usuarios"/>
         </activity>
         <activity
             android:name=".clasesJAVAMelvin.HerramientaBusquedaAvanzada.BusquedaAvanzada"
             android:configChanges="screenSize|orientation"
             android:label="Búsqueda Avanzada"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"/>
 
         <!--
              The API key for Google Maps-based APIs is defined as a string resource.
@@ -96,18 +94,16 @@
         -->
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_maps_key" />
+            android:value="@string/google_maps_key"/>
 
         <activity
             android:name=".clasesJAVABessy.Mapa"
-            android:label="@string/title_activity_mapa" />
+            android:label="@string/title_activity_mapa"/>
         <activity
             android:name=".clasesJAVAMelvin.AdministracionDePerfilesAdmin.AdministracionDePerfiles"
             android:label="@string/title_activity_administracion_de_perfiles"
             android:theme="@style/AppTheme.NoActionBar">
-
         </activity>
-
         <activity
             android:name=".clasesJAVAMelvin.AdministracionDePerfilesAdmin.EditarPerfil"
             android:configChanges="screenSize|orientation"
@@ -115,7 +111,7 @@
             android:parentActivityName=".clasesJAVAMelvin.AdministracionDePerfilesAdmin.AdministracionDePerfiles">
             <meta-data
                 android:name="android:support.PARENT_ACTIVITY"
-                android:value=".clasesJAVAMelvin.AdministracionDePerfiles" />
+                android:value=".clasesJAVAMelvin.AdministracionDePerfiles"/>
         </activity>
         <activity
             android:name=".clasesJAVAMelvin.AdministracionDePerfilesAdmin.NuevasSolicitudes"
@@ -123,8 +119,7 @@
             android:parentActivityName=".clasesJAVAMelvin.AdministracionDePerfilesAdmin.AdministracionDePerfiles">
             <meta-data
                 android:name="android:support.PARENT_ACTIVITY"
-                android:value=".clasesJAVAMelvin.AdministracionDePerfiles" />
-
+                android:value=".clasesJAVAMelvin.AdministracionDePerfiles"/>
         </activity>
         <activity
             android:name=".clasesJAVAMelvin.AdministracionDePerfilesAdmin.PerfilesEliminados"
@@ -132,7 +127,7 @@
             android:parentActivityName=".clasesJAVAMelvin.AdministracionDePerfilesAdmin.AdministracionDePerfiles">
             <meta-data
                 android:name="android:support.PARENT_ACTIVITY"
-                android:value=".clasesJAVAMelvin.AdministracionDePerfiles" />
+                android:value=".clasesJAVAMelvin.AdministracionDePerfiles"/>
         </activity>
         <activity
             android:name=".clasesJAVAMelvin.AdministracionDePerfilesAdmin.SolicitudesRechazadas"
@@ -140,12 +135,11 @@
             android:parentActivityName=".clasesJAVAMelvin.AdministracionDePerfilesAdmin.AdministracionDePerfiles">
             <meta-data
                 android:name="android:support.PARENT_ACTIVITY"
-                android:value=".clasesJAVAMelvin.AdministracionDePerfiles" />
+                android:value=".clasesJAVAMelvin.AdministracionDePerfiles"/>
         </activity>
         <activity
             android:name=".clasesJAVAMelvin.AdministracionDePerfilesAdmin.NuevoPerfil"
             android:label="@string/title_activity_nuevo_perfil">
-
         </activity>
         <activity
             android:name=".clasesJAVASheyli.RecuperacionDePassword"
@@ -153,31 +147,32 @@
             android:parentActivityName=".clasesJAVAVirgilio.Login">
             <meta-data
                 android:name="android:support.PARENT_ACTIVITY"
-                android:value=".clasesJAVAVirgilio.Login" />
+                android:value=".clasesJAVAVirgilio.Login"/>
         </activity>
 
         <service android:name=".sync.AuthenticatorService">
             <intent-filter>
-                <action android:name="android.accounts.AccountAuthenticator" />
+                <action android:name="android.accounts.AccountAuthenticator"/>
             </intent-filter>
+
             <meta-data
                 android:name="android.accounts.AccountAuthenticator"
-                android:resource="@xml/authenticator" />
+                android:resource="@xml/authenticator"/>
         </service>
-
-        <service android:name=".sync.SyncService"
+        <service
+            android:name=".sync.SyncService"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.content.SyncAdapter"/>
             </intent-filter>
+
             <meta-data
                 android:name="android.content.SyncAdapter"
                 android:resource="@xml/syncadapter"/>
-
         </service>
 
         <provider
-            android:name="unah.proyecto.aeo.aplicacionagendaelectronicaoriental.provider.AEOContentProvider"
+            android:name=".provider.AEOContentProvider"
             android:authorities="unah.proyecto.aeo.aplicacionagendaelectronicaoriental"
             android:exported="false"
             android:syncable="true"/>
@@ -186,33 +181,33 @@
             android:name=".clasesJAVAVirgilio.EditarUsuario"
             android:label="Editar Cuenta"
             android:theme="@style/AppTheme.NoActionBar"/>
-        <activity android:name=".clasesJAVAVirgilio.FormularioRegistroUsuario"
-                    android:label="Formulario de Registro"
-                  android:parentActivityName=".clasesJAVAVirgilio.Login">
+        <activity
+            android:name=".clasesJAVAVirgilio.FormularioRegistroUsuario"
+            android:label="Formulario de Registro"
+            android:parentActivityName=".clasesJAVAVirgilio.Login">
             <meta-data
                 android:name="android:support.PARENT_ACTIVITY"
-                android:value=".clasesJAVAVirgilio.Login" />
-
-        </activity> <activity
+                android:value=".clasesJAVAVirgilio.Login"/>
+        </activity>
+        <activity
             android:name=".clasesJAVAVirgilio.PanelDeControlUsuarios"
             android:label="Panel de Control"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"/>
         <activity
             android:name=".clasesJAVABessy.Ingresar_Ubicacion"
-            android:label="@string/title_activity_ingresar__ubicacion"></activity>
-
-
-     <activity android:name=".clasesJAVAVirgilio.FormularioNuevaOrganizacion"
-               android:label="Registro Contacto"
-               android:theme="@style/AppTheme.NoActionBar">
-     </activity>
-
-        <activity android:name=".clasesJAVAVirgilio.EditarPerfilOrganizacion"
-                  android:label="Editar Contacto"
-                  android:theme="@style/AppTheme.NoActionBar">
+            android:label="@string/title_activity_ingresar__ubicacion"/>
+        <activity
+            android:name=".clasesJAVAVirgilio.FormularioNuevaOrganizacion"
+            android:label="Registro Contacto"
+            android:theme="@style/AppTheme.NoActionBar">
         </activity>
-
-
+        <activity
+            android:name=".clasesJAVAVirgilio.EditarPerfilOrganizacion"
+            android:label="Editar Contacto"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+        <activity android:name=".clasesJAVAVirgilio.VerContactoOrganizacion">
+        </activity>
     </application>
 
 </manifest>
