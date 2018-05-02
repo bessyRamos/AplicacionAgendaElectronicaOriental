@@ -37,7 +37,7 @@ public class NuevasSolicitudes extends AppCompatActivity
     AdaptadorMostrarPerfiles adaptadorMostrarPerfiles;
     ProgressBar barra;
     int id_contacto;
-    String nombre_organizacion;
+    String nombre_organizacion,usuariopropietario, imagen;
     private int perfilselecionado = -1;
     int idperf;
 
@@ -45,6 +45,7 @@ public class NuevasSolicitudes extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nuevas_solicitudes);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         barra = findViewById(R.id.progressBarPerfilesPendientes);
         mostrar_perfiles= new ArrayList<Fuente_mostrarPerfiles>();
         lista = (ListView) findViewById(R.id.listviewperfilesPendientes);
@@ -148,11 +149,14 @@ public class NuevasSolicitudes extends AppCompatActivity
         protected Boolean doInBackground(String... strings) {
 
             try {
-                JSONArray respJSON = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("https://shessag.000webhostapp.com/consultarPerfilesParaAdministracionPerfiles.php?id_estado=1")).getEntity()));
+                JSONArray respJSON = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/consultarPerfilesParaAdministracionPerfiles.php?id_estado=1")).getEntity()));
                 for (int i = 0; i < respJSON.length(); i++) {
                     id_contacto = respJSON.getJSONObject(i).getInt("id_contacto");
                     nombre_organizacion = respJSON.getJSONObject(i).getString("nombre_organizacion");
-                    //mostrar_perfiles.add(new Fuente_mostrarPerfiles(id_contacto, nombre_organizacion));
+                    imagen = respJSON.getJSONObject(i).getString("imagen");
+                    usuariopropietario = respJSON.getJSONObject(i).getString("nombre_usuario");
+
+                    mostrar_perfiles.add(new Fuente_mostrarPerfiles(id_contacto, nombre_organizacion,imagen,usuariopropietario));
 
                 }
 
@@ -205,7 +209,7 @@ public class NuevasSolicitudes extends AppCompatActivity
                 Fuente_mostrarPerfiles perf = mostrar_perfiles.get(perfilselecionado);
                 idperf=perf.getId();
                 //se ejecuta la consulta al webservice y se pasa el id del perfil seleccionado
-                EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("https://shessag.000webhostapp.com/aceptarSolicitud.php?id_contacto="+idperf)).getEntity());
+                EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/aceptarSolicitud.php?id_contacto="+idperf)).getEntity());
                 resul = true;
             } catch (Exception ex) {
                 Log.e("ServicioRest", "Error!", ex);
@@ -242,7 +246,7 @@ public class NuevasSolicitudes extends AppCompatActivity
                 Fuente_mostrarPerfiles perf = mostrar_perfiles.get(perfilselecionado);
                 idperf=perf.getId();
                 //se ejecuta la consulta al webservice y se pasa el id del perfil seleccionado
-                EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("https://shessag.000webhostapp.com/rechazarSolicitud.php?id_contacto="+idperf)).getEntity());
+                EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/rechazarSolicitud.php?id_contacto="+idperf)).getEntity());
                 resul = true;
             } catch (Exception ex) {
                 Log.e("ServicioRest", "Error!", ex);

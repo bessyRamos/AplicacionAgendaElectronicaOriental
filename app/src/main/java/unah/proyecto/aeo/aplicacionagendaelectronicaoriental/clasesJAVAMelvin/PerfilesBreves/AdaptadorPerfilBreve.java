@@ -1,14 +1,20 @@
 package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.PerfilesBreves;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.net.Uri;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -26,6 +32,7 @@ public class AdaptadorPerfilBreve extends RecyclerView.Adapter<AdaptadorPerfilBr
 
     Cursor dataCursor;
     Context context;
+    private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE=1;
 
 
     public  class ViewHolder extends RecyclerView.ViewHolder{
@@ -43,6 +50,18 @@ public class AdaptadorPerfilBreve extends RecyclerView.Adapter<AdaptadorPerfilBr
             direccionPerfilBreve = (TextView) itemView.findViewById(R.id.direccion_organizacion);
             id_perfilBreve = (TextView) itemView.findViewById(R.id.id_Deorganizacion);
 
+            numeroTelefonoPerfilBreve.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                    Intent i = new Intent(Intent.ACTION_DIAL);
+                    String p = "tel:" + numeroTelefonoPerfilBreve.getText().toString();
+                    i.setData(Uri.parse(p));
+                    context.startActivity(i);
+
+                }
+            });
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -57,7 +76,9 @@ public class AdaptadorPerfilBreve extends RecyclerView.Adapter<AdaptadorPerfilBr
                 }
             });
         }
+
     }
+
 
 
 

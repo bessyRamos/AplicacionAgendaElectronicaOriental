@@ -1,9 +1,7 @@
 package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.drawable.BitmapDrawable;
@@ -11,20 +9,14 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.provider.MediaStore;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.NavigationView;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
-import android.support.v4.view.GravityCompat;
-import android.support.v4.widget.DrawerLayout;
-import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
@@ -47,15 +39,11 @@ import cz.msebera.android.httpclient.message.BasicNameValuePair;
 import cz.msebera.android.httpclient.util.EntityUtils;
 import de.hdodenhof.circleimageview.CircleImageView;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.ActivityCategorias;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.Panel_de_Control;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVABessy.Ingresar_Ubicacion;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.AdministracionDePerfilesAdmin.AdaptadorPersonalizadoSpinner;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.AdministracionDePerfilesAdmin.EditarPerfil;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.AdministracionDePerfilesAdmin.ModeloSpinner;
 
-
-public class EditarPerfilOrganizacion extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
+public class EditarPerfilOrganizacion extends AppCompatActivity {
 
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1 ;
 
@@ -92,12 +80,6 @@ public class EditarPerfilOrganizacion extends AppCompatActivity implements Navig
 
     String encodeImagen;
     int id_usuario_resibido_usuario;
-
-    //preferencias
-    private Sesion sesion;
-    private SesionUsuario sesionUsuario;
-    int id_usu=-1;
-    //
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,12 +102,8 @@ public class EditarPerfilOrganizacion extends AppCompatActivity implements Navig
         listaCategorias=new ArrayList<ModeloSpinner>();
         listaRegiones=new ArrayList<ModeloSpinner>();
 
-        //envio de clase actual para las preferencias
-        sesion = new Sesion(this);
-        sesionUsuario = new SesionUsuario(this);
-        SharedPreferences preferences = getSharedPreferences("credencial", Context.MODE_PRIVATE);
-        id_usu  = preferences.getInt("usuario_ingreso",id_usu);
-        //
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
 
 
         if (getIntent().getExtras()!=null){
@@ -234,97 +212,7 @@ public class EditarPerfilOrganizacion extends AppCompatActivity implements Navig
 
             }
         });
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
-    }
-    @Override
-    public void onBackPressed() {
-
-            super.onBackPressed();
-
-    }
-
-
-
-    @SuppressWarnings("StatementWithEmptyBody")
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.principaldos) {
-            startActivity(new Intent(getBaseContext(), ActivityCategorias.class)
-                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP));
-            finish();
-
-        } else if (id == R.id.acercadeinfodos) {
-            Intent intent = new Intent(this,AcercaDe.class);
-            startActivity(intent);
-            finish();
-
-        }else if (id == R.id.login) {
-
-            if (sesion.logindim()){
-                Intent intent = new Intent(EditarPerfilOrganizacion.this,Panel_de_Control.class);
-                intent.putExtra("usuario_ingreso",id_usu);
-                //startActivity(new Intent(PanelDeControlUsuarios.this,Panel_de_Control.class));
-                startActivity(intent);
-                finish();
-            }else{
-                if (sesionUsuario.logindimUsuario()){
-                    Intent intent = new Intent(EditarPerfilOrganizacion.this,PanelDeControlUsuarios.class);
-                    intent.putExtra("id",id_usu);
-                    //startActivity(new Intent(PanelDeControlUsuarios.this,PanelDeControlUsuarios.class));
-                    startActivity(intent);
-                    finish();
-                }else {
-                    Intent intent = new Intent(this, Login.class);
-                    startActivity(intent);
-                    finish();
-                }
-
-            }
-
-        }else if (id ==R.id.cerrarsecion){
-            //cerrar secion y borrado de preferencias
-            if (sesion.logindim()) {
-                sesion.setLogin(false);
-                startActivity(new Intent(this, Login.class));
-                finish();
-            }else {
-                //cerrar secion y borrado de preferencias
-                if(sesionUsuario.logindimUsuario()){
-                    sesionUsuario.setLoginUsuario(false);
-                    startActivity(new Intent(this, Login.class));
-                    finish();
-                }
-            }
-
-        }else if (id == R.id.ediciondeCuenta){
-            Intent intent = new Intent(this,EditarUsuario.class);
-            if (getIntent().getExtras()!=null){
-                id_usuario_resibido_usuario = getIntent().getExtras().getInt("id");
-
-                intent.putExtra("id",id_usuario_resibido_usuario);
-                startActivity(intent);
-
-            }else {
-                Toast.makeText(getApplicationContext(),"Error en id de usuario",Toast.LENGTH_SHORT).show();
-            }
-
-
-        }
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
     }
     public void guardarUbicacionOrganizacion(View v){
         Intent ubicacion1 = new Intent(getApplicationContext(), Ingresar_Ubicacion.class);
@@ -371,6 +259,12 @@ public class EditarPerfilOrganizacion extends AppCompatActivity implements Navig
         }
     }
 
+    @Override
+    public void onBackPressed() {
+
+        super.onBackPressed();
+
+    }
 
     private void validar(){
 

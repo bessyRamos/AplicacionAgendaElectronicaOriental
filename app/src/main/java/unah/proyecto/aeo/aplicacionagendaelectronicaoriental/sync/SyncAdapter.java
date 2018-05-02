@@ -109,7 +109,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
         /* **********************************************************************************
         *                       OPERACIONES PARA SINCRONIZAR PERFILES                        *
         *************************************************************************************/
-        final String rssFeedEndpoint = "https://shessag.000webhostapp.com/ParaSincronizarPerfiles.php";
+        final String rssFeedEndpoint = "http://aeo.web-hn.com/ParaSincronizarPerfiles.php";
 
 
         // We need to collect all the network items in a hash table
@@ -245,7 +245,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
          /* **********************************************************************************
         *                       OPERACIONES PARA SINCRONIZAR CATEGORIAS                     *
         *************************************************************************************/
-        final String rssFeedEndpointCategorias = "https://shessag.000webhostapp.com/ParaSincronizarCategorias.php";
+        final String rssFeedEndpointCategorias = "http://aeo.web-hn.com/ParaSincronizarCategorias.php";
         Map<String, Categoria> networkEntriesCategoria = new HashMap<>();
 
         // Parse the pretend json news feed
@@ -336,7 +336,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
          /* **********************************************************************************
         *                       OPERACIONES PARA SINCRONIZAR REGIONES                      *
         *************************************************************************************/
-        final String rssFeedEndpointRegiones= "https://shessag.000webhostapp.com/ParaSincronizarRegiones.php";
+        final String rssFeedEndpointRegiones= "http://aeo.web-hn.com/ParaSincronizarRegiones.php";
         Map<String, Region> networkEntriesRegion = new HashMap<>();
 
         // Parse the pretend json news feed

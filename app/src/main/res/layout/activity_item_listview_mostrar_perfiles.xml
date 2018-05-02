@@ -22,7 +22,6 @@
             android:layout_height="100dp"
             android:layout_weight="2.1"
             android:layout_marginLeft="10dp"
-            android:layout_gravity="center_vertical"
             android:src="@drawable/iconocontactowhite"/>
 
         <LinearLayout
@@ -31,9 +30,7 @@
             android:orientation="vertical"
             android:layout_weight="1"
             android:layout_gravity="center_vertical"
-            android:layout_marginRight="5dp"
-
-            >
+            android:layout_marginRight="5dp">
 
             <TextView
                 android:id="@+id/mostrarperfiles"
@@ -41,29 +38,34 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
                 android:layout_weight="1"
+                android:gravity="center"
                 android:textColor="@color/cardview_dark_background"
                 android:textStyle="bold"
                 android:text="Perfil"
-                android:textSize="20sp"
+                android:textSize="20sp"/>
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Usuario propietario:"
                 android:gravity="center"
-                android:maxLines="1"/>
-
-
-    <TextView
-        android:id="@+id/id_mostrarperfiles"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="id"
-        android:textStyle="bold"
-        android:gravity="center"
-        android:maxLines="1"
-        android:visibility="invisible"
-        android:textColor="#ffffff"
-        android:textSize="1sp" />
-
-
-
+                android:layout_marginTop="10dp"
+                />
+            <TextView
+                android:id="@+id/uspropietario"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="usuario propietario"
+                android:gravity="center"
+                android:textStyle="bold"
+                />
+            <TextView
+                android:id="@+id/id_mostrarperfiles"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="id"
+                android:textStyle="bold"
+                android:visibility="invisible" />
+        </LinearLayout>
     </LinearLayout>
-</LinearLayout>
 
 </LinearLayout>

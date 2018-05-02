@@ -42,41 +42,26 @@ import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVABessy.Ingresar_Ubicacion;
 
 public class EditarPerfil extends AppCompatActivity {
-    private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1 ;
 
-    int id_perfilEditar;
+    /**********************************************************************************************
+    *                                       DECLARACIÓN DE VARIABLES
+    **********************************************************************************************/
+    private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1 ;
+    int id_perfilEditar, idregion_rec, idcategoria_rec, i=0, id_categoria, id_region ;
     Bitmap imagenBitmap;
     CircleImageView imagenOrg;
-    FloatingActionButton botonFoto;
-    FloatingActionButton botonGuardar;
+    FloatingActionButton botonFoto, botonGuardar;
     TextInputEditText etnombreeorganizacion, etnumerofijo, etnumerocel, etdireccion, etemail, etdescripcion, etlatitud, etlongitud;
     Spinner spcategorias, spregiones;
-    //variables que almacenaran los datos traidos del webservice
-    String nomborg_rec ;
-    String numtel_rec ;
-    String numcel_rec ;
-    String direccion_rec ;
-    String email_rec ;
-    String desc_rec ;
-    String lati_rec ;
-    String longitud_rec ;
-    String imagen_rec ;
-    int idregion_rec ;
-    int idcategoria_rec ;
-    int i=0;
-    boolean editarFoto=false;
-    //controla si existe imagen en el contacto traido desde el webservice
-    boolean tieneImagen;
-    //
+    String nomborg_rec, numtel_rec, numcel_rec, direccion_rec, email_rec, desc_rec, lati_rec, longitud_rec, imagen_rec, encodeImagen ;
+    boolean editarFoto = false, tieneImagen;
     ArrayList<ModeloSpinner> listaCategorias, listaRegiones;
-
-    int id_categoria, id_region;
-
     private static final int PICK_IMAGE = 100;
     Uri imageUri;
 
-    String encodeImagen;
-
+    /**********************************************************************************************
+     *                                       ONCREATE
+     **********************************************************************************************/
 
 
     @Override
@@ -190,6 +175,7 @@ public class EditarPerfil extends AppCompatActivity {
                         etdescripcion.getError()==null &&
                         etlatitud.getError()==null &&
                         etlongitud.getError()==null) {
+                    botonGuardar.setClickable(false);
 
                     Toast.makeText(getApplicationContext(),"Procesando... Por favor espere",Toast.LENGTH_SHORT).show();
                     i ++;
@@ -201,12 +187,19 @@ public class EditarPerfil extends AppCompatActivity {
 
     }
 
+    /**********************************************************************************************
+     *                         MÉTODO PARA OBTENER LA UBICACIÓN
+     **********************************************************************************************/
+
     public  void  guardarUbicacionOrganizacion(View view){
 
         Intent ubicacion1 = new Intent(getApplicationContext(),Ingresar_Ubicacion.class);
         startActivityForResult(ubicacion1,1);
     }
 
+    /**********************************************************************************************
+     *               MÉTODO PARA ADQUIRIR PERMISOS PARA LEER ALMACENAMIENTO
+     **********************************************************************************************/
     public void requestRead() {
         if (ContextCompat.checkSelfPermission(this,
                 Manifest.permission.READ_EXTERNAL_STORAGE)
@@ -219,6 +212,10 @@ public class EditarPerfil extends AppCompatActivity {
             openGallery();
         }
     }
+
+    /**********************************************************************************************
+     *           MÉTODO PARA TOMAR ACCIONES A PARTIR DE PERMISO
+     **********************************************************************************************/
 
     @Override
     public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
@@ -235,10 +232,18 @@ public class EditarPerfil extends AppCompatActivity {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
     }
 
+    /**********************************************************************************************
+     *                   MÉTODO PARA ABRIR  GALERÍA
+     **********************************************************************************************/
+
     private void openGallery(){
         Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
         startActivityForResult(gallery, PICK_IMAGE);
     }
+
+    /**********************************************************************************************
+     *            MÉTODO QUE EJECUTA CCIONES A PARTIR DE RESULTADOS DE ACTIVITIES
+     **********************************************************************************************/
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         if(resultCode == RESULT_OK && requestCode == PICK_IMAGE){
             imageUri = data.getData();
@@ -261,6 +266,10 @@ public class EditarPerfil extends AppCompatActivity {
         super.onBackPressed();
 
     }
+
+    /**********************************************************************************************
+     *                                  MÉTODO PARA VALIDAR LOS CAMPOS
+     **********************************************************************************************/
 
     private void validar(){
 
@@ -319,6 +328,10 @@ public class EditarPerfil extends AppCompatActivity {
 
     }
 
+    /**********************************************************************************************
+     *         CLASE ASÍNCRONA PARA LLENAR LOS EDITTEXT CON LOS DATOS DESDE WEBSERVICE
+     **********************************************************************************************/
+
     private class llenarEditTexEditarPerfil extends AsyncTask<String, Integer, Boolean> {
         private llenarEditTexEditarPerfil(){}
         boolean resul = true;
@@ -327,7 +340,7 @@ public class EditarPerfil extends AppCompatActivity {
         protected Boolean doInBackground(String... strings) {
 
             try {
-                JSONObject respJSON = new JSONObject(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("https://shessag.000webhostapp.com/consultarDatosDePerfilParaEditar.php?id_contacto="+id_perfilEditar)).getEntity()));
+                JSONObject respJSON = new JSONObject(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/consultarDatosDePerfilParaEditar.php?id_contacto="+id_perfilEditar)).getEntity()));
                 JSONArray jsonArray = respJSON.getJSONArray("perfiles");
                 for (int i = 0; i < jsonArray.length(); i++) {
                     nomborg_rec = jsonArray.getJSONObject(i).getString("nombre_organizacion");
@@ -389,6 +402,10 @@ public class EditarPerfil extends AppCompatActivity {
         }
     }
 
+    /**********************************************************************************************
+     *         CLASE ASÍNCRONA PARA ACTUALIZAR EL PERFIL
+     **********************************************************************************************/
+
 
 
     private class actualizarPerfil extends AsyncTask<String, Integer, Boolean> {
@@ -404,7 +421,7 @@ public class EditarPerfil extends AppCompatActivity {
                 HttpPost httppost;
                 ArrayList<NameValuePair> parametros;
                 httpclient = new DefaultHttpClient();
-                httppost = new HttpPost("https://shessag.000webhostapp.com/actualizarPerfil.php");
+                httppost = new HttpPost("http://aeo.web-hn.com/actualizarPerfil.php");
                 parametros = new ArrayList<NameValuePair>();
                 parametros.add(new BasicNameValuePair("id_contacto", String.valueOf(id_perfilEditar)));
                 parametros.add(new BasicNameValuePair("nomborg_rec",etnombreeorganizacion.getText().toString()));
@@ -450,10 +467,15 @@ public class EditarPerfil extends AppCompatActivity {
 
             }else {
                 Toast.makeText(getApplicationContext(), "Problemas de conexión", Toast.LENGTH_SHORT).show();
+                botonGuardar.setClickable(true);
             }
         }
 
     }
+
+    /**********************************************************************************************
+     *         CLASE ASÍNCRONA PARA LLENAR LOS SPINNERS CON DATOS DE WEBSERVICE
+     **********************************************************************************************/
 
 
     private class llenarSpinnersPerfil extends AsyncTask<String, Integer, Boolean> {
@@ -465,8 +487,8 @@ public class EditarPerfil extends AppCompatActivity {
 
             try {
 
-                JSONArray regionesWS = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("https://shessag.000webhostapp.com/consultarRegiones.php")).getEntity()));
-                JSONArray categoriasWS = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("https://shessag.000webhostapp.com/consultarCategorias.php")).getEntity()));
+                JSONArray regionesWS = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/consultarRegiones.php")).getEntity()));
+                JSONArray categoriasWS = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/consultarCategorias.php")).getEntity()));
 
                 for (int i = 0; i < regionesWS.length(); i++) {
                     listaRegiones.add(new ModeloSpinner(regionesWS.getJSONObject(i).getString("nombre_region"),Integer.parseInt(regionesWS.getJSONObject(i).getString("id_region")))

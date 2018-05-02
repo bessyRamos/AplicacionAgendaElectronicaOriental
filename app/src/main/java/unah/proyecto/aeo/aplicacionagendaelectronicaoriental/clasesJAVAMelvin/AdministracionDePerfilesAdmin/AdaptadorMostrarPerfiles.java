@@ -52,16 +52,19 @@ public class AdaptadorMostrarPerfiles extends BaseAdapter {
 
         TextView textid = (TextView)v.findViewById(R.id.id_mostrarperfiles);
         TextView textnombre = (TextView)v.findViewById(R.id.mostrarperfiles);
+        TextView textusuario = (TextView)v.findViewById(R.id.uspropietario);
+
         CircleImageView icono = v.findViewById(R.id.iconoDeContactoEnAdministrador);
 
         if(!perfiles.get(i).getImagen().isEmpty()){
             Glide.with(context).load(perfiles.get(i).getImagen()).into(icono);
         }else {
-            Glide.with(context).load(R.drawable.iconocontactowhite).into(icono);
+            icono.setImageResource(R.drawable.iconocontactowhite);
         }
 
         textid.setText(""+perfiles.get(i).getId());
         textnombre.setText(perfiles.get(i).getPerfil());
+        textusuario.setText(perfiles.get(i).getUsuario());
 
         return v;
     }
