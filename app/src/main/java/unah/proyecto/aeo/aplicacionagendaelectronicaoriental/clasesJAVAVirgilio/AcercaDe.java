@@ -60,11 +60,8 @@ public class AcercaDe extends AppCompatActivity implements NavigationView.OnNavi
         sesion = new Sesion(this);
         sesionUsuario = new SesionUsuario(this);
         SharedPreferences preferences = getSharedPreferences("credencial", Context.MODE_PRIVATE);
-
-            id_usu  = preferences.getInt("usuario_ingreso",id_usu);
-
-
-
+        id_usu  = preferences.getInt("usuario_ingreso",id_usu);
+        //
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);

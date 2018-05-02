@@ -210,7 +210,7 @@ public class FormularioRegistroLogin extends AppCompatActivity {
         protected Boolean doInBackground(String... strings) {
 
             try {
-                JSONArray respJSON = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("https://shessag.000webhostapp.com/consultar_los_roles.php")).getEntity()));
+                JSONArray respJSON = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/consultar_los_roles.php")).getEntity()));
 
                 for (int i = 0; i < respJSON.length(); i++) {
                     String roles ;
@@ -256,7 +256,7 @@ public class FormularioRegistroLogin extends AppCompatActivity {
                 respuesta2bar_usuario = respuesta2.getText().toString();
                 respuesta3bar_usuario = respuesta3.getText().toString();
 
-                EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("https://shessag.000webhostapp.com/insertarUsuarioRespDeSeguridad.php?nombre_usuario="+nombreusuariobar+"&nombre_propio="+nombrepropiobar+"&contrasena="+contrasenabar+"&rol="+id_rol+"&respuesta_uno="+respuesta1bar_usuario+"&respuesta_dos="+respuesta2bar_usuario+"&respuesta_tres="+respuesta3bar_usuario)).getEntity());
+                EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/insertarUsuarioRespDeSeguridad.php?nombre_usuario="+nombreusuariobar+"&nombre_propio="+nombrepropiobar+"&contrasena="+contrasenabar+"&rol="+id_rol+"&respuesta_uno="+respuesta1bar_usuario+"&respuesta_dos="+respuesta2bar_usuario+"&respuesta_tres="+respuesta3bar_usuario)).getEntity());
 
                 resul = true;
 

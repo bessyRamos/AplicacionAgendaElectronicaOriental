@@ -448,14 +448,14 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity  implements N
                 HttpPost httppost;
                 ArrayList<NameValuePair> parametros;
                 httpclient = new DefaultHttpClient();
-                httppost = new HttpPost("https://shessag.000webhostapp.com/insertarPerfilUsuario.php");
+                httppost = new HttpPost("http://aeo.web-hn.com/insertarPerfilUsuario.php");
                 parametros = new ArrayList<NameValuePair>();
                 parametros.add(new BasicNameValuePair("nomborg_rec",nombreOrganizacion.getText().toString()));
                 parametros.add(new BasicNameValuePair("numtel_rec",telefonoFijo.getText().toString()));
                 parametros.add(new BasicNameValuePair("numcel_rec",telefonoCelular.getText().toString()));
                 parametros.add(new BasicNameValuePair("direccion_rec",direccionOrganizacion.getText().toString()));
-                parametros.add(new BasicNameValuePair("email_rec",emailOrganizacion.getText().toString()));
                 parametros.add(new BasicNameValuePair("desc_rec",descrpcionOrganizacion.getText().toString()));
+                parametros.add(new BasicNameValuePair("email_rec",emailOrganizacion.getText().toString()));
                // parametros.add(new BasicNameValuePair("lat_rec",latitudOrganizacion.getText().toString()));
 
                 parametros.add(new BasicNameValuePair("lat_rec",(String.valueOf(latitudResibida))));
@@ -474,13 +474,7 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity  implements N
 
                 httpclient.execute(httppost);
 
-               /* EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("?id_contacto="+id_perfilEditar
-                        +"&nomborg_rec="+etnombreeorganizacion.getText().toString().replace(" ","%20")+
-                        "&numtel_rec="+etnumerofijo.getText().toString()+"&numcel_rec="+etnumerocel.getText().toString()+"&direccion_rec="+
-                        etdireccion.getText().toString().replace(" ","%20")+"&email_rec="+etemail.getText().toString()+"&desc_rec="
-                        +etdescripcion.getText().toString().replace(" ","%20")+"&lat_rec="+etlatitud.getText().toString()+
-                        "&longitud_rec="+etlongitud.getText().toString().replace("-","%2D")+"&id_categoria="+id_categoria+"&id_region="+id_region+"&imagen_rec="+  encodeImagen.toString())).getEntity());
-                */
+
                 resul = true;
             } catch (Exception ex) {
                 Log.e("ServicioRest", "Error!", ex);
@@ -497,7 +491,6 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity  implements N
                 if (nombreOrganizacion.getError()==null && telefonoFijo.getError()==null && telefonoCelular.getError()==null && direccionOrganizacion.getError()==null && emailOrganizacion.getError()==null && descrpcionOrganizacion.getError()==null && latitudOrganizacion.getError()==null && longitudOrganizacion.getError()==null){
                     Toast.makeText(getApplicationContext(),"Perfil Creado Correctamente",Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(FormularioNuevaOrganizacion.this,PanelDeControlUsuarios.class);
-                    //startActivity(new Intent(FormularioNuevaOrganizacion.this,PanelDeControlUsuarios.class));
                     intent.putExtra("id",id_usuario);
                     startActivity(intent);
                     finish();
@@ -520,8 +513,8 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity  implements N
 
             try {
 
-                JSONArray regionesWS = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("https://shessag.000webhostapp.com/consultarRegiones.php")).getEntity()));
-                JSONArray categoriasWS = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("https://shessag.000webhostapp.com/consultarCategorias.php")).getEntity()));
+                JSONArray regionesWS = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/consultarRegiones.php")).getEntity()));
+                JSONArray categoriasWS = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/consultarCategorias.php")).getEntity()));
                 //JSONArray usuariosWS = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("https://shessag.000webhostapp.com/ConsultarTodosLosUsuarios.php")).getEntity()));
 
                 for (int i = 0; i < regionesWS.length(); i++) {
