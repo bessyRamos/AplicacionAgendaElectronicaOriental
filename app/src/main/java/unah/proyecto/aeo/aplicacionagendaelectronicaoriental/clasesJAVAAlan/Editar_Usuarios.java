@@ -143,7 +143,7 @@ public class Editar_Usuarios extends AppCompatActivity {
                 nombrepropiobar=nombrepropio.getText().toString().replace(" ","%20");
                 contrasenabar=contrasena.getText().toString();
 
-                EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("https://shessag.000webhostapp.com/actualizacion_de_un_usuario.php?id_usuario="+usuarioEditar+"&nombre_usuario="+nombreusuariobar+"&nombre_propio="+nombrepropiobar+"&contrasena="+contrasenabar)).getEntity());
+                EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/actualizacion_de_un_usuario.php?id_usuario="+usuarioEditar+"&nombre_usuario="+nombreusuariobar+"&nombre_propio="+nombrepropiobar+"&contrasena="+contrasenabar)).getEntity());
 
                 resul = true;
             } catch (Exception ex) {
@@ -182,7 +182,7 @@ public class Editar_Usuarios extends AppCompatActivity {
         protected Boolean doInBackground(String... strings) {
 
             try {
-                JSONArray respJSON = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("https://shessag.000webhostapp.com/Mostar_Los_Usuarios_Editados.php?id_usuario="+usuarioEditar)).getEntity()));
+                JSONArray respJSON = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/Mostar_Los_Usuarios_Editados.php?id_usuario="+usuarioEditar)).getEntity()));
                 for (int i = 0; i < respJSON.length(); i++) {
                     nombre_usuario = respJSON.getJSONObject(i).getString("nombre_usuario");
                     nombre_propio = respJSON.getJSONObject(i).getString("nombre_propio");

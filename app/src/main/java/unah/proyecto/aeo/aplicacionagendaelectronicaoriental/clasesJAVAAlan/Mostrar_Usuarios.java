@@ -122,7 +122,7 @@ Adaptador_mostrarusuarios adaptador;
         protected Boolean doInBackground(String... strings) {
 
             try {
-                JSONArray respJSON = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("https://shessag.000webhostapp.com/ConsultarTodosLosUsuarios.php")).getEntity()));
+                JSONArray respJSON = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/ConsultarTodosLosUsuarios.php")).getEntity()));
                 for (int i = 0; i < respJSON.length(); i++) {
                     id_usuario = respJSON.getJSONObject(i).getInt("id_usuario");
                     nombre_usuario = respJSON.getJSONObject(i).getString("nombre_usuario");
@@ -217,7 +217,7 @@ Adaptador_mostrarusuarios adaptador;
             try {
                 Fuente_mostrarUsuarios perf = mostrar_usuarios.get(usuarioselecionado);
                 idusario=perf.getId();
-                EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("https://shessag.000webhostapp.com/eliminacion_de_un_usuario.php?id_usuario="+idusario)).getEntity());
+                EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/eliminacion_de_un_usuario.php?id_usuario="+idusario)).getEntity());
 
                 resul = true;
             } catch (Exception ex) {

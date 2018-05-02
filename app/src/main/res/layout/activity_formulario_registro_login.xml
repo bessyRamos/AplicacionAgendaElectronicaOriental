@@ -200,44 +200,17 @@
                 android:orientation="horizontal">
 
 
-                <android.support.v7.widget.CardView
 
+
+                <Button
+                    android:id="@+id/registrar_usuario"
+                    android:layout_marginTop="10dp"
+                    android:textColor="#FFF"
+                    android:background="@drawable/rec_gradient_fb"
+                    android:textAllCaps="false"
+                    android:text="Registrarse"
                     android:layout_width="match_parent"
-                    android:layout_height="40dp"
-                    android:layout_margin="10dp"
-                    app:cardBackgroundColor="#234"
-                    android:background="#303f9f"
-                    android:padding="3dp"
-                    app:cardElevation="5dp"
-                    app:cardCornerRadius="10dp"
-                    app.card="5dp"
-
-                >
-
-
-
-                    <FrameLayout
-
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent">
-
-
-                        <Button
-
-                            android:textStyle="bold"
-                            android:id="@+id/registrar_usuario"
-                            android:layout_width="match_parent"
-                            android:layout_height="40dp"
-                            android:paddingLeft="5dp"
-                            android:layout_weight="1"
-                            android:text="Registrarse"
-                            android:background="@color/colorPrimaryDark"
-                            android:textColor="@android:color/white"
-                            android:textSize="16sp" />
-
-                    </FrameLayout>
-
-                </android.support.v7.widget.CardView>
+                    android:layout_height="wrap_content" />
             </LinearLayout>
 
 

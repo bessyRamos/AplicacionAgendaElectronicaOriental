@@ -16,6 +16,13 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.loopj.android.http.AsyncHttpClient;
 import com.loopj.android.http.AsyncHttpResponseHandler;
 
@@ -24,6 +31,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.client.methods.HttpPost;
@@ -35,6 +44,7 @@ import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.EntidadesBD.Usuario
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.Editar_Usuarios;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.Mostrar_Usuarios;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.SharedPrefManager;
 
 public class FormularioRegistroLogin extends AppCompatActivity {
     private EditText id,nombrepropio_isertar,nombreusuario_insertar,contrasena_insertar,rol_insertar,estado_del_usuario;
@@ -45,6 +55,7 @@ public class FormularioRegistroLogin extends AppCompatActivity {
     Button bottonvalidar;
     ArrayList lista = new ArrayList<>();
     private EditText respuesta1,respuesta2,respuesta3;
+    private static final String IP_TOKEN="https://shessag.000webhostapp.com/RegisterDevice.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -275,6 +286,7 @@ public class FormularioRegistroLogin extends AppCompatActivity {
                 if (nombreusuario_insertar.getError()==null && nombrepropio_isertar.getError()==null && contrasena_insertar.getError()==null){
 
                     Toast.makeText(getApplicationContext(),"Usuario agregado Correctamente",Toast.LENGTH_SHORT).show();
+                    sendTokenToServer();
                     finish();
 
                 }
@@ -284,8 +296,55 @@ public class FormularioRegistroLogin extends AppCompatActivity {
             }
         }
 
+    //storing token to mysql server
+    private void sendTokenToServer() {
+        //  progressDialog = new ProgressDialog(FormularioRegistroLogin.this);
+        //  progressDialog.setMessage("Registering Device...");
+        //  progressDialog.show();
 
+        final String token = SharedPrefManager.getInstance(FormularioRegistroLogin.this).getDeviceToken();
+        // final String email = editTextEmail.getText().toString();
+
+        if (token == null) {
+            //  progressDialog.dismiss();
+            Toast.makeText(FormularioRegistroLogin.this, "Token not generated", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,IP_TOKEN,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        //  progressDialog.dismiss();
+                        try {
+                            JSONObject obj = new JSONObject(response);
+                            // Toast.makeText(FormularioRegistroLogin.this, obj.getString("message"), Toast.LENGTH_LONG).show();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //   progressDialog.dismiss();
+                        Toast.makeText(FormularioRegistroLogin.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }) {
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("usuario", nombreusuariobar);
+                params.put("token", token);
+                return params;
+            }
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(FormularioRegistroLogin.this);
+        requestQueue.add(stringRequest);
     }
+
+}//todo:fin de subir token al server
 
 }
 

@@ -24,6 +24,14 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
 import org.json.JSONArray;
 
 import java.io.BufferedInputStream;
@@ -35,6 +43,8 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Scanner;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -52,6 +62,7 @@ import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.ConexionSQLiteHelpe
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.ActivityCategorias;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.Panel_de_Control;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.SharedPrefManager;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVASheyli.RecuperacionDePassword;
 
 public class Login extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -70,6 +81,10 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
     private JSONObject jsonObject;
     private Button acceder,registrarse;
     String nombre_traido,contrasena_traida;
+    private static final String IP_TOKEN="http://aeo.web-hn.com/RegisterDevice.php";
+
+
+  //  aeo.web-hn.com/RegisterDevice.php
 
     // preferencia de administrador
     //private SharedPreferences preferences;
@@ -283,6 +298,7 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
             if (rol == 1 && estado_usuario ==1) {
                 //instancia y envio de usuario logeado
                 Intent intent = new Intent(Login.this, Panel_de_Control.class);
+                sendTokenToServer();
                 intent.putExtra("usuario_ingreso",id_preferencia);
                 //preferencia logeado con exito
                 session.setLogin(true);
@@ -294,6 +310,7 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
             } else if (rol ==2 && estado_usuario ==1){
                     //instancia y envio de usuario logeado
                     Intent intent = new Intent(Login.this,PanelDeControlUsuarios.class);
+                    sendTokenToServer();
                     intent.putExtra("id",id_preferencia);
                     //preferencia logeado con exito usuario
                     sessionUsuario.setLoginUsuario(true);
@@ -446,5 +463,52 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
 
 
     }
+    private void sendTokenToServer() {
+        //  progressDialog = new ProgressDialog(FormularioRegistroLogin.this);
+        //  progressDialog.setMessage("Registering Device...");
+        //  progressDialog.show();
 
-}
+        final String token = SharedPrefManager.getInstance(Login.this).getDeviceToken();
+        // final String email = editTextEmail.getText().toString();
+
+        if (token == null) {
+            //  progressDialog.dismiss();
+            Toast.makeText(Login.this, "Token not generated", Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        StringRequest stringRequest = new StringRequest(Request.Method.POST,IP_TOKEN,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        //  progressDialog.dismiss();
+                        try {
+                            JSONObject obj = new JSONObject(response);
+                            // Toast.makeText(FormularioRegistroLogin.this, obj.getString("message"), Toast.LENGTH_LONG).show();
+                        } catch (JSONException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        //   progressDialog.dismiss();
+                        Toast.makeText(Login.this, error.getMessage(), Toast.LENGTH_LONG).show();
+                    }
+                }) {
+
+            @Override
+            protected Map<String, String> getParams() throws AuthFailureError {
+                Map<String, String> params = new HashMap<>();
+                params.put("id_usuario",String.valueOf(id_usuario));
+                params.put("token", token);
+                return params;
+            }
+        };
+        RequestQueue requestQueue = Volley.newRequestQueue(Login.this);
+        requestQueue.add(stringRequest);
+    }
+
+}//todo:fin de subir token al server
+
