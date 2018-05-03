@@ -68,7 +68,7 @@
                 android:layout_height="1dp"
                 android:layout_below="@+id/t"
                 android:layout_margin="10dp"
-                android:background="#a07b2802">
+                android:background="@color/colorPrimary">
 
             </View>
 
@@ -101,7 +101,7 @@
                 android:layout_height="1dp"
                 android:layout_below="@+id/tcelular"
                 android:layout_margin="10dp"
-                android:background="#a07b2802">
+                android:background="@color/colorPrimary">
 
             </View>
 
@@ -135,7 +135,7 @@
                 android:layout_height="1dp"
                 android:layout_below="@+id/e"
                 android:layout_margin="10dp"
-                android:background="#a07b2802">
+                android:background="@color/colorPrimary">
 
             </View>
 
@@ -169,7 +169,7 @@
                 android:layout_height="1dp"
                 android:layout_below="@+id/d"
                 android:layout_margin="10dp"
-                android:background="#a07b2802">
+                android:background="@color/colorPrimary">
 
             </View>
 
