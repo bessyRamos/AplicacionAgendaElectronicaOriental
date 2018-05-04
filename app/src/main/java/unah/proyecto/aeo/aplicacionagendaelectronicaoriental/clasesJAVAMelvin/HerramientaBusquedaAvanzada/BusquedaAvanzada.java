@@ -116,7 +116,6 @@ public class BusquedaAvanzada extends AppCompatActivity
         LinearLayoutManager layout = new LinearLayoutManager(getApplicationContext());
         layout.setOrientation(LinearLayoutManager.VERTICAL);
         contenedor.setLayoutManager(layout);
-        Toast.makeText(getApplicationContext(),"Cargando...",Toast.LENGTH_SHORT).show();
 
         /* *********************************************************
             LLAMADO AL MÉTODO QUE LLENA LAS LISTAS

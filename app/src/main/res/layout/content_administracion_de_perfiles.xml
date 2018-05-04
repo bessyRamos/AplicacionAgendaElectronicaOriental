@@ -13,6 +13,8 @@
             android:id="@+id/listviewperfiles"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:divider="@null"
+            android:dividerHeight="0dp"
             />
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/botonNuevoPerfil"

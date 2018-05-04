@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -207,7 +208,8 @@ public class PerfilDeLaOrganizacion extends AppCompatActivity implements Navigat
         }
     }
 
-  /*  @Override
+
+   @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.perfil_de_la_organizacion, menu);
@@ -223,13 +225,23 @@ public class PerfilDeLaOrganizacion extends AppCompatActivity implements Navigat
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if (id == R.id.llamar) {
+            String p;
+            Intent i = new Intent(Intent.ACTION_DIAL);
+            if(telefono.getText().toString().equals("No disponible")){
+                p = "tel:" + movil.getText().toString();
+
+            }else{
+                p= "tel:" + telefono.getText().toString();
+            }
+            i.setData(Uri.parse(p));
+            startActivity(i);
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
-    */
+
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override

@@ -9,9 +9,12 @@ import android.content.Intent;
 import android.content.Loader;
 import android.content.SharedPreferences;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
+import android.support.design.widget.Snackbar;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -22,6 +25,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.*;
 
@@ -131,7 +135,14 @@ public class ListaDeContactos extends AppCompatActivity
                 startActivity(aBusquedaAvanzada);
                 break;
             case R.id.sincronizar:
-                SyncAdapter.syncImmediately(this);
+                if(compruebaConexion(getApplicationContext())){
+                    Snackbar.make(findViewById(R.id.drawer_layout),"Actualizando datos...",Snackbar.LENGTH_SHORT).show();
+                    SyncAdapter.syncImmediately(this);
+                }else{
+                    Snackbar.make(findViewById(R.id.drawer_layout),"Actualmente no cuentas con conexión a internet",Snackbar.LENGTH_SHORT).show();
+
+                }
+
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -264,6 +275,24 @@ public class ListaDeContactos extends AppCompatActivity
 
         contenedor.setAdapter(adaptador_categoria1);
         return true;
+    }
+
+    public static boolean compruebaConexion(Context context) {
+
+        boolean connected = false;
+
+        ConnectivityManager connec = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        // Recupera todas las redes (tanto móviles como wifi)
+        NetworkInfo[] redes = connec.getAllNetworkInfo();
+
+        for (int i = 0; i < redes.length; i++) {
+            // Si alguna red tiene conexión, se devuelve true
+            if (redes[i].getState() == NetworkInfo.State.CONNECTED) {
+                connected = true;
+            }
+        }
+        return connected;
     }
 
 }
