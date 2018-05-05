@@ -19,12 +19,23 @@ import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.Pe
  */
 
 public class AdaptadorParaBusquedaAvanzada extends RecyclerView.Adapter<ViewHolderPerfilBreve> {
+    /**********************************************************************************************
+     *                                       DECLARACIÓN DE VARIABLES
+     **********************************************************************************************/
 
     List<PerfilBreve> listaObjetos;
+
+    /**********************************************************************************************
+     *                                       CONSTRUCTOR
+     **********************************************************************************************/
 
     public AdaptadorParaBusquedaAvanzada(List<PerfilBreve> listaObjetos) {
         this.listaObjetos = listaObjetos;
     }
+
+    /**********************************************************************************************
+     *      CREACIÓN DEL VIEWHOLDER QUE INFLA LA PLANTILLA DE LOS ELEMENTOS
+     **********************************************************************************************/
 
     @Override
     public ViewHolderPerfilBreve onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -32,6 +43,9 @@ public class AdaptadorParaBusquedaAvanzada extends RecyclerView.Adapter<ViewHold
         return new ViewHolderPerfilBreve(vista);
     }
 
+    /**********************************************************************************************
+     * SETEA LOS ELEMENTOS SEGÚN LA LISTA OBTENIDA
+     **********************************************************************************************/
     @Override
     public void onBindViewHolder(ViewHolderPerfilBreve holder, int position) {
         holder.nombrePerfilBreve.setText(listaObjetos.get(position).getNombre().toString());
@@ -54,6 +68,10 @@ public class AdaptadorParaBusquedaAvanzada extends RecyclerView.Adapter<ViewHold
     public int getItemCount() {
         return listaObjetos.size();
     }
+
+    /**********************************************************************************************
+     *    SETEA EL FILTRO DEL ARRAYLIST
+     **********************************************************************************************/
 
     public void setFilter(ArrayList<PerfilBreve>  newList){
         listaObjetos = new ArrayList<PerfilBreve>();

@@ -42,6 +42,7 @@
                 android:layout_marginLeft="20dp"
                 android:layout_weight="1"
                 android:textStyle="bold"
+                android:textColor="@color/colorPrimary"
                 android:text="Perfil"
                 android:textSize="20sp"/>
             <TextView
@@ -49,6 +50,7 @@
                 android:layout_height="wrap_content"
                 android:text="Usuario propietario:"
                 android:layout_marginLeft="20dp"
+                android:textColor="#555"
                 />
             <TextView
                 android:id="@+id/uspropietario"
@@ -57,6 +59,7 @@
                 android:text="usuario propietario"
                 android:layout_marginLeft="20dp"
                 android:textStyle="bold"
+                android:textColor="#555"
                 />
 
             <TextView

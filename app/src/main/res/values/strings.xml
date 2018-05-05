@@ -82,6 +82,9 @@
     </string>
 
     <string name="error_usuario">Ingrese el Usuario</string>
+    <string name="error_numnovalido">Número telefónico no válido</string>
+    <string name="error_mailnovalido">E-mail no válido</string>
+
     <string name="error_nombre_contrasena">Ingrese la Contraseña</string>
     <string name="cerrarsecion">Cerrar Sesión</string>
     <string name="editarcuenta">Editar Cuenta</string>

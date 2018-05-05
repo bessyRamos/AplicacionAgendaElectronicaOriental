@@ -9,7 +9,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Nombre"
-        android:textSize="14sp"
+        android:textSize="16sp"
         android:textColor="#000"/>
     <TextView
         android:id="@+id/item_id_spinner"

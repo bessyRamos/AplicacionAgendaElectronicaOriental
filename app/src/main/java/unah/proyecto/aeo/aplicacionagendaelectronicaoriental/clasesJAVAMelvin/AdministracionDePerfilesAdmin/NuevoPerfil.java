@@ -4,6 +4,7 @@ import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -28,6 +29,8 @@ import com.bumptech.glide.Glide;
 import org.json.JSONArray;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.NameValuePair;
@@ -47,9 +50,11 @@ public class NuevoPerfil extends AppCompatActivity {
     Bitmap imagenBitmap;
     FloatingActionButton botonGuardar;
     FloatingActionButton botonFoto;
-    TextInputEditText etnombreeorganizacion, etnumerofijo, etnumerocel, etdireccion, etemail, etdescripcion, etlatitud, etlongitud;
+    TextInputEditText etnombreeorganizacion, etnumerofijo, etnumerocel, etdireccion, etemail, etdescripcion;
+    TextView etlatitud, etlongitud;
     Spinner spcategorias, spregiones, spusuario;
     ArrayList<ModeloSpinner> listaCategorias, listaRegiones, listaUsuarios;
+    boolean editarFoto = false;
 
     int id_categoria, id_region, id_usuario;
 
@@ -138,6 +143,7 @@ public class NuevoPerfil extends AppCompatActivity {
         botonFoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                editarFoto=true;
                 requestRead();
             }
         });
@@ -145,13 +151,13 @@ public class NuevoPerfil extends AppCompatActivity {
         botonGuardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(((BitmapDrawable)imagenOrg.getDrawable())!=null){
+                if(editarFoto==true){
                     imagenBitmap = ((BitmapDrawable)imagenOrg.getDrawable()).getBitmap();
                     new AsyncTask<Void, Void, String>(){
                         @Override
                         protected String doInBackground(Void... voids) {
                             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                            imagenBitmap.compress(Bitmap.CompressFormat.JPEG,70,baos);
+                            imagenBitmap.compress(Bitmap.CompressFormat.JPEG,100,baos);
                             byte b []= baos.toByteArray();
 
                             encodeImagen = Base64.encodeToString(b,Base64.DEFAULT);
@@ -160,7 +166,6 @@ public class NuevoPerfil extends AppCompatActivity {
                         }
                     }.execute();
                 }
-
 
                 validar();
                 if (etnombreeorganizacion.getError()==null &&
@@ -175,23 +180,32 @@ public class NuevoPerfil extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),"Procesando... Espere",Toast.LENGTH_SHORT).show();
                     new crearPerfil().execute();
                 }
-               /* if(etnombreeorganizacion.getText().toString().isEmpty() || etnumerofijo.getText().toString().isEmpty() || etnumerocel.getText().toString().isEmpty() ||
-                        etdireccion.getText().toString().isEmpty() || etemail.getText().toString().isEmpty() || etdescripcion.getText().toString().isEmpty() ||
-                        etlatitud.getText().toString().isEmpty() || etlongitud.getText().toString().isEmpty() ){
-                    validar();}else {
 
-                    // Toast.makeText(getApplicationContext()," "+id_usuario,Toast.LENGTH_SHORT).show();
-                    // Toast.makeText(getApplicationContext()," "+id_categoria,Toast.LENGTH_SHORT).show();
-                    //Toast.makeText(getApplicationContext()," "+id_region,Toast.LENGTH_SHORT).show();
-
-
-                }*/
 
             }
         });
 
 
     }
+
+    /**********************************************************************************************
+     *                         MÉTODO PARA RECORTAR PESO DE LA IMAGEN SELECCIONADA
+     **********************************************************************************************/
+    public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+
+        float bitmapRatio = (float)width / (float) height;
+        if (bitmapRatio > 1) {
+            width = maxSize;
+            height = (int) (width / bitmapRatio);
+        } else {
+            height = maxSize;
+            width = (int) (height * bitmapRatio);
+        }
+        return Bitmap.createScaledBitmap(image, width, height, true);
+    }
+
     public  void  guardarUbicacionOrganizacion(View view){
 
         Intent ubicacion1 = new Intent(getApplicationContext(),Ingresar_Ubicacion.class);
@@ -232,8 +246,20 @@ public class NuevoPerfil extends AppCompatActivity {
     }
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         if(resultCode == RESULT_OK && requestCode == PICK_IMAGE){
-            imageUri = data.getData();
-            imagenOrg.setImageURI(imageUri);
+
+            try {
+                Uri imageUri = data.getData();
+                InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+
+                selectedImage = getResizedBitmap(selectedImage, 500);// 400 is for example, replace with desired size
+
+                imagenOrg.setImageBitmap(selectedImage);
+
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
         }else if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
 
@@ -254,7 +280,6 @@ public class NuevoPerfil extends AppCompatActivity {
     }
 
     private void validar(){
-
         //id.setError(null);
         etnombreeorganizacion.setError(null);
         etnumerofijo.setError(null);
@@ -265,7 +290,6 @@ public class NuevoPerfil extends AppCompatActivity {
         etlatitud.setError(null);
         etlongitud.setError(null);
 
-
         // String idd = id.getText().toString();
         String nomborg = etnombreeorganizacion.getText().toString();
         String numtel = etnumerofijo.getText().toString();
@@ -274,17 +298,49 @@ public class NuevoPerfil extends AppCompatActivity {
         String desc = etdescripcion.getText().toString();
         String lati = etlatitud.getText().toString();
         String longitud = etlongitud.getText().toString();
+        String mail = etemail.getText().toString();
 
+        if(TextUtils.isEmpty(mail)){
+
+        }else{
+            if(!mail.contains("@")){
+                etemail.setError(getString(R.string.error_mailnovalido));
+                etemail.requestFocus();
+                return;
+            }
+        }
 
         if(TextUtils.isEmpty(nomborg)){
             etnombreeorganizacion.setError(getString(R.string.errNombreOrg));
             etnombreeorganizacion.requestFocus();
             return;
         }
-        if(TextUtils.isEmpty(numtel) && TextUtils.isEmpty(numcel)){
-            etnumerofijo.setError(getString(R.string.errNumero));
-            etnumerofijo.requestFocus();
-            return;
+        if(TextUtils.isEmpty(numtel)){
+            if(TextUtils.isEmpty(numcel)){
+                etnumerofijo.setError(getString(R.string.errNumero));
+                etnumerofijo.requestFocus();
+                return;
+            }
+        }else{
+            if(numtel.length()<8 || !numtel.startsWith("2") || numtel.length()>8){
+                etnumerofijo.setError(getString(R.string.error_numnovalido));
+                etnumerofijo.requestFocus();
+                return;
+            }
+        }
+
+        if(TextUtils.isEmpty(numcel)){
+            if(TextUtils.isEmpty(numtel)){
+                etnumerocel.setError(getString(R.string.errNumero));
+                etnumerocel.requestFocus();
+                return;
+            }
+        }else{
+            if(numcel.length()<8 || numcel.length()>8){
+                etnumerocel.setError(getString(R.string.error_numnovalido));
+                etnumerocel.requestFocus();
+                return;
+            }
         }
 
         if(TextUtils.isEmpty(direccion)){
@@ -384,9 +440,11 @@ public class NuevoPerfil extends AppCompatActivity {
                 parametros.add(new BasicNameValuePair("id_categoria",String.valueOf(id_categoria)));
                 parametros.add(new BasicNameValuePair("id_region",String.valueOf(id_region)));
                 parametros.add(new BasicNameValuePair("id_usuario",String.valueOf(id_usuario)));
-                parametros.add(new BasicNameValuePair("imagen",encodeImagen));
-                parametros.add(new BasicNameValuePair("nombre_imagen",etnombreeorganizacion.getText().toString().replace(" ","_") +".jpg"));
 
+                if(editarFoto==true){
+                    parametros.add(new BasicNameValuePair("imagen",encodeImagen));
+                    parametros.add(new BasicNameValuePair("nombre_imagen",etnombreeorganizacion.getText().toString().replace(" ","_") +".jpg"));
+                }
                 httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));
 
                 httpclient.execute(httppost);

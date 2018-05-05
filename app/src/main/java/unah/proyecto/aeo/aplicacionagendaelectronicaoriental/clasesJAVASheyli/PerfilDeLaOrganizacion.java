@@ -26,6 +26,9 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -140,15 +143,13 @@ public class PerfilDeLaOrganizacion extends AppCompatActivity implements Navigat
 
         while (cursor.moveToNext()) {
             if (!cursor.getString(cursor.getColumnIndex(PerfilesContract.ContactosEntry.COLUMN_IMAGEN_PATH)).isEmpty()) {
-                Glide.with(this).
+                Picasso.get().
                         load(cursor.getString(cursor.getColumnIndex(PerfilesContract.ContactosEntry.COLUMN_IMAGEN_PATH))).
-                        override(220,180).
                         into(organizacion);
             } else {
-                Glide.with(this).
-                        load(R.drawable.iconocontactowhite).
-                        override(220,180).
-                        into(organizacion);
+                Picasso.get().
+                        load(R.drawable.iconocontactowhite).memoryPolicy(MemoryPolicy.NO_CACHE).networkPolicy(NetworkPolicy.NO_CACHE).
+                into(organizacion);
             }
 
             nombre.setText(cursor.getString(cursor.getColumnIndex(PerfilesContract.ContactosEntry.COLUMN_NOMBRE)));

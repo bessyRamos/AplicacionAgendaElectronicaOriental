@@ -43,27 +43,36 @@ import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.sync.*;
 
 
 public class ListaDeContactos extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener, android.support.v7.widget.SearchView.OnQueryTextListener, LoaderManager.LoaderCallbacks<Cursor> {
-    AEODbHelper dbHelper;
+        implements NavigationView.OnNavigationItemSelectedListener,
+        android.support.v7.widget.SearchView.OnQueryTextListener,
+        LoaderManager.LoaderCallbacks<Cursor> {
+
+    /**********************************************************************************************
+     *                                       DECLARACIÓN DE VARIABLES
+     **********************************************************************************************/
     int id_categoria;
     String nombre_categoria;
     AdaptadorPerfilBreve adaptadorPerfilBreve;
     RecyclerView contenedor;
     private static final int PERFIL_LOADER=0;
-
     //preferencias
     private Sesion sesion;
     private SesionUsuario sesionUsuario;
     int id_usu=-1;
 
+    /**********************************************************************************************
+     *                                      MÉTODO ONCREATE
+     **********************************************************************************************/
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_lista_de_contactos);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+
         //Obtiene el id de la categoria de la cual se mostrarán los contactos
         Bundle extras = getIntent().getExtras();
+
         //envio de clase actual para las preferencias
         sesion = new Sesion(this);
         sesionUsuario = new SesionUsuario(this);
@@ -187,6 +196,10 @@ public class ListaDeContactos extends AppCompatActivity
         return true;
     }
 
+    /**********************************************************************************************
+     *                 CREA EL CARGADOR CON SU CURSOR
+     **********************************************************************************************/
+
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         String[] projection ={
@@ -216,6 +229,10 @@ public class ListaDeContactos extends AppCompatActivity
         adaptadorPerfilBreve.swapCursor(null);
     }
 
+
+    /**********************************************************************************************
+     *      MÉTODO PARA REFRESCAR LA LISTA CUANDO SE DA CLIC EN EL BOTON DE BUSQUEDA
+     **********************************************************************************************/
     @Override
     public boolean onQueryTextSubmit(String query) {
 
@@ -226,6 +243,10 @@ public class ListaDeContactos extends AppCompatActivity
         contenedor.setAdapter(adaptador_perfil1);
         return true;
     }
+    /**********************************************************************************************
+     * MÉTODO QUE CONSULTA A LA BASE DE DATOS SEGÚN LO QUE SE VAYA ESCRIBIENDO EN LA BARRA DE
+     * BÚSQUEDA Y RETORNA EL CURSOR QUE SE ACTUALIZARÁ AL LLAMAR EL LOADER
+     **********************************************************************************************/
 
     public Cursor getListOfContacts(String searchText) {
 
@@ -267,6 +288,9 @@ public class ListaDeContactos extends AppCompatActivity
         return cur;
     }
 
+    /**********************************************************************************************
+     *      MÉTODO PARA REFRESCAR LA LISTA CUANDO SE VA ESCRIBIENDO EN LA BARRA DE BÚSQUEDA
+     **********************************************************************************************/
     @Override
     public boolean onQueryTextChange(String newText) {
         Cursor contacts = getListOfContacts(newText);
@@ -276,6 +300,10 @@ public class ListaDeContactos extends AppCompatActivity
         contenedor.setAdapter(adaptador_categoria1);
         return true;
     }
+
+    /**********************************************************************************************
+     *      MÉTODO PARA COMPROBAR EL ESTADO DE CONEXIÓN A INTERNET
+     **********************************************************************************************/
 
     public static boolean compruebaConexion(Context context) {
 

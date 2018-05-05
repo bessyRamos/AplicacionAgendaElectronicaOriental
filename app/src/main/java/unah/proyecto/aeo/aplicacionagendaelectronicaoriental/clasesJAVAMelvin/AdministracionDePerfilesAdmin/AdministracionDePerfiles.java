@@ -49,7 +49,7 @@ public class AdministracionDePerfiles extends AppCompatActivity
     private int perfilselecionado = -1;
     int id_contacto;
     String nombre_organizacion, imagen, usuariopropietario;
-    AdaptadorMostrarPerfiles adaptadorMostrarPerfiles;
+    public AdaptadorMostrarPerfiles adaptadorMostrarPerfiles;
     private  Object mActionMode;
     int idperf;
     ProgressBar barra;
@@ -58,6 +58,7 @@ public class AdministracionDePerfiles extends AppCompatActivity
     private SesionUsuario sesionUsuario;
     int id_usuario_resibido_usuario;
     int id_usu=-1;
+    private static final int PASAR_A_EDITAR = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,17 +80,18 @@ public class AdministracionDePerfiles extends AppCompatActivity
         new llenarLista().execute();
 
         //Se establece el listener al mantener presionado un item del listview
-        lista.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 //se inicializa la variable con la posición del item seleccionado del listview
                 perfilselecionado = position;
-                //se inicia la construcción del menú superior
-                mActionMode =AdministracionDePerfiles.this.startActionMode(amc);
-                view.setSelected(true);
-                return true;
+                Fuente_mostrarPerfiles per = mostrar_perfiles.get(perfilselecionado);
+                Intent in = new Intent(getApplicationContext(),EditarPerfil.class);
+                in.putExtra("id",per.getId());
+                startActivityForResult(in,PASAR_A_EDITAR);
             }
         });
+
 
         //se establece el listener del boton agregar perfil
         botonNuevoPerfil = (FloatingActionButton) findViewById(R.id.botonNuevoPerfil);
@@ -123,6 +125,15 @@ public class AdministracionDePerfiles extends AppCompatActivity
         }
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == PASAR_A_EDITAR && resultCode == RESULT_OK){
+
+            mostrar_perfiles.clear();
+            new llenarLista().execute();
+            adaptadorMostrarPerfiles.notifyDataSetChanged();
+        }
+    }
 
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -140,7 +151,6 @@ public class AdministracionDePerfiles extends AppCompatActivity
         if (id == R.id.menusolicitudesnuevas) {
             Intent i = new Intent(getApplicationContext(),NuevasSolicitudes.class);
             startActivity(i);
-
         } else if (id == R.id.menusolicitudesrechazadas) {
             Intent i = new Intent(getApplicationContext(),SolicitudesRechazadas.class);
             startActivity(i);
@@ -194,13 +204,13 @@ public class AdministracionDePerfiles extends AppCompatActivity
             //cerrar secion y borrado de preferencias
             if (sesion.logindim()) {
                 sesion.setLogin(false);
-                startActivity(new Intent(this, Login.class));
+                startActivity(new Intent(this, Login.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP));
                 finish();
             }else {
                 //cerrar secion y borrado de preferencias
                 if(sesionUsuario.logindimUsuario()){
                     sesionUsuario.setLoginUsuario(false);
-                    startActivity(new Intent(this, Login.class));
+                    startActivity(new Intent(this, Login.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP));
                     finish();
                 }
             }
@@ -348,6 +358,7 @@ public class AdministracionDePerfiles extends AppCompatActivity
     }
 
 
+    /*
 
     private ActionMode.Callback amc = new ActionMode.Callback() {
         @Override
@@ -384,5 +395,5 @@ public class AdministracionDePerfiles extends AppCompatActivity
         public void onDestroyActionMode(ActionMode mode) {
 
         }
-    };
+    };*/
 }

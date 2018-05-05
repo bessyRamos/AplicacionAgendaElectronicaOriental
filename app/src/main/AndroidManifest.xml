@@ -116,6 +116,7 @@
         <activity
             android:name=".clasesJAVAMelvin.AdministracionDePerfilesAdmin.NuevasSolicitudes"
             android:label="@string/title_activity_nuevas_solicitudes"
+            android:theme="@style/AppTheme.NoActionBar"
             android:parentActivityName=".clasesJAVAMelvin.AdministracionDePerfilesAdmin.AdministracionDePerfiles">
             <meta-data
                 android:name="android:support.PARENT_ACTIVITY"
@@ -124,6 +125,7 @@
         <activity
             android:name=".clasesJAVAMelvin.AdministracionDePerfilesAdmin.PerfilesEliminados"
             android:label="@string/title_activity_perfiles_eliminados"
+            android:theme="@style/AppTheme.NoActionBar"
             android:parentActivityName=".clasesJAVAMelvin.AdministracionDePerfilesAdmin.AdministracionDePerfiles">
             <meta-data
                 android:name="android:support.PARENT_ACTIVITY"
@@ -132,6 +134,7 @@
         <activity
             android:name=".clasesJAVAMelvin.AdministracionDePerfilesAdmin.SolicitudesRechazadas"
             android:label="@string/title_activity_solicitudes_rechazadas"
+            android:theme="@style/AppTheme.NoActionBar"
             android:parentActivityName=".clasesJAVAMelvin.AdministracionDePerfilesAdmin.AdministracionDePerfiles">
             <meta-data
                 android:name="android:support.PARENT_ACTIVITY"

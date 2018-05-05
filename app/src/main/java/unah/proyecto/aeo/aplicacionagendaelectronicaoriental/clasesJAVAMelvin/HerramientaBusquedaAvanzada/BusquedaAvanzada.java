@@ -48,9 +48,9 @@ import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.web.Perfil;
 public class BusquedaAvanzada extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
 
-    /* *******************************************************************************************
-                    DECLARACIÓN DE VARIABLES GLOBALES
-        ***************************************************************************************** */
+    /**********************************************************************************************
+     *                                       DECLARACIÓN DE VARIABLES
+     **********************************************************************************************/
     TextInputEditText contactoABuscar;
     Spinner categoria, region;
     ImageButton btnbusqueda;
@@ -70,7 +70,9 @@ public class BusquedaAvanzada extends AppCompatActivity
     private SesionUsuario sesionUsuario;
     int id_usu=-1;
 
-
+    /**********************************************************************************************
+     *                                      MÉTODO ONCREATE
+     **********************************************************************************************/
     @Override
     protected void onCreate(Bundle savedInstanceState) {
          /* *********************************************************
@@ -195,9 +197,9 @@ public class BusquedaAvanzada extends AppCompatActivity
         });
     }
 
-     /* *******************************************************************************************
-                    METODO QUE CONSULTA A LA BASE DE DATOS Y LLENA LAS LISTAS
-        ***************************************************************************************** */
+     /********************************************************************************************
+                            METODO QUE CONSULTA A LA BASE DE DATOS Y LLENA LAS LISTAS
+        ******************************************************************************************/
 
     public void consultarBaseDeDatosParaArmarListas(){
         listaCategorias.add(new ModeloSpinner("Todas las Categorias",-1000));
@@ -359,9 +361,9 @@ public class BusquedaAvanzada extends AppCompatActivity
     }
 
 
-    /* *******************************************************************************************
+    /********************************************************************************************
                                     FILTROS PARA LA BÚSQUEDA AVANZADA
-       ***************************************************************************************** */
+       ******************************************************************************************/
     public void filtrosOffline(){
         if(!contactoABuscar.getText().toString().isEmpty()){
             SQLiteDatabase db;
@@ -461,10 +463,10 @@ public class BusquedaAvanzada extends AppCompatActivity
 
     }
 
-     /* *******************************************************************************************
+     /********************************************************************************************
                         MÉTODO PARA RECORRER EL CURSOR SETEADO POR LOS FILTROS
 
-        ***************************************************************************************** */
+        ******************************************************************************************/
 
 
     public void recorrerCursor(Cursor cursorBusqueda,ArrayList<PerfilBreve> arrayList) {

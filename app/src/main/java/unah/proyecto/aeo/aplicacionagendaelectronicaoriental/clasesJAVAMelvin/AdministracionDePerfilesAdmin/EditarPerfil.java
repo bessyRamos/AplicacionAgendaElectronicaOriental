@@ -1,9 +1,11 @@
 package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.AdministracionDePerfilesAdmin;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -12,22 +14,31 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TextInputEditText;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.NameValuePair;
@@ -51,7 +62,8 @@ public class EditarPerfil extends AppCompatActivity {
     Bitmap imagenBitmap;
     CircleImageView imagenOrg;
     FloatingActionButton botonFoto, botonGuardar;
-    TextInputEditText etnombreeorganizacion, etnumerofijo, etnumerocel, etdireccion, etemail, etdescripcion, etlatitud, etlongitud;
+    TextInputEditText etnombreeorganizacion, etnumerofijo, etnumerocel, etdireccion, etemail, etdescripcion;
+    TextView etlatitud, etlongitud;
     Spinner spcategorias, spregiones;
     String nomborg_rec, numtel_rec, numcel_rec, direccion_rec, email_rec, desc_rec, lati_rec, longitud_rec, imagen_rec, encodeImagen ;
     boolean editarFoto = false, tieneImagen;
@@ -155,7 +167,7 @@ public class EditarPerfil extends AppCompatActivity {
                         @Override
                         protected String doInBackground(Void... voids) {
                             ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                            imagenBitmap.compress(Bitmap.CompressFormat.JPEG,70,baos);
+                            imagenBitmap.compress(Bitmap.CompressFormat.JPEG,100,baos);
                             byte b []= baos.toByteArray();
 
                             encodeImagen = Base64.encodeToString(b,0);
@@ -180,11 +192,30 @@ public class EditarPerfil extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),"Procesando... Por favor espere",Toast.LENGTH_SHORT).show();
                     i ++;
                     new actualizarPerfil().execute();
+                    Picasso.get().invalidate(imagen_rec);
                 }
 
             }
         });
 
+    }
+
+    /**********************************************************************************************
+     *                         MÉTODO PARA RECORTAR PESO DE LA IMAGEN SELECCIONADA
+     **********************************************************************************************/
+    public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+
+        float bitmapRatio = (float)width / (float) height;
+        if (bitmapRatio > 1) {
+            width = maxSize;
+            height = (int) (width / bitmapRatio);
+        } else {
+            height = maxSize;
+            width = (int) (height * bitmapRatio);
+        }
+        return Bitmap.createScaledBitmap(image, width, height, true);
     }
 
     /**********************************************************************************************
@@ -194,6 +225,8 @@ public class EditarPerfil extends AppCompatActivity {
     public  void  guardarUbicacionOrganizacion(View view){
 
         Intent ubicacion1 = new Intent(getApplicationContext(),Ingresar_Ubicacion.class);
+        ubicacion1.putExtra("latitud",etlatitud.getText().toString());
+        ubicacion1.putExtra("longitud",etlatitud.getText().toString());
         startActivityForResult(ubicacion1,1);
     }
 
@@ -246,8 +279,22 @@ public class EditarPerfil extends AppCompatActivity {
      **********************************************************************************************/
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         if(resultCode == RESULT_OK && requestCode == PICK_IMAGE){
-            imageUri = data.getData();
-            imagenOrg.setImageURI(imageUri);
+
+            try {
+                Uri imageUri = data.getData();
+                InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+
+                selectedImage = getResizedBitmap(selectedImage, 500);// 400 is for example, replace with desired size
+
+                imagenOrg.setImageBitmap(selectedImage);
+
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            //imageUri = data.getData();
+            //imagenOrg.setImageURI(imageUri);
         }else if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
 
@@ -283,7 +330,6 @@ public class EditarPerfil extends AppCompatActivity {
         etlatitud.setError(null);
         etlongitud.setError(null);
 
-
         // String idd = id.getText().toString();
         String nomborg = etnombreeorganizacion.getText().toString();
         String numtel = etnumerofijo.getText().toString();
@@ -292,17 +338,49 @@ public class EditarPerfil extends AppCompatActivity {
         String desc = etdescripcion.getText().toString();
         String lati = etlatitud.getText().toString();
         String longitud = etlongitud.getText().toString();
+        String mail = etemail.getText().toString();
 
+        if(TextUtils.isEmpty(mail)){
+
+        }else{
+            if(!mail.contains("@")){
+                etemail.setError(getString(R.string.error_mailnovalido));
+                etemail.requestFocus();
+                return;
+            }
+        }
 
         if(TextUtils.isEmpty(nomborg)){
             etnombreeorganizacion.setError(getString(R.string.errNombreOrg));
             etnombreeorganizacion.requestFocus();
             return;
         }
-        if(TextUtils.isEmpty(numtel) && TextUtils.isEmpty(numcel)){
-            etnumerofijo.setError(getString(R.string.errNumero));
-            etnumerofijo.requestFocus();
-            return;
+        if(TextUtils.isEmpty(numtel)){
+            if(TextUtils.isEmpty(numcel)){
+                etnumerofijo.setError(getString(R.string.errNumero));
+                etnumerofijo.requestFocus();
+                return;
+            }
+        }else{
+            if(numtel.length()<8 || !numtel.startsWith("2") || numtel.length()>8){
+                etnumerofijo.setError(getString(R.string.error_numnovalido));
+                etnumerofijo.requestFocus();
+                return;
+            }
+        }
+
+        if(TextUtils.isEmpty(numcel)){
+            if(TextUtils.isEmpty(numtel)){
+                etnumerocel.setError(getString(R.string.errNumero));
+                etnumerocel.requestFocus();
+                return;
+            }
+        }else{
+            if(numcel.length()<8 || numcel.length()>8){
+                etnumerocel.setError(getString(R.string.error_numnovalido));
+                etnumerocel.requestFocus();
+                return;
+            }
         }
 
         if(TextUtils.isEmpty(direccion)){
@@ -325,6 +403,62 @@ public class EditarPerfil extends AppCompatActivity {
             etlongitud.requestFocus();
             return;
         }
+
+    }
+
+    /**********************************************************************************************
+     *            creación de menú
+     **********************************************************************************************/
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.borrar_perfil, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        if (id == R.id.eliminarPerfil) {
+            removerperfil();
+
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
+    //metodo para eliminar un perfil
+
+    public void removerperfil() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("Eliminar Perfil");
+        String fmt= getResources().getString(R.string.eliminarPerfil);
+        builder.setMessage(String.format(fmt,etnombreeorganizacion.getText()));
+        builder.setPositiveButton(R.string.eliminar, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                //  llama a la clase que borra el perfil de la base de datos remota
+
+
+                new eliminarPerfil().execute();
+                Intent data = new Intent();
+                setResult(AdministracionDePerfiles.RESULT_OK, data);
+                finish();
+
+            }
+        });
+
+        builder.setNegativeButton(R.string.canselar,new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+
+
+            }
+        });
+        builder.create().show();
 
     }
 
@@ -376,11 +510,13 @@ public class EditarPerfil extends AppCompatActivity {
             if (resul) {
                 if(tieneImagen==true){
 
-                    Glide.with(getApplicationContext()).
+                    Picasso.get().
                             load(imagen_rec).
-                            into(imagenOrg);
+                    networkPolicy(NetworkPolicy.NO_CACHE).
+                            memoryPolicy(MemoryPolicy.NO_CACHE).
+                    into(imagenOrg);
                 }else{
-                    Glide.with(getApplicationContext()).
+                    Picasso.get().
                             load(R.drawable.iconocontactowhite).
                             into(imagenOrg);
                 }
@@ -436,18 +572,14 @@ public class EditarPerfil extends AppCompatActivity {
                 parametros.add(new BasicNameValuePair("id_region",String.valueOf(id_region)));
                 if(editarFoto==true){
                     parametros.add(new BasicNameValuePair("imagen",encodeImagen));
+                    parametros.add(new BasicNameValuePair("nombre_imagen",etnombreeorganizacion.getText().toString().replace(" ","_")+ ""+ i +".jpg"));
                 }else {
                     parametros.add(new BasicNameValuePair("imagen",imagen_rec));
+
                 }
 
-                parametros.add(new BasicNameValuePair("nombre_imagen",etnombreeorganizacion.getText().toString().replace(" ","_")+ ""+ i +".jpg"));
-
-
                 httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));
-
                 httpclient.execute(httppost);
-
-
                 resul = true;
             } catch (Exception ex) {
                 Log.e("ServicioRest", "Error!", ex);
@@ -456,7 +588,6 @@ public class EditarPerfil extends AppCompatActivity {
             return resul;
 
         }
-
 
         protected void onPostExecute(Boolean result) {
             if (resul) {
@@ -530,6 +661,42 @@ public class EditarPerfil extends AppCompatActivity {
                 }
 
 
+            }else {
+                Toast.makeText(getApplicationContext(), "Problemas de conexión", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+
+    }
+
+    //clase AsyncTask que se conecta al webservice que ejecuta la consulta para borrar el perfil
+
+    private class eliminarPerfil extends AsyncTask<String, Integer, Boolean> {
+        private eliminarPerfil(){}
+        boolean resul = true;
+
+        @Override
+        protected Boolean doInBackground(String... strings) {
+
+            try {
+
+                //se ejecuta la consulta al webservice y se pasa el id del perfil seleccionado
+                EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/eliminarPerfil.php?id_contacto="+id_perfilEditar)).getEntity());
+                resul = true;
+            } catch (Exception ex) {
+                Log.e("ServicioRest", "Error!", ex);
+                resul = false;
+            }
+            return resul;
+
+        }
+
+        protected void onPostExecute(Boolean result) {
+
+            if (resul) {
+                Toast.makeText(getApplicationContext(),"Perfil Eliminado",Toast.LENGTH_SHORT).show();
+
+                finish();
             }else {
                 Toast.makeText(getApplicationContext(), "Problemas de conexión", Toast.LENGTH_SHORT).show();
             }

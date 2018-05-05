@@ -10,11 +10,6 @@
 
     <include layout="@layout/content_nuevas_solicitudes" />
 
-    <ProgressBar
-        android:id="@+id/progressBarPerfilesPendientes"
-        android:layout_width="30dp"
-        android:layout_height="30dp"
-        android:layout_gravity="center"
-        />
+
 
 </android.support.design.widget.CoordinatorLayout>

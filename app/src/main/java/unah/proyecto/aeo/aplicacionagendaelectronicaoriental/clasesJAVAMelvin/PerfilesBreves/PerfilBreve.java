@@ -8,11 +8,18 @@ import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.provider.*;
  */
 
 public class PerfilBreve {
+    /**********************************************************************************************
+     *                                       DECLARACIÓN DE VARIABLES
+     **********************************************************************************************/
     public String nombre;
     public String imagen;
     public String numeroTelefono;
     public String direccion;
     public int id;
+
+    /**********************************************************************************************
+     *                                      CONSTRUCTOR
+     **********************************************************************************************/
 
     public PerfilBreve(Cursor cursor) {
         this.nombre = cursor.getString(cursor.getColumnIndex(PerfilesContract.ContactosEntry.COLUMN_NOMBRE));
@@ -26,10 +33,17 @@ public class PerfilBreve {
         this.direccion = cursor.getString(cursor.getColumnIndex(PerfilesContract.ContactosEntry.COLUMN_NOMBRE_REGION));
         this.id = cursor.getInt(cursor.getColumnIndex(PerfilesContract.ContactosEntry.COLUMN_PERFILID));
     }
+    /**********************************************************************************************
+     *                                      CONSTRUCTOR SIN PARAMETROS
+     **********************************************************************************************/
 
     public PerfilBreve(){
 
     }
+
+    /**********************************************************************************************
+     *                                  GETTERS Y SETTERS
+     **********************************************************************************************/
 
     public String getNombre() {
         return nombre;

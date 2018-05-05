@@ -7,6 +7,9 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
@@ -26,6 +29,7 @@ public class AdaptadorMostrarPerfiles extends BaseAdapter {
     public AdaptadorMostrarPerfiles(List<Fuente_mostrarPerfiles> perfiles, Context context) {
         this.perfiles = perfiles;
         this.context = context;
+
     }
 
 
@@ -57,9 +61,13 @@ public class AdaptadorMostrarPerfiles extends BaseAdapter {
         CircleImageView icono = v.findViewById(R.id.iconoDeContactoEnAdministrador);
 
         if(!perfiles.get(i).getImagen().isEmpty()){
-            Glide.with(context).load(perfiles.get(i).getImagen()).into(icono);
+            Picasso.get().load(perfiles.get(i).getImagen()).
+                    memoryPolicy(MemoryPolicy.NO_CACHE).networkPolicy(NetworkPolicy.NO_CACHE).placeholder(R.drawable.wait).
+            into(icono);
         }else {
-            icono.setImageResource(R.drawable.iconocontactowhite);
+            Picasso.get().load(R.drawable.iconocontactowhite).
+                    memoryPolicy(MemoryPolicy.NO_CACHE)    .networkPolicy(NetworkPolicy.NO_CACHE).
+                    into(icono);
         }
 
         textid.setText(""+perfiles.get(i).getId());
