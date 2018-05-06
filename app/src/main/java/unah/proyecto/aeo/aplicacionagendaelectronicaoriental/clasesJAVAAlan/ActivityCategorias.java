@@ -35,6 +35,7 @@ import android.view.Surface;
 import android.view.WindowManager;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
@@ -48,6 +49,8 @@ import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.provider.Categorias
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.provider.PerfilesContract;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.sync.SyncAdapter;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.sync.SyncService;
+
+import static kotlin.text.Typography.amp;
 
 public class ActivityCategorias extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -157,7 +160,7 @@ public class ActivityCategorias extends AppCompatActivity
                 startActivity(aBusquedaAvanzada);
                 break;
             case R.id.sincronizar:
-                if(compruebaConexion(getApplicationContext())){
+                if( compruebaConexion()){
                     Snackbar.make(findViewById(R.id.drawer_layout),"Actualizando datos...",Snackbar.LENGTH_SHORT).show();
                     SyncAdapter.syncImmediately(this);
                 }else{
@@ -286,22 +289,15 @@ public class ActivityCategorias extends AppCompatActivity
         return true;
     }
 
-    public static boolean compruebaConexion(Context context) {
+    public boolean compruebaConexion() {
 
-        boolean connected = false;
-
-        ConnectivityManager connec = (ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE);
-
-        // Recupera todas las redes (tanto móviles como wifi)
-        NetworkInfo[] redes = connec.getAllNetworkInfo();
-
-        for (int i = 0; i < redes.length; i++) {
-            // Si alguna red tiene conexión, se devuelve true
-            if (redes[i].getState() == NetworkInfo.State.CONNECTED) {
-                connected = true;
-            }
-        }
-        return connected;
+        Runtime runtime = Runtime.getRuntime();
+        try {
+            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
+            int     exitValue = ipProcess.waitFor();
+            return (exitValue == 0);
+        } catch (IOException e)          { e.printStackTrace(); }
+        catch (InterruptedException e) { e.printStackTrace(); }
+        return false;
     }
-
 }

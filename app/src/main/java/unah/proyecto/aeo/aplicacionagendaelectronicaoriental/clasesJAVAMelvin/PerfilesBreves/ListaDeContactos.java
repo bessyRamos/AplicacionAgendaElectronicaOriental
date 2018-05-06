@@ -144,7 +144,7 @@ public class ListaDeContactos extends AppCompatActivity
                 startActivity(aBusquedaAvanzada);
                 break;
             case R.id.sincronizar:
-                if(compruebaConexion(getApplicationContext())){
+                if( isOnlineNet()){
                     Snackbar.make(findViewById(R.id.drawer_layout),"Actualizando datos...",Snackbar.LENGTH_SHORT).show();
                     SyncAdapter.syncImmediately(this);
                 }else{
@@ -321,6 +321,21 @@ public class ListaDeContactos extends AppCompatActivity
             }
         }
         return connected;
+    }
+    public Boolean isOnlineNet() {
+
+        try {
+            Process p = java.lang.Runtime.getRuntime().exec("ping -c 1 www.google.es");
+
+            int val           = p.waitFor();
+            boolean reachable = (val == 0);
+            return reachable;
+
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return false;
     }
 
 }
