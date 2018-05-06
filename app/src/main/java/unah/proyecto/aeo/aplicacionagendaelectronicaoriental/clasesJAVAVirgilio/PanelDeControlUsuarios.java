@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.SystemClock;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -22,6 +23,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -57,6 +59,7 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
 
     int id_usu=-1;
     int id_usuario;
+    ProgressBar barraProgreso;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +75,12 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
         mostrar_perfiles= new ArrayList<EntidadOrganizacion>();
         FloatingActionButton agregar = (FloatingActionButton) findViewById(R.id.agregarContacto);
         lista = (ListView) findViewById(R.id.lista_pefil_empresa);
+
+        //barra de progreso
+        barraProgreso = (ProgressBar) findViewById(R.id.progresoPerfilesUsuario);
+        barraProgreso.setProgress(0);
+        //fin barra de progreso
+
 
         //se asegura que el extra no este vacio
         if (getIntent().getExtras()!=null){
@@ -112,7 +121,7 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(PanelDeControlUsuarios.this);
                 ListView modeloListView = new ListView(PanelDeControlUsuarios.this);
-                String[] modes = new String[] {"Editar Contacto ","Borrar Contacto"};
+                String[] modes = new String[] {"Ver Contacto ","Borrar Contacto"};
                 ArrayAdapter<String> modeAdapter  = new ArrayAdapter<String>(PanelDeControlUsuarios.this,android.R.layout.simple_list_item_1,android.R.id.text1,modes);
 
                 modeloListView.setAdapter(modeAdapter);
@@ -127,7 +136,7 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
                         if (position == 0){  //Editar Contacto
 
                             EntidadOrganizacion per = mostrar_perfiles.get(perfilselecionado);
-                            Intent intent= new Intent(getApplicationContext(),EditarPerfilOrganizacion.class);
+                            Intent intent= new Intent(getApplicationContext(),VerContactoOrganizacion.class);
                             intent.putExtra("id",per.getId());
                             intent.putExtra("id_usuario",id_usuario_resibido_usuario);
                             startActivity(intent);
@@ -265,8 +274,11 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
         //variable booleana para controlar el resultado de las ejecuciones
         boolean resul = true;
 
+        int progreso=0;
+
         @Override
         protected Boolean doInBackground(String... strings) {
+
 
             //verifica que el id no este vacio
             if (getIntent().getExtras()!=null){
@@ -306,15 +318,25 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
                 Log.e("ServicioRest", "Error!", ex);
                 resul = false;
             }
+            //barra de progreso
+            while (progreso<100){
+                progreso++;
+                publishProgress(progreso);
+                SystemClock.sleep(20);
+            }
+            //fin de barra de progreso
+
             return resul;
 
         }
 
+        //barrra de progreso
         @Override
         protected void onProgressUpdate(Integer... values) {
             super.onProgressUpdate(values);
+            barraProgreso.setProgress(values[0]);
 
-        }
+        }//fin de barra de progreso
 
         protected void onPostExecute(Boolean result) {
 
@@ -324,6 +346,10 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
                 adaptadorMostrarPerfiles = new AdaptadorOrganizacion(mostrar_perfiles,PanelDeControlUsuarios.this);
                 //llena la lista con el item creado junto con la informacion de el json
                 lista.setAdapter(adaptadorMostrarPerfiles);
+                //barra de progreso
+                barraProgreso.setVisibility(View.INVISIBLE);
+                //fin de barra de progreso
+
                 return;
             }else{
                 //muestra mensaje si se produce un error al ejercutar la consulta al webservice
@@ -363,6 +389,9 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
         protected void onPostExecute(Boolean result) {
 
             if (resul) {
+                //barra de progreso
+                barraProgreso.setVisibility(View.VISIBLE);
+                //fin de barra de progreso
                 Toast.makeText(getApplicationContext(),"Perfil Eliminado",Toast.LENGTH_SHORT).show();
                 mostrar_perfiles.removeAll(mostrar_perfiles);
                 new llenarLista().execute();

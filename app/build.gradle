@@ -40,6 +40,8 @@ dependencies {
     compile 'com.mcxiaoke.volley:library:1.0.16'
     compile 'com.google.code.gson:gson:2.3.1'
 
+    compile 'br.com.simplepass:loading-button-android:1.7.2'
+
     implementation 'com.squareup.picasso:picasso:2.71828'
 }
 
