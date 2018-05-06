@@ -155,13 +155,31 @@ public class AdministracionDePerfiles extends AppCompatActivity
 
         if (id == R.id.menusolicitudesnuevas) {
             Intent i = new Intent(getApplicationContext(),NuevasSolicitudes.class);
+            //envia intent ala actividad editar perfil
+            if (getIntent().getExtras()!=null){
+                id_usuario_resibido_usuario  = getIntent().getExtras().getInt("usuario_ingreso");
+                i.putExtra("id",id_usuario_resibido_usuario);
+            }
             startActivity(i);
+            finish();
         } else if (id == R.id.menusolicitudesrechazadas) {
             Intent i = new Intent(getApplicationContext(),SolicitudesRechazadas.class);
+            //envia intent ala actividad editar perfil
+            if (getIntent().getExtras()!=null){
+                id_usuario_resibido_usuario  = getIntent().getExtras().getInt("usuario_ingreso");
+                i.putExtra("id",id_usuario_resibido_usuario);
+            }
             startActivity(i);
+            finish();
         } else if (id == R.id.menuperfileliminados) {
             Intent i = new Intent(getApplicationContext(),PerfilesEliminados.class);
+            //envia intent ala actividad editar perfil
+            if (getIntent().getExtras()!=null){
+                id_usuario_resibido_usuario  = getIntent().getExtras().getInt("usuario_ingreso");
+                i.putExtra("id",id_usuario_resibido_usuario);
+            }
             startActivity(i);
+            finish();
         }
 
         return super.onOptionsItemSelected(item);

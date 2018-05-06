@@ -78,7 +78,10 @@ public class Panel_de_Control extends AppCompatActivity implements NavigationVie
                     startActivity(intent);
                 }else if(position==1){
                     Intent intent = new Intent(view.getContext(),AdministracionDePerfiles.class);
-                    intent.putExtra("usuario_ingreso",id_usuario_resibido);
+                    if (getIntent().getExtras()!=null){
+                        id_usuario_resibido = getIntent().getExtras().getInt("usuario_ingreso");
+                        intent.putExtra("usuario_ingreso",id_usuario_resibido);
+                    }
                     startActivity(intent);
                     finish();
                 }else if(position==2){

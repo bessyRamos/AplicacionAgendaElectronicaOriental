@@ -215,8 +215,6 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity  implements N
                 }.execute();
 
                 validar();
-
-                validar();
                 cantidadDigitos = String.valueOf(telefonoCelular.getText().toString());
                 if(cantidadDigitos.length() == 8){
                     if (nombreOrganizacion.getError()==null && telefonoFijo.getError()==null && telefonoCelular.getError()==null && direccionOrganizacion.getError()==null && emailOrganizacion.getError()==null && descrpcionOrganizacion.getError()==null && latitudOrganizacion.getError()==null && longitudOrganizacion.getError()==null){

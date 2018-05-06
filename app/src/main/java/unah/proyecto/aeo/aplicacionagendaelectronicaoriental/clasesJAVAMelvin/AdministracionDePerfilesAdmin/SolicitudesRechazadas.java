@@ -119,6 +119,7 @@ public class SolicitudesRechazadas extends AppCompatActivity implements Navigati
                 }else {
                     Intent intent = new Intent(this, Login.class);
                     startActivity(intent);
+                    finish();
                 }
 
             }
@@ -142,7 +143,6 @@ public class SolicitudesRechazadas extends AppCompatActivity implements Navigati
             Intent intent = new Intent(this,EditarUsuario.class);
             if (getIntent().getExtras()!=null){
                 id_usuario_resibido_usuario = getIntent().getExtras().getInt("id");
-
                 intent.putExtra("id",id_usuario_resibido_usuario);
                 startActivity(intent);
                 finish();

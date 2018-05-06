@@ -168,6 +168,7 @@ public class Editar_Usuarios extends AppCompatActivity {
 
             }else {
                 Toast.makeText(getApplicationContext(), "Problemas de conexión", Toast.LENGTH_SHORT).show();
+
             }
         }
 

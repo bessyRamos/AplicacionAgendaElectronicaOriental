@@ -113,6 +113,7 @@ public class PerfilesEliminados extends AppCompatActivity  implements Navigation
                 }else {
                     Intent intent = new Intent(this, Login.class);
                     startActivity(intent);
+                    finish();
                 }
 
             }

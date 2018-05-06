@@ -169,6 +169,7 @@ public class NuevasSolicitudes extends AppCompatActivity
                 }else {
                     Intent intent = new Intent(this, Login.class);
                     startActivity(intent);
+                    finish();
                 }
 
             }
@@ -199,6 +200,7 @@ public class NuevasSolicitudes extends AppCompatActivity
             }else {
                 Toast.makeText(getApplicationContext(),"Error en id de usuario",Toast.LENGTH_SHORT).show();
             }
+
 
 
         }
