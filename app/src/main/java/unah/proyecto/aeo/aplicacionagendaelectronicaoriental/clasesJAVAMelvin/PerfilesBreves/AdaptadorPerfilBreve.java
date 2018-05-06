@@ -192,7 +192,7 @@ public class AdaptadorPerfilBreve extends RecyclerView.Adapter<AdaptadorPerfilBr
         }
         return  null;
     }
-/*
+
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     public void onViewAttachedToWindow(ViewHolder holder) {
         super.onViewAttachedToWindow(holder);
@@ -207,6 +207,6 @@ public class AdaptadorPerfilBreve extends RecyclerView.Adapter<AdaptadorPerfilBr
         view.setVisibility(View.VISIBLE);
         animator.start();
     }
-*/
+
 }
 

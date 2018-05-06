@@ -225,8 +225,8 @@ public class EditarPerfil extends AppCompatActivity {
     public  void  guardarUbicacionOrganizacion(View view){
 
         Intent ubicacion1 = new Intent(getApplicationContext(),Ingresar_Ubicacion.class);
-        ubicacion1.putExtra("latitud",Double.valueOf(etlatitud.getText().toString()));
-        ubicacion1.putExtra("longitud",Double.valueOf(etlatitud.getText().toString()));
+        ubicacion1.putExtra("latitud", Double.valueOf(etlatitud.getText().toString()));
+        ubicacion1.putExtra("longitud", Double.valueOf(etlatitud.getText().toString()));
         startActivityForResult(ubicacion1,1);
     }
 
