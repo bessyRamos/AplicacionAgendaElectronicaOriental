@@ -1,6 +1,7 @@
 package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio;
 
 import android.Manifest;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -36,9 +37,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import cz.msebera.android.httpclient.NameValuePair;
 import cz.msebera.android.httpclient.client.HttpClient;
@@ -82,7 +86,7 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity  implements N
     private static final int PICK_IMAGE = 100;
     Uri imageUri;
 
-    String encodeImagen;
+    String encodeImagen,cantidadDigitos;
 
 
     //preferencias
@@ -93,6 +97,8 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity  implements N
 
     double latitudResibida;
     double longitudResibida;
+
+    String validemail,email,correoIgual;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -210,10 +216,50 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity  implements N
 
                 validar();
 
+                validar();
+                cantidadDigitos = String.valueOf(telefonoCelular.getText().toString());
+                if(cantidadDigitos.length() == 8){
+                    if (nombreOrganizacion.getError()==null && telefonoFijo.getError()==null && telefonoCelular.getError()==null && direccionOrganizacion.getError()==null && emailOrganizacion.getError()==null && descrpcionOrganizacion.getError()==null && latitudOrganizacion.getError()==null && longitudOrganizacion.getError()==null){
+                        //validarEmail(emailOrganizacion.getText().toString());
+                        final int validar_correo = validarEmail(emailOrganizacion.getText().toString());
+                        if (validar_correo==1){
+                            //new validarCorreoDiferente().execute();
 
-                if (nombreOrganizacion.getError()==null && telefonoFijo.getError()==null && telefonoCelular.getError()==null && direccionOrganizacion.getError()==null && emailOrganizacion.getError()==null && descrpcionOrganizacion.getError()==null && latitudOrganizacion.getError()==null && longitudOrganizacion.getError()==null){
-                    Toast.makeText(getApplicationContext(),"Procesando... Por favor espere",Toast.LENGTH_SHORT).show();
-                    new crearPerfil().execute();
+                            final ProgressDialog progressDialog = new ProgressDialog(FormularioNuevaOrganizacion.this);
+                            progressDialog.setTitle("Procesando...");
+                            progressDialog.setMessage("Por favor espere");
+                            progressDialog.setCancelable(false);
+                            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                            //Toast.makeText(getApplicationContext(),"Procesando... Por favor espere",Toast.LENGTH_SHORT).show();
+
+
+                            new Thread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    new crearPerfil().execute();
+                                    try {
+                                        Thread.sleep(2000);
+                                    } catch (InterruptedException e) {
+                                        e.printStackTrace();
+                                    }
+                                    progressDialog.dismiss();
+
+                                }
+                            }).start();
+                            progressDialog.show();
+
+
+                        }
+                        else {
+                            emailOrganizacion.setError("Email no válido");
+                            emailOrganizacion.requestFocus();
+                            //Toast.makeText(getApplicationContext(),"Enter Valid Email-Id",Toast.LENGTH_LONG).show();
+                        }
+
+                    }
+                }else {
+                    Toast.makeText(getApplicationContext(),"El Numero Celular tiene que contener 8 digitos "+"cantidad = "+cantidadDigitos.length(),Toast.LENGTH_SHORT).show();
+                    telefonoCelular.requestFocus();
                 }
 
 
@@ -547,6 +593,99 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity  implements N
         }
 
 
+    }
+
+    //valida que el formato de el correo sea el correcto
+    private int validarEmail(String email_1) {
+        /*Pattern pattern = Patterns.EMAIL_ADDRESS;
+        return pattern.matcher(email).matches();*/
+
+        validemail = "[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" +
+
+                "\\@" +
+
+                "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
+
+                "(" +
+
+                "\\." +
+
+                "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
+
+                ")+";
+        email = email_1;
+        Matcher matcher= Pattern.compile(validemail).matcher(email);
+
+        if (matcher.matches()){
+            return 1;
+
+        }
+        else {
+            return 0;
+        }
+
+    }
+
+    private class validarCorreoDiferente extends AsyncTask<String, Integer, Boolean> {
+        private validarCorreoDiferente() {
+        }
+
+        boolean resul = true;
+
+        @Override
+        protected Boolean doInBackground(String... strings) {
+            String correoTraido;
+
+            try {
+                // Parseamos la respuesta obtenida del servidor a un objeto JSON
+                JSONObject jsonObject = new JSONObject(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/verCorreoOrganizacion.php?id_correo="+emailOrganizacion.getText().toString())).getEntity()));
+                JSONArray jsonArray = jsonObject.getJSONArray("datos");
+                for (int i = 0; i < jsonArray.length(); i++) {
+
+                    correoTraido = jsonArray.getJSONObject(i).getString("e_mail");
+                    if (jsonArray.getJSONObject(i).getString("e_mail").isEmpty()) {
+
+
+                        if (correoTraido.equals(emailOrganizacion.getText().toString())) {
+                            correoIgual = "igual";
+                        } else {
+                            correoIgual = "diferente";
+
+                        }
+                    }else {
+                        correoIgual = "diferente";
+                    }
+
+
+
+                }
+
+                resul = true;
+            } catch (Exception ex) {
+                Log.e("ServicioRest", "Error!", ex);
+                resul = false;
+            }
+            return resul;
+
+        }
+        protected void onPostExecute(Boolean result) {
+            if (resul) {
+                if (correoIgual.equals("igual")){
+                    emailOrganizacion.setError("correo ya existe");
+                    emailOrganizacion.requestFocus();
+                }else {
+
+                    validar();
+
+                    if (nombreOrganizacion.getError() == null && telefonoFijo.getError() == null && telefonoCelular.getError() == null && direccionOrganizacion.getError() == null && emailOrganizacion.getError() == null && descrpcionOrganizacion.getError() == null && latitudOrganizacion.getError() == null && longitudOrganizacion.getError() == null) {
+
+                    }
+                }
+
+            }else {
+                Toast.makeText(getApplicationContext(), "Problemas de conexión", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 
 

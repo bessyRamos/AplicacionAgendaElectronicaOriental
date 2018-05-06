@@ -55,6 +55,7 @@ import org.json.JSONObject;
 import org.json.*;
 import org.json.JSONStringer;
 
+import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import cz.msebera.android.httpclient.client.methods.HttpPost;
 import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
 import cz.msebera.android.httpclient.util.EntityUtils;
@@ -79,7 +80,7 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
     private int rol;
     private int estado_usuario;
     private JSONObject jsonObject;
-    private Button acceder,registrarse;
+    //private Button acceder,registrarse;
     String nombre_traido,contrasena_traida;
     private static final String IP_TOKEN="http://aeo.web-hn.com/RegisterDevice.php";
 
@@ -106,6 +107,8 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
     int id_usu=-1;
+    private CircularProgressButton acceder;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -122,7 +125,7 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
 
 
         //
-        acceder = (Button) findViewById(R.id.ingresar_login);
+        acceder = (CircularProgressButton) findViewById(R.id.ingresar_login);
         recuperar = (TextView) findViewById(R.id.recuperacion);//para recuperacion de contrasenia
         acceder.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,9 +133,35 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
                     if (usuario.getText().toString().isEmpty() || contrasena.getText().toString().isEmpty()) {
                         //Toast.makeText(getApplicationContext(), "Favor ingresar todos los Campos", Toast.LENGTH_SHORT).show();
                         validar();
+                        acceder.revertAnimation();
+                        acceder.stopAnimation();
                     } else {                          //si existe el usuario y la contraseña son correctas el accedera
+                        final AsyncTask<String,String,String> demoLogin = new AsyncTask<String, String, String>() {
+                            @Override
+                            protected String doInBackground(String... strings) {
+                                try {
+                                    Thread.sleep(3000);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+                                return "cargado";
 
-                        new LoginValidadoWeb().execute();
+                            }
+
+                            @Override
+                            protected void onPostExecute(String s) {
+                                if (s.equals("cargado")){
+
+                                    new LoginValidadoWeb().execute();
+                                    acceder.stopAnimation();
+                                    acceder.revertAnimation();
+
+                                }
+
+                            }
+                        };
+                        acceder.startAnimation();
+                        demoLogin.execute();
 
                     }//fin else
             }
@@ -310,7 +339,7 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
             } else if (rol ==2 && estado_usuario ==1){
                     //instancia y envio de usuario logeado
                     Intent intent = new Intent(Login.this,PanelDeControlUsuarios.class);
-                    sendTokenToServer();
+                    //sendTokenToServer();
                     intent.putExtra("id",id_preferencia);
                     //preferencia logeado con exito usuario
                     sessionUsuario.setLoginUsuario(true);

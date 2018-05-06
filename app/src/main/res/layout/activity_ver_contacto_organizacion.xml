@@ -6,228 +6,350 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.VerContactoOrganizacion">
+    <LinearLayout android:layout_width="match_parent"
+                  android:layout_height="wrap_content"
+                  android:orientation="vertical"
+    >
+        <android.support.design.widget.CoordinatorLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+        >
+            <android.support.design.widget.AppBarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:theme="@style/AppTheme.AppBarOverlay">
 
-    <ScrollView
+                <android.support.v7.widget.Toolbar
+                    android:id="@+id/toolbar"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:background="?attr/colorPrimary"
+                    app:popupTheme="@style/AppTheme.PopupOverlay"
+                    app:title="Ver Contacto"/>
+
+            </android.support.design.widget.AppBarLayout>
+        </android.support.design.widget.CoordinatorLayout>
+
+
+        <ScrollView
             android:id="@+id/scview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            xmlns:android="http://schemas.android.com/apk/res/android">
-
-            <RelativeLayout
-                xmlns:android="http://schemas.android.com/apk/res/android"
-                xmlns:app="http://schemas.android.com/apk/res-auto"
-                xmlns:tools="http://schemas.android.com/tools"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="5dp"
-                android:id="@+id/rl1">
-
-                <de.hdodenhof.circleimageview.CircleImageView
-                    android:id="@+id/imagenDeOrganizacion"
-                    android:layout_width="200dp"
-                    android:layout_height="160dp"
-                    android:layout_alignParentTop="true"
-                    android:layout_centerInParent="true"
-                    android:scaleType="centerCrop"
-                />
-
-                <android.support.design.widget.TextInputLayout
-                    android:layout_below="@id/imagenDeOrganizacion"
-                    android:id="@+id/iptlnombreorg"
-                    android:layout_marginTop="15dp"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <android.support.design.widget.TextInputEditText
-                        android:id="@+id/etnombreeorganizacion"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Nombre de la Organización"/>
-
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/iptlnumfijo"
-                    android:layout_below="@+id/iptlnombreorg"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <android.support.design.widget.TextInputEditText
-                        android:id="@+id/etnumerofijo"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Número fijo"
-                        android:inputType="text"
-                        android:digits="1234567890-"/>
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/iptlnumcel"
-                    android:layout_below="@+id/iptlnumfijo"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <android.support.design.widget.TextInputEditText
-                        android:id="@+id/etnumerocel"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Número móvil"
-                        android:inputType="text"
-                        android:digits="1234567890-"/>
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/iptldir"
-                    android:layout_below="@+id/iptlnumcel"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <android.support.design.widget.TextInputEditText
-                        android:id="@+id/etdireccion"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Dirección"
-                        android:inputType="textMultiLine"/>
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/iptlemail"
-                    android:layout_below="@+id/iptldir"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <android.support.design.widget.TextInputEditText
-                        android:id="@+id/etemail"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="e-mail"
-                        android:inputType="textEmailAddress" />
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/iptldescript"
-                    android:layout_below="@+id/iptlemail"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <android.support.design.widget.TextInputEditText
-                        android:id="@+id/etdescripcion"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:hint="Descripción de la Organizacion"
-                        android:inputType="textMultiLine"
-                    />
-                </android.support.design.widget.TextInputLayout>
+        >
+            <LinearLayout android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:orientation="vertical"
+            >
 
 
-                <TextView
-                    android:id="@+id/tvcat"
-                    android:layout_below="@id/iptldescript"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Categoría"/>
+                    android:orientation="vertical"
 
-                <Spinner
-                    android:id="@+id/spinercategoriaPerfil"
-                    android:layout_below="@+id/tvcat"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:spinnerMode="dialog"/>
-                <TextView
-                    android:id="@+id/tvreg"
-                    android:layout_below="@id/spinercategoriaPerfil"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Región" />
-                <Spinner
-                    android:id="@+id/spinerregionPerfil"
-                    android:layout_below="@+id/tvreg"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:spinnerMode="dropdown"/>
-                <TextView
-                    android:id="@+id/tvus"
-                    android:layout_below="@id/spinerregionPerfil"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Usuario"
-                    android:visibility="invisible"/>
-                <Spinner
-                    android:id="@+id/spinerusuariosPerfil"
-                    android:layout_below="@+id/tvus"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:spinnerMode="dropdown"
-                    android:visibility="invisible"/>
+                    android:layout_marginBottom="5dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginLeft="10dp"
+                >
 
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/iptllatit"
-                    android:layout_below="@+id/spinerusuariosPerfil"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <android.support.design.widget.TextInputEditText
-                        android:id="@+id/etlatitud"
+                    <TextView
+                        android:id="@+id/verNombreOrganizacion"
+                        android:layout_marginTop="20dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:clickable="false"
-                        android:text="latitud"
+                        android:text="Nombre de La Organización"
+                        android:textSize="20sp"
+                        android:gravity="center"
+                        android:textStyle="bold"
+
                     />
 
-                </android.support.design.widget.TextInputLayout>
-
-                <android.support.design.widget.TextInputLayout
-                    android:id="@+id/iptllong"
-                    android:layout_below="@+id/iptllatit"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-                    <android.support.design.widget.TextInputEditText
-                        android:id="@+id/etlongitud"
-                        android:text="longitud"
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:clickable="false"
+                        android:orientation="horizontal"
+                        android:layout_marginTop="10dp"
+                    >
+                        <ImageView
+                            android:id="@+id/verImagenOrganizacion"
+                            android:layout_width="match_parent"
+                            android:layout_height="170dp"
+                            android:src="@drawable/iconocontactowhite"
+                            android:layout_marginTop="15dp"
+                            android:layout_weight="1"
+                        />
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="170dp"
+                            android:orientation="vertical"
+                            android:layout_weight="1"
+                            android:layout_gravity="center_vertical"
+                            android:gravity="center"
+                            android:layout_marginTop="10dp"
+                            android:layout_marginLeft="6dp"
+
+                        >
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Numero Fijo:"
+                                android:textSize="15sp"
+                            />
+
+                            <TextView
+                                android:id="@+id/verNumeroFijo"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="2763-12-12"
+                                android:textSize="20sp"
+                                android:layout_marginTop="10dp"
+
+                            />
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="2dp"
+                                android:background="@color/colorPrimary"
+                                android:layout_marginTop="2dp"
+                            />
+                            <TextView
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="Numero Celular:"
+                                android:textSize="15sp"
+                                android:layout_marginTop="20dp"
+
+                            />
+                            <TextView
+                                android:id="@+id/verNumeroCelular"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:text="9777-12-12"
+                                android:textSize="20sp"
+                                android:layout_marginTop="10dp"
+
+                            />
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="2dp"
+                                android:background="@color/colorPrimary"
+                                android:layout_marginTop="2dp"
+                            />
+
+                        </LinearLayout>
+                    </LinearLayout>
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Correo Electronico:"
+                        android:textSize="15sp"
+                        android:layout_marginTop="26dp"
+
                     />
-                </android.support.design.widget.TextInputLayout>
-                <ImageView
-                    android:layout_below="@id/iptllong"
-                    android:id="@+id/imgUbicacionOrganizacion"
-                    android:layout_width="match_parent"
-                    android:layout_height="90dp"
-                    app:srcCompat="@drawable/ubicacion_organizacion"
-                />
-                <Button
-                    android:layout_below="@id/imgUbicacionOrganizacion"
-                    android:id="@+id/btnUbicacionOrganizacion"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Insertar Ubicacion"
-                    app:srcCompat="@drawable/ubicacion_organizacion"
-                    android:layout_centerInParent="true"
-                    android:layout_gravity="center_horizontal"
-                    android:onClick="guardarUbicacionOrganizacion"
-                    android:layout_marginBottom="25dp"
+                    <TextView
+                        android:id="@+id/verEmailOrganizacion"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="correo@gmail.com"
+                        android:textSize="20sp"
+                        android:layout_marginTop="10dp"
 
-                />
+                    />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@color/colorPrimary"
+                        android:layout_marginTop="2dp"
+                    />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Dirección:"
+                        android:textSize="15sp"
+                        android:layout_marginTop="10dp"
 
-                <android.support.design.widget.FloatingActionButton
-                    android:id="@+id/botonFoto"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_above="@+id/iptlnumfijo"
-                    android:layout_alignEnd="@+id/imagenDeOrganizacion"
-                    android:layout_marginBottom="74dp"
-                    android:layout_marginEnd="20dp"
-                    android:src="@drawable/ic_menu_camera" />
+                    />
+                    <TextView
+                        android:id="@+id/verDireccionOrganizacion"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Dirección de la Organización "
+                        android:textSize="20sp"
+                        android:layout_marginTop="10dp"
+
+                    />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@color/colorPrimary"
+                        android:layout_marginTop="2dp"
+                    />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="@string/Descripcion"
+                        android:textSize="15sp"
+                        android:layout_marginTop="10dp"
+
+                    />
+                    <TextView
+                        android:id="@+id/verDescripcionOrganizacion"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Descripcion de la Organización "
+                        android:textSize="20sp"
+                        android:layout_marginTop="10dp"
+
+                    />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@color/colorPrimary"
+                        android:layout_marginTop="2dp"
+                    />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Categoría:"
+                        android:textSize="15sp"
+                        android:layout_marginTop="10dp"
+
+                    />
+                    <TextView
+                        android:id="@+id/verCategoriaOrganizacion"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Categoria que pertenece "
+                        android:textSize="20sp"
+                        android:layout_marginTop="10dp"
+
+                    />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@color/colorPrimary"
+                        android:layout_marginTop="2dp"
+                    />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Región:"
+                        android:textSize="15sp"
+                        android:layout_marginTop="10dp"
+
+                    />
+                    <TextView
+                        android:id="@+id/verRegionOrganizacion"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Region que pertenese "
+                        android:textSize="20sp"
+                        android:layout_marginTop="10dp"
+
+                    />
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@color/colorPrimary"
+                        android:layout_marginTop="2dp"
+                    />
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:text="Ubicación:"
+                        android:textSize="20sp"
+                        android:layout_marginTop="10dp"
+                        android:gravity="center"
+                    />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:layout_gravity="center_horizontal"
+                    >
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Latitud:"
+                            android:textSize="15sp"
+                            android:layout_marginTop="10dp"
+                            android:layout_weight="4"
+                            android:gravity="center"
+                        />
+                        <TextView
+                            android:id="@+id/verLatitudOrganizacion"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="646473738737474748484 "
+                            android:textSize="20sp"
+                            android:layout_marginTop="10dp"
+                            android:layout_weight="1"
+                        />
+
+
+                    </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        android:gravity="center"
+                        android:layout_gravity="center_horizontal"
+                    >
+                        <TextView
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="Longitud:"
+                            android:textSize="15sp"
+                            android:layout_marginTop="10dp"
+                            android:layout_weight="4"
+                            android:gravity="center"
+                        />
+                        <TextView
+                            android:id="@+id/verLongitudOrganizacion"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:text="-646473738737474748484 "
+                            android:textSize="20sp"
+                            android:layout_marginTop="10dp"
+                            android:layout_weight="1"
+
+                        />
+
+
+                    </LinearLayout>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="2dp"
+                        android:background="@color/colorPrimary"
+                        android:layout_marginTop="5dp"
+                    />
 
 
 
-            </RelativeLayout>
 
+
+
+
+                </LinearLayout>
+
+
+
+            </LinearLayout>
         </ScrollView>
+    </LinearLayout>
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/botonGuardar"
+        android:id="@+id/botonEditarOrganizacion"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:layout_alignParentEnd="true"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
-        android:src="@drawable/ic_save_white_24dp" />
+        app:srcCompat="@drawable/editar"
+        android:onClick="editarOrganizacion"
+    />
 
 
 </RelativeLayout>

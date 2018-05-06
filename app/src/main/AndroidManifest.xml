@@ -226,7 +226,8 @@
         </service>
 
 
-        <activity android:name=".clasesJAVAVirgilio.VerContactoOrganizacion">
+        <activity android:name=".clasesJAVAVirgilio.VerContactoOrganizacion"
+                  android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>
 
