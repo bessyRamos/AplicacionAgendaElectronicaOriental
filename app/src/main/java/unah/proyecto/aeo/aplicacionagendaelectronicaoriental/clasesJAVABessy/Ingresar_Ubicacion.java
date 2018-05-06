@@ -18,13 +18,16 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import java.util.Locale;
 
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.AdministracionDePerfilesAdmin.EditarPerfil;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.AdministracionDePerfilesAdmin.NuevoPerfil;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.EditarPerfilOrganizacion;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.FormularioNuevaOrganizacion;
 
 public class Ingresar_Ubicacion extends AppCompatActivity implements GoogleMap.OnMarkerDragListener,OnMapReadyCallback {
     private GoogleMap mMap;
     private Marker marcas;
-
+    double latitud;
+    double longitud;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,17 +36,29 @@ public class Ingresar_Ubicacion extends AppCompatActivity implements GoogleMap.O
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-    }
 
+    }
     @Override
     public void onMapReady(GoogleMap googleMap) {
+
         mMap = googleMap;
         mMap.setMapType(GoogleMap.MAP_TYPE_HYBRID);
-        LatLng danli = new LatLng(14.041458, -86.568061);
-        marcas = googleMap.addMarker(new MarkerOptions().position(danli).title("Danlí").draggable(true));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(danli, 16));
-        googleMap.setOnMarkerDragListener(this);
-        mMap.getUiSettings().setZoomControlsEnabled(true);
+        LatLng danli;
+        Bundle extras = getIntent().getExtras();
+        if (getIntent().getExtras()!=null){
+           double latitud = getIntent().getExtras().getDouble("latitud");
+           double longitud = getIntent().getExtras().getDouble("longitud");
+           danli= new  LatLng(latitud, longitud);
+
+        }else {
+
+        danli = new LatLng(14.041458, -86.568061);
+        }
+
+            marcas = googleMap.addMarker(new MarkerOptions().position(danli).title("Danlí").draggable(true));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(danli, 16));
+            googleMap.setOnMarkerDragListener(this);
+            mMap.getUiSettings().setZoomControlsEnabled(true);
 
     }
 
@@ -67,28 +82,6 @@ public class Ingresar_Ubicacion extends AppCompatActivity implements GoogleMap.O
         if (marker.equals(marcas)) {
             Toast.makeText(this, "Ubicacion Exitosa.", Toast.LENGTH_SHORT).show();
 
-            /*String la, lo;
-            la = Double.toString(marker.getPosition().latitude);
-            lo = Double.toString(marker.getPosition().longitude);
-
-            Intent data = new Intent();
-            data.putExtra("latitud", la);
-            data.putExtra("longitud", lo);
-            setResult(NuevoPerfil.RESULT_OK, data);
-            finish();
-//extras para Formulario de nuevas organizaciones
-        } else if (marker.equals(marcas)) {
-            Toast.makeText(this, "Ubicacion Exitosa.", Toast.LENGTH_SHORT).show();
-
-            String la, lo;
-            la = Double.toString(marker.getPosition().latitude);
-            lo = Double.toString(marker.getPosition().longitude);
-
-            Intent data = new Intent();
-            data.putExtra("latitud", la);
-            data.putExtra("longitud", lo);
-            setResult(FormularioNuevaOrganizacion.RESULT_OK, data);
-            finish();*/
         }
     }
 
@@ -119,6 +112,7 @@ public class Ingresar_Ubicacion extends AppCompatActivity implements GoogleMap.O
             data.putExtra("longitud", lo);
             setResult(FormularioNuevaOrganizacion.RESULT_OK, data);
             finish();
+            return true;
 
         }else if(id==R.id.send) {
 
@@ -130,6 +124,32 @@ public class Ingresar_Ubicacion extends AppCompatActivity implements GoogleMap.O
             data.putExtra("latitud", la);
             data.putExtra("longitud", lo);
             setResult(NuevoPerfil.RESULT_OK, data);
+            finish();
+
+            return true;
+        }else if(id==R.id.send) {
+
+            String la, lo;
+            la = Double.toString(marcas.getPosition().latitude);
+            lo = Double.toString(marcas.getPosition().longitude);
+
+            Intent data = new Intent();
+            data.putExtra("latitud", la);
+            data.putExtra("longitud", lo);
+            setResult(EditarPerfilOrganizacion.RESULT_OK, data);
+            finish();
+
+            return true;
+        }else if(id==R.id.send) {
+
+            String la, lo;
+            la = Double.toString(marcas.getPosition().latitude);
+            lo = Double.toString(marcas.getPosition().longitude);
+
+            Intent data = new Intent();
+            data.putExtra("latitud", la);
+            data.putExtra("longitud", lo);
+            setResult(EditarPerfil.RESULT_OK, data);
             finish();
 
             return true;
