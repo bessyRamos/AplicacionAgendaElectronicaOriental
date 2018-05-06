@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -40,6 +41,8 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -78,7 +81,7 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity  implements N
     Button ubicacion;
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1 ;
     Bitmap imagenBitmap;
-
+    boolean editarFoto = false;
     ArrayList<ModeloSpinner> listaCategorias, listaRegiones, listaUsuarios;
     private Spinner  spinnerCategorias,spinnerRgiones;
 
@@ -191,6 +194,7 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity  implements N
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                editarFoto=true;
                 requestRead();
             }
         });
@@ -198,71 +202,49 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity  implements N
         guardar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                if(editarFoto==true){
+                    imagenBitmap = ((BitmapDrawable)imagenOrganizacion.getDrawable()).getBitmap();
+                    new AsyncTask<Void, Void, String>(){
+                        @Override
+                        protected String doInBackground(Void... voids) {
+                            ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                            imagenBitmap.compress(Bitmap.CompressFormat.JPEG,100,baos);
+                            byte b []= baos.toByteArray();
 
-                imagenBitmap = ((BitmapDrawable)imagenOrganizacion.getDrawable()).getBitmap();
+                            encodeImagen = Base64.encodeToString(b,Base64.DEFAULT);
 
-                new AsyncTask<Void, Void, String>(){
-                    @Override
-                    protected String doInBackground(Void... voids) {
-                        ByteArrayOutputStream baos = new ByteArrayOutputStream();
-                        imagenBitmap.compress(Bitmap.CompressFormat.JPEG,100,baos);
-                        byte b []= baos.toByteArray();
-
-                        encodeImagen = Base64.encodeToString(b,0);
-
-                        return null;
-                    }
-                }.execute();
+                            return null;
+                        }
+                    }.execute();
+                }
 
                 validar();
-                cantidadDigitos = String.valueOf(telefonoCelular.getText().toString());
-                if(cantidadDigitos.length() == 8){
-                    if (nombreOrganizacion.getError()==null && telefonoFijo.getError()==null && telefonoCelular.getError()==null && direccionOrganizacion.getError()==null && emailOrganizacion.getError()==null && descrpcionOrganizacion.getError()==null && latitudOrganizacion.getError()==null && longitudOrganizacion.getError()==null){
-                        //validarEmail(emailOrganizacion.getText().toString());
-                        final int validar_correo = validarEmail(emailOrganizacion.getText().toString());
-                        if (validar_correo==1){
-                            //new validarCorreoDiferente().execute();
+                if (nombreOrganizacion.getError()==null &&
+                        telefonoFijo.getError()==null &&
+                        telefonoCelular.getError()==null &&
+                        direccionOrganizacion.getError()==null &&
+                        emailOrganizacion.getError()==null &&
+                        descrpcionOrganizacion.getError()==null &&
+                        latitudOrganizacion.getError()==null &&
+                        longitudOrganizacion.getError()==null) {
+                    guardar.setClickable(false);
 
-                            final ProgressDialog progressDialog = new ProgressDialog(FormularioNuevaOrganizacion.this);
-                            progressDialog.setTitle("Procesando...");
-                            progressDialog.setMessage("Por favor espere");
-                            progressDialog.setCancelable(false);
-                            progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-                            //Toast.makeText(getApplicationContext(),"Procesando... Por favor espere",Toast.LENGTH_SHORT).show();
+                    final ProgressDialog progressDialog = new ProgressDialog(FormularioNuevaOrganizacion.this);
+                    progressDialog.setTitle("Procesando...");
+                    progressDialog.setMessage("Por favor espere");
+                    progressDialog.setCancelable(false);
+                    progressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+                    //Toast.makeText(getApplicationContext(),"Procesando... Por favor espere",Toast.LENGTH_SHORT).show();
 
+                    progressDialog.show();
+                    new crearPerfil().execute();
 
-                            new Thread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    new crearPerfil().execute();
-                                    try {
-                                        Thread.sleep(2000);
-                                    } catch (InterruptedException e) {
-                                        e.printStackTrace();
-                                    }
-                                    progressDialog.dismiss();
-
-                                }
-                            }).start();
-                            progressDialog.show();
-
-
-                        }
-                        else {
-                            emailOrganizacion.setError("Email no válido");
-                            emailOrganizacion.requestFocus();
-                            //Toast.makeText(getApplicationContext(),"Enter Valid Email-Id",Toast.LENGTH_LONG).show();
-                        }
-
-                    }
-                }else {
-                    Toast.makeText(getApplicationContext(),"El Numero Celular tiene que contener 8 digitos "+"cantidad = "+cantidadDigitos.length(),Toast.LENGTH_SHORT).show();
-                    telefonoCelular.requestFocus();
                 }
 
 
             }
         });
+
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -290,9 +272,34 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity  implements N
         }
 
         if(resultCode == RESULT_OK && requestCode == PICK_IMAGE){
-            imageUri = data.getData();
-            imagenOrganizacion.setImageURI(imageUri);
+            try {
+                Uri imageUri = data.getData();
+                InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+
+                selectedImage = getResizedBitmap(selectedImage, 500);// 400 is for example, replace with desired size
+
+                imagenOrganizacion.setImageBitmap(selectedImage);
+
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
         }
+    }
+    public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+
+        float bitmapRatio = (float)width / (float) height;
+        if (bitmapRatio > 1) {
+            width = maxSize;
+            height = (int) (width / bitmapRatio);
+        } else {
+            height = maxSize;
+            width = (int) (height * bitmapRatio);
+        }
+        return Bitmap.createScaledBitmap(image, width, height, true);
     }
 
     public void requestRead() {
@@ -405,7 +412,6 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity  implements N
 
 
     private void validar(){
-
         //id.setError(null);
         nombreOrganizacion.setError(null);
         telefonoFijo.setError(null);
@@ -417,62 +423,78 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity  implements N
         longitudOrganizacion.setError(null);
 
         // String idd = id.getText().toString();
-        String nombreOrganiza = nombreOrganizacion.getText().toString();
-        String telefonoOrganiza = telefonoFijo.getText().toString();
-        String celularOrganiza= telefonoCelular.getText().toString();
-        String direccionOrganiza = direccionOrganizacion.getText().toString();
-        String emailOrganiza = emailOrganizacion.getText().toString();
-        String descripcionOrganiza = descrpcionOrganizacion.getText().toString();
-        //String longitudOrganiza = String.valueOf(longitudOrganizacion).toString();
-        //String latitudOrganiza = String.valueOf(latitudOrganizacion).toString();
+        String nomborg = nombreOrganizacion.getText().toString();
+        String numtel = telefonoFijo.getText().toString();
+        String numcel = telefonoCelular.getText().toString();
+        String direccion = direccionOrganizacion.getText().toString();
+        String desc = descrpcionOrganizacion.getText().toString();
+        String lati = latitudOrganizacion.getText().toString();
+        String longitud = longitudOrganizacion.getText().toString();
+        String mail = emailOrganizacion.getText().toString();
 
-        String longitudOrganiza = longitudOrganizacion.getText().toString();
-        String latitudOrganiza = latitudOrganizacion.getText().toString();
+        if(TextUtils.isEmpty(mail)){
 
+        }else{
+            if(!mail.contains("@") || !mail.contains(".com")){
+                emailOrganizacion.setError(getString(R.string.error_mailnovalido));
+                emailOrganizacion.requestFocus();
+                return;
+            }
+        }
 
-
-        if(TextUtils.isEmpty(nombreOrganiza)){
+        if(TextUtils.isEmpty(nomborg)){
             nombreOrganizacion.setError(getString(R.string.errNombreOrg));
             nombreOrganizacion.requestFocus();
             return;
         }
-        if(TextUtils.isEmpty(telefonoOrganiza)){
-            telefonoFijo.setError(getString(R.string.errNumero));
-            telefonoFijo.requestFocus();
-            return;
+        if(TextUtils.isEmpty(numtel)){
+            if(TextUtils.isEmpty(numcel)){
+                telefonoFijo.setError(getString(R.string.errNumero));
+                telefonoFijo.requestFocus();
+                return;
+            }
+        }else{
+            if(numtel.length()<8 || !numtel.startsWith("2") || numtel.length()>8){
+                telefonoFijo.setError(getString(R.string.error_numnovalido));
+                telefonoFijo.requestFocus();
+                return;
+            }
         }
 
-        if(TextUtils.isEmpty(celularOrganiza)){
-            telefonoCelular.setError(getString(R.string.errNumeroCelular));
-            telefonoCelular.requestFocus();
-            return;
+        if(TextUtils.isEmpty(numcel)){
+            if(TextUtils.isEmpty(numtel)){
+                telefonoCelular.setError(getString(R.string.errNumero));
+                telefonoCelular.requestFocus();
+                return;
+            }
+        }else{
+            if(numcel.length()<8 || numcel.length()>8){
+                telefonoCelular.setError(getString(R.string.error_numnovalido));
+                telefonoCelular.requestFocus();
+                return;
+            }
         }
-        if(TextUtils.isEmpty(direccionOrganiza)){
+
+        if(TextUtils.isEmpty(direccion)){
             direccionOrganizacion.setError(getString(R.string.errDir));
             direccionOrganizacion.requestFocus();
             return;
         }
-        if(TextUtils.isEmpty(emailOrganiza)){
-            emailOrganizacion.setError(getString(R.string.erremail));
-            emailOrganizacion.requestFocus();
-            return;
-        }
-        if(TextUtils.isEmpty(descripcionOrganiza)){
+        if(TextUtils.isEmpty(desc)){
             descrpcionOrganizacion.setError(getString(R.string.errDesc));
             descrpcionOrganizacion.requestFocus();
             return;
         }
-        if(TextUtils.isEmpty(latitudOrganiza)){
+        if(TextUtils.isEmpty(lati)){
             latitudOrganizacion.setError(getString(R.string.errLat));
             latitudOrganizacion.requestFocus();
             return;
         }
-        if(TextUtils.isEmpty(longitudOrganiza)){
-           longitudOrganizacion.setError(getString(R.string.errLong));
+        if(TextUtils.isEmpty(longitud)){
+            longitudOrganizacion.setError(getString(R.string.errLong));
             longitudOrganizacion.requestFocus();
             return;
         }
-
 
     }
 
@@ -508,12 +530,13 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity  implements N
                 parametros.add(new BasicNameValuePair("id_region",String.valueOf(id_region)));
                 parametros.add(new BasicNameValuePair("id_usuario",String.valueOf(id_usuario)));
 
-                parametros.add(new BasicNameValuePair("imagen_rec",encodeImagen));
-
+                if(editarFoto==true){
+                    parametros.add(new BasicNameValuePair("imagen",encodeImagen));
+                    parametros.add(new BasicNameValuePair("nombre_imagen",nombreOrganizacion.getText().toString().replace(" ","_") +".jpg"));
+                }
                 httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));
 
                 httpclient.execute(httppost);
-
 
                 resul = true;
             } catch (Exception ex) {
@@ -538,6 +561,7 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity  implements N
 
             }else {
                 Toast.makeText(getApplicationContext(), "Problemas de conexión", Toast.LENGTH_SHORT).show();
+                guardar.setClickable(true);
             }
         }
 
