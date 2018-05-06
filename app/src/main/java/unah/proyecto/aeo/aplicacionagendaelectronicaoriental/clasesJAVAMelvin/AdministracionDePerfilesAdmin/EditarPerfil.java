@@ -192,7 +192,7 @@ public class EditarPerfil extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(),"Procesando... Por favor espere",Toast.LENGTH_SHORT).show();
                     i ++;
                     new actualizarPerfil().execute();
-                    Picasso.get().invalidate(imagen_rec);
+
                 }
 
             }
@@ -225,8 +225,8 @@ public class EditarPerfil extends AppCompatActivity {
     public  void  guardarUbicacionOrganizacion(View view){
 
         Intent ubicacion1 = new Intent(getApplicationContext(),Ingresar_Ubicacion.class);
-        ubicacion1.putExtra("latitud",etlatitud.getText().toString());
-        ubicacion1.putExtra("longitud",etlatitud.getText().toString());
+        ubicacion1.putExtra("latitud",Double.valueOf(etlatitud.getText().toString()));
+        ubicacion1.putExtra("longitud",Double.valueOf(etlatitud.getText().toString()));
         startActivityForResult(ubicacion1,1);
     }
 
@@ -594,7 +594,9 @@ public class EditarPerfil extends AppCompatActivity {
 
                     Toast.makeText(getApplicationContext(),"Perfil Actualizado Correctamente",Toast.LENGTH_SHORT).show();
                     //startActivity(new Intent(getApplicationContext(),AdministracionDePerfiles.class));
-                    finish();
+                Intent data = new Intent();
+                setResult(AdministracionDePerfiles.RESULT_OK, data);
+                finish();
 
             }else {
                 Toast.makeText(getApplicationContext(), "Problemas de conexión", Toast.LENGTH_SHORT).show();

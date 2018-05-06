@@ -59,6 +59,7 @@ public class AdministracionDePerfiles extends AppCompatActivity
     int id_usuario_resibido_usuario;
     int id_usu=-1;
     private static final int PASAR_A_EDITAR = 100;
+    private static final int PASAR_A_NUEVO = 200;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
