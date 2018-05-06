@@ -498,11 +498,11 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity  implements N
                 parametros.add(new BasicNameValuePair("direccion_rec",direccionOrganizacion.getText().toString()));
                 parametros.add(new BasicNameValuePair("desc_rec",descrpcionOrganizacion.getText().toString()));
                 parametros.add(new BasicNameValuePair("email_rec",emailOrganizacion.getText().toString()));
-               // parametros.add(new BasicNameValuePair("lat_rec",latitudOrganizacion.getText().toString()));
+                parametros.add(new BasicNameValuePair("lat_rec",latitudOrganizacion.getText().toString()));
 
                 parametros.add(new BasicNameValuePair("lat_rec",(String.valueOf(latitudResibida))));
 
-               // parametros.add(new BasicNameValuePair("longitud_rec",longitudOrganizacion.getText().toString()));
+                parametros.add(new BasicNameValuePair("longitud_rec",longitudOrganizacion.getText().toString()));
 
                 parametros.add(new BasicNameValuePair("longitud_rec",String.valueOf(longitudResibida)));
 

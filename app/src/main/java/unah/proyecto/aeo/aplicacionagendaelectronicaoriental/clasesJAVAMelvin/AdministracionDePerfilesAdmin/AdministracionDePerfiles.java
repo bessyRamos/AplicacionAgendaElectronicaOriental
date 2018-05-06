@@ -201,6 +201,7 @@ public class AdministracionDePerfiles extends AppCompatActivity
                 }else {
                     Intent intent = new Intent(this, Login.class);
                     startActivity(intent);
+                    finish();
                 }
 
             }
@@ -223,8 +224,8 @@ public class AdministracionDePerfiles extends AppCompatActivity
         }else if (id == R.id.ediciondeCuenta){
             Intent intent = new Intent(this,EditarUsuario.class);
             if (getIntent().getExtras()!=null){
-                id_usuario_resibido_usuario = getIntent().getExtras().getInt("id");
-
+                    id_usuario_resibido_usuario  = getIntent().getExtras().getInt("usuario_ingreso");
+                //id_usuario_resibido_usuario = getIntent().getExtras().getInt("id");
                 intent.putExtra("id",id_usuario_resibido_usuario);
                 startActivity(intent);
                 finish();

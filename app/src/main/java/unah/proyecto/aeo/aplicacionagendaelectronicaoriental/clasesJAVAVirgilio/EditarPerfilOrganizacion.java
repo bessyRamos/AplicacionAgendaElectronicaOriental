@@ -348,7 +348,18 @@ public class EditarPerfilOrganizacion extends AppCompatActivity  implements Navi
         if(resultCode == RESULT_OK && requestCode == PICK_IMAGE){
             imageUri = data.getData();
             imagenOrg.setImageURI(imageUri);
+        }else if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+
+                String latitud = data.getStringExtra("latitud");
+                String longitud = data.getStringExtra("longitud");
+                etlatitud.setText(latitud);
+                etlongitud.setText(longitud);
+
+            }
         }
+
+
     }
 
 
