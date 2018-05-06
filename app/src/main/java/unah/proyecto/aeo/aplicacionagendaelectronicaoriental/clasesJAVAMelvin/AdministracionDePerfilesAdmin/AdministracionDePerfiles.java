@@ -99,8 +99,8 @@ public class AdministracionDePerfiles extends AppCompatActivity
         botonNuevoPerfil.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(getApplicationContext(),NuevoPerfil.class));
-                finish();
+               Intent i= new Intent(getApplicationContext(),NuevoPerfil.class);
+                startActivityForResult(i,PASAR_A_NUEVO);
             }
         });
 
@@ -130,6 +130,10 @@ public class AdministracionDePerfiles extends AppCompatActivity
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == PASAR_A_EDITAR && resultCode == RESULT_OK){
 
+            mostrar_perfiles.clear();
+            new llenarLista().execute();
+            adaptadorMostrarPerfiles.notifyDataSetChanged();
+        }else if(requestCode == PASAR_A_NUEVO && resultCode == RESULT_OK){
             mostrar_perfiles.clear();
             new llenarLista().execute();
             adaptadorMostrarPerfiles.notifyDataSetChanged();

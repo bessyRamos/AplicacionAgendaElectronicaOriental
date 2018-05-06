@@ -465,9 +465,10 @@ public class NuevoPerfil extends AppCompatActivity {
         protected void onPostExecute(Boolean result) {
             if (resul) {
 
-                    Toast.makeText(getApplicationContext(),"Perfil Creado Correctamente",Toast.LENGTH_SHORT).show();
-                    startActivity(new Intent(getApplicationContext(),AdministracionDePerfiles.class));
-                    finish();
+                Toast.makeText(getApplicationContext(),"Perfil Creado Correctamente",Toast.LENGTH_SHORT).show();
+                Intent data = new Intent();
+                setResult(AdministracionDePerfiles.RESULT_OK, data);
+                finish();
 
             }else {
                 Toast.makeText(getApplicationContext(), "Problemas de conexión", Toast.LENGTH_SHORT).show();

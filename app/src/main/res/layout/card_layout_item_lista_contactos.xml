@@ -38,16 +38,18 @@
                             android:textColor="#000"
                             android:textStyle="bold"
                             android:textSize="18sp"
+                            android:layout_marginLeft="10dp"
                             />
                         <TextView
                             android:id="@+id/numero_telefono_organizacion"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text=""
+                            android:text="32277701"
                             android:autoLink="phone"
                             android:layout_marginTop="5dp"
                             android:textColor="#000"
                             android:textSize="16sp"
+                            android:layout_marginLeft="10dp"
                             />
                         <TextView
                             android:id="@+id/direccion_organizacion"
@@ -57,6 +59,7 @@
                             android:layout_marginTop="5dp"
                             android:textColor="#000"
                             android:textSize="14sp"
+                            android:layout_marginLeft="10dp"
                             />
                         <TextView
                             android:id="@+id/id_Deorganizacion"
@@ -66,6 +69,7 @@
                             android:textSize="14sp"
                             android:text=""
                             android:visibility="invisible" />
+
                 </LinearLayout>
     </LinearLayout>
 

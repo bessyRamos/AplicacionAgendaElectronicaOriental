@@ -18,10 +18,9 @@
 
     <application
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher_round"
+        android:icon="@mipmap/icono_nuevo_aeo_round"
         android:label="@string/app_name"
         android:largeHeap="true"
-        android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
@@ -227,7 +226,8 @@
         </service>
 
 
-        <activity android:name=".clasesJAVAVirgilio.VerContactoOrganizacion">
+        <activity android:name=".clasesJAVAVirgilio.VerContactoOrganizacion"
+                  android:theme="@style/AppTheme.NoActionBar">
         </activity>
     </application>
 

@@ -223,10 +223,12 @@ public class EditarPerfil extends AppCompatActivity {
      **********************************************************************************************/
 
     public  void  guardarUbicacionOrganizacion(View view){
+        Double latitudParaubicar=Double.valueOf(etlatitud.getText().toString());
+        Double longitudParaubicar=Double.valueOf(etlongitud.getText().toString());
 
         Intent ubicacion1 = new Intent(getApplicationContext(),Ingresar_Ubicacion.class);
-        ubicacion1.putExtra("latitud",Double.valueOf(etlatitud.getText().toString()));
-        ubicacion1.putExtra("longitud",Double.valueOf(etlatitud.getText().toString()));
+        ubicacion1.putExtra("latitud",latitudParaubicar);
+        ubicacion1.putExtra("longitud", longitudParaubicar);
         startActivityForResult(ubicacion1,1);
     }
 
@@ -444,9 +446,7 @@ public class EditarPerfil extends AppCompatActivity {
 
 
                 new eliminarPerfil().execute();
-                Intent data = new Intent();
-                setResult(AdministracionDePerfiles.RESULT_OK, data);
-                finish();
+
 
             }
         });
@@ -697,7 +697,8 @@ public class EditarPerfil extends AppCompatActivity {
 
             if (resul) {
                 Toast.makeText(getApplicationContext(),"Perfil Eliminado",Toast.LENGTH_SHORT).show();
-
+                Intent data = new Intent();
+                setResult(AdministracionDePerfiles.RESULT_OK, data);
                 finish();
             }else {
                 Toast.makeText(getApplicationContext(), "Problemas de conexión", Toast.LENGTH_SHORT).show();
