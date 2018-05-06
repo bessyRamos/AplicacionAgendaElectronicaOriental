@@ -513,7 +513,7 @@ public class EditarPerfil extends AppCompatActivity {
                     Picasso.get().
                             load(imagen_rec).
                     networkPolicy(NetworkPolicy.NO_CACHE).
-                            memoryPolicy(MemoryPolicy.NO_CACHE).
+                            memoryPolicy(MemoryPolicy.NO_CACHE).placeholder(R.drawable.wait).
                     into(imagenOrg);
                 }else{
                     Picasso.get().

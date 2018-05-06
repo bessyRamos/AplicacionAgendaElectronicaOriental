@@ -67,7 +67,7 @@ public class NuevoPerfil extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editar_perfil);
-
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         botonFoto = findViewById(R.id.botonFoto);
         imagenOrg = findViewById(R.id.imagenDeOrganizacion);
         botonGuardar= findViewById(R.id.botonGuardar);
@@ -303,7 +303,7 @@ public class NuevoPerfil extends AppCompatActivity {
         if(TextUtils.isEmpty(mail)){
 
         }else{
-            if(!mail.contains("@")){
+            if(!mail.contains("@") || !mail.contains(".com")){
                 etemail.setError(getString(R.string.error_mailnovalido));
                 etemail.requestFocus();
                 return;
