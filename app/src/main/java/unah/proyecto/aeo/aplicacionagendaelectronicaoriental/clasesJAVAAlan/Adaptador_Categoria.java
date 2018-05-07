@@ -1,11 +1,15 @@
 package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan;
+import android.animation.Animator;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.os.Build;
+import android.support.annotation.RequiresApi;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewAnimationUtils;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -118,6 +122,20 @@ public class Adaptador_Categoria extends RecyclerView.Adapter<Adaptador_Categori
             return new Fuente_Categoria(dataCursor);
         }
         return  null;
+    }
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public void onViewAttachedToWindow(ViewHolder holder) {
+        super.onViewAttachedToWindow(holder);
+        animateCircularReveal(holder.itemView);
+
+    }
+
+    @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
+    public void animateCircularReveal(View view){
+        int centerX=0, centery=0, startRadius=0, endRadius = Math.max(view.getWidth(),view.getHeight());
+        Animator animator = ViewAnimationUtils.createCircularReveal(view, centerX, centery,startRadius,endRadius);
+        view.setVisibility(View.VISIBLE);
+        animator.start();
     }
 
 }

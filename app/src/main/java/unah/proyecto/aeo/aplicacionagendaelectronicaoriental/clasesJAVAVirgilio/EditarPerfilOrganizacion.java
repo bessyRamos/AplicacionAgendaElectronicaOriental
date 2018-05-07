@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -31,11 +32,16 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 import cz.msebera.android.httpclient.NameValuePair;
@@ -149,7 +155,7 @@ public class EditarPerfilOrganizacion extends AppCompatActivity  implements Navi
 
 
         }
-        //validar();
+
         botonFoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -346,8 +352,19 @@ public class EditarPerfilOrganizacion extends AppCompatActivity  implements Navi
     }
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         if(resultCode == RESULT_OK && requestCode == PICK_IMAGE){
-            imageUri = data.getData();
-            imagenOrg.setImageURI(imageUri);
+            try {
+                Uri imageUri = data.getData();
+                InputStream imageStream = getContentResolver().openInputStream(imageUri);
+                Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
+
+                selectedImage = getResizedBitmap(selectedImage, 500);// 400 is for example, replace with desired size
+
+                imagenOrg.setImageBitmap(selectedImage);
+
+
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
         }else if (requestCode == 1) {
             if (resultCode == RESULT_OK) {
 
@@ -361,6 +378,24 @@ public class EditarPerfilOrganizacion extends AppCompatActivity  implements Navi
 
 
     }
+    /**********************************************************************************************
+     *                         MÉTODO PARA RECORTAR PESO DE LA IMAGEN SELECCIONADA
+     **********************************************************************************************/
+    public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
+        int width = image.getWidth();
+        int height = image.getHeight();
+
+        float bitmapRatio = (float)width / (float) height;
+        if (bitmapRatio > 1) {
+            width = maxSize;
+            height = (int) (width / bitmapRatio);
+        } else {
+            height = maxSize;
+            width = (int) (height * bitmapRatio);
+        }
+        return Bitmap.createScaledBitmap(image, width, height, true);
+    }
+
 
 
     private void validar(){
@@ -375,7 +410,6 @@ public class EditarPerfilOrganizacion extends AppCompatActivity  implements Navi
         etlatitud.setError(null);
         etlongitud.setError(null);
 
-
         // String idd = id.getText().toString();
         String nomborg = etnombreeorganizacion.getText().toString();
         String numtel = etnumerofijo.getText().toString();
@@ -384,17 +418,49 @@ public class EditarPerfilOrganizacion extends AppCompatActivity  implements Navi
         String desc = etdescripcion.getText().toString();
         String lati = etlatitud.getText().toString();
         String longitud = etlongitud.getText().toString();
+        String mail = etemail.getText().toString();
 
+        if(TextUtils.isEmpty(mail)){
+
+        }else{
+            if(!mail.contains("@") && !mail.contains(".com")){
+                etemail.setError(getString(R.string.error_mailnovalido));
+                etemail.requestFocus();
+                return;
+            }
+        }
 
         if(TextUtils.isEmpty(nomborg)){
             etnombreeorganizacion.setError(getString(R.string.errNombreOrg));
             etnombreeorganizacion.requestFocus();
             return;
         }
-        if(TextUtils.isEmpty(numtel) && TextUtils.isEmpty(numcel)){
-            etnumerofijo.setError(getString(R.string.errNumero));
-            etnumerofijo.requestFocus();
-            return;
+        if(TextUtils.isEmpty(numtel)){
+            if(TextUtils.isEmpty(numcel)){
+                etnumerofijo.setError(getString(R.string.errNumero));
+                etnumerofijo.requestFocus();
+                return;
+            }
+        }else{
+            if(numtel.length()<8 || !numtel.startsWith("2") || numtel.length()>8){
+                etnumerofijo.setError(getString(R.string.error_numnovalido));
+                etnumerofijo.requestFocus();
+                return;
+            }
+        }
+
+        if(TextUtils.isEmpty(numcel)){
+            if(TextUtils.isEmpty(numtel)){
+                etnumerocel.setError(getString(R.string.errNumero));
+                etnumerocel.requestFocus();
+                return;
+            }
+        }else{
+            if(numcel.length()<8 || numcel.length()>8){
+                etnumerocel.setError(getString(R.string.error_numnovalido));
+                etnumerocel.requestFocus();
+                return;
+            }
         }
 
         if(TextUtils.isEmpty(direccion)){
@@ -462,19 +528,18 @@ public class EditarPerfilOrganizacion extends AppCompatActivity  implements Navi
         protected void onPostExecute(Boolean result) {
 
             if (resul) {
-                /*if(tieneImagen==true){
-                    byte[] byteCode = Base64.decode(imagen_rec, Base64.DEFAULT);
-                    imagenOrg.setImageBitmap(BitmapFactory.decodeByteArray(byteCode,0,byteCode.length));
-                }else {
-                    imagenOrg.setImageResource(R.drawable.iconocontactowhite);
-                }*/
+
                 if(tieneImagen==true){
-                    Glide.with(getApplicationContext()).
+                    Picasso.get().
                             load(imagen_rec).
+                            memoryPolicy(MemoryPolicy.NO_CACHE).
+                            networkPolicy(NetworkPolicy.NO_CACHE).
                             into(imagenOrg);
                 }else{
-                    Glide.with(getApplicationContext()).
+                    Picasso.get().
                             load(R.drawable.iconocontactowhite).
+                            memoryPolicy(MemoryPolicy.NO_CACHE).
+                            networkPolicy(NetworkPolicy.NO_CACHE).
                             into(imagenOrg);
                 }
 
@@ -505,13 +570,14 @@ public class EditarPerfilOrganizacion extends AppCompatActivity  implements Navi
         protected Boolean doInBackground(String... strings) {
 
             try {
+
                 HttpClient httpclient;
                 HttpPost httppost;
                 ArrayList<NameValuePair> parametros;
                 httpclient = new DefaultHttpClient();
                 httppost = new HttpPost("http://aeo.web-hn.com/actualizarPerfil.php");
                 parametros = new ArrayList<NameValuePair>();
-                parametros.add(new BasicNameValuePair("id_contacto", String.valueOf(id_perfilEditar)));
+                parametros.add(new BasicNameValuePair("id_contacto", String.valueOf(id_usuario_resibido_usuario)));
                 parametros.add(new BasicNameValuePair("nomborg_rec",etnombreeorganizacion.getText().toString()));
                 parametros.add(new BasicNameValuePair("numtel_rec",etnumerofijo.getText().toString()));
                 parametros.add(new BasicNameValuePair("numcel_rec",etnumerocel.getText().toString()));
@@ -522,19 +588,16 @@ public class EditarPerfilOrganizacion extends AppCompatActivity  implements Navi
                 parametros.add(new BasicNameValuePair("longitud_rec",etlongitud.getText().toString()));
                 parametros.add(new BasicNameValuePair("id_categoria",String.valueOf(id_categoria)));
                 parametros.add(new BasicNameValuePair("id_region",String.valueOf(id_region)));
-                if (editarfoto==true){
+                if(editarfoto==true){
                     parametros.add(new BasicNameValuePair("imagen",encodeImagen));
+                    parametros.add(new BasicNameValuePair("nombre_imagen",etnombreeorganizacion.getText().toString().replace(" ","_")+ ""+ i +".jpg"));
                 }else {
                     parametros.add(new BasicNameValuePair("imagen",imagen_rec));
-                }
-                parametros.add(new BasicNameValuePair("nombre_imagen",etnombreeorganizacion.getText().toString().replace(" ","_")+i+".jpg"));
 
+                }
 
                 httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));
-
                 httpclient.execute(httppost);
-
-
                 resul = true;
             } catch (Exception ex) {
                 Log.e("ServicioRest", "Error!", ex);
@@ -544,22 +607,18 @@ public class EditarPerfilOrganizacion extends AppCompatActivity  implements Navi
 
         }
 
-
         protected void onPostExecute(Boolean result) {
             if (resul) {
 
-                    Toast.makeText(getApplicationContext(),"Procesando...",Toast.LENGTH_SHORT).show();
-
-                    Toast.makeText(getApplicationContext(),"Perfil Actualizado Correctamente",Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(EditarPerfilOrganizacion.this,PanelDeControlUsuarios.class);
-                    intent.putExtra("id",id_usuario_resibido_usuario);
-                    startActivity(intent);
-                    //startActivity(new Intent(getApplicationContext(),PanelDeControlUsuarios.class));
-                    finish();
-
+                Toast.makeText(getApplicationContext(),"Perfil Actualizado Correctamente",Toast.LENGTH_SHORT).show();
+                //startActivity(new Intent(getApplicationContext(),AdministracionDePerfiles.class));
+                Intent data = new Intent(EditarPerfilOrganizacion.this,PanelDeControlUsuarios.class);
+                startActivity(data);
+                finish();
 
             }else {
                 Toast.makeText(getApplicationContext(), "Problemas de conexión", Toast.LENGTH_SHORT).show();
+                botonGuardar.setClickable(true);
             }
         }
 

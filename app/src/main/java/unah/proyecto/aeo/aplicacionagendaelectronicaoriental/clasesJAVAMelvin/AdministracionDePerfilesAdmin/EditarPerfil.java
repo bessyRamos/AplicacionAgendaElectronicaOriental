@@ -122,7 +122,6 @@ public class EditarPerfil extends AppCompatActivity {
 
 
         }
-        //validar();
         botonFoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -345,7 +344,7 @@ public class EditarPerfil extends AppCompatActivity {
         if(TextUtils.isEmpty(mail)){
 
         }else{
-            if(!mail.contains("@")){
+            if(!mail.contains("@") && !mail.contains(".com")){
                 etemail.setError(getString(R.string.error_mailnovalido));
                 etemail.requestFocus();
                 return;

@@ -49,6 +49,7 @@
                     android:layout_height="wrap_content"
                     android:hint="Número fijo"
                     android:inputType="phone"
+                    android:digits="1234567890"
                     />
             </android.support.design.widget.TextInputLayout>
 
@@ -63,6 +64,7 @@
                     android:layout_height="wrap_content"
                     android:hint="Número móvil"
                     android:inputType="phone"
+                    android:digits="1234567890"
                     />
             </android.support.design.widget.TextInputLayout>
 

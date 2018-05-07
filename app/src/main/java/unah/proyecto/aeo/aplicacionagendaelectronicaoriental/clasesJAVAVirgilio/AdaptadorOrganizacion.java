@@ -9,9 +9,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 
 /**
@@ -54,7 +58,7 @@ public class AdaptadorOrganizacion extends BaseAdapter {
         //TextView textid = (TextView)v.findViewById(R.id.id);
         TextView nombre = (TextView)v.findViewById(R.id.nombreOrganizacionRegistrada);
         TextView estado = (TextView)v.findViewById(R.id.estadoOrganizacionRegistrada);
-        ImageView Imagen = (ImageView) v.findViewById(R.id.imagenOrganizacionRegistrada);
+        CircleImageView Imagen = v.findViewById(R.id.imagenOrganizacionRegistrada);
 
 
        // textid.setText(""+perfiles.get(i).getId());
@@ -64,12 +68,11 @@ public class AdaptadorOrganizacion extends BaseAdapter {
             Imagen.setImageResource(R.drawable.iconocontactowhite);
 
         }else {
-            Glide.with(context).load(listaobjetos.get(i).getImagen()).into(Imagen);
+            Picasso.get().load(listaobjetos.get(i).getImagen()).
+                    memoryPolicy(MemoryPolicy.NO_CACHE).
+                    networkPolicy(NetworkPolicy.NO_CACHE).
+                    into(Imagen);
         }
-
-
-
-
 
         return v;
     }
