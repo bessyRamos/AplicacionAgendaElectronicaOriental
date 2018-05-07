@@ -3,6 +3,11 @@ package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.ColorSpace;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -11,14 +16,24 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
+import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.MemoryPolicy;
+import com.squareup.picasso.NetworkPolicy;
+import com.squareup.picasso.Picasso;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 
 import cz.msebera.android.httpclient.client.methods.HttpPost;
 import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
@@ -32,11 +47,20 @@ public class VerContactoOrganizacion extends AppCompatActivity implements Naviga
     String nombre_ver,telefono_ver,celular_ver,correo_ver,direccion_ver,descripcion_ver,categoria_ver,region_ver,latitud_ver,longitud_ver;
     int id_perfil=0;
     int id_perfilEditar=0;
+    ImageView imagen;
+    Bitmap imagenBitmap;
+    String encodeImagen,imagen_rec;
+    int categoriaEntero,regionEntero;
+    Boolean tieneImagen;
+
+    String nombreCategoria,nombreRegion;
+    Toolbar toolbar;
 
     //preferencias
     private Sesion sesion;
     private SesionUsuario sesionUsuario;
     int id_usu=-1,id_usuario_resibido_usuario=0;
+    int usuario;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,6 +74,7 @@ public class VerContactoOrganizacion extends AppCompatActivity implements Naviga
         id_usu  = preferences.getInt("usuario_ingreso",id_usu);
         //
 
+        boolean editarFoto=false;
 
         Bundle a = getIntent().getExtras();
         id_perfilEditar = a.getInt("id");
@@ -66,11 +91,11 @@ public class VerContactoOrganizacion extends AppCompatActivity implements Naviga
         region = (TextView) findViewById(R.id.verRegionOrganizacion);
         latitud = (TextView) findViewById(R.id.verLatitudOrganizacion);
         longitud = (TextView) findViewById(R.id.verLongitudOrganizacion);
+        imagen = (ImageView)findViewById(R.id.verImagenOrganizacion);
 
-        new llenarDatosContacto().execute();
+        new llenarEditTexEditarPerfil().execute();
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -79,6 +104,27 @@ public class VerContactoOrganizacion extends AppCompatActivity implements Naviga
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+
+//
+        if(editarFoto==true){
+            imagenBitmap = ((BitmapDrawable)imagen.getDrawable()).getBitmap();
+
+            new AsyncTask<Void, Void, String>(){
+                @Override
+                protected String doInBackground(Void... voids) {
+                    ByteArrayOutputStream baos = new ByteArrayOutputStream();
+                    imagenBitmap.compress(Bitmap.CompressFormat.JPEG,100,baos);
+                    byte b []= baos.toByteArray();
+
+                    encodeImagen = Base64.encodeToString(b,0);
+
+                    return null;
+                }
+            }.execute();
+        }//fin
+
+
 
     }
 
@@ -164,15 +210,16 @@ public class VerContactoOrganizacion extends AppCompatActivity implements Naviga
         return true;
     }
 
-
-
-
-
     public void editarOrganizacion(View v){
         Intent intent = new Intent(VerContactoOrganizacion.this,EditarPerfilOrganizacion.class);
         // intent.putExtra("usuario_ingreso",id_perfil);
         intent.putExtra("id_usuario",id_perfil);
+        if (getIntent().getExtras()!=null){
+            usuario = getIntent().getExtras().getInt("usuario");
+        }
+        intent.putExtra("usuario",usuario);
         startActivity(intent);
+        finish();
 
         /*
         if (getIntent().getExtras()!=null){
@@ -256,6 +303,7 @@ public class VerContactoOrganizacion extends AppCompatActivity implements Naviga
                 nombre.setText(nombre_ver);
 
 
+
                 telefono.setText(telefono_ver);
 
                 celular.setText(celular_ver);
@@ -284,6 +332,152 @@ public class VerContactoOrganizacion extends AppCompatActivity implements Naviga
                 */
 
 
+            }else {
+                Toast.makeText(getApplicationContext(), "Problemas de conexión", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+//metodo
+    private class llenarEditTexEditarPerfil extends AsyncTask<String, Integer, Boolean> {
+        private llenarEditTexEditarPerfil(){}
+        boolean resul = true;
+
+        @Override
+        protected Boolean doInBackground(String... strings) {
+
+            try {
+                JSONObject respJSON = new JSONObject(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/consultarDatosDePerfilParaEditar.php?id_contacto="+id_perfilEditar)).getEntity()));
+                JSONArray jsonArray = respJSON.getJSONArray("perfiles");
+                for (int i = 0; i < jsonArray.length(); i++) {
+                    nombre_ver = jsonArray.getJSONObject(i).getString("nombre_organizacion");
+                    telefono_ver = jsonArray.getJSONObject(i).getString("numero_fijo");
+                    celular_ver = jsonArray.getJSONObject(i).getString("numero_movil");
+                    direccion_ver= jsonArray.getJSONObject(i).getString("direccion");
+                    if(jsonArray.getJSONObject(i).getString("imagen").isEmpty()){
+                        tieneImagen=false;
+                    }else{
+                        imagen_rec = jsonArray.getJSONObject(i).getString("imagen");
+                        tieneImagen=true;
+                    }
+
+                    correo_ver = jsonArray.getJSONObject(i).getString("e_mail");
+                    descripcion_ver = jsonArray.getJSONObject(i).getString("descripcion_organizacion");
+                    latitud_ver = jsonArray.getJSONObject(i).getString("latitud");
+                    longitud_ver = jsonArray.getJSONObject(i).getString("longitud");
+                    regionEntero = jsonArray.getJSONObject(i).getInt("id_region");
+                    categoriaEntero = jsonArray.getJSONObject(i).getInt("id_categoria");
+
+                    //JSONArray regiones = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/consultarRegiones.php")).getEntity()));
+
+
+                        JSONObject categorias = new JSONObject(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("https://shessag.000webhostapp.com/verNombreCategoria.php?categoria_id="+categoriaEntero)).getEntity()));
+                        JSONArray jsonArraye = categorias.getJSONArray("datos");
+                        for (int c = 0; c < categorias.length(); c++) {
+                            nombreCategoria = jsonArraye.getJSONObject(c).getString("nombre_categoria");
+                        }
+
+                    JSONObject regiones = new JSONObject(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("https://shessag.000webhostapp.com/verNombreRegiones.php?region_id="+regionEntero)).getEntity()));
+                    JSONArray jsonArrayr = regiones.getJSONArray("datoss");
+                    for (int c = 0; c < regiones.length(); c++) {
+                        nombreRegion = jsonArrayr.getJSONObject(c).getString("nombre_region");
+                    }
+
+
+
+
+
+                }
+
+                resul = true;
+            } catch (Exception ex) {
+                Log.e("ServicioRest", "Error!", ex);
+                resul = false;
+            }
+            return resul;
+
+        }
+
+        protected void onPostExecute(Boolean result) {
+
+            if (resul) {
+                if(tieneImagen==true){
+
+                    Picasso.get().
+                            load(imagen_rec).
+                            networkPolicy(NetworkPolicy.NO_CACHE).
+                            memoryPolicy(MemoryPolicy.NO_CACHE).placeholder(R.drawable.wait).
+                            into(imagen);
+                }else{
+                    Picasso.get().
+                            load(R.drawable.iconocontactowhite).
+                            into(imagen);
+                }
+
+                if (nombre_ver.isEmpty()){
+                    nombre.setText("No Disponible");
+                    toolbar.setTitle("Nombre No Disponible");
+                    setSupportActionBar(toolbar);
+                }else {
+                    nombre.setText(nombre_ver);
+                    toolbar.setTitle(nombre_ver);
+                    setSupportActionBar(toolbar);
+                }
+
+               if (telefono_ver.isEmpty()){
+                   telefono.setText("No Disponible");
+               }else {
+                   telefono.setText(telefono_ver);
+               }
+               if (celular_ver.isEmpty()){
+                   celular.setText("No Disponible");
+               }else {
+                   celular.setText(celular_ver);
+               }
+                if (correo_ver.isEmpty()){
+                   correo.setText("No Disponible");
+                }else {
+                    correo.setText(correo_ver);
+                }
+                if (direccion_ver.isEmpty()){
+                    direccion.setText("No Disponible");
+                }else {
+                    direccion.setText(direccion_ver);
+                }
+                if (direccion_ver.isEmpty()){
+                    descripcion.setText("No Disponible");
+                }else {
+                    descripcion.setText(descripcion_ver);
+                }
+
+
+                categoria_ver= String.valueOf(categoriaEntero);
+                if (categoria_ver.isEmpty()){
+                    categoria.setText("No Disponinble");
+                }else {
+                    //
+                    categoria.setText(nombreCategoria);
+                }
+
+
+                region_ver=String.valueOf(regionEntero);
+                if (region_ver.isEmpty()){
+                    region.setText("No Disponible");
+                }else {
+                    region.setText(nombreRegion);
+                    //
+                }
+                if (latitud_ver.isEmpty()|| latitud_ver.equals(0)){
+                    latitud.setText("No Disponible");
+
+                }else {
+                    latitud.setText(latitud_ver);
+                }
+                if (longitud_ver.isEmpty() || longitud_ver.equals(0)){
+                    longitud.setText("No Disponible");
+
+                }else {
+                    longitud.setText(longitud_ver);
+                }
             }else {
                 Toast.makeText(getApplicationContext(), "Problemas de conexión", Toast.LENGTH_SHORT).show();
             }

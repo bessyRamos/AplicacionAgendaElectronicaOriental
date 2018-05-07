@@ -327,7 +327,7 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
             if (rol == 1 && estado_usuario ==1) {
                 //instancia y envio de usuario logeado
                 Intent intent = new Intent(Login.this, Panel_de_Control.class);
-                sendTokenToServer();
+                //sendTokenToServer();
                 intent.putExtra("usuario_ingreso",id_preferencia);
                 //preferencia logeado con exito
                 session.setLogin(true);

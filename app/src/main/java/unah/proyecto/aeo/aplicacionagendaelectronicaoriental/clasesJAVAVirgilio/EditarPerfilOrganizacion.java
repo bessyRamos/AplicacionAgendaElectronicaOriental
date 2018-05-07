@@ -96,11 +96,13 @@ public class EditarPerfilOrganizacion extends AppCompatActivity  implements Navi
 
     String encodeImagen;
     int id_usuario_resibido_usuario;
+    String numero;
 
     //preferencias
     private Sesion sesion;
     private SesionUsuario sesionUsuario;
     int id_usu=-1;
+    int nu;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -312,8 +314,17 @@ public class EditarPerfilOrganizacion extends AppCompatActivity  implements Navi
 
 
 
-    public void guardarUbicacionOrganizacion(View v){
+   /* public void guardarUbicacionOrganizacion(View v){
         Intent ubicacion1 = new Intent(getApplicationContext(), Ingresar_Ubicacion.class);
+        startActivityForResult(ubicacion1,1);
+    }*/
+    public  void  guardarUbicacionOrganizacion(View view){
+        Double latitudParaubicar=Double.valueOf(etlatitud.getText().toString());
+        Double longitudParaubicar=Double.valueOf(etlongitud.getText().toString());
+
+        Intent ubicacion1 = new Intent(getApplicationContext(),Ingresar_Ubicacion.class);
+        ubicacion1.putExtra("latitud",latitudParaubicar);
+        ubicacion1.putExtra("longitud", longitudParaubicar);
         startActivityForResult(ubicacion1,1);
     }
 
@@ -350,6 +361,7 @@ public class EditarPerfilOrganizacion extends AppCompatActivity  implements Navi
         Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
         startActivityForResult(gallery, PICK_IMAGE);
     }
+
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
         if(resultCode == RESULT_OK && requestCode == PICK_IMAGE){
             try {
@@ -377,10 +389,8 @@ public class EditarPerfilOrganizacion extends AppCompatActivity  implements Navi
         }
 
 
-    }
-    /**********************************************************************************************
-     *                         MÉTODO PARA RECORTAR PESO DE LA IMAGEN SELECCIONADA
-     **********************************************************************************************/
+    }//aqiiiiiiiiiiiiiiiiiiiiiiiiiiiii
+
     public Bitmap getResizedBitmap(Bitmap image, int maxSize) {
         int width = image.getWidth();
         int height = image.getHeight();
@@ -410,7 +420,6 @@ public class EditarPerfilOrganizacion extends AppCompatActivity  implements Navi
         etlatitud.setError(null);
         etlongitud.setError(null);
 
-        // String idd = id.getText().toString();
         String nomborg = etnombreeorganizacion.getText().toString();
         String numtel = etnumerofijo.getText().toString();
         String numcel = etnumerocel.getText().toString();
@@ -528,18 +537,16 @@ public class EditarPerfilOrganizacion extends AppCompatActivity  implements Navi
         protected void onPostExecute(Boolean result) {
 
             if (resul) {
-
                 if(tieneImagen==true){
+
                     Picasso.get().
                             load(imagen_rec).
-                            memoryPolicy(MemoryPolicy.NO_CACHE).
                             networkPolicy(NetworkPolicy.NO_CACHE).
+                            memoryPolicy(MemoryPolicy.NO_CACHE).placeholder(R.drawable.wait).
                             into(imagenOrg);
                 }else{
                     Picasso.get().
                             load(R.drawable.iconocontactowhite).
-                            memoryPolicy(MemoryPolicy.NO_CACHE).
-                            networkPolicy(NetworkPolicy.NO_CACHE).
                             into(imagenOrg);
                 }
 
@@ -612,9 +619,15 @@ public class EditarPerfilOrganizacion extends AppCompatActivity  implements Navi
 
                 Toast.makeText(getApplicationContext(),"Perfil Actualizado Correctamente",Toast.LENGTH_SHORT).show();
                 //startActivity(new Intent(getApplicationContext(),AdministracionDePerfiles.class));
-                Intent data = new Intent(EditarPerfilOrganizacion.this,PanelDeControlUsuarios.class);
-                startActivity(data);
+                Intent intent = new Intent(EditarPerfilOrganizacion.this,PanelDeControlUsuarios.class);
+                if (getIntent().getExtras()!=null){
+                    nu = getIntent().getExtras().getInt("usuario");
+                }
+
+                intent.putExtra("id",nu);
+                startActivity(intent);
                 finish();
+
 
             }else {
                 Toast.makeText(getApplicationContext(), "Problemas de conexión", Toast.LENGTH_SHORT).show();

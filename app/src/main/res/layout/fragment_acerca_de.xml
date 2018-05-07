@@ -18,8 +18,9 @@
             <ImageView
                 android:layout_width="match_parent"
                 android:layout_height="130dp"
-                android:src="@drawable/icono_final"
+                android:src="@drawable/proyecto_nuevo_icono_aeo"
                 android:layout_marginTop="15dp"
+                android:layout_marginBottom="10dp"
             />
             <TextView
                 android:id="@+id/section_label"

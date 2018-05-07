@@ -57,7 +57,7 @@
                         android:layout_marginTop="20dp"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Nombre de La Organización"
+                        android:text="cargando..."
                         android:textSize="20sp"
                         android:gravity="center"
                         android:textStyle="bold"
@@ -100,7 +100,7 @@
                                 android:id="@+id/verNumeroFijo"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="2763-12-12"
+                                android:text="cargando..."
                                 android:textSize="20sp"
                                 android:layout_marginTop="10dp"
 
@@ -123,7 +123,7 @@
                                 android:id="@+id/verNumeroCelular"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:text="9777-12-12"
+                                android:text="cargando..."
                                 android:textSize="20sp"
                                 android:layout_marginTop="10dp"
 
@@ -149,7 +149,7 @@
                         android:id="@+id/verEmailOrganizacion"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="correo@gmail.com"
+                        android:text="cargando..."
                         android:textSize="20sp"
                         android:layout_marginTop="10dp"
 
@@ -172,7 +172,7 @@
                         android:id="@+id/verDireccionOrganizacion"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Dirección de la Organización "
+                        android:text="cargando..."
                         android:textSize="20sp"
                         android:layout_marginTop="10dp"
 
@@ -195,7 +195,7 @@
                         android:id="@+id/verDescripcionOrganizacion"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Descripcion de la Organización "
+                        android:text="cargando..."
                         android:textSize="20sp"
                         android:layout_marginTop="10dp"
 
@@ -218,7 +218,7 @@
                         android:id="@+id/verCategoriaOrganizacion"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Categoria que pertenece "
+                        android:text="cargando..."
                         android:textSize="20sp"
                         android:layout_marginTop="10dp"
 
@@ -241,7 +241,7 @@
                         android:id="@+id/verRegionOrganizacion"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="Region que pertenese "
+                        android:text="cargando..."
                         android:textSize="20sp"
                         android:layout_marginTop="10dp"
 
@@ -281,7 +281,7 @@
                             android:id="@+id/verLatitudOrganizacion"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="646473738737474748484 "
+                            android:text="cargando..."
                             android:textSize="20sp"
                             android:layout_marginTop="10dp"
                             android:layout_weight="1"
@@ -309,7 +309,7 @@
                             android:id="@+id/verLongitudOrganizacion"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="-646473738737474748484 "
+                            android:text="cargando..."
                             android:textSize="20sp"
                             android:layout_marginTop="10dp"
                             android:layout_weight="1"
@@ -324,8 +324,6 @@
                         android:background="@color/colorPrimary"
                         android:layout_marginTop="5dp"
                     />
-
-
 
 
 

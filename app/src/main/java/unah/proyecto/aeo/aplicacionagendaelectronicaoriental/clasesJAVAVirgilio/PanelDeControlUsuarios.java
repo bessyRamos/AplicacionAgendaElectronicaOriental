@@ -106,6 +106,7 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
 
                     intent.putExtra("id",id_usuario_resibido_usuario);
                     startActivity(intent);
+                    finish();
 
                 }
 
@@ -139,8 +140,9 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
                             Intent intent= new Intent(getApplicationContext(),VerContactoOrganizacion.class);
                             intent.putExtra("id",per.getId());
                             intent.putExtra("id_usuario",id_usuario_resibido_usuario);
+                            intent.putExtra("usuario",id_usuario_resibido_usuario);
                             startActivity(intent);
-
+                            finish();
 
                         }else if(position ==1){ //Borrar Contacto
 
@@ -256,6 +258,7 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
 
                 intent.putExtra("id",id_usuario_resibido_usuario);
                 startActivity(intent);
+                finish();
 
             }else {
                 Toast.makeText(getApplicationContext(),"Error en id de usuario",Toast.LENGTH_SHORT).show();
