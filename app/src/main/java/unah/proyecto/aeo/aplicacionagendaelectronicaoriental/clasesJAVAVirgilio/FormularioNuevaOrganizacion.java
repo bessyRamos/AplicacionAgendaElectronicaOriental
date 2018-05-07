@@ -91,7 +91,7 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity  implements N
 
     String encodeImagen,cantidadDigitos;
 
-
+TextView lo,lat;
     //preferencias
     private Sesion sesion;
     private SesionUsuario sesionUsuario;
@@ -128,6 +128,8 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity  implements N
         imageButton = findViewById(R.id.imagenOrganizacionUsuario);
 
        // latitudOrganizacion.setText("123123");  ///ingresar la latitud que el usuario selecciono
+        lat =findViewById(R.id.latitiResibida);
+        lo =findViewById(R.id.longitudResibida);
 
         longitudOrganizacion = (EditText) findViewById(R.id.txtlongitudOrganizacion);
 
@@ -265,8 +267,12 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity  implements N
 
                 String latitud = data.getStringExtra("latitud");
                 String longitud = data.getStringExtra("longitud");
+
                 latitudOrganizacion.setText(latitud);
                 longitudOrganizacion.setText(longitud);
+
+                lat.setText(latitud);
+                lo.setText(longitud);
 
             }
         }
@@ -520,11 +526,11 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity  implements N
                 parametros.add(new BasicNameValuePair("email_rec",emailOrganizacion.getText().toString()));
                 parametros.add(new BasicNameValuePair("lat_rec",latitudOrganizacion.getText().toString()));
 
-                parametros.add(new BasicNameValuePair("lat_rec",(String.valueOf(latitudResibida))));
+               // parametros.add(new BasicNameValuePair("lat_rec",(String.valueOf(latitudResibida))));
 
                 parametros.add(new BasicNameValuePair("longitud_rec",longitudOrganizacion.getText().toString()));
 
-                parametros.add(new BasicNameValuePair("longitud_rec",String.valueOf(longitudResibida)));
+               // parametros.add(new BasicNameValuePair("longitud_rec",String.valueOf(longitudResibida)));
 
                 parametros.add(new BasicNameValuePair("id_categoria",String.valueOf(id_categoria)));
                 parametros.add(new BasicNameValuePair("id_region",String.valueOf(id_region)));

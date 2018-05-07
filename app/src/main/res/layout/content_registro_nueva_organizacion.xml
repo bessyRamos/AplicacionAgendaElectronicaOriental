@@ -26,7 +26,7 @@
                 android:layout_height="160dp"
                 android:layout_alignParentTop="true"
                 android:layout_centerInParent="true"
-
+                android:src="@mipmap/ic_launcher"
                 android:scaleType="centerCrop"
             />
 
@@ -58,8 +58,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Número fijo"
-                    android:inputType="phone"
-                    android:digits="1234567890"/>
+                    android:inputType="text"
+                    android:digits="1234567890-"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -74,8 +74,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Número móvil"
-                    android:inputType="phone"
-                    android:digits="1234567890"/>
+                    android:inputType="text"
+                    android:digits="1234567890-"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -186,43 +186,105 @@
                 android:layout_marginBottom="25dp"
 
             />
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/iptllatit"
-                android:layout_below="@+id/btnUbicacionOrganizacion"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
 
-                <EditText
-                    android:id="@+id/txtlatitudOrganizacion"
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/iptllatit"
+                    android:layout_below="@+id/btnUbicacionOrganizacion"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:visibility="invisible"
+
+                >
+
+                    <EditText
+                        android:id="@+id/txtlatitudOrganizacion"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:hint="Latitud"
+                        android:visibility="invisible"
+                        android:clickable="false"
+                        android:inputType="number"
+                        android:digits="1234567890.-"
+
+
+                    />
+
+                </android.support.design.widget.TextInputLayout>
+
+
+
+
+                <android.support.design.widget.TextInputLayout
+                    android:id="@+id/iptllong"
+                    android:layout_below="@+id/iptllatit"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+
+
+                >
+
+                    <EditText
+                        android:id="@+id/txtlongitudOrganizacion"
+                        android:layout_width="0dp"
+                        android:layout_height="0dp"
+                        android:hint="Longitud"
+                        android:visibility="invisible"
+                        android:clickable="false"
+                        android:inputType="number"
+                        android:digits="1234567890-."
+
+                    />
+
+                </android.support.design.widget.TextInputLayout>
+                <RelativeLayout
+                    android:id="@+id/lh"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Latitud"
-                    android:visibility="invisible"
-                    android:clickable="false"
-                    android:inputType="number"
-                    android:digits="1234567890.-"
+                    android:layout_below="@+id/iptllong"
+                    android:layout_marginBottom="20dp"
+                >
+                    <TextView
+                        android:id="@+id/latitiResibida"
+                        android:layout_width="190dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentTop="true"
+                        android:layout_alignParentEnd="true"
+                        android:text="0"
+                        android:textAlignment="textEnd"
+                        android:textSize="16sp"
 
-                />
+                    />
+                    <TextView
+                        android:id="@+id/lblatitud"
+                        android:layout_width="190dp"
+                        android:layout_height="wrap_content"
+                        android:text="Latitud"
+                        android:textSize="16sp"
+                    />
 
-            </android.support.design.widget.TextInputLayout>
+                    <TextView
+                        android:id="@+id/longitudResibida"
+                        android:text="0"
+                        android:layout_below="@id/etlatitud"
+                        android:textAlignment="textEnd"
+                        android:layout_alignParentBottom="true"
+                        android:layout_width="190dp"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:textSize="16sp"
+                    />
+                    <TextView
+                        android:id="@+id/lblongitud"
+                        android:text="Longitud"
+                        android:layout_below="@id/lblatitud"
+                        android:layout_alignParentBottom="true"
+                        android:textSize="16sp"
+                        android:layout_width="190dp"
+                        android:layout_height="wrap_content"
+                    />
 
-            <android.support.design.widget.TextInputLayout
-                android:id="@+id/iptllong"
-                android:layout_below="@+id/iptllatit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                </RelativeLayout>
 
-                <EditText
-                    android:id="@+id/txtlongitudOrganizacion"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="Longitud"
-                    android:visibility="invisible"
-                    android:clickable="false"
-                    android:inputType="number"
-                    android:digits="1234567890-."/>
-
-            </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.FloatingActionButton
                 android:id="@+id/imagenOrganizacionUsuario"
@@ -239,6 +301,7 @@
         </RelativeLayout>
 
     </ScrollView>
+
 
 
     <android.support.design.widget.FloatingActionButton
