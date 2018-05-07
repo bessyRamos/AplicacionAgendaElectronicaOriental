@@ -122,7 +122,6 @@ public class EditarPerfil extends AppCompatActivity {
 
 
         }
-        //validar();
         botonFoto.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
