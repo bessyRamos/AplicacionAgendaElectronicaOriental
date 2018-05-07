@@ -108,7 +108,7 @@
             </android.support.design.widget.TextInputLayout>
 
             <ImageView
-                android:layout_below="@id/iptldescript"
+                android:layout_below="@id/spinerusuariosPerfil"
                 android:id="@+id/imgUbicacionOrganizacion"
                 android:layout_width="match_parent"
                 android:layout_height="90dp"
@@ -119,7 +119,7 @@
                 android:id="@+id/btnUbicacionOrganizacion"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Insertar Ubicacion"
+                android:text="Editar Ubicación"
                 app:srcCompat="@drawable/ubicacion_organizacion"
                 android:layout_centerInParent="true"
                 android:layout_gravity="center_horizontal"
@@ -130,10 +130,13 @@
 
             <TextView
                 android:id="@+id/tvcat"
-                android:layout_below="@id/btnUbicacionOrganizacion"
+                android:layout_below="@id/iptldescript"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Categoría"/>
+                android:text="Categoría"
+                android:layout_marginTop="15dp"
+
+            />
 
             <Spinner
                 android:id="@+id/spinercategoriaPerfil"
@@ -170,13 +173,13 @@
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/iptllatit"
-                android:layout_below="@+id/spinerusuariosPerfil"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_below="@+id/btnUbicacionOrganizacion"
+                android:layout_width="0dp"
+                android:layout_height="0dp">
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/etlatitud"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
                     android:hint="Latitud"
                     android:visibility="invisible"
                     android:clickable="false"
@@ -188,12 +191,12 @@
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/iptllong"
                 android:layout_below="@+id/iptllatit"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content">
+                android:layout_width="0dp"
+                android:layout_height="0dp">
                 <android.support.design.widget.TextInputEditText
                     android:id="@+id/etlongitud"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
                     android:hint="Longitud"
                     android:visibility="invisible"
                     android:clickable="false"
