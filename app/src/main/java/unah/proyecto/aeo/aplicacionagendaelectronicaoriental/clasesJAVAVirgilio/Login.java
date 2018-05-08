@@ -322,6 +322,7 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
         if (resul) {
             id_preferencia = id_usuario;
             editor.putInt("usuario_ingreso",id_preferencia);
+            editor.putInt("usuario_admin",id_preferencia);
             editor.commit();
 
             if (rol == 1 && estado_usuario ==1) {
@@ -329,6 +330,7 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
                 Intent intent = new Intent(Login.this, Panel_de_Control.class);
                 //sendTokenToServer();
                 intent.putExtra("usuario_ingreso",id_preferencia);
+                id_usu = preferences.getInt("usuario_ingreso",0);
                 //preferencia logeado con exito
                 session.setLogin(true);
                 //
@@ -341,6 +343,7 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
                     Intent intent = new Intent(Login.this,PanelDeControlUsuarios.class);
                     //sendTokenToServer();
                     intent.putExtra("id",id_preferencia);
+                id_usu = preferences.getInt("usuario_ingreso",id_preferencia);
                     //preferencia logeado con exito usuario
                     sessionUsuario.setLoginUsuario(true);
                     //limpieza de variables

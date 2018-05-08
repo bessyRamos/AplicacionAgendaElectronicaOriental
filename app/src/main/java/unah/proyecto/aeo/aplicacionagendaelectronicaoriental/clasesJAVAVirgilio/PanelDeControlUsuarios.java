@@ -85,6 +85,7 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
         //se asegura que el extra no este vacio
         if (getIntent().getExtras()!=null){
             id_usuario_resibido_usuario = getIntent().getExtras().getInt("id");
+
         }else {
             Toast.makeText(getApplicationContext(),"Error en id de usuario",Toast.LENGTH_SHORT).show();
         }
@@ -142,7 +143,6 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
                             intent.putExtra("id_usuario",id_usuario_resibido_usuario);
                             intent.putExtra("usuario",id_usuario_resibido_usuario);
                             startActivity(intent);
-                            finish();
 
                         }else if(position ==1){ //Borrar Contacto
 

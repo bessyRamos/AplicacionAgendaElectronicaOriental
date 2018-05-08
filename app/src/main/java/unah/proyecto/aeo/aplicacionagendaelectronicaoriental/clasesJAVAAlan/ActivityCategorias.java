@@ -64,7 +64,8 @@ public class ActivityCategorias extends AppCompatActivity
     //preferencias
     private Sesion sesion;
     private SesionUsuario sesionUsuario;
-    int id_usu=-1;
+    int id_usu=-0;
+    int id_usu2;
 
 
 
@@ -76,7 +77,8 @@ public class ActivityCategorias extends AppCompatActivity
         sesion = new Sesion(this);
         sesionUsuario = new SesionUsuario(this);
         SharedPreferences preferences = getSharedPreferences("credencial",Context.MODE_PRIVATE);
-        id_usu  = preferences.getInt("usuario_ingreso",id_usu);
+        id_usu  = preferences.getInt("usuario_ingreso",0);
+        id_usu2  = preferences.getInt("usuario_admin",0);
         //
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -197,6 +199,8 @@ public class ActivityCategorias extends AppCompatActivity
             }else{
                 if (sesionUsuario.logindimUsuario()){
                     Intent intent = new Intent(ActivityCategorias.this,PanelDeControlUsuarios.class);
+                    //intent,putExtra("id",id_usu);
+                    intent.putExtra("id2",id_usu2);
                     intent.putExtra("id",id_usu);
                     //startActivity(new Intent(ActivityCategorias.this,PanelDeControlUsuarios.class));
                     startActivity(intent);
