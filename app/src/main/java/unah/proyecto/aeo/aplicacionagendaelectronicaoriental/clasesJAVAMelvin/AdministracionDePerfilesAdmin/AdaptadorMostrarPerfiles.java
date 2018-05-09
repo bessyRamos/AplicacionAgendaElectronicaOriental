@@ -62,11 +62,10 @@ public class AdaptadorMostrarPerfiles extends BaseAdapter {
 
         if(!perfiles.get(i).getImagen().isEmpty()){
             Picasso.get().load(perfiles.get(i).getImagen()).
-                    memoryPolicy(MemoryPolicy.NO_CACHE).networkPolicy(NetworkPolicy.NO_CACHE).placeholder(R.drawable.wait).
+                    placeholder(R.drawable.wait).
             into(icono);
         }else {
             Picasso.get().load(R.drawable.iconocontactowhite).
-                    memoryPolicy(MemoryPolicy.NO_CACHE)    .networkPolicy(NetworkPolicy.NO_CACHE).
                     into(icono);
         }
 
