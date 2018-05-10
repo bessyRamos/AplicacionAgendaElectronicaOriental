@@ -141,38 +141,16 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
         acceder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                acceder.startAnimation();
+
                 if (usuario.getText().toString().isEmpty() || contrasena.getText().toString().isEmpty()) {
                     //Toast.makeText(getApplicationContext(), "Favor ingresar todos los Campos", Toast.LENGTH_SHORT).show();
                     validar();
                     acceder.revertAnimation();
                     acceder.stopAnimation();
-                } else {                          //si existe el usuario y la contraseña son correctas el accedera
-                    final AsyncTask<String,String,String> demoLogin = new AsyncTask<String, String, String>() {
-                        @Override
-                        protected String doInBackground(String... strings) {
-                                try {
-                                    Thread.sleep(4000);
-                                } catch (Exception e) {
-                                    e.printStackTrace();
-                                }
-                            return "cargado";
+                } else {
+                    new LoginValidadoWeb().execute();//si existe el usuario y la contraseña son correctas el accedera
 
-                        }
-
-                        @Override
-                        protected void onPostExecute(String s) {
-                            if (s.equals("cargado")){
-
-                                new LoginValidadoWeb().execute();
-                                acceder.stopAnimation();
-                                acceder.revertAnimation();
-
-                            }
-
-                        }
-                    };
-                    acceder.startAnimation();
-                    demoLogin.execute();
 
                 }//fin else
             }
@@ -304,14 +282,18 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
         }
 
         protected void onPostExecute(Boolean result) {
+
             if (resul) {
                 id_preferencia = id_usuario;
                 editor.putInt("usuario_ingreso",id_preferencia);
                 editor.putInt("usuario_admin",id_preferencia);
                 editor.commit();
 
+                acceder.stopAnimation();
+                acceder.revertAnimation();
 
                 Intent intent1= new Intent();
+
 
                 setResult(ActivityCategorias.RESULT_OK,intent1);
 
@@ -362,12 +344,11 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
                     finish();
 
 
-                }else {
-                    Toast.makeText(getApplicationContext(),"Usuario y/o Contraseña incorrecta ",Toast.LENGTH_LONG).show();
                 }
 
-
             } else {
+                acceder.stopAnimation();
+                acceder.revertAnimation();
 
                 if (id_usuario==0){
                     Toast.makeText(getApplicationContext(),"Usuario y/o Contraseña incorrecta ",Toast.LENGTH_LONG).show();

@@ -104,6 +104,7 @@ public class EditarPerfilOrganizacion extends AppCompatActivity  implements Navi
     int id_usu=-1;
     int nu;
 
+    Double lat,log;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -135,6 +136,7 @@ public class EditarPerfilOrganizacion extends AppCompatActivity  implements Navi
         //
         if (getIntent().getExtras()!=null){
             id_usuario_resibido_usuario = getIntent().getExtras().getInt("id_usuario");
+
         }
 
 
