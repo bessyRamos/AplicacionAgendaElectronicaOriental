@@ -218,6 +218,8 @@ public class VerContactoOrganizacion extends AppCompatActivity implements Naviga
         if (getIntent().getExtras()!=null){
             usuario = getIntent().getExtras().getInt("usuario");
         }
+        intent.putExtra("latitudEnviar",latitud_ver);
+        intent.putExtra("longitudEnviar",longitud_ver);
         intent.putExtra("usuario",usuario);
         startActivity(intent);
         finish();
