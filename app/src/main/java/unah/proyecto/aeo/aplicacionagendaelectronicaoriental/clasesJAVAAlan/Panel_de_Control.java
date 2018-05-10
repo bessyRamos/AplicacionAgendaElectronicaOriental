@@ -3,6 +3,8 @@ package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -15,7 +17,6 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.PerfilesBreves.ListaDeContactos;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.AdministracionDePerfilesAdmin.AdministracionDePerfiles;
@@ -34,6 +35,7 @@ public class Panel_de_Control extends AppCompatActivity implements NavigationVie
     private SharedPreferences preferences_2;
     private SharedPreferences.Editor editor_2;
     Context context=this;
+    public static Handler h;
 
     //preferencias de administrador y usuario
     private Sesion sesion;
@@ -52,6 +54,21 @@ public class Panel_de_Control extends AppCompatActivity implements NavigationVie
         //
 
         lista=(ListView)findViewById(R.id.listViewPneldeControl);
+        h = new Handler() {
+
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+
+                switch(msg.what) {
+
+                    case 0:
+                        finish();
+                        break;
+
+                }
+            }
+
+        };
 
 
 
@@ -86,7 +103,6 @@ public class Panel_de_Control extends AppCompatActivity implements NavigationVie
                         intent.putExtra("usuario_ingreso",id_usuario_resibido);
                     }
                     startActivity(intent);
-                    finish();
                 }else if(position==2){
                     Intent intent = new Intent(view.getContext(),ListaDeContactos.class);
                     startActivity(intent);

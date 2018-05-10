@@ -92,9 +92,10 @@ public class Adaptador_Categoria extends RecyclerView.Adapter<Adaptador_Categori
 
         if(!dataCursor.getString(dataCursor.getColumnIndex(CategoriasContract.CategoriasEntry.COLUMN_IMAGEN_CATEGORIA)).isEmpty()){
             Picasso.get().load(dataCursor.getString(dataCursor.getColumnIndex(CategoriasContract.CategoriasEntry.COLUMN_IMAGEN_CATEGORIA))).
-
                     into(holder.imagen);
         }
+
+
 
     }
 

@@ -441,7 +441,7 @@ TextView lo,lat;
         if(TextUtils.isEmpty(mail)){
 
         }else{
-            if(!mail.contains("@") || !mail.contains(".com")){
+            if(!mail.contains("@") && !mail.contains(".") ){
                 emailOrganizacion.setError(getString(R.string.error_mailnovalido));
                 emailOrganizacion.requestFocus();
                 return;
