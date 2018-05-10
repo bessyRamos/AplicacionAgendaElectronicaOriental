@@ -35,6 +35,7 @@ import android.view.Surface;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.squareup.picasso.LruCache;
 import com.squareup.picasso.Picasso;
 
 import java.io.File;
@@ -49,6 +50,7 @@ import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.PanelDeControlUsuarios;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.Sesion;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.SesionUsuario;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.provider.AEODbHelper;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.provider.CategoriasContract;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.provider.PerfilesContract;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.sync.SyncAdapter;
@@ -70,6 +72,9 @@ public class ActivityCategorias extends AppCompatActivity
     private SesionUsuario sesionUsuario;
     int id_usu=-0;
     int id_usu2;
+
+    private Picasso picasso;
+    private LruCache picassoLruCache;
 
 //va ala preferencia
   SharedPreferences preferencia ;
@@ -201,7 +206,7 @@ public class ActivityCategorias extends AppCompatActivity
             case R.id.sincronizar:
                 if( compruebaConexion()){
                     Snackbar.make(findViewById(R.id.drawer_layout),"Actualizando datos...",Snackbar.LENGTH_SHORT).show();
-
+                    borrarCacheImagenes();
                     SyncAdapter.syncImmediately(this);
                 }else{
                     Snackbar.make(findViewById(R.id.drawer_layout),"Actualmente no cuentas con conexión a internet",Snackbar.LENGTH_SHORT).show();
@@ -215,6 +220,12 @@ public class ActivityCategorias extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
        this.recreate();
+    }
+
+    private void borrarCacheImagenes(){
+
+
+
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
