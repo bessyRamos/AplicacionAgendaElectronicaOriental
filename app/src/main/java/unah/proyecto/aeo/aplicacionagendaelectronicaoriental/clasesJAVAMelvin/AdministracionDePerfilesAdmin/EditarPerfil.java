@@ -344,7 +344,7 @@ public class EditarPerfil extends AppCompatActivity {
         if(TextUtils.isEmpty(mail)){
 
         }else{
-            if(!mail.contains("@") && !mail.contains(".com")){
+            if(!mail.contains("@") && !mail.contains(".")){
                 etemail.setError(getString(R.string.error_mailnovalido));
                 etemail.requestFocus();
                 return;

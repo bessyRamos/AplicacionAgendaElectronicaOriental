@@ -4,7 +4,7 @@
     <item
         android:id="@+id/send"
         android:title="@string/Enviar"
-        android:icon="@android:drawable/ic_menu_send"
+        android:icon="@drawable/ic_check_black_24dp"
        app:showAsAction="always"
         />
 </menu>

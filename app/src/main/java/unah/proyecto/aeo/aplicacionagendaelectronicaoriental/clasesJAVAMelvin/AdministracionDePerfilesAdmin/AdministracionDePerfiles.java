@@ -6,6 +6,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
@@ -60,6 +62,7 @@ public class AdministracionDePerfiles extends AppCompatActivity
     int id_usu=-1;
     private static final int PASAR_A_EDITAR = 100;
     private static final int PASAR_A_NUEVO = 200;
+    public static Handler h;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +79,22 @@ public class AdministracionDePerfiles extends AppCompatActivity
         barra = findViewById(R.id.progressBarPerfiles);
         lista = (ListView) findViewById(R.id.listviewperfiles);
         mostrar_perfiles= new ArrayList<Fuente_mostrarPerfiles>();
+
+        h = new Handler() {
+
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+
+                switch(msg.what) {
+
+                    case 0:
+                        finish();
+                        break;
+
+                }
+            }
+
+        };
 
         //Ejecución de la clase AsyncTask llenarLista
         new llenarLista().execute();
@@ -161,7 +180,6 @@ public class AdministracionDePerfiles extends AppCompatActivity
                 i.putExtra("id",id_usuario_resibido_usuario);
             }
             startActivity(i);
-            finish();
         } else if (id == R.id.menusolicitudesrechazadas) {
             Intent i = new Intent(getApplicationContext(),SolicitudesRechazadas.class);
             //envia intent ala actividad editar perfil
@@ -170,7 +188,6 @@ public class AdministracionDePerfiles extends AppCompatActivity
                 i.putExtra("id",id_usuario_resibido_usuario);
             }
             startActivity(i);
-            finish();
         } else if (id == R.id.menuperfileliminados) {
             Intent i = new Intent(getApplicationContext(),PerfilesEliminados.class);
             //envia intent ala actividad editar perfil
@@ -179,7 +196,6 @@ public class AdministracionDePerfiles extends AppCompatActivity
                 i.putExtra("id",id_usuario_resibido_usuario);
             }
             startActivity(i);
-            finish();
         }
 
         return super.onOptionsItemSelected(item);
@@ -228,7 +244,8 @@ public class AdministracionDePerfiles extends AppCompatActivity
             //cerrar secion y borrado de preferencias
             if (sesion.logindim()) {
                 sesion.setLogin(false);
-                startActivity(new Intent(this, Login.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP));
+                startActivity(new Intent(this, Login.class));
+                Panel_de_Control.h.sendEmptyMessage(0);
                 finish();
             }else {
                 //cerrar secion y borrado de preferencias

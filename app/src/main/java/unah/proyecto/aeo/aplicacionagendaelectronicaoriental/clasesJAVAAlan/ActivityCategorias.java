@@ -35,6 +35,8 @@ import android.view.Surface;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -199,6 +201,7 @@ public class ActivityCategorias extends AppCompatActivity
             case R.id.sincronizar:
                 if( compruebaConexion()){
                     Snackbar.make(findViewById(R.id.drawer_layout),"Actualizando datos...",Snackbar.LENGTH_SHORT).show();
+
                     SyncAdapter.syncImmediately(this);
                 }else{
                     Snackbar.make(findViewById(R.id.drawer_layout),"Actualmente no cuentas con conexión a internet",Snackbar.LENGTH_SHORT).show();
@@ -211,15 +214,7 @@ public class ActivityCategorias extends AppCompatActivity
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode==100 && resultCode==RESULT_OK){
-            this.recreate();
-        }else if (requestCode==200 && resultCode==RESULT_OK){
-            this.recreate();
-        }else if (requestCode==200 && resultCode==RESULT_CANCELED){
-            this.recreate();
-        }else if (requestCode==300 && resultCode==RESULT_CANCELED){
-            this.recreate();
-        }
+       this.recreate();
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -364,7 +359,7 @@ public class ActivityCategorias extends AppCompatActivity
 
         Runtime runtime = Runtime.getRuntime();
         try {
-            Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
+            Process ipProcess = runtime.exec("/system/bin/ping -w 1 8.8.8.8");
             int     exitValue = ipProcess.waitFor();
             return (exitValue == 0);
         } catch (IOException e)          { e.printStackTrace(); }

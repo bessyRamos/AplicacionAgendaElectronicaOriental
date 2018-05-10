@@ -368,7 +368,7 @@ public class ListaDeContactos extends AppCompatActivity
     public Boolean isOnlineNet() {
 
         try {
-            Process p = java.lang.Runtime.getRuntime().exec("ping -c 1 www.google.es");
+            Process p = java.lang.Runtime.getRuntime().exec("ping -w 1 8.8.8.8");
 
             int val           = p.waitFor();
             boolean reachable = (val == 0);

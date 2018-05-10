@@ -1,7 +1,6 @@
 package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio;
 
 import android.content.Context;
-import android.content.Entity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -9,7 +8,6 @@ import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.renderscript.ScriptGroup;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -47,21 +45,14 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Scanner;
 
-import javax.net.ssl.HttpsURLConnection;
-
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.json.*;
-import org.json.JSONStringer;
 
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
 import cz.msebera.android.httpclient.client.methods.HttpPost;
 import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
 import cz.msebera.android.httpclient.util.EntityUtils;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.ConexionSQLiteHelper;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.ActivityCategorias;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.Panel_de_Control;
@@ -72,7 +63,7 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
     public EditText usuario, contrasena;
     public Button button;
     public TextView recuperar;//para recuperacion de contrasenia
-    ConexionSQLiteHelper basedatos = new ConexionSQLiteHelper(this, "bdaeo", null, 1);
+    //ConexionSQLiteHelper basedatos = new ConexionSQLiteHelper(this, "bdaeo", null, 1);
     SQLiteDatabase conexion;
     String usuarioPermiso, contrasenaPermiso;
     int idRol;
@@ -181,7 +172,9 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
         } else {
             Intent intent = new Intent();
             setResult(ActivityCategorias.RESULT_CANCELED,intent);
-            super.onBackPressed();
+            startActivity(new Intent(getBaseContext(), ActivityCategorias.class)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP));
+            finish();
         }
     }
     //abrira activity recuperar contrasenia
@@ -198,6 +191,8 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
         int id = item.getItemId();
 
         if (id == R.id.principaldos) {
+            Intent intent = new Intent();
+            setResult(ActivityCategorias.RESULT_CANCELED,intent);
             startActivity(new Intent(getBaseContext(), ActivityCategorias.class)
                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP));
             finish();
@@ -228,6 +223,14 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
 
     }//fin de boton
 
+    private Cursor ConsultarUsuarioPassword(String usuario, String password) throws SQLException {
+        //conexion = basedatos.getReadableDatabase();
+        Cursor mcursor = null;
+        int estado = 1;
+        int rol = 1;
+        mcursor = conexion.query("Usuarios", new String[]{"id_usuario", "nombre_usuario", "nombre_propio", "contrasena", "rol", "estado_usuario"}, "nombre_usuario like'" + usuario + "'and  contrasena like '" + password + "'and  estado_usuario like '" + estado + "'and  rol like '" + rol + "'", null, null, null, null);
+        return mcursor;
+    }
 
     //METODO DE VERIFICADE DESDE EL SERVIDOR
     private class LoginValidadoWeb extends AsyncTask<String, Integer, Boolean> {
@@ -413,7 +416,7 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
 
 
 
-    public void permisoAdmin() {
+    /*public void permisoAdmin() {
         SQLiteDatabase permiso = basedatos.getReadableDatabase();
         idRol = 1;
         Cursor cursorP = permiso.rawQuery("SELECT nombre_usuario, contrasena FROM USUARIOS WHERE rol = " + idRol, null);
@@ -428,7 +431,7 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
             Intent p = new Intent(getApplicationContext(), Panel_de_Control.class);
             startActivity(p);
         }
-    }
+    }*/
 
     public int obtenerDatosJson(String respuest) {
         int res = 0;

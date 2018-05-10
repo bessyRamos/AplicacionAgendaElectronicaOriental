@@ -179,6 +179,8 @@ public class NuevasSolicitudes extends AppCompatActivity
             if (sesion.logindim()) {
                 sesion.setLogin(false);
                 startActivity(new Intent(this, Login.class));
+                Panel_de_Control.h.sendEmptyMessage(0);
+                AdministracionDePerfiles.h.sendEmptyMessage(0);
                 finish();
             }else {
                 //cerrar secion y borrado de preferencias
