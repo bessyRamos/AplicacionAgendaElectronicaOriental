@@ -19,6 +19,6 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         android:fitsSystemWindows="true"
-        app:menu="@menu/activity_administracion_de_perfiles_drawer" />
+        app:menu="@menu/menu_tercero" />
 
 </android.support.v4.widget.DrawerLayout>
