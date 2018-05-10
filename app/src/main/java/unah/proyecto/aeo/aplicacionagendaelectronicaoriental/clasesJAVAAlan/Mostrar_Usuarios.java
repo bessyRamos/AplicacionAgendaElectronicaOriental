@@ -179,6 +179,7 @@ Adaptador_mostrarusuarios adaptador;
                         if (sesion.logindim()) {
                             sesion.setLogin(false);
                         }
+                        Toast.makeText(getApplicationContext()," "+id_usuario_resibido,Toast.LENGTH_SHORT).show();
                         finish();
                     }else{
                         new eliminarUsuario().execute();

@@ -61,6 +61,8 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
     int id_usuario;
     ProgressBar barraProgreso;
 
+    int id_usuario_normal;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,6 +82,13 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
         barraProgreso = (ProgressBar) findViewById(R.id.progresoPerfilesUsuario);
         barraProgreso.setProgress(0);
         //fin barra de progreso
+
+        //berificar y obtener la activit modo respuesta
+        Bundle tr = getIntent().getExtras();
+        if (getIntent().getExtras()!=null){
+            id_usuario_normal = tr.getInt("hola");
+        }
+///////////////////////////////////////////////////////////
 
 
         //se asegura que el extra no este vacio
@@ -189,12 +198,17 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
         navigationView.setNavigationItemSelectedListener(this);
 
     }
+
+
+
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
+            Intent intent = new Intent();
+            setResult(ActivityCategorias.RESULT_CANCELED,intent);
             super.onBackPressed();
         }
     }
@@ -205,8 +219,9 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
         int id = item.getItemId();
 
         if (id == R.id.principaldos) {
-            startActivity(new Intent(getBaseContext(), ActivityCategorias.class)
+            startActivity (new Intent(getBaseContext(), ActivityCategorias.class)
                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP));
+
             finish();
 
         } else if (id == R.id.acercadeinfodos) {
@@ -258,7 +273,7 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
 
                 intent.putExtra("id",id_usuario_resibido_usuario);
                 startActivity(intent);
-                finish();
+
 
             }else {
                 Toast.makeText(getApplicationContext(),"Error en id de usuario",Toast.LENGTH_SHORT).show();
@@ -287,6 +302,7 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
             if (getIntent().getExtras()!=null){
                 id_usuario_resibido_usuario = getIntent().getExtras().getInt("id");
             }
+            //int prueba = preferences.getInt("usuario_ingreso",0);
 
             try {
                 JSONArray respJSON = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/consultarOrganizacionesUsuarioLogeados.php?id_usuario="+id_usuario_resibido_usuario)).getEntity()));
@@ -407,6 +423,13 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
 
     }
 
+    @Override
+    public void finish(){
+        Intent data = new Intent();
+        data.putExtra("retorno",id_usuario_normal);
+        setResult(RESULT_OK,data);
+        super.finish();
+    }
 
 
 

@@ -33,6 +33,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Surface;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
@@ -42,6 +43,7 @@ import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.HerramientaBusquedaAvanzada.BusquedaAvanzada;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.AcercaDe;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.Login;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.MenuPreferencias;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.PanelDeControlUsuarios;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.Sesion;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.SesionUsuario;
@@ -67,12 +69,36 @@ public class ActivityCategorias extends AppCompatActivity
     int id_usu=-0;
     int id_usu2;
 
+//va ala preferencia
+  SharedPreferences preferencia ;
 
+
+
+    //variables en la cual se almacenara la preferencia
+    //String usario = preferencia.getString("usarioAdmin","null");
+    //String contrasena = preferencia.getString("contrasenaAdmin","null");
+    //int id_usuario = preferencia.getInt("idAdmin",0);
+
+    int id_usuario_normal;
+    private MenuPreferencias menu;
+
+    SharedPreferences logue;
+    int id_administrador,id_normal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_categorias);
+
+        preferencia = getSharedPreferences("acceso", Context.MODE_PRIVATE);
+        id_usuario_normal = preferencia.getInt("idNormal",0);
+
+
+
+        logue = getSharedPreferences("Nombre",Context.MODE_PRIVATE);
+        id_administrador =logue.getInt("Admin",0);
+        id_normal = logue.getInt("Normal",0);
+
         //envio de clase actual para las preferencias
         sesion = new Sesion(this);
         sesionUsuario = new SesionUsuario(this);
@@ -80,7 +106,6 @@ public class ActivityCategorias extends AppCompatActivity
         id_usu  = preferences.getInt("usuario_ingreso",0);
         id_usu2  = preferences.getInt("usuario_admin",0);
         //
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -89,8 +114,18 @@ public class ActivityCategorias extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        menu = new MenuPreferencias(this);
+
+        if (sesion.logindim() || sesionUsuario.logindimUsuario()){
+                NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+                navigationView.inflateMenu(R.menu.menu_tercero);
+                navigationView.setNavigationItemSelectedListener(this);
+        }else {
+            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+            navigationView.inflateMenu(R.menu.activity_principal_drawer);
+            navigationView.setNavigationItemSelectedListener(this);
+        }
+
 
         contenedor = (RecyclerView) findViewById(R.id.contenedor);
         contenedor.setHasFixedSize(true);
@@ -174,6 +209,18 @@ public class ActivityCategorias extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode==100 && resultCode==RESULT_OK){
+            this.recreate();
+        }else if (requestCode==200 && resultCode==RESULT_OK){
+            this.recreate();
+        }else if (requestCode==200 && resultCode==RESULT_CANCELED){
+            this.recreate();
+        }else if (requestCode==300 && resultCode==RESULT_CANCELED){
+            this.recreate();
+        }
+    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -192,26 +239,46 @@ public class ActivityCategorias extends AppCompatActivity
         }else if (id == R.id.login) {
             if (sesion.logindim()){
                 Intent intent = new Intent(ActivityCategorias.this,Panel_de_Control.class);
-                intent.putExtra("usuario_ingreso",id_usu);
-                //startActivity(new Intent(ActivityCategorias.this,Panel_de_Control.class));
-                startActivity(intent);
+                Toast.makeText(getApplicationContext(),""+id_administrador,Toast.LENGTH_SHORT).show();
+                intent.putExtra("usuario_ingreso",id_administrador);
+
+                sesionUsuario.setLoginUsuario(false);
+                startActivityForResult(intent,100);
 
             }else{
                 if (sesionUsuario.logindimUsuario()){
                     Intent intent = new Intent(ActivityCategorias.this,PanelDeControlUsuarios.class);
-                    //intent,putExtra("id",id_usu);
-                    intent.putExtra("id2",id_usu2);
-                    intent.putExtra("id",id_usu);
+
+                    intent.putExtra("id",id_normal);
+                    Toast.makeText(getApplicationContext(),""+id_normal,Toast.LENGTH_SHORT).show();
                     //startActivity(new Intent(ActivityCategorias.this,PanelDeControlUsuarios.class));
-                    startActivity(intent);
+
+                    sesion.setLogin(false);
+                    startActivityForResult(intent,300);
 
 
                 }else {
                     Intent intent = new Intent(this, Login.class);
-                    startActivity(intent);
+                    startActivityForResult(intent,100);
+                    //finish();
 
                 }
 
+            }
+        }else if (id == R.id.cerrarsecion){
+            if (sesion.logindim()) {
+                sesion.setLogin(false);
+                //startActivity(new Intent(this, Login.class));
+                Intent intent = new Intent(this,Login.class);
+                startActivityForResult(intent,200);
+
+            }else {
+                if(sesionUsuario.logindimUsuario()){
+                    sesionUsuario.setLoginUsuario(false);
+                    Intent intent = new Intent(this,Login.class);
+                    startActivityForResult(intent,200);
+
+                }
             }
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

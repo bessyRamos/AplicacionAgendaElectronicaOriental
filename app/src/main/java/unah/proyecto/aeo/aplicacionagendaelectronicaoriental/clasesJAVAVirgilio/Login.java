@@ -17,6 +17,7 @@ import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -38,6 +39,7 @@ import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.lang.reflect.Array;
@@ -85,7 +87,7 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
     private static final String IP_TOKEN="http://aeo.web-hn.com/RegisterDevice.php";
 
 
-  //  aeo.web-hn.com/RegisterDevice.php
+    //  aeo.web-hn.com/RegisterDevice.php
 
     // preferencia de administrador
     //private SharedPreferences preferences;
@@ -108,6 +110,12 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
     SharedPreferences.Editor editor;
     int id_usu=-1;
     private CircularProgressButton acceder;
+    private MenuPreferencias menu;
+
+    String nada;
+
+    SharedPreferences logue;
+    SharedPreferences.Editor editorLogueo;
 
 
     @Override
@@ -123,47 +131,50 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
         preferences = getSharedPreferences("credencial",Context.MODE_PRIVATE);
         editor = preferences.edit();
 
+        logue= getSharedPreferences("Nombre",Context.MODE_PRIVATE);
+        editorLogueo = logue.edit();
 
+        menu=new MenuPreferencias(this);
         //
         acceder = (CircularProgressButton) findViewById(R.id.ingresar_login);
         recuperar = (TextView) findViewById(R.id.recuperacion);//para recuperacion de contrasenia
         acceder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    if (usuario.getText().toString().isEmpty() || contrasena.getText().toString().isEmpty()) {
-                        //Toast.makeText(getApplicationContext(), "Favor ingresar todos los Campos", Toast.LENGTH_SHORT).show();
-                        validar();
-                        acceder.revertAnimation();
-                        acceder.stopAnimation();
-                    } else {                          //si existe el usuario y la contraseña son correctas el accedera
-                        final AsyncTask<String,String,String> demoLogin = new AsyncTask<String, String, String>() {
-                            @Override
-                            protected String doInBackground(String... strings) {
+                if (usuario.getText().toString().isEmpty() || contrasena.getText().toString().isEmpty()) {
+                    //Toast.makeText(getApplicationContext(), "Favor ingresar todos los Campos", Toast.LENGTH_SHORT).show();
+                    validar();
+                    acceder.revertAnimation();
+                    acceder.stopAnimation();
+                } else {                          //si existe el usuario y la contraseña son correctas el accedera
+                    final AsyncTask<String,String,String> demoLogin = new AsyncTask<String, String, String>() {
+                        @Override
+                        protected String doInBackground(String... strings) {
                                 try {
-                                    Thread.sleep(3000);
-                                } catch (InterruptedException e) {
+                                    Thread.sleep(4000);
+                                } catch (Exception e) {
                                     e.printStackTrace();
                                 }
-                                return "cargado";
+                            return "cargado";
+
+                        }
+
+                        @Override
+                        protected void onPostExecute(String s) {
+                            if (s.equals("cargado")){
+
+                                new LoginValidadoWeb().execute();
+                                acceder.stopAnimation();
+                                acceder.revertAnimation();
 
                             }
 
-                            @Override
-                            protected void onPostExecute(String s) {
-                                if (s.equals("cargado")){
+                        }
+                    };
+                    acceder.startAnimation();
+                    demoLogin.execute();
 
-                                    new LoginValidadoWeb().execute();
-                                    acceder.stopAnimation();
-                                    acceder.revertAnimation();
-
-                                }
-
-                            }
-                        };
-                        acceder.startAnimation();
-                        demoLogin.execute();
-
-                    }//fin else
+                }//fin else
             }
         });
 
@@ -190,6 +201,8 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
+            Intent intent = new Intent();
+            setResult(ActivityCategorias.RESULT_CANCELED,intent);
             super.onBackPressed();
         }
     }
@@ -223,7 +236,7 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
         return true;
     }
 
-//Metodo para ingresar al formulario de registrar una nueva cuenta de usuario
+    //Metodo para ingresar al formulario de registrar una nueva cuenta de usuario
     public void Formulario_Registrarse_login(View v) {   //metodo que habre el formulario para registrarse
         Intent intent = new Intent(this, FormularioRegistroUsuario.class);
         usuario.setText("");
@@ -237,43 +250,8 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
 
     }//fin de boton
 
-    private Cursor ConsultarUsuarioPassword(String usuario, String password) throws SQLException {
-        conexion = basedatos.getReadableDatabase();
-        Cursor mcursor = null;
-        int estado = 1;
-        int rol = 1;
-        mcursor = conexion.query("Usuarios", new String[]{"id_usuario", "nombre_usuario", "nombre_propio", "contrasena", "rol", "estado_usuario"}, "nombre_usuario like'" + usuario + "'and  contrasena like '" + password + "'and  estado_usuario like '" + estado + "'and  rol like '" + rol + "'", null, null, null, null);
-        return mcursor;
-    }
 
-    private void consultaUsuContra(String nombre_usuario, String password_usuario) {
-        String usuario_resibido, password_resibido;
-
-        usuario_resibido = usuario.getText().toString();
-        password_resibido = contrasena.getText().toString();
-
-        //
-        usuari = usuario_resibido;
-        contrase = password_resibido;
-        //
-
-        Cursor fila = conexion.rawQuery("select nombre_usuario,contrasena,id_usuario,estado_usuario from Usuarios WHERE nombre_usuario= '" + usuario_resibido + "'and contrasena='" + password_resibido + "'", null);
-
-        while (fila.moveToNext()) {
-            String usua = fila.getString(0);
-            String pass = fila.getString(1);
-            if (usuario_resibido.equals(usua) && password_resibido.equals(pass)) {
-                Intent intent = new Intent(this, Panel_de_Control.class);
-                usuario.setText("");
-                contrasena.setText("");
-                startActivity(intent);
-            } else {
-                Toast.makeText(getApplicationContext(), "usuario o contrase;a erronea", Toast.LENGTH_SHORT).show();
-            }
-        }
-
-    }
-//METODO DE VERIFICADE DESDE EL SERVIDOR
+    //METODO DE VERIFICADE DESDE EL SERVIDOR
     private class LoginValidadoWeb extends AsyncTask<String, Integer, Boolean> {
         private LoginValidadoWeb() {
         }
@@ -300,14 +278,21 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
                 if (id_usuario != 0 && rol != 0 && estado_usuario != 0) {
                     resul = true;
                 } else {
-                    if(   (    ((id_usuario != 0) && (rol==1 && estado_usuario==2)) ||  ( (id_usuario != 0 && rol==2) && (estado_usuario==2) ) ) ) {
                         resul = false;
-                    }else if (id_usuario==0){
-                        resul = false;
-                    }else {
-                        resul = false;
-                    }
                 }
+                if (id_usuario==0){
+                    resul = false;
+                }
+                if (jsonObject.getJSONArray("datos").equals(null)){
+                    nada="nada";
+                }
+                if (id_usuario!=0&& rol==1&&estado_usuario==2){
+                    resul = false;
+                }
+                if (id_usuario!=0&& rol==2&&estado_usuario==2){
+                    resul = false;
+                }
+
 
             } catch (Exception ex) {
                 ex.printStackTrace();
@@ -318,83 +303,99 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
             return resul;
         }
 
-    protected void onPostExecute(Boolean result) {
-        if (resul) {
-            id_preferencia = id_usuario;
-            editor.putInt("usuario_ingreso",id_preferencia);
-            editor.putInt("usuario_admin",id_preferencia);
-            editor.commit();
+        protected void onPostExecute(Boolean result) {
+            if (resul) {
+                id_preferencia = id_usuario;
+                editor.putInt("usuario_ingreso",id_preferencia);
+                editor.putInt("usuario_admin",id_preferencia);
+                editor.commit();
 
-            if (rol == 1 && estado_usuario ==1) {
-                //instancia y envio de usuario logeado
-                Intent intent = new Intent(Login.this, Panel_de_Control.class);
-                //sendTokenToServer();
-                intent.putExtra("usuario_ingreso",id_preferencia);
-                id_usu = preferences.getInt("usuario_ingreso",0);
-                //preferencia logeado con exito
-                session.setLogin(true);
-                //
-                usuario.setText("");
-                contrasena.setText("");
-                startActivity(intent);
-                finish();
-            } else if (rol ==2 && estado_usuario ==1){
-                    //instancia y envio de usuario logeado
-                    Intent intent = new Intent(Login.this,PanelDeControlUsuarios.class);
-                    //sendTokenToServer();
-                    intent.putExtra("id",id_preferencia);
-                id_usu = preferences.getInt("usuario_ingreso",id_preferencia);
-                    //preferencia logeado con exito usuario
-                    sessionUsuario.setLoginUsuario(true);
+
+                Intent intent1= new Intent();
+
+                setResult(ActivityCategorias.RESULT_OK,intent1);
+
+                if (rol == 1 && estado_usuario ==1) {
+                    Intent intent = new Intent(Login.this,Panel_de_Control.class);
+                    session.setLogin(true);
+                    menu.setLoginMenu(true);
+                    sessionUsuario.setLoginUsuario(false);
+
+
+                    intent.putExtra("usuario_ingreso",id_preferencia);
+                    Toast.makeText(getApplicationContext(),""+id_preferencia,Toast.LENGTH_SHORT).show();
+
+                    editorLogueo.putInt("Admin",id_usuario);
+                    editorLogueo.commit();
+
+
+                    startActivity(intent);
+
                     //limpieza de variables
                     usuario.setText("");
                     contrasena.setText("");
                     //
-                    startActivity(intent);
                     finish();
+
+
+                } else if (rol ==2 && estado_usuario ==1){
+                    Intent intent = new Intent(Login.this,PanelDeControlUsuarios.class);
+                    sessionUsuario.setLoginUsuario(true);
+                    menu.setLoginMenu(true);
+                    session.setLogin(false);
+
+                    intent.putExtra("id",id_preferencia);
+                    intent.putExtra("usuario_ingreso",id_preferencia);
+                    Toast.makeText(getApplicationContext(),""+id_preferencia,Toast.LENGTH_SHORT).show();
+
+                    editorLogueo.putInt("Normal",id_usuario);
+                    editorLogueo.commit();
+
+
+
+                    startActivity(intent);
+
+                    //limpieza de variables
+                    usuario.setText("");
+                    contrasena.setText("");
+                    //
+                    finish();
+
+
                 }else {
                     Toast.makeText(getApplicationContext(),"Usuario y/o Contraseña incorrecta ",Toast.LENGTH_LONG).show();
                 }
 
 
-        } else {
-            if ( (rol == 1 && estado_usuario==2) || (rol ==2 && estado_usuario ==2)) {
+            } else {
 
-                //numero de intentos
-                contador = contador + 1;
-                if (contador == 3) {
-                    usuario.setText("");
-                    contrasena.setText("");
-                    Toast.makeText(getApplicationContext(), "Limite de intentos agotados", Toast.LENGTH_SHORT).show();
-                    finish();
-                } else {
-                    Toast.makeText(getApplicationContext(), "Usuario y/o Contraseña incorrecta", Toast.LENGTH_SHORT).show();
+                if (id_usuario==0){
+                    Toast.makeText(getApplicationContext(),"Usuario y/o Contraseña incorrecta ",Toast.LENGTH_LONG).show();
+                }else  if (id_usuario!=0&& rol==1&&estado_usuario==2){
+                    Toast.makeText(getApplicationContext(),"Usuario y/o Contraseña incorrecta ",Toast.LENGTH_LONG).show();
+                }else if (id_usuario!=0&& rol==2&&estado_usuario==2){
+                    Toast.makeText(getApplicationContext(),"Usuario y/o Contraseña incorrecta ",Toast.LENGTH_LONG).show();
+                } else if (nada.equals(nada)) {
+                    Toast.makeText(getApplicationContext(), "Usuario y/o Contraseña incorrecta ", Toast.LENGTH_LONG).show();
+                }if (compruebaConexion()==false){
+                    Toast.makeText(getApplicationContext(), "Problemas de conexion ", Toast.LENGTH_LONG).show();
+
                 }
 
-            }else if (id_usuario ==0){
-                //numero de intentos
-                contador=contador+1;
-                if (contador ==3){
-                    usuario.setText("");
-                    contrasena.setText("");
-                    Toast.makeText(getApplicationContext(), "Limite de intentos agotados", Toast.LENGTH_SHORT).show();
-                    finish();
-                }else {
-                    Toast.makeText(getApplicationContext(), "Usuario y/o Contraseña incorrecta", Toast.LENGTH_SHORT).show();
-                }
+            }//fin de onPostExecute
 
-            }else  if((id_usuario != 0 && rol==1 && estado_usuario==2) || (id_usuario != 0 && rol==2 && estado_usuario==2)){
-                Toast.makeText(getApplicationContext(), "Usuario y/o Contraseña incorrecta", Toast.LENGTH_SHORT).show();
+        }//fin boolean result
+        public boolean compruebaConexion() {
 
-             } else if (result!=true){
-                Toast.makeText(getApplicationContext(), "Problemas de Conexion", Toast.LENGTH_SHORT).show();
-
-
-            }//fin de else fallo conexion, buscar sqlite
-
-        }//fin de onPostExecute
-
-    }//fin boolean result
+            Runtime runtime = Runtime.getRuntime();
+            try {
+                Process ipProcess = runtime.exec("/system/bin/ping -c 1 8.8.8.8");
+                int     exitValue = ipProcess.waitFor();
+                return (exitValue == 0);
+            } catch (IOException e)          { e.printStackTrace(); }
+            catch (InterruptedException e) { e.printStackTrace(); }
+            return false;
+        }
 
     }//fin boolean
 

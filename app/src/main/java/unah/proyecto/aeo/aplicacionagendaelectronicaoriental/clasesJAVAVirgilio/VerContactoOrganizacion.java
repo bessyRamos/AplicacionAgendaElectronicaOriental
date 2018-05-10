@@ -197,6 +197,7 @@ public class VerContactoOrganizacion extends AppCompatActivity implements Naviga
 
                 intent.putExtra("id",id_usuario_resibido_usuario);
                 startActivity(intent);
+                finish();
 
             }else {
                 Toast.makeText(getApplicationContext(),"Error en id de usuario",Toast.LENGTH_SHORT).show();

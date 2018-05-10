@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.Toast;
 
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.PerfilesBreves.ListaDeContactos;
@@ -73,6 +74,7 @@ public class Panel_de_Control extends AppCompatActivity implements NavigationVie
                     Intent intent = new Intent(view.getContext(),Mostrar_Usuarios.class);
                     if (getIntent().getExtras()!=null){
                         id_usuario_resibido = getIntent().getExtras().getInt("usuario_ingreso");
+                        Toast.makeText(getApplicationContext(),""+id_usuario_resibido,Toast.LENGTH_SHORT).show();
                         intent.putExtra("usuario_ingreso",id_usuario_resibido);
                     }
                     startActivity(intent);
@@ -80,6 +82,7 @@ public class Panel_de_Control extends AppCompatActivity implements NavigationVie
                     Intent intent = new Intent(view.getContext(),AdministracionDePerfiles.class);
                     if (getIntent().getExtras()!=null){
                         id_usuario_resibido = getIntent().getExtras().getInt("usuario_ingreso");
+                        Toast.makeText(getApplicationContext(),""+id_usuario_resibido,Toast.LENGTH_SHORT).show();
                         intent.putExtra("usuario_ingreso",id_usuario_resibido);
                     }
                     startActivity(intent);
@@ -143,8 +146,7 @@ public class Panel_de_Control extends AppCompatActivity implements NavigationVie
 
         }else if (id == R.id.login) {
             if (sesion.logindim()){
-                startActivity(new Intent(Panel_de_Control.this,Panel_de_Control.class));
-                finish();
+
             }else{
                 if (sesionUsuario.logindimUsuario()){
                     startActivity(new Intent(Panel_de_Control.this,PanelDeControlUsuarios.class));
