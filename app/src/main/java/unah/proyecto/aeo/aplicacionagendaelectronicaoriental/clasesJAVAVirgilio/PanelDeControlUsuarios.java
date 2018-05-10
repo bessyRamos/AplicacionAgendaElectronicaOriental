@@ -207,10 +207,15 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            Intent intent = new Intent();
-            setResult(ActivityCategorias.RESULT_CANCELED,intent);
             super.onBackPressed();
         }
+    }
+    @Override
+    public void onRestart()
+    {
+        super.onRestart();
+        finish();
+        startActivity(getIntent());
     }
 
     @SuppressWarnings("StatementWithEmptyBody")

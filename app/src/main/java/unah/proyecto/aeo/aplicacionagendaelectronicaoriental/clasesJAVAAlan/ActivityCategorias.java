@@ -173,6 +173,13 @@ public class ActivityCategorias extends AppCompatActivity
                 return "horizontal inversa";
         }
     }
+    @Override
+    public void onRestart()
+    {
+        super.onRestart();
+        finish();
+        startActivity(getIntent());
+    }
 
     @Override
     public void onBackPressed() {
@@ -180,7 +187,6 @@ public class ActivityCategorias extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            this.recreate();
             super.onBackPressed();
         }
     }
@@ -202,12 +208,11 @@ public class ActivityCategorias extends AppCompatActivity
             //Intent para pasar a la activity de búsqueda avanzada
             case R.id.accion_buscarAvanzado:
                 Intent aBusquedaAvanzada = new Intent(getApplicationContext(), BusquedaAvanzada.class);
-                startActivityForResult(aBusquedaAvanzada,400);
+                startActivity(aBusquedaAvanzada);
                 break;
             case R.id.sincronizar:
                 if( compruebaConexion()){
                     Snackbar.make(findViewById(R.id.drawer_layout),"Actualizando datos...",Snackbar.LENGTH_SHORT).show();
-                    borrarCacheImagenes();
                     SyncAdapter.syncImmediately(this);
                 }else{
                     Snackbar.make(findViewById(R.id.drawer_layout),"Actualmente no cuentas con conexión a internet",Snackbar.LENGTH_SHORT).show();
@@ -218,16 +223,6 @@ public class ActivityCategorias extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-       this.recreate();
-    }
-
-    private void borrarCacheImagenes(){
-
-
-
-    }
 
     @SuppressWarnings("StatementWithEmptyBody")
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -241,7 +236,7 @@ public class ActivityCategorias extends AppCompatActivity
 
         } else if (id == R.id.acercadeinfodos) {
             Intent intent = new Intent(this,AcercaDe.class);
-            startActivityForResult(intent,400);
+            startActivity(intent);
 
         }else if (id == R.id.login) {
             if (sesion.logindim()){
@@ -249,7 +244,7 @@ public class ActivityCategorias extends AppCompatActivity
                 intent.putExtra("usuario_ingreso",id_administrador);
 
                 sesionUsuario.setLoginUsuario(false);
-                startActivityForResult(intent,100);
+                startActivity(intent);
 
             }else{
                 if (sesionUsuario.logindimUsuario()){
@@ -259,12 +254,12 @@ public class ActivityCategorias extends AppCompatActivity
                     //startActivity(new Intent(ActivityCategorias.this,PanelDeControlUsuarios.class));
 
                     sesion.setLogin(false);
-                    startActivityForResult(intent,300);
+                    startActivity(intent);
 
 
                 }else {
                     Intent intent = new Intent(this, Login.class);
-                    startActivityForResult(intent,100);
+                    startActivity(intent);
                     //finish();
 
                 }
@@ -275,13 +270,13 @@ public class ActivityCategorias extends AppCompatActivity
                 sesion.setLogin(false);
                 //startActivity(new Intent(this, Login.class));
                 Intent intent = new Intent(this,Login.class);
-                startActivityForResult(intent,200);
+                startActivity(intent);
 
             }else {
                 if(sesionUsuario.logindimUsuario()){
                     sesionUsuario.setLoginUsuario(false);
                     Intent intent = new Intent(this,Login.class);
-                    startActivityForResult(intent,200);
+                    startActivity(intent);
 
                 }
             }

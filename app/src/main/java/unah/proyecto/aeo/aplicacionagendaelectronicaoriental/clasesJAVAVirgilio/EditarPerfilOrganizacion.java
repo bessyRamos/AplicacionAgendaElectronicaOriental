@@ -255,6 +255,13 @@ public class EditarPerfilOrganizacion extends AppCompatActivity  implements Navi
             super.onBackPressed();
         }
     }
+    @Override
+    public void onRestart()
+    {
+        super.onRestart();
+        finish();
+        startActivity(getIntent());
+    }
 
 
     @SuppressWarnings("StatementWithEmptyBody")

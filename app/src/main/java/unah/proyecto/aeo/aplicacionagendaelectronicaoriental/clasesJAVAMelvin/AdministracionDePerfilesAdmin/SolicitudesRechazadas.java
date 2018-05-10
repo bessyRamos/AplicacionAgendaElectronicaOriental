@@ -192,6 +192,13 @@ public class SolicitudesRechazadas extends AppCompatActivity implements Navigati
     public void onBackPressed() {
         super.onBackPressed();
     }
+    @Override
+    public void onRestart()
+    {
+        super.onRestart();
+        finish();
+        startActivity(getIntent());
+    }
 
     public static boolean compruebaConexion(Context context) {
 

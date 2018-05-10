@@ -191,10 +191,15 @@ public class PerfilDeLaOrganizacion extends AppCompatActivity implements Navigat
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            Intent intent = new Intent();
-            setResult(ListaDeContactos.RESULT_CANCELED,intent);
             super.onBackPressed();
         }
+    }
+    @Override
+    public void onRestart()
+    {
+        super.onRestart();
+        finish();
+        startActivity(getIntent());
     }
 
 
@@ -231,18 +236,6 @@ public class PerfilDeLaOrganizacion extends AppCompatActivity implements Navigat
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode==100 && resultCode==RESULT_OK){
-            this.recreate();
-        }else if (requestCode==200 && resultCode==RESULT_OK){
-            this.recreate();
-        }else if (requestCode==200 && resultCode==RESULT_CANCELED){
-            this.recreate();
-        }else if (requestCode==300 && resultCode==RESULT_CANCELED){
-            this.recreate();
-        }
-    }
 
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -266,7 +259,7 @@ public class PerfilDeLaOrganizacion extends AppCompatActivity implements Navigat
                 intent.putExtra("usuario_ingreso",id_usu);
 
                 sesionUsuario.setLoginUsuario(false);
-                startActivityForResult(intent,100);
+                startActivity(intent);
                 //startActivity(new Intent(ActivityCategorias.this,Panel_de_Control.class));
                 //startActivity(intent);
 
@@ -276,14 +269,14 @@ public class PerfilDeLaOrganizacion extends AppCompatActivity implements Navigat
                     intent.putExtra("id",id_usu);
                     //startActivity(new Intent(ActivityCategorias.this,PanelDeControlUsuarios.class));
                     sesion.setLogin(false);
-                    startActivityForResult(intent,300);
+                    startActivity(intent);
 
                     //startActivity(intent);
 
 
                 }else {
                     Intent intent = new Intent(this, Login.class);
-                    startActivityForResult(intent,100);
+                    startActivity(intent);
 
                 }
 
@@ -293,14 +286,14 @@ public class PerfilDeLaOrganizacion extends AppCompatActivity implements Navigat
             if (sesion.logindim()) {
                 sesion.setLogin(false);
                 Intent intent = new Intent(this,Login.class);
-                startActivityForResult(intent,200);
+                startActivity(intent);
                 //startActivity(new Intent(this, Login.class));
                 //finish();
             }else {
                 if(sesionUsuario.logindimUsuario()){
                     sesionUsuario.setLoginUsuario(false);
                     Intent intent = new Intent(this,Login.class);
-                    startActivityForResult(intent,200);
+                    startActivity(intent);
                     //startActivity(new Intent(this, Login.class));
                     //finish();
                 }

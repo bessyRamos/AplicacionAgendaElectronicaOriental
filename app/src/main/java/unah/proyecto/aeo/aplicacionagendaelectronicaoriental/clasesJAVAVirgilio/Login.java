@@ -57,6 +57,8 @@ import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.ActivityCategorias;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.Panel_de_Control;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.SharedPrefManager;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.HerramientaBusquedaAvanzada.BusquedaAvanzada;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.PerfilesBreves.ListaDeContactos;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVASheyli.RecuperacionDePassword;
 
 public class Login extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
@@ -172,10 +174,20 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
         } else {
             Intent intent = new Intent();
             setResult(ActivityCategorias.RESULT_CANCELED,intent);
+            setResult(ListaDeContactos.RESULT_CANCELED,intent);
+            setResult(BusquedaAvanzada.RESULT_CANCELED,intent);
+
             startActivity(new Intent(getBaseContext(), ActivityCategorias.class)
                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP));
             finish();
         }
+    }
+    @Override
+    public void onRestart()
+    {
+        super.onRestart();
+        finish();
+        startActivity(getIntent());
     }
     //abrira activity recuperar contrasenia
     public void recuperar1(View v){
@@ -298,7 +310,7 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
                 Intent intent1= new Intent();
 
 
-                setResult(ActivityCategorias.RESULT_OK,intent1);
+
 
                 if (rol == 1 && estado_usuario ==1) {
                     Intent intent = new Intent(Login.this,Panel_de_Control.class);
@@ -311,7 +323,6 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
 
                     editorLogueo.putInt("Admin",id_usuario);
                     editorLogueo.commit();
-
 
                     startActivity(intent);
 

@@ -144,6 +144,13 @@ public class AdministracionDePerfiles extends AppCompatActivity
             super.onBackPressed();
         }
     }
+    @Override
+    public void onRestart()
+    {
+        super.onRestart();
+        finish();
+        startActivity(getIntent());
+    }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

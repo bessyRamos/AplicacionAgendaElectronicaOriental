@@ -307,6 +307,13 @@ public class EditarUsuario extends AppCompatActivity implements NavigationView.O
 
 
     }
+    @Override
+    public void onRestart()
+    {
+        super.onRestart();
+        finish();
+        startActivity(getIntent());
+    }
 
 }
 

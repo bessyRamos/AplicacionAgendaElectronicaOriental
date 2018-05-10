@@ -322,23 +322,15 @@ public class BusquedaAvanzada extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            Intent intent = new Intent();
-            setResult(ActivityCategorias.RESULT_CANCELED,intent);
-            setResult(ListaDeContactos.RESULT_CANCELED,intent);
             super.onBackPressed();
         }
     }
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode==100 && resultCode==RESULT_OK){
-            this.recreate();
-        }else if (requestCode==200 && resultCode==RESULT_OK){
-            this.recreate();
-        }else if (requestCode==200 && resultCode==RESULT_CANCELED){
-            this.recreate();
-        }else if (requestCode==300 && resultCode==RESULT_CANCELED){
-            this.recreate();
-        }
+    public void onRestart()
+    {
+        super.onRestart();
+        finish();
+        startActivity(getIntent());
     }
 
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -359,7 +351,7 @@ public class BusquedaAvanzada extends AppCompatActivity
                 Intent intent = new Intent(BusquedaAvanzada.this,Panel_de_Control.class);
                 intent.putExtra("usuario_ingreso",id_usu);
                 sesionUsuario.setLoginUsuario(false);
-                startActivityForResult(intent,100);
+                startActivity(intent);
                 //startActivity(new Intent(ActivityCategorias.this,Panel_de_Control.class));
                 //startActivity(intent);
                 //finish();
@@ -368,13 +360,13 @@ public class BusquedaAvanzada extends AppCompatActivity
                     Intent intent = new Intent(BusquedaAvanzada.this,PanelDeControlUsuarios.class);
                     intent.putExtra("id",id_usu);
                     sesion.setLogin(false);
-                    startActivityForResult(intent,300);
+                    startActivity(intent);
                     //startActivity(new Intent(ActivityCategorias.this,PanelDeControlUsuarios.class));
                     //startActivity(intent);
                     //finish();
                 }else {
                     Intent intent = new Intent(this, Login.class);
-                    startActivityForResult(intent,100);
+                    startActivity(intent);
                     //finish();
                 }
 
@@ -385,14 +377,14 @@ public class BusquedaAvanzada extends AppCompatActivity
             if (sesion.logindim()) {
                 sesion.setLogin(false);
                 Intent intent = new Intent(this,Login.class);
-                startActivityForResult(intent,200);
+                startActivity(intent);
                 //startActivity(new Intent(this, Login.class));
                 //finish();
             }else {
                 if(sesionUsuario.logindimUsuario()){
                     sesionUsuario.setLoginUsuario(false);
                     Intent intent = new Intent(this,Login.class);
-                    startActivityForResult(intent,200);
+                    startActivity(intent);
                     //startActivity(new Intent(this, Login.class));
                     //finish();
                 }

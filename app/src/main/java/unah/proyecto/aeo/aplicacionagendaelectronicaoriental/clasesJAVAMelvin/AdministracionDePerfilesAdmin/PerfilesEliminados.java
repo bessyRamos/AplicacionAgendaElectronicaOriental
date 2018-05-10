@@ -191,6 +191,13 @@ public class PerfilesEliminados extends AppCompatActivity  implements Navigation
             super.onBackPressed();
         }
     }
+    @Override
+    public void onRestart()
+    {
+        super.onRestart();
+        finish();
+        startActivity(getIntent());
+    }
 
     public static boolean compruebaConexion(Context context) {
 

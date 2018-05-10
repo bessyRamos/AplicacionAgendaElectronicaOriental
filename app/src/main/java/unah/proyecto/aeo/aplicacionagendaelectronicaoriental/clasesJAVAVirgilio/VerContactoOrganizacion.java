@@ -490,6 +490,13 @@ public class VerContactoOrganizacion extends AppCompatActivity implements Naviga
             }
         }
     }
+    @Override
+    public void onRestart()
+    {
+        super.onRestart();
+        finish();
+        startActivity(getIntent());
+    }
 
 }
 

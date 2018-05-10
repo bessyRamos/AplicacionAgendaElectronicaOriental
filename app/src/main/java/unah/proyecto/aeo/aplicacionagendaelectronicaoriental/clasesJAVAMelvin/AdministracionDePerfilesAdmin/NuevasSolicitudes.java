@@ -248,6 +248,13 @@ public class NuevasSolicitudes extends AppCompatActivity
             super.onBackPressed();
         }
     }
+    @Override
+    public void onRestart()
+    {
+        super.onRestart();
+        finish();
+        startActivity(getIntent());
+    }
 
     private class llenarListaPendientes extends AsyncTask<String, Integer, Boolean> {
         private llenarListaPendientes(){}

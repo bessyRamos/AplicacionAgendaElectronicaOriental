@@ -128,10 +128,15 @@ public class ListaDeContactos extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            Intent intent = new Intent();
-            setResult(ActivityCategorias.RESULT_CANCELED,intent);
             super.onBackPressed();
         }
+    }
+    @Override
+    public void onRestart()
+    {
+        super.onRestart();
+        finish();
+        startActivity(getIntent());
     }
 
     @Override
@@ -151,7 +156,7 @@ public class ListaDeContactos extends AppCompatActivity
             //Intent para pasar a la activity de búsqueda avanzada
             case R.id.accion_buscarAvanzado:
                 Intent aBusquedaAvanzada= new Intent(getApplicationContext(),BusquedaAvanzada.class);
-                startActivityForResult(aBusquedaAvanzada,400);
+                startActivity(aBusquedaAvanzada);
                 break;
             case R.id.sincronizar:
                 if( isOnlineNet()){
@@ -167,20 +172,7 @@ public class ListaDeContactos extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode==100 && resultCode==RESULT_OK){
-            this.recreate();
-        }else if (requestCode==200 && resultCode==RESULT_OK){
-            this.recreate();
-        }else if (requestCode==200 && resultCode==RESULT_CANCELED){
-            this.recreate();
-        }else if (requestCode==300 && resultCode==RESULT_CANCELED){
-            this.recreate();
-        }else{
-            this.recreate();
-        }
-    }
+
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
@@ -197,7 +189,7 @@ public class ListaDeContactos extends AppCompatActivity
                 intent.putExtra("usuario_ingreso",id_usu);
                 //startActivity(new Intent(ActivityCategorias.this,Panel_de_Control.class));
                 sesionUsuario.setLoginUsuario(false);
-                startActivityForResult(intent,100);
+                startActivity(intent);
                 //startActivity(intent);
                 //finish();
             }else{
@@ -206,13 +198,13 @@ public class ListaDeContactos extends AppCompatActivity
                     intent.putExtra("id",id_usu);
                     //startActivity(new Intent(ActivityCategorias.this,PanelDeControlUsuarios.class));
                     sesion.setLogin(false);
-                    startActivityForResult(intent,300);
+                    startActivity(intent);
                     //startActivity(intent);
                     //finish();
 
                 }else {
                     Intent intent = new Intent(this, Login.class);
-                    startActivityForResult(intent,100);
+                    startActivity(intent);
                     //finish();
                 }
 
@@ -222,14 +214,14 @@ public class ListaDeContactos extends AppCompatActivity
             if (sesion.logindim()) {
                 sesion.setLogin(false);
                 Intent intent = new Intent(this,Login.class);
-                startActivityForResult(intent,200);
+                startActivity(intent);
                 //startActivity(new Intent(this, Login.class));
                 //finish();
             }else {
                 if(sesionUsuario.logindimUsuario()){
                     sesionUsuario.setLoginUsuario(false);
                     Intent intent = new Intent(this,Login.class);
-                    startActivityForResult(intent,200);
+                    startActivity(intent);
                     //startActivity(new Intent(this, Login.class));
                     //finish();
                 }

@@ -107,7 +107,6 @@ public class FormularioRegistroLogin extends AppCompatActivity {
          }
      });
 
-
     }
 
     // public void registrar_usuario_login (View v){
@@ -297,9 +296,17 @@ public class FormularioRegistroLogin extends AppCompatActivity {
 
 
 
+}//todo:fin de subir token al server
+    @Override
+    public void onRestart()
+    {
+        super.onRestart();
+        finish();
+        startActivity(getIntent());
+    }
+
  }
 
-}
 
 
 
