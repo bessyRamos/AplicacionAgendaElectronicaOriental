@@ -55,10 +55,12 @@ public class AdaptadorParaBusquedaAvanzada extends RecyclerView.Adapter<ViewHold
         if(!listaObjetos.get(position).getImagen().isEmpty()){
             Glide.with(holder.context).
                     load(listaObjetos.get(position).getImagen()).
+                    placeholder(R.drawable.wait).
                     into(holder.imagenPerfilBreve);
         }else{
             Glide.with(holder.context).
                     load(R.drawable.iconocontactowhite).
+                    placeholder(R.drawable.wait).
                     into(holder.imagenPerfilBreve);
         }
         holder.setOnClickListener();

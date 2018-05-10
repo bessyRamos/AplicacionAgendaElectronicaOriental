@@ -369,7 +369,7 @@ public class EditarPerfilOrganizacion extends AppCompatActivity  implements Navi
                 InputStream imageStream = getContentResolver().openInputStream(imageUri);
                 Bitmap selectedImage = BitmapFactory.decodeStream(imageStream);
 
-                selectedImage = getResizedBitmap(selectedImage, 500);// 400 is for example, replace with desired size
+                selectedImage = getResizedBitmap(selectedImage, 200);// 400 is for example, replace with desired size
 
                 imagenOrg.setImageBitmap(selectedImage);
 

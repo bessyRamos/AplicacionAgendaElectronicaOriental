@@ -69,12 +69,10 @@ public class AdaptadorOrganizacion extends BaseAdapter {
 
         }else {
             Picasso.get().load(listaobjetos.get(i).getImagen()).
-                    memoryPolicy(MemoryPolicy.NO_CACHE).
-                    networkPolicy(NetworkPolicy.NO_CACHE).
+            placeholder(R.drawable.wait).
                     into(Imagen);
         }
 
         return v;
     }
 }
-
