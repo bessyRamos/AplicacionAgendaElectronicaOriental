@@ -341,7 +341,7 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
             while (progreso<100){
                 progreso++;
                 publishProgress(progreso);
-                SystemClock.sleep(20);
+                //SystemClock.sleep(20);
             }
             //fin de barra de progreso
 
@@ -419,7 +419,6 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
                 Toast.makeText(getApplicationContext(), "Problemas de conexión", Toast.LENGTH_SHORT).show();
             }
         }
-
 
     }
 

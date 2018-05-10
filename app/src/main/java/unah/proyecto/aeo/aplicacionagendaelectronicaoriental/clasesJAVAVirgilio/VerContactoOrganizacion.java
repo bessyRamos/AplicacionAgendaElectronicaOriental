@@ -93,10 +93,11 @@ public class VerContactoOrganizacion extends AppCompatActivity implements Naviga
         longitud = (TextView) findViewById(R.id.verLongitudOrganizacion);
         imagen = (ImageView)findViewById(R.id.verImagenOrganizacion);
 
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
         new llenarEditTexEditarPerfil().execute();
 
-         toolbar = (Toolbar) findViewById(R.id.toolbar);
-         toolbar.setTitle("Contacto");
+
+        //toolbar.setTitle("Contacto");
         setSupportActionBar(toolbar);
         //muestra el menu lateral
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -426,7 +427,7 @@ public class VerContactoOrganizacion extends AppCompatActivity implements Naviga
                 }else {
                     nombre.setText(nombre_ver);
                     //toolbar.setTitle(nombre_ver);
-                    //setSupportActionBar(toolbar);
+                   // setSupportActionBar(toolbar);
                 }
 
                if (telefono_ver.isEmpty()){

@@ -180,6 +180,7 @@ public class ActivityCategorias extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
+            
             super.onBackPressed();
         }
     }
@@ -201,7 +202,7 @@ public class ActivityCategorias extends AppCompatActivity
             //Intent para pasar a la activity de búsqueda avanzada
             case R.id.accion_buscarAvanzado:
                 Intent aBusquedaAvanzada = new Intent(getApplicationContext(), BusquedaAvanzada.class);
-                startActivity(aBusquedaAvanzada);
+                startActivityForResult(aBusquedaAvanzada,400);
                 break;
             case R.id.sincronizar:
                 if( compruebaConexion()){
@@ -240,12 +241,11 @@ public class ActivityCategorias extends AppCompatActivity
 
         } else if (id == R.id.acercadeinfodos) {
             Intent intent = new Intent(this,AcercaDe.class);
-            startActivity(intent);
+            startActivityForResult(intent,400);
 
         }else if (id == R.id.login) {
             if (sesion.logindim()){
                 Intent intent = new Intent(ActivityCategorias.this,Panel_de_Control.class);
-                Toast.makeText(getApplicationContext(),""+id_administrador,Toast.LENGTH_SHORT).show();
                 intent.putExtra("usuario_ingreso",id_administrador);
 
                 sesionUsuario.setLoginUsuario(false);
@@ -256,7 +256,6 @@ public class ActivityCategorias extends AppCompatActivity
                     Intent intent = new Intent(ActivityCategorias.this,PanelDeControlUsuarios.class);
 
                     intent.putExtra("id",id_normal);
-                    Toast.makeText(getApplicationContext(),""+id_normal,Toast.LENGTH_SHORT).show();
                     //startActivity(new Intent(ActivityCategorias.this,PanelDeControlUsuarios.class));
 
                     sesion.setLogin(false);

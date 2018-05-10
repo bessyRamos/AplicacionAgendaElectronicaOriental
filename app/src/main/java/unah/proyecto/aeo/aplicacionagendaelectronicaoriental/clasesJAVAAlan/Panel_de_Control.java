@@ -91,7 +91,6 @@ public class Panel_de_Control extends AppCompatActivity implements NavigationVie
                     Intent intent = new Intent(view.getContext(),Mostrar_Usuarios.class);
                     if (getIntent().getExtras()!=null){
                         id_usuario_resibido = getIntent().getExtras().getInt("usuario_ingreso");
-                        Toast.makeText(getApplicationContext(),""+id_usuario_resibido,Toast.LENGTH_SHORT).show();
                         intent.putExtra("usuario_ingreso",id_usuario_resibido);
                     }
                     startActivity(intent);
@@ -99,7 +98,6 @@ public class Panel_de_Control extends AppCompatActivity implements NavigationVie
                     Intent intent = new Intent(view.getContext(),AdministracionDePerfiles.class);
                     if (getIntent().getExtras()!=null){
                         id_usuario_resibido = getIntent().getExtras().getInt("usuario_ingreso");
-                        Toast.makeText(getApplicationContext(),""+id_usuario_resibido,Toast.LENGTH_SHORT).show();
                         intent.putExtra("usuario_ingreso",id_usuario_resibido);
                     }
                     startActivity(intent);

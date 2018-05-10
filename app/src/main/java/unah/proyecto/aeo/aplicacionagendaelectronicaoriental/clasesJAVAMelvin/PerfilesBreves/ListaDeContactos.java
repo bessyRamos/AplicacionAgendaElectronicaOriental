@@ -151,7 +151,7 @@ public class ListaDeContactos extends AppCompatActivity
             //Intent para pasar a la activity de búsqueda avanzada
             case R.id.accion_buscarAvanzado:
                 Intent aBusquedaAvanzada= new Intent(getApplicationContext(),BusquedaAvanzada.class);
-                startActivity(aBusquedaAvanzada);
+                startActivityForResult(aBusquedaAvanzada,400);
                 break;
             case R.id.sincronizar:
                 if( isOnlineNet()){
@@ -176,6 +176,8 @@ public class ListaDeContactos extends AppCompatActivity
         }else if (requestCode==200 && resultCode==RESULT_CANCELED){
             this.recreate();
         }else if (requestCode==300 && resultCode==RESULT_CANCELED){
+            this.recreate();
+        }else{
             this.recreate();
         }
     }
