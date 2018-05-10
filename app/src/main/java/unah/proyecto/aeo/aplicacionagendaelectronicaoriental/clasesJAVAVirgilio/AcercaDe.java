@@ -113,18 +113,13 @@ public class AcercaDe extends AppCompatActivity implements NavigationView.OnNavi
         }
     }
 
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode==100 && resultCode==RESULT_OK){
-            this.recreate();
-        }else if (requestCode==200 && resultCode==RESULT_OK){
-            this.recreate();
-        }else if (requestCode==200 && resultCode==RESULT_CANCELED){
-            this.recreate();
-        }else if (requestCode==300 && resultCode==RESULT_CANCELED){
-            this.recreate();
-        }
+    @Override
+    public void onRestart()
+    {
+        super.onRestart();
+        finish();
+        startActivity(getIntent());
     }
-
 
 
     @SuppressWarnings("StatementWithEmptyBody")
