@@ -90,12 +90,25 @@ Adaptador_mostrarusuarios adaptador;
             @Override
             public void onClick(View view) {
                 Intent intent = new Intent(Mostrar_Usuarios.this, FormularioRegistroLogin.class);
-                startActivity(intent);
+                startActivityForResult(intent,600);
 
             }
         });
 
 
+    }
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(requestCode == 600 && resultCode == RESULT_OK){
+
+            mostrar_usuarios.clear();
+            new llenarLista().execute();
+            adaptador.notifyDataSetChanged();
+        }else if(requestCode == 600 && resultCode == RESULT_OK){
+            mostrar_usuarios.clear();
+            new llenarLista().execute();
+            adaptador.notifyDataSetChanged();
+        }
     }
     public void onclick(){
         lista.setChoiceMode(ListView.CHOICE_MODE_SINGLE);

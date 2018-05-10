@@ -40,6 +40,7 @@ import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
 import cz.msebera.android.httpclient.util.EntityUtils;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.Mostrar_Usuarios;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.SharedPrefManager;
 
 public class FormularioRegistroLogin extends AppCompatActivity {
@@ -51,7 +52,6 @@ public class FormularioRegistroLogin extends AppCompatActivity {
     Button bottonvalidar;
     ArrayList lista = new ArrayList<>();
     private EditText respuesta1,respuesta2,respuesta3;
-    private static final String IP_TOKEN="https://shessag.000webhostapp.com/RegisterDevice.php";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -282,8 +282,11 @@ public class FormularioRegistroLogin extends AppCompatActivity {
                 if (nombreusuario_insertar.getError()==null && nombrepropio_isertar.getError()==null && contrasena_insertar.getError()==null){
 
                     Toast.makeText(getApplicationContext(),"Usuario agregado Correctamente",Toast.LENGTH_SHORT).show();
-                    sendTokenToServer();
+
+                    Intent data = new Intent();
+                    setResult(Mostrar_Usuarios.RESULT_OK, data);
                     finish();
+
 
                 }
 
@@ -292,55 +295,9 @@ public class FormularioRegistroLogin extends AppCompatActivity {
             }
         }
 
-    //storing token to mysql server
-    private void sendTokenToServer() {
-        //  progressDialog = new ProgressDialog(FormularioRegistroLogin.this);
-        //  progressDialog.setMessage("Registering Device...");
-        //  progressDialog.show();
 
-        final String token = SharedPrefManager.getInstance(FormularioRegistroLogin.this).getDeviceToken();
-        // final String email = editTextEmail.getText().toString();
 
-        if (token == null) {
-            //  progressDialog.dismiss();
-            Toast.makeText(FormularioRegistroLogin.this, "Token not generated", Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        StringRequest stringRequest = new StringRequest(Request.Method.POST,IP_TOKEN,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        //  progressDialog.dismiss();
-                        try {
-                            JSONObject obj = new JSONObject(response);
-                            // Toast.makeText(FormularioRegistroLogin.this, obj.getString("message"), Toast.LENGTH_LONG).show();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        //   progressDialog.dismiss();
-                        Toast.makeText(FormularioRegistroLogin.this, error.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                }) {
-
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("usuario", nombreusuariobar);
-                params.put("token", token);
-                return params;
-            }
-        };
-        RequestQueue requestQueue = Volley.newRequestQueue(FormularioRegistroLogin.this);
-        requestQueue.add(stringRequest);
-    }
-
-}//todo:fin de subir token al server
+ }
 
 }
 

@@ -353,13 +353,40 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
                 acceder.revertAnimation();
 
                 if (id_usuario==0){
-                    Toast.makeText(getApplicationContext(),"Usuario y/o Contraseña incorrecta ",Toast.LENGTH_LONG).show();
+                    contador=contador+1;
+                    if (contador ==3){
+                        usuario.setText("");
+                        contrasena.setText("");
+                        Toast.makeText(getApplicationContext(), "Limite de intentos agotados", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }else {
+                        Toast.makeText(getApplicationContext(), "Usuario y/o Contraseña incorrecta", Toast.LENGTH_SHORT).show();
+                    }
+                   // Toast.makeText(getApplicationContext(),"Usuario y/o Contraseña incorrecta 1",Toast.LENGTH_LONG).show();
                 }else  if (id_usuario!=0&& rol==1&&estado_usuario==2){
-                    Toast.makeText(getApplicationContext(),"Usuario y/o Contraseña incorrecta ",Toast.LENGTH_LONG).show();
+                    contador=contador+1;
+                    if (contador ==3){
+                        usuario.setText("");
+                        contrasena.setText("");
+                        Toast.makeText(getApplicationContext(), "Limite de intentos agotados", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }else {
+                        Toast.makeText(getApplicationContext(), "Usuario y/o Contraseña incorrecta", Toast.LENGTH_SHORT).show();
+                    }
+                    //Toast.makeText(getApplicationContext(),"Usuario y/o Contraseña incorrecta 2",Toast.LENGTH_LONG).show();
                 }else if (id_usuario!=0&& rol==2&&estado_usuario==2){
-                    Toast.makeText(getApplicationContext(),"Usuario y/o Contraseña incorrecta ",Toast.LENGTH_LONG).show();
+                    contador=contador+1;
+                    if (contador ==3){
+                        usuario.setText("");
+                        contrasena.setText("");
+                        Toast.makeText(getApplicationContext(), "Limite de intentos agotados", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }else {
+                        Toast.makeText(getApplicationContext(), "Usuario y/o Contraseña incorrecta", Toast.LENGTH_SHORT).show();
+                    }
+                    //Toast.makeText(getApplicationContext(),"Usuario y/o Contraseña incorrecta 3",Toast.LENGTH_LONG).show();
                 } else if (nada.equals(nada)) {
-                    Toast.makeText(getApplicationContext(), "Usuario y/o Contraseña incorrecta ", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getApplicationContext(), "Usuario y/o Contraseña incorrecta ", Toast.LENGTH_LONG).show();
                 }if (compruebaConexion()==false){
                     Toast.makeText(getApplicationContext(), "Problemas de conexion ", Toast.LENGTH_LONG).show();
 

@@ -180,7 +180,7 @@ public class ActivityCategorias extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            
+            this.recreate();
             super.onBackPressed();
         }
     }

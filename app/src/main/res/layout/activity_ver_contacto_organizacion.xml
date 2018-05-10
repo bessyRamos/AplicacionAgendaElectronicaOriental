@@ -284,7 +284,7 @@
                             android:text="Longitud:"
                             android:textSize="15sp"
                             android:layout_marginTop="10dp"
-                            android:layout_weight="4"
+                            android:layout_weight="3"
 
                         />
                         <TextView
