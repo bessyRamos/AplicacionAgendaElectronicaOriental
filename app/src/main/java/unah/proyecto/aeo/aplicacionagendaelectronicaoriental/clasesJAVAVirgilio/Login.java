@@ -172,7 +172,9 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
         } else {
             Intent intent = new Intent();
             setResult(ActivityCategorias.RESULT_CANCELED,intent);
-            super.onBackPressed();
+            startActivity(new Intent(getBaseContext(), ActivityCategorias.class)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP));
+            finish();
         }
     }
     //abrira activity recuperar contrasenia
@@ -189,6 +191,8 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
         int id = item.getItemId();
 
         if (id == R.id.principaldos) {
+            Intent intent = new Intent();
+            setResult(ActivityCategorias.RESULT_CANCELED,intent);
             startActivity(new Intent(getBaseContext(), ActivityCategorias.class)
                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP));
             finish();
