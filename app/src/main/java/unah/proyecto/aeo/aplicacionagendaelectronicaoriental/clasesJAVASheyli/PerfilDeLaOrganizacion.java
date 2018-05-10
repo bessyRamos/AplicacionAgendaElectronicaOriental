@@ -52,6 +52,7 @@ import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.Acti
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.Fuente_Categoria;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.Panel_de_Control;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVABessy.Mapa;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.PerfilesBreves.ListaDeContactos;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.AcercaDe;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.Login;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.PanelDeControlUsuarios;
@@ -90,14 +91,30 @@ public class PerfilDeLaOrganizacion extends AppCompatActivity implements Navigat
         id_usu  = preferences.getInt("usuario_ingreso",id_usu);
         //
 
+        Bundle extras = getIntent().getExtras();
+        if (extras != null) {
+            id_organizacion = extras.getInt("id_organizacion");
+            nombreOrganizacion = extras.getString("nombre_organizacion");
+            toolbar.setTitle(nombreOrganizacion);
+        }
+        setSupportActionBar(toolbar);
+        conn = new AEODbHelper(this);
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        if (sesion.logindim() || sesionUsuario.logindimUsuario()){
+            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+            navigationView.inflateMenu(R.menu.menu_tercero);
+            navigationView.setNavigationItemSelectedListener(this);
+        }else {
+            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+            navigationView.inflateMenu(R.menu.activity_principal_drawer);
+            navigationView.setNavigationItemSelectedListener(this);
+        }
 
 
         //recuperacion de variables
@@ -110,14 +127,7 @@ public class PerfilDeLaOrganizacion extends AppCompatActivity implements Navigat
         descripcion = (TextView) findViewById(R.id.descripcion);
         ubicacion = (FloatingActionButton) findViewById(R.id.fab);
 
-        Bundle extras = getIntent().getExtras();
-        if (extras != null) {
-            id_organizacion = extras.getInt("id_organizacion");
-            nombreOrganizacion = extras.getString("nombre_organizacion");
-            toolbar.setTitle(nombreOrganizacion);
-        }
-        setSupportActionBar(toolbar);
-        conn = new AEODbHelper(this);
+
 
         String[] projection = {
                 PerfilesContract.ContactosEntry.COLUMN_IMAGEN_PATH,
@@ -205,6 +215,8 @@ public class PerfilDeLaOrganizacion extends AppCompatActivity implements Navigat
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
+            Intent intent = new Intent();
+            setResult(ListaDeContactos.RESULT_CANCELED,intent);
             super.onBackPressed();
         }
     }
@@ -243,6 +255,19 @@ public class PerfilDeLaOrganizacion extends AppCompatActivity implements Navigat
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode==100 && resultCode==RESULT_OK){
+            this.recreate();
+        }else if (requestCode==200 && resultCode==RESULT_OK){
+            this.recreate();
+        }else if (requestCode==200 && resultCode==RESULT_CANCELED){
+            this.recreate();
+        }else if (requestCode==300 && resultCode==RESULT_CANCELED){
+            this.recreate();
+        }
+    }
+
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -263,23 +288,46 @@ public class PerfilDeLaOrganizacion extends AppCompatActivity implements Navigat
             if (sesion.logindim()){
                 Intent intent = new Intent(PerfilDeLaOrganizacion.this,Panel_de_Control.class);
                 intent.putExtra("usuario_ingreso",id_usu);
+
+                sesionUsuario.setLoginUsuario(false);
+                startActivityForResult(intent,100);
                 //startActivity(new Intent(ActivityCategorias.this,Panel_de_Control.class));
-                startActivity(intent);
+                //startActivity(intent);
 
             }else{
                 if (sesionUsuario.logindimUsuario()){
                     Intent intent = new Intent(PerfilDeLaOrganizacion.this,PanelDeControlUsuarios.class);
                     intent.putExtra("id",id_usu);
                     //startActivity(new Intent(ActivityCategorias.this,PanelDeControlUsuarios.class));
-                    startActivity(intent);
+                    sesion.setLogin(false);
+                    startActivityForResult(intent,300);
+
+                    //startActivity(intent);
 
 
                 }else {
                     Intent intent = new Intent(this, Login.class);
-                    startActivity(intent);
+                    startActivityForResult(intent,100);
 
                 }
 
+            }
+        }else if (id == R.id.cerrarsecion){
+
+            if (sesion.logindim()) {
+                sesion.setLogin(false);
+                Intent intent = new Intent(this,Login.class);
+                startActivityForResult(intent,200);
+                //startActivity(new Intent(this, Login.class));
+                //finish();
+            }else {
+                if(sesionUsuario.logindimUsuario()){
+                    sesionUsuario.setLoginUsuario(false);
+                    Intent intent = new Intent(this,Login.class);
+                    startActivityForResult(intent,200);
+                    //startActivity(new Intent(this, Login.class));
+                    //finish();
+                }
             }
         }
 

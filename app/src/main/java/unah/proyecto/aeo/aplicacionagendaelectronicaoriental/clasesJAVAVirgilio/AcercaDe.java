@@ -87,8 +87,19 @@ public class AcercaDe extends AppCompatActivity implements NavigationView.OnNavi
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+
+        if (sesion.logindim() || sesionUsuario.logindimUsuario()){
+            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+            navigationView.inflateMenu(R.menu.menu_tercero);
+            navigationView.setNavigationItemSelectedListener(this);
+        }else {
+            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+            navigationView.inflateMenu(R.menu.activity_principal_drawer);
+            navigationView.setNavigationItemSelectedListener(this);
+        }
+
+
+
 
     }
 
@@ -99,6 +110,18 @@ public class AcercaDe extends AppCompatActivity implements NavigationView.OnNavi
             drawer.closeDrawer(GravityCompat.START);
         } else {
             super.onBackPressed();
+        }
+    }
+
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode==100 && resultCode==RESULT_OK){
+            this.recreate();
+        }else if (requestCode==200 && resultCode==RESULT_OK){
+            this.recreate();
+        }else if (requestCode==200 && resultCode==RESULT_CANCELED){
+            this.recreate();
+        }else if (requestCode==300 && resultCode==RESULT_CANCELED){
+            this.recreate();
         }
     }
 
@@ -120,26 +143,33 @@ public class AcercaDe extends AppCompatActivity implements NavigationView.OnNavi
 
         }else if (id == R.id.login) {
             if (sesion.logindim()){
-                Intent intent = new Intent(AcercaDe.this,Panel_de_Control.class);
+                //Intent intent = new Intent(AcercaDe.this,Panel_de_Control.class);
+                Intent intent = new Intent(this,Panel_de_Control.class);
                 intent.putExtra("usuario_ingreso",id_usu);
                 //startActivity(new Intent(ActivityCategorias.this,Panel_de_Control.class));
+
+                sesionUsuario.setLoginUsuario(false);
+                startActivityForResult(intent,100);
                 startActivity(intent);
                 finish();
             }else{
                 if (sesionUsuario.logindimUsuario()){
-                    Intent intent = new Intent(AcercaDe.this,PanelDeControlUsuarios.class);
+                   // Intent intent = new Intent(AcercaDe.this,PanelDeControlUsuarios.class);
+                    Intent intent = new Intent(this,PanelDeControlUsuarios.class);
                     intent.putExtra("id",id_usu);
                     //startActivity(new Intent(ActivityCategorias.this,PanelDeControlUsuarios.class));
-                    startActivity(intent);
+                    sesion.setLogin(false);
+                    startActivityForResult(intent,300);
                     finish();
                 }else {
                     Intent intent = new Intent(this, Login.class);
-                    startActivity(intent);
+                    startActivityForResult(intent,100);
                     finish();
+
                 }
 
             }
-        }if (id == R.id.cerrarsecion){
+        }else if (id == R.id.cerrarsecion){
 
             if (sesion.logindim()) {
                 sesion.setLogin(false);

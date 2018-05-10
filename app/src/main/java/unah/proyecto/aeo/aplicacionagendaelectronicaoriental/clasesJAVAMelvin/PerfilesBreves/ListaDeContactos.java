@@ -29,6 +29,7 @@ import android.widget.Toast;
 
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.*;
 
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.ActivityCategorias;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.Panel_de_Control;
 
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.HerramientaBusquedaAvanzada.BusquedaAvanzada;
@@ -96,8 +97,15 @@ public class ListaDeContactos extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        if (sesion.logindim() || sesionUsuario.logindimUsuario()){
+            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+            navigationView.inflateMenu(R.menu.menu_tercero);
+            navigationView.setNavigationItemSelectedListener(this);
+        }else {
+            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+            navigationView.inflateMenu(R.menu.activity_principal_drawer);
+            navigationView.setNavigationItemSelectedListener(this);
+        }
 
 
         contenedor = (RecyclerView) findViewById(R.id.recyclerViewPerfilBreve);
@@ -120,6 +128,8 @@ public class ListaDeContactos extends AppCompatActivity
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
+            Intent intent = new Intent();
+            setResult(ActivityCategorias.RESULT_CANCELED,intent);
             super.onBackPressed();
         }
     }
@@ -157,6 +167,18 @@ public class ListaDeContactos extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if (requestCode==100 && resultCode==RESULT_OK){
+            this.recreate();
+        }else if (requestCode==200 && resultCode==RESULT_OK){
+            this.recreate();
+        }else if (requestCode==200 && resultCode==RESULT_CANCELED){
+            this.recreate();
+        }else if (requestCode==300 && resultCode==RESULT_CANCELED){
+            this.recreate();
+        }
+    }
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
@@ -172,22 +194,43 @@ public class ListaDeContactos extends AppCompatActivity
                 Intent intent = new Intent(ListaDeContactos.this,Panel_de_Control.class);
                 intent.putExtra("usuario_ingreso",id_usu);
                 //startActivity(new Intent(ActivityCategorias.this,Panel_de_Control.class));
-                startActivity(intent);
-                finish();
+                sesionUsuario.setLoginUsuario(false);
+                startActivityForResult(intent,100);
+                //startActivity(intent);
+                //finish();
             }else{
                 if (sesionUsuario.logindimUsuario()){
                     Intent intent = new Intent(ListaDeContactos.this,PanelDeControlUsuarios.class);
                     intent.putExtra("id",id_usu);
                     //startActivity(new Intent(ActivityCategorias.this,PanelDeControlUsuarios.class));
-                    startActivity(intent);
-                    finish();
+                    sesion.setLogin(false);
+                    startActivityForResult(intent,300);
+                    //startActivity(intent);
+                    //finish();
 
                 }else {
                     Intent intent = new Intent(this, Login.class);
-                    startActivity(intent);
-                    finish();
+                    startActivityForResult(intent,100);
+                    //finish();
                 }
 
+            }
+        }else if (id == R.id.cerrarsecion){
+
+            if (sesion.logindim()) {
+                sesion.setLogin(false);
+                Intent intent = new Intent(this,Login.class);
+                startActivityForResult(intent,200);
+                //startActivity(new Intent(this, Login.class));
+                //finish();
+            }else {
+                if(sesionUsuario.logindimUsuario()){
+                    sesionUsuario.setLoginUsuario(false);
+                    Intent intent = new Intent(this,Login.class);
+                    startActivityForResult(intent,200);
+                    //startActivity(new Intent(this, Login.class));
+                    //finish();
+                }
             }
         }
 

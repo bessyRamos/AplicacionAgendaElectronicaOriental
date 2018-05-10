@@ -95,7 +95,10 @@ public class VerContactoOrganizacion extends AppCompatActivity implements Naviga
 
         new llenarEditTexEditarPerfil().execute();
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+         toolbar = (Toolbar) findViewById(R.id.toolbar);
+         toolbar.setTitle("Contacto");
+        setSupportActionBar(toolbar);
+        //muestra el menu lateral
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -418,12 +421,12 @@ public class VerContactoOrganizacion extends AppCompatActivity implements Naviga
 
                 if (nombre_ver.isEmpty()){
                     nombre.setText("No Disponible");
-                    toolbar.setTitle("Nombre No Disponible");
-                    setSupportActionBar(toolbar);
+                    //toolbar.setTitle("Nombre No Disponible");
+                    //setSupportActionBar(toolbar);
                 }else {
                     nombre.setText(nombre_ver);
-                    toolbar.setTitle(nombre_ver);
-                    setSupportActionBar(toolbar);
+                    //toolbar.setTitle(nombre_ver);
+                    //setSupportActionBar(toolbar);
                 }
 
                if (telefono_ver.isEmpty()){
