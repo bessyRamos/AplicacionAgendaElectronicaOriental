@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="horizontal"
+    android:orientation="vertical"
     android:padding="10dp"
     >
 
@@ -29,5 +29,16 @@
         android:textSize="14sp"
         android:textStyle="bold"
         android:text="mostrar usuario" />
+
+    <TextView
+        android:id="@+id/descripcionmostrarusuarios"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="10dp"
+        android:layout_weight="1"
+        android:textColor="@color/cardview_dark_background"
+        android:textSize="11sp"
+        android:textStyle="bold"
+        android:text="descripcion rol" />
 
 </LinearLayout>

@@ -13,8 +13,14 @@ import android.widget.Toast;
 
 import org.json.JSONArray;
 
+import java.util.ArrayList;
+
+import cz.msebera.android.httpclient.NameValuePair;
+import cz.msebera.android.httpclient.client.HttpClient;
+import cz.msebera.android.httpclient.client.entity.UrlEncodedFormEntity;
 import cz.msebera.android.httpclient.client.methods.HttpPost;
 import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
+import cz.msebera.android.httpclient.message.BasicNameValuePair;
 import cz.msebera.android.httpclient.util.EntityUtils;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 
@@ -26,10 +32,10 @@ import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 public class Editar_Usuarios extends AppCompatActivity {
 
     private int usuarioEditar;
-    private EditText nombreusuario,nombrepropio,contrasena;
-    String nombreusuariobar,nombrepropiobar,contrasenabar;
+    private EditText nombreusuario,nombrepropio,correo;
+    String nombreusuariobar,nombrepropiobar,correobar;
     Button bottonvalidar;
-    String nombre_usuario,nombre_propio,contra;
+    String nombre_usuario,nombre_propio,correoo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,7 +61,7 @@ public class Editar_Usuarios extends AppCompatActivity {
 
         nombreusuario = (EditText)findViewById(R.id.EditUsuario);
         nombrepropio = (EditText)findViewById(R.id.EditNombre);
-        contrasena= (EditText)findViewById(R.id.Editcontrasena);
+        correo= (EditText)findViewById(R.id.Editcorreo);
 
 
         // reflejarCampos();
@@ -63,7 +69,7 @@ public class Editar_Usuarios extends AppCompatActivity {
         new llenarlosEditTextdelServer().execute();
         nombreusuariobar=nombreusuario.getText().toString();
         nombrepropiobar=nombrepropio.getText().toString();
-        contrasenabar=contrasena.getText().toString();
+        correobar=correo.getText().toString();
 
     }
     /*
@@ -95,13 +101,15 @@ public class Editar_Usuarios extends AppCompatActivity {
         //id.setError(null);
         nombreusuario.setError(null);
         nombrepropio.setError(null);
-        contrasena.setError(null);
+        correo.setError(null);
 
 
         // String idd = id.getText().toString();
         String nombusus = nombreusuario.getText().toString();
         String nomb = nombrepropio.getText().toString();
-        String cont = contrasena.getText().toString();
+       String cor = correo.getText().toString();
+
+
 
 
         if(TextUtils.isEmpty(nombusus)){
@@ -114,18 +122,16 @@ public class Editar_Usuarios extends AppCompatActivity {
             nombrepropio.requestFocus();
             return;
 
-        }if(TextUtils.isEmpty(cont)){
-            contrasena.setError(getString(R.string.error_contrasena));
-            contrasena.requestFocus();
-            return;
+        }if(TextUtils.isEmpty(cor)){
+        }else{
+            if(!correo.getText().toString().contains("@") && !correo.getText().toString().contains(".")){
+                correo.setError(getString(R.string.error_contrasena));
+                correo.requestFocus();
+                return;
+            }
 
         }
-
-
     }
-
-
-
     //ACTUALIZACION DE UN USUARIO DESDE EL WEB SERVER
     private class actualizarUsuarios extends AsyncTask<String, Integer, Boolean> {
         private actualizarUsuarios(){}
@@ -135,11 +141,23 @@ public class Editar_Usuarios extends AppCompatActivity {
         protected Boolean doInBackground(String... strings) {
 
             try {
-                nombreusuariobar=nombreusuario.getText().toString();
-                nombrepropiobar=nombrepropio.getText().toString().replace(" ","%20");
-                contrasenabar=contrasena.getText().toString();
+                HttpClient httpclient;
+                HttpPost httppost;
+                ArrayList<NameValuePair> parametros;
+                httpclient = new DefaultHttpClient();
+                httppost = new HttpPost("http://aeo.web-hn.com/actualizacion_de_un_usuario.php");
+                parametros = new ArrayList<NameValuePair>();
+                parametros.add(new BasicNameValuePair("usuario",String.valueOf(usuarioEditar)));
+                parametros.add(new BasicNameValuePair("usuarionombre",nombreusuario.getText().toString()));
+                parametros.add(new BasicNameValuePair("usuariopropio",nombrepropio.getText().toString()));
+                parametros.add(new BasicNameValuePair("usuarioemail",correo.getText().toString()));
 
-                EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/actualizacion_de_un_usuario.php?id_usuario="+usuarioEditar+"&nombre_usuario="+nombreusuariobar+"&nombre_propio="+nombrepropiobar+"&contrasena="+contrasenabar)).getEntity());
+
+                httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));
+
+                httpclient.execute(httppost);
+
+
 
                 resul = true;
             } catch (Exception ex) {
@@ -155,7 +173,7 @@ public class Editar_Usuarios extends AppCompatActivity {
 
 
             if (resul) {
-                if (nombreusuario.getError()==null && nombrepropio.getError()==null && contrasena.getError()==null){
+                if (nombreusuario.getError()==null && nombrepropio.getError()==null && correo.getError()==null){
                     Toast.makeText(getApplicationContext(),"Usuario Realizado Correctamente",Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(Editar_Usuarios.this,Mostrar_Usuarios.class);
                     startActivity(intent);
@@ -179,11 +197,11 @@ public class Editar_Usuarios extends AppCompatActivity {
         protected Boolean doInBackground(String... strings) {
 
             try {
-                JSONArray respJSON = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/Mostar_Los_Usuarios_Editados.php?id_usuario="+usuarioEditar)).getEntity()));
+                JSONArray respJSON = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/Mostar_Los_Usuarios_Editados.php?usuario="+usuarioEditar)).getEntity()));
                 for (int i = 0; i < respJSON.length(); i++) {
                     nombre_usuario = respJSON.getJSONObject(i).getString("nombre_usuario");
                     nombre_propio = respJSON.getJSONObject(i).getString("nombre_propio");
-                    contra = respJSON.getJSONObject(i).getString("contrasena");
+                    correoo = respJSON.getJSONObject(i).getString("correo");
                 }
 
                 resul = true;
@@ -200,7 +218,7 @@ public class Editar_Usuarios extends AppCompatActivity {
             if (resul) {
                 nombreusuario.setText(nombre_usuario);
                 nombrepropio.setText(nombre_propio);
-                contrasena.setText(contra);
+                correo.setText(correoo);
             }else {
                 Toast.makeText(getApplicationContext(), "Problemas de conexión", Toast.LENGTH_SHORT).show();
             }

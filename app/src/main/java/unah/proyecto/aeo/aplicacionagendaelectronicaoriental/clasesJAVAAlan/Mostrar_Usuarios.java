@@ -29,8 +29,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 
+import cz.msebera.android.httpclient.NameValuePair;
+import cz.msebera.android.httpclient.client.HttpClient;
+import cz.msebera.android.httpclient.client.entity.UrlEncodedFormEntity;
 import cz.msebera.android.httpclient.client.methods.HttpPost;
 import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
+import cz.msebera.android.httpclient.message.BasicNameValuePair;
 import cz.msebera.android.httpclient.util.EntityUtils;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.AdministracionDePerfilesAdmin.Fuente_mostrarPerfiles;
@@ -53,7 +57,7 @@ public class Mostrar_Usuarios extends AppCompatActivity {
     private int usuarioselecionado = -1;
     private  Object mActionMode;
     int id_usuario;
-    String nombre_usuario;
+    String nombre_usuario,descripcion_rol;
     private int id_usuario_resibido;
 Adaptador_mostrarusuarios adaptador;
     ProgressBar barra;
@@ -124,6 +128,8 @@ Adaptador_mostrarusuarios adaptador;
         });
     }
 
+
+
     //LLENAR EL LIST VIEW DESDE EL WEB SERVER.
     private class llenarLista extends AsyncTask<String, Integer, Boolean> {
         private llenarLista(){}
@@ -133,11 +139,23 @@ Adaptador_mostrarusuarios adaptador;
         protected Boolean doInBackground(String... strings) {
 
             try {
-                JSONArray respJSON = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/ConsultarTodosLosUsuarios.php")).getEntity()));
+
+                HttpClient httpclient;
+                HttpPost httppost;
+                ArrayList<NameValuePair> parametros;
+                httpclient = new DefaultHttpClient();
+                httppost = new HttpPost("http://aeo.web-hn.com/ConsultarTodosLosUsuarios.php");
+                parametros = new ArrayList<NameValuePair>();
+                parametros.add(new BasicNameValuePair("estado","1"));
+
+                httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));
+                JSONArray respJSON = new JSONArray(EntityUtils.toString(( httpclient.execute(httppost)).getEntity()));
                 for (int i = 0; i < respJSON.length(); i++) {
                     id_usuario = respJSON.getJSONObject(i).getInt("id_usuario");
                     nombre_usuario = respJSON.getJSONObject(i).getString("nombre_usuario");
-                    mostrar_usuarios.add(new Fuente_mostrarUsuarios(id_usuario, nombre_usuario));
+                    descripcion_rol = respJSON.getJSONObject(i).getString("descripcion_rol");
+
+                    mostrar_usuarios.add(new Fuente_mostrarUsuarios(id_usuario, nombre_usuario,descripcion_rol));
 
                 }
             } catch (Exception ex) {
@@ -227,9 +245,20 @@ Adaptador_mostrarusuarios adaptador;
         protected Boolean doInBackground(String... strings) {
 
             try {
-                Fuente_mostrarUsuarios perf = mostrar_usuarios.get(usuarioselecionado);
+                Fuente_mostrarUsuarios perf=mostrar_usuarios.get(usuarioselecionado);
                 idusario=perf.getId();
-                EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/eliminacion_de_un_usuario.php?id_usuario="+idusario)).getEntity());
+                HttpClient httpclient;
+                HttpPost httppost;
+                ArrayList<NameValuePair> parametros;
+                httpclient = new DefaultHttpClient();
+                httppost = new HttpPost("http://aeo.web-hn.com/eliminacion_de_un_usuario.php");
+                parametros = new ArrayList<NameValuePair>();
+                parametros.add(new BasicNameValuePair("usuario",String.valueOf(idusario)));
+
+                httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));
+
+                httpclient.execute(httppost);
+
 
                 resul = true;
             } catch (Exception ex) {

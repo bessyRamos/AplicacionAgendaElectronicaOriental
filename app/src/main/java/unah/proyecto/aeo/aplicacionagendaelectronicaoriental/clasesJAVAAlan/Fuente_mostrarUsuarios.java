@@ -7,10 +7,12 @@ package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan;
 public class Fuente_mostrarUsuarios {
     private int id;
     private String usuario;
+    private String descripcion;
 
-    public Fuente_mostrarUsuarios(int id, String usuario) {
+    public Fuente_mostrarUsuarios(int id, String usuario,String descripcion) {
         this.id = id;
         this.usuario = usuario;
+        this.descripcion = descripcion;
     }
     public Fuente_mostrarUsuarios(){
     }
@@ -28,5 +30,13 @@ public class Fuente_mostrarUsuarios {
 
     public void setUsuario(String usuario) {
         this.usuario = usuario;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 }

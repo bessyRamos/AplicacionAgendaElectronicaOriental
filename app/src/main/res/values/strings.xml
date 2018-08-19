@@ -41,6 +41,9 @@
     <string name="error_nombre_usuario">Ingrese el Nombre de Usuario</string>
     <string name="error_nombre">Ingrese su Nombre y Apellido</string>
     <string name="error_contrasena">Cree su Contraseña</string>
+    <string name="error_contrasena1">Ingrese de nuevo su Contraseña</string>
+    <string name="error_correo">Ingrese su correo</string>
+    <string name="error_contrasenavalidada">Ambas Contraseñas debe de conicidir</string>
     <string name="title_activity_login">Login</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Dashboard</string>

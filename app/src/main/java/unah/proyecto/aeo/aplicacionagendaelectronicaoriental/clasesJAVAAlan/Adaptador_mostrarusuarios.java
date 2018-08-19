@@ -48,9 +48,11 @@ public class Adaptador_mostrarusuarios extends BaseAdapter{
 
         TextView textid = (TextView)v.findViewById(R.id.id_mostrarusuarios);
         TextView textnombre = (TextView)v.findViewById(R.id.mostrarusuarios);
+        TextView texdescripcion = (TextView)v.findViewById(R.id.descripcionmostrarusuarios);
 
         textid.setText(""+usuarios.get(i).getId());
         textnombre.setText(usuarios.get(i).getUsuario());
+        texdescripcion.setText(usuarios.get(i).getDescripcion());
 
         return v;
     }

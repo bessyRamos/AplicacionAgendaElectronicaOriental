@@ -35,8 +35,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 import cz.msebera.android.httpclient.Header;
+import cz.msebera.android.httpclient.NameValuePair;
+import cz.msebera.android.httpclient.client.HttpClient;
+import cz.msebera.android.httpclient.client.entity.UrlEncodedFormEntity;
 import cz.msebera.android.httpclient.client.methods.HttpPost;
 import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
+import cz.msebera.android.httpclient.message.BasicNameValuePair;
 import cz.msebera.android.httpclient.util.EntityUtils;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 
@@ -44,14 +48,19 @@ import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.Most
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.SharedPrefManager;
 
 public class FormularioRegistroLogin extends AppCompatActivity {
-    private EditText id,nombrepropio_isertar,nombreusuario_insertar,contrasena_insertar,rol_insertar,estado_del_usuario;
-    String nombreusuariobar,nombrepropiobar,contrasenabar,respuesta1bar_usuario,respuesta2bar_usuario,respuesta3bar_usuario;
+    private EditText id,nombrepropio_isertar,nombreusuario_insertar,correo_insertar,contrasena_insertar,contrasenarepetir,rol_insertar,estado_del_usuario;
+    String nombreusuariobar;
+    String nombrepropiobar;
+    String correobar;
+    String contrasenabar;
+    String contrasenarepetirbar;
+
     int id_rol;
     private Spinner  tipousu;
     private AsyncHttpClient cliente;
     Button bottonvalidar;
     ArrayList lista = new ArrayList<>();
-    private EditText respuesta1,respuesta2,respuesta3;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,21 +77,26 @@ public class FormularioRegistroLogin extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 //EJECUTAMOS LAS CLASE DE INSERCION DE UN USUARIO.
-                new insertarUsuarios().execute();
-               // validar();
+                validar();
+                if (nombreusuario_insertar.getError()==null && nombrepropio_isertar.getError()==null && correo_insertar.getError()==null && contrasena_insertar.getError()==null && contrasenarepetir.getError()==null){
 
+
+                    new insertarUsuarios().execute();
+               // validar();
+                }
             }
         });
 
         tipousu=(Spinner)findViewById(R.id.tipousuario);
         nombrepropio_isertar = (EditText) findViewById(R.id.txtnombre_registro_login);
         nombreusuario_insertar = (EditText) findViewById(R.id.txtnombreUsuario_registro_login);
+        correo_insertar = (EditText) findViewById(R.id.txtcorreo_registro_login);
         contrasena_insertar = (EditText) findViewById(R.id.txtcontrasena_registro_login);
+        contrasenarepetir = (EditText) findViewById(R.id.txtcontrasenarepetir_registro_login);
         rol_insertar = (EditText) findViewById(R.id.txtrol_registro_login);
         estado_del_usuario = (EditText) findViewById(R.id.txtestado_registro_login);
-        respuesta1 = (EditText) findViewById(R.id.txtrespuesta1);
-        respuesta2 = (EditText) findViewById(R.id.txtrespuesta2);
-        respuesta3 = (EditText) findViewById(R.id.txtrespuesta3);
+
+
 
 
 //EJECUTAMOS LA CLASE DE LLENADO DE EL SPINNER
@@ -114,26 +128,30 @@ public class FormularioRegistroLogin extends AppCompatActivity {
         //id.setError(null);
         nombrepropio_isertar.setError(null);
         nombreusuario_insertar.setError(null);
+        correo_insertar.setError(null);
         contrasena_insertar.setError(null);
-        respuesta1.setError(null);
-        respuesta2.setError(null);
-        respuesta3.setError(null);
+        contrasenarepetir.setError(null);
+
+
 
 //VARIABLES QUE SE USAN EN LA CONEXION DE LA BASE DE DATOS LOCAL.
         // String idd = id.getText().toString();
         String nombusus = nombrepropio_isertar.getText().toString();
         String nomb = nombreusuario_insertar.getText().toString();
+        String cor = correo_insertar.getText().toString();
         String cont = contrasena_insertar.getText().toString();
-        String resp1=respuesta1.getText().toString();
-        String resp2=respuesta2.getText().toString();
-        String resp3=respuesta3.getText().toString();
+        String contr = contrasenarepetir.getText().toString();
+
+        
 
 
 //server
 //RECIVIMOS LOS USUARIOS QUE VIENEN DEL SERVIDOR Y LOS ADAPTAMOS ALOS COMPONENTES VISIALUES
         nombreusuariobar=nombreusuario_insertar.getText().toString();
         nombrepropiobar=nombrepropio_isertar.getText().toString();
+        correobar=correo_insertar.getText().toString();
         contrasenabar=contrasena_insertar.getText().toString();
+        contrasenarepetirbar=contrasenarepetir.getText().toString();
 
 
         if(TextUtils.isEmpty(nombusus)){
@@ -146,66 +164,50 @@ public class FormularioRegistroLogin extends AppCompatActivity {
             nombreusuario_insertar.requestFocus();
             return;
 
-        }if(TextUtils.isEmpty(cont)){
+        }if(TextUtils.isEmpty(cor)){
+            correo_insertar.setError(getString(R.string.error_correo));
+            correo_insertar.requestFocus();
+            return;
+        }else{
+            if(!correo_insertar.getText().toString().contains("@") || !correo_insertar.getText().toString().contains(".")){
+                correo_insertar.setError(getString(R.string.error_mailnovalido));
+                correo_insertar.requestFocus();
+                return;
+            }
+
+        }
+
+        if(TextUtils.isEmpty(cont)){
             contrasena_insertar.setError(getString(R.string.error_contrasena));
             contrasena_insertar.requestFocus();
             return;
-
-        }if(TextUtils.isEmpty(resp1)){
-            respuesta1.setError(getString(R.string.error_respuesta1));
-            respuesta1.requestFocus();
-            return;
-
-        }if(TextUtils.isEmpty(resp2)){
-            respuesta2.setError(getString(R.string.error_respuesta2));
-            respuesta2.requestFocus();
-            return;
-
-        }if(TextUtils.isEmpty(resp3)){
-            respuesta3.setError(getString(R.string.error_respuesta3));
-            respuesta3.requestFocus();
-            return;
-
-        }
-
-        String nom,nombusuario,conta,ro,est;
-
-        nom= nombreusuario_insertar.getText().toString();
-        nombusuario=nombrepropio_isertar.getText().toString();
-        conta = contrasena_insertar.getText().toString();
-        ro = rol_insertar.getText().toString();
-        est = estado_del_usuario.getText().toString();
-/*
-//INSERCION DE USUARIOS DESDE UNA BASE DE  DATOS LOCAL.
-        ConexionSQLiteHelper bh = new ConexionSQLiteHelper(FormularioRegistroLogin.this,"bdaeo",null,1);
-        if(bh!=null){
-            SQLiteDatabase db = bh.getWritableDatabase();
-            ContentValues valores = new ContentValues();
-            //  valores.put("id_usuario",idd);
-            valores.put("nombre_usuario",nom);
-            valores.put("nombre_propio",nombusuario);
-            valores.put("contrasena",conta);
-            valores.put("rol",ro);
-            valores.put("estado_usuario",est);
-            long insertado = db.insert("USUARIOS",null,valores);
-            db.close();
-            if(insertado>0 ){
-
-                Toast.makeText(FormularioRegistroLogin.this,"Agregado con exito",Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(this,Login.class);
-                nombrepropio_isertar.setText("");
-                nombreusuario_insertar.setText("");
-                contrasena_insertar.setText("");
-                startActivity(intent);
-                finish();
-
-            }else {
-                Toast.makeText(FormularioRegistroLogin.this,"Nos se Agrego",Toast.LENGTH_SHORT).show();
-
+        }else{
+            if(!TextUtils.isEmpty(contr) && !contr.equals(cont)){
+                contrasenarepetir.setError(getString(R.string.error_contrasenavalidada));
+                contrasenarepetir.requestFocus();
+                return;
             }
         }
-*/
+
+        if(TextUtils.isEmpty(contr)){
+            contrasenarepetir.setError(getString(R.string.error_contrasena1));
+            contrasenarepetir.requestFocus();
+            return;
+        }else{
+            if(!TextUtils.isEmpty(cont) && !cont.equals(contr)){
+                contrasenarepetir.setError(getString(R.string.error_contrasenavalidada));
+                contrasenarepetir.requestFocus();
+                return;
+            }
+        }
+
     }
+
+
+
+
+
+
 
     //METODO PARA LLENAR EL ESPINNER DESDE EL WEB SERVER
     private class llenarEspinner extends AsyncTask<String, Integer, Boolean> {
@@ -245,24 +247,31 @@ public class FormularioRegistroLogin extends AppCompatActivity {
 
 
     }
-    //METODO PARA INSERTAR USUARIOS DIRECTAMENTE DESDE EL SERVER.
+
     private class insertarUsuarios extends AsyncTask<String, Integer, Boolean> {
         private insertarUsuarios(){}
-
         boolean resul = true;
 
         @Override
         protected Boolean doInBackground(String... strings) {
 
             try {
-                nombreusuariobar=nombreusuario_insertar.getText().toString();
-                nombrepropiobar=nombrepropio_isertar.getText().toString().replace(" ","%20");
-                contrasenabar=contrasena_insertar.getText().toString();
-                respuesta1bar_usuario = respuesta1.getText().toString();
-                respuesta2bar_usuario = respuesta2.getText().toString();
-                respuesta3bar_usuario = respuesta3.getText().toString();
+                HttpClient httpclient;
+                HttpPost httppost;
+                ArrayList<NameValuePair> parametros;
+                httpclient = new DefaultHttpClient();
+                httppost = new HttpPost("http://aeo.web-hn.com/insercion_de_usuario.php");
+                parametros = new ArrayList<NameValuePair>();
+                parametros.add(new BasicNameValuePair("usuarionombre",nombreusuario_insertar.getText().toString()));
+                parametros.add(new BasicNameValuePair("usuariopropio",nombrepropio_isertar.getText().toString()));
+                parametros.add(new BasicNameValuePair("usuarioemail",correo_insertar.getText().toString()));
+                parametros.add(new BasicNameValuePair("usariopassword",contrasena_insertar.getText().toString()));
+                parametros.add(new BasicNameValuePair("usuariosroles",String.valueOf(id_rol)));
 
-                EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/insertarUsuarioRespDeSeguridad.php?nombre_usuario="+nombreusuariobar+"&nombre_propio="+nombrepropiobar+"&contrasena="+contrasenabar+"&rol="+id_rol+"&respuesta_uno="+respuesta1bar_usuario+"&respuesta_dos="+respuesta2bar_usuario+"&respuesta_tres="+respuesta3bar_usuario)).getEntity());
+
+                httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));
+
+                httpclient.execute(httppost);
 
                 resul = true;
 
@@ -275,19 +284,17 @@ public class FormularioRegistroLogin extends AppCompatActivity {
         }
 
         protected void onPostExecute(Boolean result) {
-            validar();
+
             if (resul) {
                 //VALIDACION DE QUE LOS CAMPOS NO ESTEN VACIOS ANTES DE INGRESAR UN USUARIO
-                if (nombreusuario_insertar.getError()==null && nombrepropio_isertar.getError()==null && contrasena_insertar.getError()==null){
-
-                    Toast.makeText(getApplicationContext(),"Usuario agregado Correctamente",Toast.LENGTH_SHORT).show();
+                   Toast.makeText(getApplicationContext(),"Usuario agregado Correctamente",Toast.LENGTH_SHORT).show();
 
                     Intent data = new Intent();
                     setResult(Mostrar_Usuarios.RESULT_OK, data);
                     finish();
 
 
-                }
+
 
             }else {
                 Toast.makeText(getApplicationContext(), "Problemas de conexión", Toast.LENGTH_SHORT).show();
