@@ -29,8 +29,12 @@ import org.json.JSONArray;
 
 import java.util.ArrayList;
 
+import cz.msebera.android.httpclient.NameValuePair;
+import cz.msebera.android.httpclient.client.HttpClient;
+import cz.msebera.android.httpclient.client.entity.UrlEncodedFormEntity;
 import cz.msebera.android.httpclient.client.methods.HttpPost;
 import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
+import cz.msebera.android.httpclient.message.BasicNameValuePair;
 import cz.msebera.android.httpclient.util.EntityUtils;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.ActivityCategorias;
@@ -264,7 +268,16 @@ public class NuevasSolicitudes extends AppCompatActivity
         protected Boolean doInBackground(String... strings) {
 
             try {
-                JSONArray respJSON = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/consultarPerfilesParaAdministracionPerfiles.php?id_estado=1")).getEntity()));
+                HttpClient httpclient;
+                HttpPost httppost;
+                ArrayList<NameValuePair> parametros;
+                httpclient = new DefaultHttpClient();
+                httppost = new HttpPost("http://aeo.web-hn.com/consultarPerfilesParaAdministracionPerfiles.php");
+                parametros = new ArrayList<NameValuePair>();
+                parametros.add(new BasicNameValuePair("ste","1"));
+                httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));
+
+                JSONArray respJSON = new JSONArray(EntityUtils.toString(httpclient.execute(httppost).getEntity()));
                 for (int i = 0; i < respJSON.length(); i++) {
                     id_contacto = respJSON.getJSONObject(i).getInt("id_contacto");
                     nombre_organizacion = respJSON.getJSONObject(i).getString("nombre_organizacion");
@@ -324,7 +337,7 @@ public class NuevasSolicitudes extends AppCompatActivity
                 Fuente_mostrarPerfiles perf = mostrar_perfiles.get(perfilselecionado);
                 idperf=perf.getId();
                 //se ejecuta la consulta al webservice y se pasa el id del perfil seleccionado
-                EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/aceptarSolicitud.php?id_contacto="+idperf)).getEntity());
+                EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/aceptarSolicitud.php?cto="+idperf)).getEntity());
                 resul = true;
             } catch (Exception ex) {
                 Log.e("ServicioRest", "Error!", ex);
@@ -361,7 +374,9 @@ public class NuevasSolicitudes extends AppCompatActivity
                 Fuente_mostrarPerfiles perf = mostrar_perfiles.get(perfilselecionado);
                 idperf=perf.getId();
                 //se ejecuta la consulta al webservice y se pasa el id del perfil seleccionado
-                EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/rechazarSolicitud.php?id_contacto="+idperf)).getEntity());
+
+
+                EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/rechazarSolicitud.php?cto="+idperf)).getEntity());
                 resul = true;
             } catch (Exception ex) {
                 Log.e("ServicioRest", "Error!", ex);

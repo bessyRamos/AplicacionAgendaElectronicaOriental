@@ -5,13 +5,13 @@
 
         <item
             android:id="@+id/menusolicitudesnuevas"
-            android:title="Nuevas Solicitudes" />
+            android:title="@string/menuNuevasSolicitudes" />
         <item
             android:id="@+id/menusolicitudesrechazadas"
-            android:title="Solicitudes Rechazadas" />
+            android:title="@string/menuSolicitudesRechazadas" />
         <item
             android:id="@+id/menuperfileliminados"
-            android:title="Perfiles  Eliminados" />
+            android:title="@string/menuPerfilesEliminados" />
 
 
 </menu>

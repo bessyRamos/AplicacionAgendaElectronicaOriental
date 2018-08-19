@@ -114,6 +114,7 @@ public class BusquedaAvanzada extends AppCompatActivity
         ********************************************************* */
 
         contactoABuscar = findViewById(R.id.contacto_a_buscar);
+        
         categoria = findViewById(R.id.spinercategoria);
         region = findViewById(R.id.spinerregionesbuscar);
         btnbusqueda = findViewById(R.id.boton_busqueda_avanzada);

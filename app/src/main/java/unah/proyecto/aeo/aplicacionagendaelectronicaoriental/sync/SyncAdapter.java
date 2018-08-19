@@ -247,7 +247,7 @@ public class SyncAdapter extends AbstractThreadedSyncAdapter {
          /* **********************************************************************************
         *                       OPERACIONES PARA SINCRONIZAR CATEGORIAS                     *
         *************************************************************************************/
-        final String rssFeedEndpointCategorias = "http://aeo.web-hn.com/ParaSincronizarCategorias.php";
+        final String rssFeedEndpointCategorias = "http://aeo.web-hn.com/ParaSincronizarCategorias.php?estados=2";
         Map<String, Categoria> networkEntriesCategoria = new HashMap<>();
 
         // Parse the pretend json news feed

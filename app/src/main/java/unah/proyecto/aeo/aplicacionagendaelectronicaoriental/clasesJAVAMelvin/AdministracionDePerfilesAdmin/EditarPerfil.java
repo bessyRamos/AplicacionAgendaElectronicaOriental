@@ -473,7 +473,7 @@ public class EditarPerfil extends AppCompatActivity {
         protected Boolean doInBackground(String... strings) {
 
             try {
-                JSONObject respJSON = new JSONObject(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/consultarDatosDePerfilParaEditar.php?id_contacto="+id_perfilEditar)).getEntity()));
+                JSONObject respJSON = new JSONObject(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/consultarDatosDePerfilParaEditar.php?cto="+id_perfilEditar)).getEntity()));
                 JSONArray jsonArray = respJSON.getJSONArray("perfiles");
                 for (int i = 0; i < jsonArray.length(); i++) {
                     nomborg_rec = jsonArray.getJSONObject(i).getString("nombre_organizacion");
@@ -558,7 +558,7 @@ public class EditarPerfil extends AppCompatActivity {
                 httpclient = new DefaultHttpClient();
                 httppost = new HttpPost("http://aeo.web-hn.com/actualizarPerfil.php");
                 parametros = new ArrayList<NameValuePair>();
-                parametros.add(new BasicNameValuePair("id_contacto", String.valueOf(id_perfilEditar)));
+                parametros.add(new BasicNameValuePair("cto", String.valueOf(id_perfilEditar)));
                 parametros.add(new BasicNameValuePair("nomborg_rec",etnombreeorganizacion.getText().toString()));
                 parametros.add(new BasicNameValuePair("numtel_rec",etnumerofijo.getText().toString()));
                 parametros.add(new BasicNameValuePair("numcel_rec",etnumerocel.getText().toString()));
@@ -682,7 +682,7 @@ public class EditarPerfil extends AppCompatActivity {
             try {
 
                 //se ejecuta la consulta al webservice y se pasa el id del perfil seleccionado
-                EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/eliminarPerfil.php?id_contacto="+id_perfilEditar)).getEntity());
+                EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/eliminarPerfil.php?cto="+id_perfilEditar)).getEntity());
                 resul = true;
             } catch (Exception ex) {
                 Log.e("ServicioRest", "Error!", ex);
