@@ -377,7 +377,18 @@ public class NuevoPerfil extends AppCompatActivity {
 
                 JSONArray regionesWS = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/consultarRegiones.php")).getEntity()));
                 JSONArray categoriasWS = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/consultarCategorias.php")).getEntity()));
-                JSONArray usuariosWS = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/ConsultarTodosLosUsuarios.php")).getEntity()));
+
+                HttpClient httpclient;
+                HttpPost httppost;
+                ArrayList<NameValuePair> parametros;
+                httpclient = new DefaultHttpClient();
+                httppost = new HttpPost("http://aeo.web-hn.com/ConsultarTodosLosUsuarios.php");
+                parametros = new ArrayList<NameValuePair>();
+                parametros.add(new BasicNameValuePair("estado","1"));
+                httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));
+
+
+                JSONArray usuariosWS = new JSONArray(EntityUtils.toString(httpclient.execute(httppost).getEntity()));
 
                 for (int i = 0; i < regionesWS.length(); i++) {
                     listaRegiones.add(new ModeloSpinner(regionesWS.getJSONObject(i).getString("nombre_region"),Integer.parseInt(regionesWS.getJSONObject(i).getString("id_region")))
@@ -445,12 +456,10 @@ public class NuevoPerfil extends AppCompatActivity {
                     parametros.add(new BasicNameValuePair("imagen",encodeImagen));
                     parametros.add(new BasicNameValuePair("nombre_imagen",etnombreeorganizacion.getText().toString().replace(" ","_") +".jpg"));
                 }
+
+
                 httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));
-
                 httpclient.execute(httppost);
-
-
-
 
                 resul = true;
             } catch (Exception ex) {

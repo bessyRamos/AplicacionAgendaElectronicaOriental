@@ -28,8 +28,12 @@ import org.json.JSONArray;
 
 import java.util.ArrayList;
 
+import cz.msebera.android.httpclient.NameValuePair;
+import cz.msebera.android.httpclient.client.HttpClient;
+import cz.msebera.android.httpclient.client.entity.UrlEncodedFormEntity;
 import cz.msebera.android.httpclient.client.methods.HttpPost;
 import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
+import cz.msebera.android.httpclient.message.BasicNameValuePair;
 import cz.msebera.android.httpclient.util.EntityUtils;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.ActivityCategorias;
@@ -226,7 +230,18 @@ public class SolicitudesRechazadas extends AppCompatActivity implements Navigati
         protected Boolean doInBackground(String... strings) {
 
             try {
-                JSONArray respJSON = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/consultarPerfilesParaAdministracionPerfiles.php?id_estado=3")).getEntity()));
+                HttpClient httpclient;
+                HttpPost httppost;
+                ArrayList<NameValuePair> parametros;
+                httpclient = new DefaultHttpClient();
+                httppost = new HttpPost("http://aeo.web-hn.com/consultarPerfilesParaAdministracionPerfiles.php");
+                parametros = new ArrayList<NameValuePair>();
+                parametros.add(new BasicNameValuePair("ste","3"));
+                httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));
+
+
+                JSONArray respJSON = new JSONArray(EntityUtils.toString(httpclient.execute(httppost).getEntity()));
+
                 for (int i = 0; i < respJSON.length(); i++) {
                     id_contacto = respJSON.getJSONObject(i).getInt("id_contacto");
                     nombre_organizacion = respJSON.getJSONObject(i).getString("nombre_organizacion");

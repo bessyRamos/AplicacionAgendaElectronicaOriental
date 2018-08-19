@@ -3,11 +3,11 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/AplicacionAgendaElectronicaOriental.iml" filepath="$PROJECT_DIR$/AplicacionAgendaElectronicaOriental.iml" />
-      <module fileurl="file://C:\android1\AplicacionAgendaElectronicaOriental\AplicacionAgendaElectronicaOriental.iml" filepath="C:\android1\AplicacionAgendaElectronicaOriental\AplicacionAgendaElectronicaOriental.iml" />
-      <module fileurl="file://C:\Users\DELL\aplicacion aeo\AplicacionAgendaElectronicaOriental\AplicacionAgendaElectronicaOriental.iml" filepath="C:\Users\DELL\aplicacion aeo\AplicacionAgendaElectronicaOriental\AplicacionAgendaElectronicaOriental.iml" />
+      <module fileurl="file://C:/Users/DELL/aplicacion aeo/AplicacionAgendaElectronicaOriental/AplicacionAgendaElectronicaOriental.iml" filepath="C:/Users/DELL/aplicacion aeo/AplicacionAgendaElectronicaOriental/AplicacionAgendaElectronicaOriental.iml" />
+      <module fileurl="file://C:/android1/AplicacionAgendaElectronicaOriental/AplicacionAgendaElectronicaOriental.iml" filepath="C:/android1/AplicacionAgendaElectronicaOriental/AplicacionAgendaElectronicaOriental.iml" />
       <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://C:\Users\DELL\aplicacion aeo\AplicacionAgendaElectronicaOriental\app\app.iml" filepath="C:\Users\DELL\aplicacion aeo\AplicacionAgendaElectronicaOriental\app\app.iml" />
-      <module fileurl="file://C:\android1\AplicacionAgendaElectronicaOriental\app\app.iml" filepath="C:\android1\AplicacionAgendaElectronicaOriental\app\app.iml" />
+      <module fileurl="file://C:/Users/DELL/aplicacion aeo/AplicacionAgendaElectronicaOriental/app/app.iml" filepath="C:/Users/DELL/aplicacion aeo/AplicacionAgendaElectronicaOriental/app/app.iml" />
+      <module fileurl="file://C:/android1/AplicacionAgendaElectronicaOriental/app/app.iml" filepath="C:/android1/AplicacionAgendaElectronicaOriental/app/app.iml" />
     </modules>
   </component>
 </project>

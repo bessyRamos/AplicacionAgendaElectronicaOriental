@@ -103,4 +103,10 @@
     <string name="Enviar">Enviar Ubicación</string>
 
 
+    <string name="menuNuevasSolicitudes">Nuevas Solicitudes</string>
+    <string name="menuSolicitudesRechazadas">Solicitudes Rechazadas</string>
+    <string name="menuPerfilesEliminados">Perfiles Eliminados</string>
+    <string name="menuEliminarPerfil">Eliminar Perfil</string>
+    <string name="menuBusquedaAvanzada">Búsqueda avanzada</string>
+    <string name="menuActualizardatos">Actualizar datos</string>
 </resources>
