@@ -512,7 +512,7 @@ public class EditarPerfilOrganizacion extends AppCompatActivity  implements Navi
         protected Boolean doInBackground(String... strings) {
 
             try {
-                JSONObject respJSON = new JSONObject(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/consultarDatosDePerfilParaEditar.php?id_contacto="+id_usuario_resibido_usuario)).getEntity()));
+                JSONObject respJSON = new JSONObject(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/consultarDatosDePerfilParaEditar.php?cto="+id_usuario_resibido_usuario)).getEntity()));
                 JSONArray jsonArray = respJSON.getJSONArray("perfiles");
                 for (int i = 0; i < jsonArray.length(); i++) {
                     nomborg_rec = jsonArray.getJSONObject(i).getString("nombre_organizacion");
@@ -593,7 +593,7 @@ public class EditarPerfilOrganizacion extends AppCompatActivity  implements Navi
                 httpclient = new DefaultHttpClient();
                 httppost = new HttpPost("http://aeo.web-hn.com/actualizarPerfil.php");
                 parametros = new ArrayList<NameValuePair>();
-                parametros.add(new BasicNameValuePair("id_contacto", String.valueOf(id_usuario_resibido_usuario)));
+                parametros.add(new BasicNameValuePair("cto", String.valueOf(id_usuario_resibido_usuario)));
                 parametros.add(new BasicNameValuePair("nomborg_rec",etnombreeorganizacion.getText().toString()));
                 parametros.add(new BasicNameValuePair("numtel_rec",etnumerofijo.getText().toString()));
                 parametros.add(new BasicNameValuePair("numcel_rec",etnumerocel.getText().toString()));

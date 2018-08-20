@@ -378,6 +378,7 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
             }else{
                 //muestra mensaje si se produce un error al ejercutar la consulta al webservice
                 Toast.makeText(getApplicationContext(), "Problemas de conexión", Toast.LENGTH_SHORT).show();
+                barraProgreso.setVisibility(View.INVISIBLE);
             }
 
         }
@@ -400,7 +401,7 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
                 EntidadOrganizacion perf = mostrar_perfiles.get(perfilselecionado);
                 idperf=perf.getId();
                 //se ejecuta la consulta al webservice y se pasa el id del perfil seleccionado
-                EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/eliminarPerfil.php?id_contacto="+idperf)).getEntity());
+                EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/eliminarPerfil.php?cto="+idperf)).getEntity());
                 resul = true;
             } catch (Exception ex) {
                 Log.e("ServicioRest", "Error!", ex);

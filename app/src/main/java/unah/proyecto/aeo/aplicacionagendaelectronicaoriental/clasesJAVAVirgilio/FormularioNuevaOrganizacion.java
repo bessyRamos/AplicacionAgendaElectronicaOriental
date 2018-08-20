@@ -75,7 +75,7 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity  implements N
     EditText longitudOrganizacion;
     //ImageView imagenOrganizacion,ubicacionOrganizacion;
     FloatingActionButton guardar;
-    ImageButton imageButton;
+    CircleImageView imageButton;
     CircleImageView imagenOrganizacion;
     //int id_usuario;
     Button ubicacion;
@@ -125,7 +125,7 @@ TextView lo,lat;
         emailOrganizacion = (EditText) findViewById(R.id.txtEmail);
         descrpcionOrganizacion = (EditText) findViewById(R.id.txtDescripcion);
         latitudOrganizacion = (EditText) findViewById(R.id.txtlatitudOrganizacion);
-        imageButton = findViewById(R.id.imagenOrganizacionUsuario);
+        imageButton = findViewById(R.id.imagenDeOrganizacion);
 
        // latitudOrganizacion.setText("123123");  ///ingresar la latitud que el usuario selecciono
         lat =findViewById(R.id.latitiResibida);
@@ -516,7 +516,7 @@ TextView lo,lat;
                 HttpPost httppost;
                 ArrayList<NameValuePair> parametros;
                 httpclient = new DefaultHttpClient();
-                httppost = new HttpPost("http://aeo.web-hn.com/nuevoContacto.php");
+                httppost = new HttpPost("http://aeo.web-hn.com/crearPerfil.php");
                 parametros = new ArrayList<NameValuePair>();
                 parametros.add(new BasicNameValuePair("nomborg_rec",nombreOrganizacion.getText().toString()));
                 parametros.add(new BasicNameValuePair("numtel_rec",telefonoFijo.getText().toString()));
