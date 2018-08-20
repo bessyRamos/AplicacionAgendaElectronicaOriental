@@ -23,8 +23,14 @@ import android.widget.Toast;
 
 import org.json.JSONArray;
 
+import java.util.ArrayList;
+
+import cz.msebera.android.httpclient.NameValuePair;
+import cz.msebera.android.httpclient.client.HttpClient;
+import cz.msebera.android.httpclient.client.entity.UrlEncodedFormEntity;
 import cz.msebera.android.httpclient.client.methods.HttpPost;
 import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
+import cz.msebera.android.httpclient.message.BasicNameValuePair;
 import cz.msebera.android.httpclient.util.EntityUtils;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.ActivityCategorias;
@@ -33,10 +39,10 @@ import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.Pane
 public class EditarUsuario extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
     private int usuarioEditar;
-    private EditText nombreusuario,nombrepropio,contrasena;
+    private EditText nombreusuario,nombrepropio,correo;
     String nombreusuariobar,nombrepropiobar,contrasenabar;
     Button bottonvalidar;
-    String nombre_usuario,nombre_propio,contra;
+    String nombre_usuario,nombre_propio,corre_o;
 
     private Sesion sesion;
     private SesionUsuario sesionUsuario;
@@ -79,7 +85,7 @@ public class EditarUsuario extends AppCompatActivity implements NavigationView.O
 
         nombreusuario = (EditText)findViewById(R.id.EditUsuario);
         nombrepropio = (EditText)findViewById(R.id.EditNombre);
-        contrasena= (EditText)findViewById(R.id.Editcontrasena);
+        correo= (EditText)findViewById(R.id.Editcorreo);
 
 
         // reflejarCampos();
@@ -87,7 +93,7 @@ public class EditarUsuario extends AppCompatActivity implements NavigationView.O
         new llenarlosEditTextdelServer().execute();
         nombreusuariobar=nombreusuario.getText().toString();
         nombrepropiobar=nombrepropio.getText().toString();
-        contrasenabar=contrasena.getText().toString();
+        contrasenabar=correo.getText().toString();
 
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -183,13 +189,13 @@ public class EditarUsuario extends AppCompatActivity implements NavigationView.O
         //id.setError(null);
         nombreusuario.setError(null);
         nombrepropio.setError(null);
-        contrasena.setError(null);
+        correo.setError(null);
 
 
         // String idd = id.getText().toString();
         String nombusus = nombreusuario.getText().toString();
         String nomb = nombrepropio.getText().toString();
-        String cont = contrasena.getText().toString();
+        String cor = correo.getText().toString();
 
 
         if(TextUtils.isEmpty(nombusus)){
@@ -202,10 +208,13 @@ public class EditarUsuario extends AppCompatActivity implements NavigationView.O
             nombrepropio.requestFocus();
             return;
 
-        }if(TextUtils.isEmpty(cont)){
-            contrasena.setError(getString(R.string.error_contrasena));
-            contrasena.requestFocus();
-            return;
+        }if(TextUtils.isEmpty(cor)){
+        }else{
+            if(!correo.getText().toString().contains("@") && !correo.getText().toString().contains(".")){
+                correo.setError(getString(R.string.error_contrasena));
+                correo.requestFocus();
+                return;
+            }
 
         }
 
@@ -223,8 +232,6 @@ public class EditarUsuario extends AppCompatActivity implements NavigationView.O
 
     }
 
-
-
     //ACTUALIZACION DE UN USUARIO DESDE EL WEB SERVER
     private class actualizarUsuarios extends AsyncTask<String, Integer, Boolean> {
         private actualizarUsuarios(){}
@@ -234,11 +241,22 @@ public class EditarUsuario extends AppCompatActivity implements NavigationView.O
         protected Boolean doInBackground(String... strings) {
 
             try {
-                nombreusuariobar=nombreusuario.getText().toString();
-                nombrepropiobar=nombrepropio.getText().toString().replace(" ","%20");
-                contrasenabar=contrasena.getText().toString();
+                HttpClient httpclient;
+                HttpPost httppost;
+                ArrayList<NameValuePair> parametros;
+                httpclient = new DefaultHttpClient();
+                httppost = new HttpPost("http://aeo.web-hn.com/actualizacion_de_un_usuario.php");
+                parametros = new ArrayList<NameValuePair>();
+                parametros.add(new BasicNameValuePair("usuario",String.valueOf(usuarioEditar)));
+                parametros.add(new BasicNameValuePair("usuarionombre",nombreusuario.getText().toString()));
+                parametros.add(new BasicNameValuePair("usuariopropio",nombrepropio.getText().toString()));
+                parametros.add(new BasicNameValuePair("usuarioemail",correo.getText().toString()));
 
-                EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/actualizacion_de_un_usuario.php?id_usuario="+usuarioEditar+"&nombre_usuario="+nombreusuariobar+"&nombre_propio="+nombrepropiobar+"&contrasena="+contrasenabar)).getEntity());
+
+                httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));
+
+                httpclient.execute(httppost);
+
 
                 resul = true;
             } catch (Exception ex) {
@@ -254,7 +272,7 @@ public class EditarUsuario extends AppCompatActivity implements NavigationView.O
 
 
             if (resul) {
-                if (nombreusuario.getError()==null && nombrepropio.getError()==null && contrasena.getError()==null){
+                if (nombreusuario.getError()==null && nombrepropio.getError()==null && correo.getError()==null){
                     Toast.makeText(getApplicationContext(),"Usuario Realizado Correctamente",Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(EditarUsuario.this,PanelDeControlUsuarios.class);
                     intent.putExtra("id",id_usu);
@@ -278,11 +296,11 @@ public class EditarUsuario extends AppCompatActivity implements NavigationView.O
         protected Boolean doInBackground(String... strings) {
 
             try {
-                JSONArray respJSON = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/Mostar_Los_Usuarios_Editados.php?id_usuario="+usuarioEditar)).getEntity()));
+                JSONArray respJSON = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/Mostar_Los_Usuarios_Editados.php?usuario="+usuarioEditar)).getEntity()));
                 for (int i = 0; i < respJSON.length(); i++) {
                     nombre_usuario = respJSON.getJSONObject(i).getString("nombre_usuario");
                     nombre_propio = respJSON.getJSONObject(i).getString("nombre_propio");
-                    contra = respJSON.getJSONObject(i).getString("contrasena");
+                    corre_o = respJSON.getJSONObject(i).getString("correo");
                 }
 
                 resul = true;
@@ -299,7 +317,7 @@ public class EditarUsuario extends AppCompatActivity implements NavigationView.O
             if (resul) {
                 nombreusuario.setText(nombre_usuario);
                 nombrepropio.setText(nombre_propio);
-                contrasena.setText(contra);
+                correo.setText(corre_o);
             }else {
                 Toast.makeText(getApplicationContext(), "Problemas de conexión", Toast.LENGTH_SHORT).show();
             }

@@ -72,17 +72,20 @@
             >
 
                 <EditText
-                    android:id="@+id/Editcontrasena"
-                    android:hint="Cambiar Contraseña"
+                    android:id="@+id/Editcorreo"
+                    android:hint="Cambiar Correo"
                     android:textSize="15sp"
                     android:ems="10"
                     android:maxLines="1"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:inputType="textPassword"
+                    android:inputType="textEmailAddress"
 
                 />
             </android.support.design.widget.TextInputLayout>
+
+
+
 
             <Button
                 android:id="@+id/editar"

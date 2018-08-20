@@ -516,7 +516,7 @@ TextView lo,lat;
                 HttpPost httppost;
                 ArrayList<NameValuePair> parametros;
                 httpclient = new DefaultHttpClient();
-                httppost = new HttpPost("http://aeo.web-hn.com/insertarPerfilUsuario.php");
+                httppost = new HttpPost("http://aeo.web-hn.com/nuevoContacto.php");
                 parametros = new ArrayList<NameValuePair>();
                 parametros.add(new BasicNameValuePair("nomborg_rec",nombreOrganizacion.getText().toString()));
                 parametros.add(new BasicNameValuePair("numtel_rec",telefonoFijo.getText().toString()));

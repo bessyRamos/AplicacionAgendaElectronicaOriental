@@ -64,6 +64,23 @@
                     android:textColor="#000"
                 />
             </android.support.design.widget.TextInputLayout>
+            <android.support.design.widget.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+            >
+
+                <EditText
+                    android:id="@+id/txtcorreo_registro_login_usuario"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="Ingrese su correo"
+                    android:inputType="textEmailAddress"
+                    android:maxLines="1"
+                    android:textSize="15sp"
+                    android:textColor="#000"
+                />
+            </android.support.design.widget.TextInputLayout>
 
 
             <android.support.design.widget.TextInputLayout
@@ -91,72 +108,26 @@
             </android.support.design.widget.TextInputLayout>
 
 
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Preguntas para Recuperación de Contraseña"
-                android:textColor="#000"
-                android:layout_marginTop="15dp"
-                android:textSize="16sp"
-                android:gravity="center"
-            />
-
             <android.support.design.widget.TextInputLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
                 android:layout_marginTop="20dp"
-
+                app:passwordToggleEnabled="true"
+                app:passwordToggleTint="@color/colorAccent"
             >
+
                 <EditText
-                    android:id="@+id/txtrespuesta1"
+                    android:id="@+id/txtcontrasenarecuperacion_registro_login_usuario"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="¿Cuál es el nombre de tu ciudad natal?"
-                    android:inputType="textPersonName"
+                    android:hint="Cree su Contraseña"
+                    android:inputType="textPassword"
                     android:maxLines="1"
                     android:textSize="15sp"
                     android:textColor="#000"
-                />
 
-            </android.support.design.widget.TextInputLayout>
 
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="20dp"
 
-            >
-                <EditText
-                    android:id="@+id/txtrespuesta2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="¿Cuál es el nombre de tu abuelo?"
-                    android:inputType="textPersonName"
-                    android:maxLines="1"
-                    android:textSize="15sp"
-                    android:textColor="#000"
-                />
-
-            </android.support.design.widget.TextInputLayout>
-
-            <android.support.design.widget.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="20dp"
-
-            >
-                <EditText
-                    android:id="@+id/txtrespuesta3"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:hint="¿Cuál es tu deporte favorito?"
-                    android:inputType="textPersonName"
-                    android:maxLines="1"
-                    android:textSize="15sp"
-                    android:textColor="#000"
                 />
 
             </android.support.design.widget.TextInputLayout>
