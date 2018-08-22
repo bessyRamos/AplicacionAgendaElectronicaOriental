@@ -75,7 +75,7 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity  implements N
     EditText longitudOrganizacion;
     //ImageView imagenOrganizacion,ubicacionOrganizacion;
     FloatingActionButton guardar;
-    CircleImageView imageButton;
+    FloatingActionButton imageButton;
     CircleImageView imagenOrganizacion;
     //int id_usuario;
     Button ubicacion;
@@ -125,16 +125,10 @@ TextView lo,lat;
         emailOrganizacion = (EditText) findViewById(R.id.txtEmail);
         descrpcionOrganizacion = (EditText) findViewById(R.id.txtDescripcion);
         latitudOrganizacion = (EditText) findViewById(R.id.txtlatitudOrganizacion);
-        imageButton = findViewById(R.id.imagenDeOrganizacion);
-
-       // latitudOrganizacion.setText("123123");  ///ingresar la latitud que el usuario selecciono
+        imageButton = findViewById(R.id.imagenOrganizacionUsuario);
         lat =findViewById(R.id.latitiResibida);
         lo =findViewById(R.id.longitudResibida);
-
         longitudOrganizacion = (EditText) findViewById(R.id.txtlongitudOrganizacion);
-
-       // longitudOrganizacion.setText("-123334");    //ingresar la longitud que el usuario selecciono
-
         imagenOrganizacion = (CircleImageView) findViewById(R.id.imagenDeOrganizacion);
         guardar = (FloatingActionButton) findViewById(R.id.btnGuardar);
         spinnerCategorias = (Spinner) findViewById(R.id.spinercategoriaOrganizacion);
@@ -145,31 +139,14 @@ TextView lo,lat;
         ubicacion.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(FormularioNuevaOrganizacion.this, Ingresar_Ubicacion.class);
-
-                //latitudOrganizacion = latitud_traida
-                //longitudOrganizacion = longitud_traida
-
-                startActivityForResult(intent,1);
-
-
+                Intent ubicacion1 = new Intent(getApplicationContext(),Ingresar_Ubicacion.class);
+                startActivityForResult(ubicacion1,1);
             }
         });
-
 
         //llenado de spiner categorias y regiones
         listaCategorias=new ArrayList<ModeloSpinner>();
         listaRegiones=new ArrayList<ModeloSpinner>();
-        //
-
-        new llenarSpinnersNuevoPerfil().execute();
-
-
-        if (getIntent().getExtras()!=null){
-            id_usuario = getIntent().getExtras().getInt("id");
-
-        }
-
         spinnerCategorias.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
@@ -192,6 +169,11 @@ TextView lo,lat;
 
             }
         });
+        //
+        new llenarSpinnersNuevoPerfil().execute();
+        if (getIntent().getExtras()!=null){
+            id_usuario = getIntent().getExtras().getInt("id");
+        }
 
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -261,23 +243,10 @@ TextView lo,lat;
         navigationView.setNavigationItemSelectedListener(this);
 
     }
-    protected void onActivityResult(int requestCode,int resultCode, Intent data){
-        if (requestCode == 1) {
-            if (resultCode == RESULT_OK) {
 
-                String latitud = data.getStringExtra("latitud");
-                String longitud = data.getStringExtra("longitud");
-
-                latitudOrganizacion.setText(latitud);
-                longitudOrganizacion.setText(longitud);
-
-                lat.setText(latitud);
-                lo.setText(longitud);
-
-            }
-        }
-
+    protected void onActivityResult(int requestCode, int resultCode, Intent data){
         if(resultCode == RESULT_OK && requestCode == PICK_IMAGE){
+
             try {
                 Uri imageUri = data.getData();
                 InputStream imageStream = getContentResolver().openInputStream(imageUri);
@@ -290,6 +259,15 @@ TextView lo,lat;
 
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
+            }
+        }else if (requestCode == 1) {
+            if (resultCode == RESULT_OK) {
+
+                String latitud = data.getStringExtra("latitud");
+                String longitud = data.getStringExtra("longitud");
+                lat.setText(latitud);
+                lo.setText(longitud);
+
             }
         }
     }
@@ -340,7 +318,7 @@ TextView lo,lat;
         Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
         startActivityForResult(gallery, PICK_IMAGE);
     }
-
+//9873298475923487858342905
     @Override
     public void onBackPressed() {
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -418,24 +396,22 @@ TextView lo,lat;
 
 
     private void validar(){
-        //id.setError(null);
         nombreOrganizacion.setError(null);
         telefonoFijo.setError(null);
         telefonoCelular.setError(null);
         direccionOrganizacion.setError(null);
         emailOrganizacion.setError(null);
         descrpcionOrganizacion.setError(null);
-        latitudOrganizacion.setError(null);
-        longitudOrganizacion.setError(null);
+        lat.setError(null);
+        lo.setError(null);
 
-        // String idd = id.getText().toString();
         String nomborg = nombreOrganizacion.getText().toString();
         String numtel = telefonoFijo.getText().toString();
         String numcel = telefonoCelular.getText().toString();
         String direccion = direccionOrganizacion.getText().toString();
         String desc = descrpcionOrganizacion.getText().toString();
-        String lati = latitudOrganizacion.getText().toString();
-        String longitud = longitudOrganizacion.getText().toString();
+        String lati = lat.getText().toString();
+        String longitud = lo.getText().toString();
         String mail = emailOrganizacion.getText().toString();
 
         if(TextUtils.isEmpty(mail)){
@@ -492,13 +468,13 @@ TextView lo,lat;
             return;
         }
         if(TextUtils.isEmpty(lati)){
-            latitudOrganizacion.setError(getString(R.string.errLat));
-            latitudOrganizacion.requestFocus();
+            lat.setError(getString(R.string.errLat));
+            lat.requestFocus();
             return;
         }
         if(TextUtils.isEmpty(longitud)){
-            longitudOrganizacion.setError(getString(R.string.errLong));
-            longitudOrganizacion.requestFocus();
+            lo.setError(getString(R.string.errLong));
+            lo.requestFocus();
             return;
         }
 
@@ -516,7 +492,7 @@ TextView lo,lat;
                 HttpPost httppost;
                 ArrayList<NameValuePair> parametros;
                 httpclient = new DefaultHttpClient();
-                httppost = new HttpPost("http://aeo.web-hn.com/crearPerfil.php");
+                httppost = new HttpPost("http://aeo.web-hn.com/insertarPerfilUsuario.php");
                 parametros = new ArrayList<NameValuePair>();
                 parametros.add(new BasicNameValuePair("nomborg_rec",nombreOrganizacion.getText().toString()));
                 parametros.add(new BasicNameValuePair("numtel_rec",telefonoFijo.getText().toString()));
@@ -524,14 +500,8 @@ TextView lo,lat;
                 parametros.add(new BasicNameValuePair("direccion_rec",direccionOrganizacion.getText().toString()));
                 parametros.add(new BasicNameValuePair("desc_rec",descrpcionOrganizacion.getText().toString()));
                 parametros.add(new BasicNameValuePair("email_rec",emailOrganizacion.getText().toString()));
-                parametros.add(new BasicNameValuePair("lat_rec",latitudOrganizacion.getText().toString()));
-
-               // parametros.add(new BasicNameValuePair("lat_rec",(String.valueOf(latitudResibida))));
-
-                parametros.add(new BasicNameValuePair("longitud_rec",longitudOrganizacion.getText().toString()));
-
-               // parametros.add(new BasicNameValuePair("longitud_rec",String.valueOf(longitudResibida)));
-
+                parametros.add(new BasicNameValuePair("lat_rec",lat.getText().toString()));
+                parametros.add(new BasicNameValuePair("longitud_rec",lo.getText().toString()));
                 parametros.add(new BasicNameValuePair("id_categoria",String.valueOf(id_categoria)));
                 parametros.add(new BasicNameValuePair("id_region",String.valueOf(id_region)));
                 parametros.add(new BasicNameValuePair("id_usuario",String.valueOf(id_usuario)));
@@ -557,7 +527,7 @@ TextView lo,lat;
         protected void onPostExecute(Boolean result) {
             if (resul) {
                 validar();
-                if (nombreOrganizacion.getError()==null && telefonoFijo.getError()==null && telefonoCelular.getError()==null && direccionOrganizacion.getError()==null && emailOrganizacion.getError()==null && descrpcionOrganizacion.getError()==null && latitudOrganizacion.getError()==null && longitudOrganizacion.getError()==null){
+                if (nombreOrganizacion.getError()==null && telefonoFijo.getError()==null && telefonoCelular.getError()==null && direccionOrganizacion.getError()==null && emailOrganizacion.getError()==null && descrpcionOrganizacion.getError()==null && lat.getError()==null && lo.getError()==null){
                     Toast.makeText(getApplicationContext(),"Perfil Creado Correctamente",Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(FormularioNuevaOrganizacion.this,PanelDeControlUsuarios.class);
                     intent.putExtra("id",id_usuario);
@@ -585,18 +555,12 @@ TextView lo,lat;
 
                 JSONArray regionesWS = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/consultarRegiones.php")).getEntity()));
                 JSONArray categoriasWS = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/consultarCategorias.php")).getEntity()));
-                //JSONArray usuariosWS = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("https://shessag.000webhostapp.com/ConsultarTodosLosUsuarios.php")).getEntity()));
-
-                for (int i = 0; i < regionesWS.length(); i++) {
+                  for (int i = 0; i < regionesWS.length(); i++) {
                     listaRegiones.add(new ModeloSpinner(regionesWS.getJSONObject(i).getString("nombre_region"),Integer.parseInt(regionesWS.getJSONObject(i).getString("id_region")))
                     );                }
                 for (int i=0;i<categoriasWS.length();i++){
                     listaCategorias.add(new ModeloSpinner(categoriasWS.getJSONObject(i).getString("nombre_categoria"), Integer.parseInt(categoriasWS.getJSONObject(i).getString("id_categoria"))));
                 }
-               // for (int i=0;i<usuariosWS.length();i++){
-               //     listaUsuarios.add(new ModeloSpinner(usuariosWS.getJSONObject(i).getString("nombre_usuario"),Integer.parseInt(usuariosWS.getJSONObject(i).getString("id_usuario"))));
-               // }
-
                 resul = true;
             } catch (Exception ex) {
                 Log.e("ServicioRest", "Error!", ex);
@@ -610,10 +574,8 @@ TextView lo,lat;
             if (resul) {
                 AdaptadorPersonalizadoSpinner adaptadorCategorias = new AdaptadorPersonalizadoSpinner(FormularioNuevaOrganizacion.this,R.layout.plantilla_spiners_personalizados_id_nombre,R.id.item_id_spinner,listaCategorias);
                 AdaptadorPersonalizadoSpinner adaptadorRegiones = new AdaptadorPersonalizadoSpinner(FormularioNuevaOrganizacion.this,R.layout.plantilla_spiners_personalizados_id_nombre,R.id.item_id_spinner,listaRegiones);
-                //AdaptadorPersonalizadoSpinner adaptadorUsuarios = new AdaptadorPersonalizadoSpinner(NuevoPerfil.this,R.layout.plantilla_spiners_personalizados_id_nombre,R.id.item_id_spinner,listaUsuarios);
                 spinnerCategorias.setAdapter(adaptadorCategorias);
                 spinnerRgiones.setAdapter(adaptadorRegiones);
-                //spusuario.setAdapter(adaptadorUsuarios);
 
             }else {
                 Toast.makeText(getApplicationContext(), "Problemas de conexión", Toast.LENGTH_SHORT).show();
@@ -623,36 +585,6 @@ TextView lo,lat;
 
     }
 
-    //valida que el formato de el correo sea el correcto
-    private int validarEmail(String email_1) {
-        /*Pattern pattern = Patterns.EMAIL_ADDRESS;
-        return pattern.matcher(email).matches();*/
-
-        validemail = "[a-zA-Z0-9\\+\\.\\_\\%\\-\\+]{1,256}" +
-
-                "\\@" +
-
-                "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,64}" +
-
-                "(" +
-
-                "\\." +
-
-                "[a-zA-Z0-9][a-zA-Z0-9\\-]{0,25}" +
-
-                ")+";
-        email = email_1;
-        Matcher matcher= Pattern.compile(validemail).matcher(email);
-
-        if (matcher.matches()){
-            return 1;
-
-        }
-        else {
-            return 0;
-        }
-
-    }
 
     private class validarCorreoDiferente extends AsyncTask<String, Integer, Boolean> {
         private validarCorreoDiferente() {
@@ -716,11 +648,11 @@ TextView lo,lat;
         }
     }
 
-    @Override
+    /*@Override
     public void onRestart()
     {
         super.onRestart();
         finish();
         startActivity(getIntent());
-    }
+    }*/
 }
