@@ -382,7 +382,7 @@ public class NuevoPerfil extends AppCompatActivity {
                 HttpPost httppost;
                 ArrayList<NameValuePair> parametros;
                 httpclient = new DefaultHttpClient();
-                httppost = new HttpPost("http://aeo.web-hn.com/ConsultarTodosLosUsuarios.php");
+                httppost = new HttpPost("http://aeo.web-hn.com/WebServices/ConsultarTodosLosUsuarios.php");
                 parametros = new ArrayList<NameValuePair>();
                 parametros.add(new BasicNameValuePair("estado","1"));
                 httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));
@@ -438,7 +438,7 @@ public class NuevoPerfil extends AppCompatActivity {
                 HttpPost httppost;
                 ArrayList<NameValuePair> parametros;
                 httpclient = new DefaultHttpClient();
-                httppost = new HttpPost("http://aeo.web-hn.com/crearPerfil.php");
+                httppost = new HttpPost("http://aeo.web-hn.com/WebServices/crearPerfil.php");
                 parametros = new ArrayList<NameValuePair>();
                 parametros.add(new BasicNameValuePair("nomborg_rec",etnombreeorganizacion.getText().toString()));
                 parametros.add(new BasicNameValuePair("numtel_rec",etnumerofijo.getText().toString()));

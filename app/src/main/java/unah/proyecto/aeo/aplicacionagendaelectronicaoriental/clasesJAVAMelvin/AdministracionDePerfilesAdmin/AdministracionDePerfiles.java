@@ -300,7 +300,7 @@ public class AdministracionDePerfiles extends AppCompatActivity
                 HttpPost httppost;
                 ArrayList<NameValuePair> parametros;
                 httpclient = new DefaultHttpClient();
-                httppost = new HttpPost("http://aeo.web-hn.com/consultarPerfilesParaAdministracionPerfiles.php");
+                httppost = new HttpPost("http://aeo.web-hn.com/WebServices/consultarPerfilesParaAdministracionPerfiles.php");
                 parametros = new ArrayList<NameValuePair>();
                 parametros.add(new BasicNameValuePair("ste","2"));
                 httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));
@@ -393,7 +393,7 @@ public class AdministracionDePerfiles extends AppCompatActivity
                 Fuente_mostrarPerfiles perf = mostrar_perfiles.get(perfilselecionado);
                 idperf=perf.getId();
                 //se ejecuta la consulta al webservice y se pasa el id del perfil seleccionado
-                EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/eliminarPerfil.php?cto="+idperf)).getEntity());
+                EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/WebServices/eliminarPerfil.php?cto="+idperf)).getEntity());
                 resul = true;
             } catch (Exception ex) {
                 Log.e("ServicioRest", "Error!", ex);

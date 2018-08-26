@@ -310,7 +310,7 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
             //int prueba = preferences.getInt("usuario_ingreso",0);
 
             try {
-                JSONArray respJSON = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/consultarOrganizacionesUsuarioLogeados.php?id_usuario="+id_usuario_resibido_usuario)).getEntity()));
+                JSONArray respJSON = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/WebServices/consultarOrganizacionesUsuarioLogeados.php?id_usuario="+id_usuario_resibido_usuario)).getEntity()));
                 //recorre el array para asignar los resultados a las variables
                 for (int i = 0; i < respJSON.length(); i++) {
 
@@ -401,7 +401,7 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
                 EntidadOrganizacion perf = mostrar_perfiles.get(perfilselecionado);
                 idperf=perf.getId();
                 //se ejecuta la consulta al webservice y se pasa el id del perfil seleccionado
-                EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/eliminarPerfil.php?cto="+idperf)).getEntity());
+                EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/WebServices/eliminarPerfil.php?cto="+idperf)).getEntity());
                 resul = true;
             } catch (Exception ex) {
                 Log.e("ServicioRest", "Error!", ex);

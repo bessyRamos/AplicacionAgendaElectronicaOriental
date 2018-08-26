@@ -144,7 +144,7 @@ public class FormularioRegistroUsuario extends AppCompatActivity {
                 HttpPost httppost;
                 ArrayList<NameValuePair> parametros;
                 httpclient = new DefaultHttpClient();
-                httppost = new HttpPost("http://aeo.web-hn.com/insertarUsuarioCliente.php");
+                httppost = new HttpPost("http://aeo.web-hn.com/WebServices/insertarUsuarioCliente.php");
                 parametros = new ArrayList<NameValuePair>();
                 parametros.add(new BasicNameValuePair("usuarionombre",nombreusuario_insertar_usuario.getText().toString()));
                 parametros.add(new BasicNameValuePair("usuariopropio",nombrepropio_isertar_usuario.getText().toString()));
@@ -200,7 +200,7 @@ public class FormularioRegistroUsuario extends AppCompatActivity {
 
             try {
                 // Parseamos la respuesta obtenida del servidor a un objeto JSON
-                JSONObject jsonObject = new JSONObject(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/verCorreoOrganizacion.php?id_correo="+correo_insertar_usario.getText().toString())).getEntity()));
+                JSONObject jsonObject = new JSONObject(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/WebServices/verCorreoOrganizacion.php?id_correo="+correo_insertar_usario.getText().toString())).getEntity()));
                 JSONArray jsonArray = jsonObject.getJSONArray("datos");
                 for (int i = 0; i < jsonArray.length(); i++) {
 

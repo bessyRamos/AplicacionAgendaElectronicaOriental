@@ -272,7 +272,7 @@ public class NuevasSolicitudes extends AppCompatActivity
                 HttpPost httppost;
                 ArrayList<NameValuePair> parametros;
                 httpclient = new DefaultHttpClient();
-                httppost = new HttpPost("http://aeo.web-hn.com/consultarPerfilesParaAdministracionPerfiles.php");
+                httppost = new HttpPost("http://aeo.web-hn.com/WebServices/consultarPerfilesParaAdministracionPerfiles.php");
                 parametros = new ArrayList<NameValuePair>();
                 parametros.add(new BasicNameValuePair("ste","1"));
                 httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));
@@ -337,7 +337,7 @@ public class NuevasSolicitudes extends AppCompatActivity
                 Fuente_mostrarPerfiles perf = mostrar_perfiles.get(perfilselecionado);
                 idperf=perf.getId();
                 //se ejecuta la consulta al webservice y se pasa el id del perfil seleccionado
-                EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/aceptarSolicitud.php?cto="+idperf)).getEntity());
+                EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/WebServices/aceptarSolicitud.php?cto="+idperf)).getEntity());
                 resul = true;
             } catch (Exception ex) {
                 Log.e("ServicioRest", "Error!", ex);
@@ -376,7 +376,7 @@ public class NuevasSolicitudes extends AppCompatActivity
                 //se ejecuta la consulta al webservice y se pasa el id del perfil seleccionado
 
 
-                EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/rechazarSolicitud.php?cto="+idperf)).getEntity());
+                EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/WebServices/rechazarSolicitud.php?cto="+idperf)).getEntity());
                 resul = true;
             } catch (Exception ex) {
                 Log.e("ServicioRest", "Error!", ex);

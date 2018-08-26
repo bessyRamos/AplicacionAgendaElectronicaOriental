@@ -93,7 +93,7 @@
                     android:inputType="textPassword"
                 />
             </android.support.design.widget.TextInputLayout>
-
+<!--
             <TextView
                 android:id="@+id/recuperacion"
                 android:layout_width="match_parent"
@@ -105,7 +105,7 @@
 
 
 
-            />
+            /> -->
 
             <br.com.simplepass.loading_button_lib.customViews.CircularProgressButton
                 android:id="@+id/ingresar_login"

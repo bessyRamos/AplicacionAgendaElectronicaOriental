@@ -130,7 +130,7 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
         menu=new MenuPreferencias(this);
         //
         acceder = (CircularProgressButton) findViewById(R.id.ingresar_login);
-        recuperar = (TextView) findViewById(R.id.recuperacion);//para recuperacion de contrasenia
+        //recuperar = (TextView) findViewById(R.id.recuperacion);//para recuperacion de contrasenia
         acceder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -259,7 +259,7 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
 
             try {
                 // Parseamos la respuesta obtenida del servidor a un objeto JSON
-                JSONObject jsonObject = new JSONObject(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/validar_usuario.php?nombre_usuario="+ usu + "&contrasena="+pas)).getEntity()));
+                JSONObject jsonObject = new JSONObject(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/WebServices/validar_usuario.php?nombre_usuario="+ usu + "&contrasena="+pas)).getEntity()));
                 JSONArray jsonArray = jsonObject.getJSONArray("datos");
                 for (int i = 0; i < jsonArray.length(); i++) {
 

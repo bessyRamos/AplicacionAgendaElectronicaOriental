@@ -245,7 +245,7 @@ public class EditarUsuario extends AppCompatActivity implements NavigationView.O
                 HttpPost httppost;
                 ArrayList<NameValuePair> parametros;
                 httpclient = new DefaultHttpClient();
-                httppost = new HttpPost("http://aeo.web-hn.com/actualizacion_de_un_usuario.php");
+                httppost = new HttpPost("http://aeo.web-hn.com/WebServices/actualizacion_de_un_usuario.php");
                 parametros = new ArrayList<NameValuePair>();
                 parametros.add(new BasicNameValuePair("usuario",String.valueOf(usuarioEditar)));
                 parametros.add(new BasicNameValuePair("usuarionombre",nombreusuario.getText().toString()));
@@ -296,7 +296,7 @@ public class EditarUsuario extends AppCompatActivity implements NavigationView.O
         protected Boolean doInBackground(String... strings) {
 
             try {
-                JSONArray respJSON = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/Mostar_Los_Usuarios_Editados.php?usuario="+usuarioEditar)).getEntity()));
+                JSONArray respJSON = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/WebServices/Mostar_Los_Usuarios_Editados.php?usuario="+usuarioEditar)).getEntity()));
                 for (int i = 0; i < respJSON.length(); i++) {
                     nombre_usuario = respJSON.getJSONObject(i).getString("nombre_usuario");
                     nombre_propio = respJSON.getJSONObject(i).getString("nombre_propio");
