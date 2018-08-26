@@ -233,7 +233,7 @@ public class PerfilesEliminados extends AppCompatActivity  implements Navigation
                 HttpPost httppost;
                 ArrayList<NameValuePair> parametros;
                 httpclient = new DefaultHttpClient();
-                httppost = new HttpPost("http://aeo.web-hn.com/consultarPerfilesParaAdministracionPerfiles.php");
+                httppost = new HttpPost("http://aeo.web-hn.com/WebServices/consultarPerfilesParaAdministracionPerfiles.php");
                 parametros = new ArrayList<NameValuePair>();
                 parametros.add(new BasicNameValuePair("ste","4"));
                 httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));

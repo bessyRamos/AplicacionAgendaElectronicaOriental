@@ -218,7 +218,7 @@ public class FormularioRegistroLogin extends AppCompatActivity {
         protected Boolean doInBackground(String... strings) {
 
             try {
-                JSONArray respJSON = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/consultar_los_roles.php")).getEntity()));
+                JSONArray respJSON = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/WebServices/consultar_los_roles.php")).getEntity()));
 
                 for (int i = 0; i < respJSON.length(); i++) {
                     String roles ;
@@ -260,7 +260,7 @@ public class FormularioRegistroLogin extends AppCompatActivity {
                 HttpPost httppost;
                 ArrayList<NameValuePair> parametros;
                 httpclient = new DefaultHttpClient();
-                httppost = new HttpPost("http://aeo.web-hn.com/insercion_de_usuario.php");
+                httppost = new HttpPost("http://aeo.web-hn.com/WebServices/insercion_de_usuario.php");
                 parametros = new ArrayList<NameValuePair>();
                 parametros.add(new BasicNameValuePair("usuarionombre",nombreusuario_insertar.getText().toString()));
                 parametros.add(new BasicNameValuePair("usuariopropio",nombrepropio_isertar.getText().toString()));
