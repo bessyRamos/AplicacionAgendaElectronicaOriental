@@ -88,6 +88,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
+                app:passwordToggleEnabled="true"
+                app:passwordToggleTint="@color/colorAccent"
                 >
 
                 <EditText
@@ -95,7 +97,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Cree su Contraseña"
-                    android:inputType="textPersonName"
+                    android:inputType="textPassword"
                     android:maxLines="1"
                     android:textSize="15sp"
                     android:textColor="#000"
@@ -109,14 +111,16 @@
     <android.support.design.widget.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp">
+        android:layout_marginTop="20dp"
+        app:passwordToggleEnabled="true"
+        app:passwordToggleTint="@color/colorAccent">
 
         <EditText
             android:id="@+id/txtcontrasenarepetir_registro_login"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:hint="Repita su Contraseña"
-            android:inputType="textPersonName"
+            android:inputType="textPassword"
             android:maxLines="1"
             android:textColor="#000"
             android:textSize="15sp"

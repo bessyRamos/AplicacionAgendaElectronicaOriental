@@ -375,8 +375,8 @@ public class NuevoPerfil extends AppCompatActivity {
 
             try {
 
-                JSONArray regionesWS = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/consultarRegiones.php")).getEntity()));
-                JSONArray categoriasWS = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/consultarCategorias.php")).getEntity()));
+                JSONArray regionesWS = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/WebServices/consultarRegiones.php")).getEntity()));
+                JSONArray categoriasWS = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/WebServices/consultarCategorias.php")).getEntity()));
 
                 HttpClient httpclient;
                 HttpPost httppost;
