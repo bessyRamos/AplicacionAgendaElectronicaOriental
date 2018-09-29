@@ -43,6 +43,7 @@ import java.io.InputStreamReader;
 import java.lang.reflect.Array;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -50,8 +51,12 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
+import cz.msebera.android.httpclient.NameValuePair;
+import cz.msebera.android.httpclient.client.HttpClient;
+import cz.msebera.android.httpclient.client.entity.UrlEncodedFormEntity;
 import cz.msebera.android.httpclient.client.methods.HttpPost;
 import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
+import cz.msebera.android.httpclient.message.BasicNameValuePair;
 import cz.msebera.android.httpclient.util.EntityUtils;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.ActivityCategorias;
@@ -60,56 +65,33 @@ import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.Shar
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.HerramientaBusquedaAvanzada.BusquedaAvanzada;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.PerfilesBreves.ListaDeContactos;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVASheyli.RecuperacionDePassword;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.DatoT;
 
 public class Login extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     public EditText usuario, contrasena;
     public Button button;
-    public TextView recuperar;//para recuperacion de contrasenia
-    //ConexionSQLiteHelper basedatos = new ConexionSQLiteHelper(this, "bdaeo", null, 1);
-    SQLiteDatabase conexion;
-    String usuarioPermiso, contrasenaPermiso;
-    int idRol;
-
     private int contador = 0;
     private int id_usuario;
     private int rol;
     private int estado_usuario;
-    private JSONObject jsonObject;
     //private Button acceder,registrarse;
-    String nombre_traido,contrasena_traida;
     private static final String IP_TOKEN="http://aeo.web-hn.com/RegisterDevice.php";
-
-
-    //  aeo.web-hn.com/RegisterDevice.php
-
-    // preferencia de administrador
-    //private SharedPreferences preferences;
-    //private SharedPreferences.Editor editor;
     Context context=this;
-    String usuari;
-    String contrase;
-
-    //
-
     //preferencia de usuario
     private SesionUsuario  sessionUsuario;
     private Sesion session;
-    private SharedPreferences preferencesUsuario;
-    private SharedPreferences.Editor editorUsuario;
 
-    //
+
     int id_preferencia;
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
-    int id_usu=-1;
     private CircularProgressButton acceder;
     private MenuPreferencias menu;
-
-    String nada;
-
+    String nada,dato,tkasig;
     SharedPreferences logue;
     SharedPreferences.Editor editorLogueo;
 
+    DatoT datoT = new DatoT(this);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -128,9 +110,7 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
         editorLogueo = logue.edit();
 
         menu=new MenuPreferencias(this);
-        //
         acceder = (CircularProgressButton) findViewById(R.id.ingresar_login);
-        //recuperar = (TextView) findViewById(R.id.recuperacion);//para recuperacion de contrasenia
         acceder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -230,20 +210,6 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
     }
 
 
-    public void Ingresar_Login(View v) { // metodo que verificaque se ingresen datos en los campos usuario y contraseña
-
-
-    }//fin de boton
-
-    private Cursor ConsultarUsuarioPassword(String usuario, String password) throws SQLException {
-        //conexion = basedatos.getReadableDatabase();
-        Cursor mcursor = null;
-        int estado = 1;
-        int rol = 1;
-        mcursor = conexion.query("Usuarios", new String[]{"id_usuario", "nombre_usuario", "nombre_propio", "contrasena", "rol", "estado_usuario"}, "nombre_usuario like'" + usuario + "'and  contrasena like '" + password + "'and  estado_usuario like '" + estado + "'and  rol like '" + rol + "'", null, null, null, null);
-        return mcursor;
-    }
-
     //METODO DE VERIFICADE DESDE EL SERVIDOR
     private class LoginValidadoWeb extends AsyncTask<String, Integer, Boolean> {
         private LoginValidadoWeb() {
@@ -258,16 +224,24 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
             String pas=contrasena.getText().toString();
 
             try {
-                // Parseamos la respuesta obtenida del servidor a un objeto JSON
-                JSONObject jsonObject = new JSONObject(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/WebServices/validar_usuario.php?nombre_usuario="+ usu + "&contrasena="+pas)).getEntity()));
-                JSONArray jsonArray = jsonObject.getJSONArray("datos");
-                for (int i = 0; i < jsonArray.length(); i++) {
 
-                    id_usuario = jsonArray.getJSONObject(i).getInt("id_usuario");
-                    rol = jsonArray.getJSONObject(i).getInt("rol");
-                    estado_usuario = jsonArray.getJSONObject(i).getInt("estado_usuario");
+                HttpClient httpclient;
+                HttpPost httppost;
+                ArrayList<NameValuePair> parametros;
+                httpclient = new DefaultHttpClient();
+                httppost = new HttpPost("http://aeo.web-hn.com/WebServices/validar_usuario.php");
+                parametros = new ArrayList<NameValuePair>();
+                parametros.add(new BasicNameValuePair("nombre_usuario",usu));
+                parametros.add(new BasicNameValuePair("contrasena",pas));
+                httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));
 
-                }
+                JSONObject credencial = new JSONObject(EntityUtils.toString(httpclient.execute(httppost).getEntity()));
+                    id_usuario = credencial.getInt("idUrs");
+                    rol = credencial.getInt("rol");
+                    estado_usuario = credencial.getInt("ste");
+                    tkasig = credencial.getString("token");
+
+
                 if (id_usuario != 0 && rol != 0 && estado_usuario != 0) {
                     resul = true;
                 } else {
@@ -276,7 +250,7 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
                 if (id_usuario==0){
                     resul = false;
                 }
-                if (jsonObject.getJSONArray("datos").equals(null)){
+                if (credencial.equals("Credenciales incorrectos")){
                     nada="nada";
                 }
                 if (id_usuario!=0&& rol==1&&estado_usuario==2){
@@ -288,7 +262,7 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
 
 
             } catch (Exception ex) {
-                ex.printStackTrace();
+                Log.e("ServicioRest", "Error!", ex);
                 resul = false;
             }
 
@@ -299,23 +273,22 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
         protected void onPostExecute(Boolean result) {
 
             if (resul) {
+                dato = tkasig;
                 id_preferencia = id_usuario;
                 editor.putInt("usuario_ingreso",id_preferencia);
                 editor.putInt("usuario_admin",id_preferencia);
                 editor.commit();
 
+
                 acceder.stopAnimation();
                 acceder.revertAnimation();
 
-                Intent intent1= new Intent();
 
 
-
-
-                if (rol == 1 && estado_usuario ==1) {
+                 if (rol == 1 && estado_usuario ==1) {
                     Intent intent = new Intent(Login.this,Panel_de_Control.class);
+
                     session.setLogin(true);
-                    menu.setLoginMenu(true);
                     sessionUsuario.setLoginUsuario(false);
 
 
@@ -323,17 +296,15 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
 
                     editorLogueo.putInt("Admin",id_usuario);
                     editorLogueo.commit();
-
                     startActivity(intent);
-
                     //limpieza de variables
                     usuario.setText("");
                     contrasena.setText("");
                     //
                     finish();
 
-
                 } else if (rol ==2 && estado_usuario ==1){
+
                     Intent intent = new Intent(Login.this,PanelDeControlUsuarios.class);
                     sessionUsuario.setLoginUsuario(true);
                     menu.setLoginMenu(true);
@@ -342,11 +313,8 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
                     intent.putExtra("id",id_preferencia);
                     intent.putExtra("usuario_ingreso",id_preferencia);
 
-
                     editorLogueo.putInt("Normal",id_usuario);
                     editorLogueo.commit();
-
-
 
                     startActivity(intent);
 
@@ -420,18 +388,11 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
 
     }//fin boolean
 
-
-
-
-
     private void validar(){
 
         //id.setError(null);
         usuario.setError(null);
         contrasena.setError(null);
-
-
-        // String idd = id.getText().toString();
 
         String us = usuario.getText().toString();
         String cont = contrasena.getText().toString();
@@ -451,72 +412,6 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
 
     }
 
-
-
-    /*public void permisoAdmin() {
-        SQLiteDatabase permiso = basedatos.getReadableDatabase();
-        idRol = 1;
-        Cursor cursorP = permiso.rawQuery("SELECT nombre_usuario, contrasena FROM USUARIOS WHERE rol = " + idRol, null);
-        while (cursorP.moveToNext()) {
-            usuarioPermiso = cursorP.getString(0);
-            contrasenaPermiso = cursorP.getString(1);
-        }
-
-        if (usuarioPermiso != "Admin") {
-            Toast.makeText(getApplicationContext(), "Permiso denegado", Toast.LENGTH_SHORT).show();
-        } else {
-            Intent p = new Intent(getApplicationContext(), Panel_de_Control.class);
-            startActivity(p);
-        }
-    }*/
-
-    public int obtenerDatosJson(String respuest) {
-        int res = 0;
-        try {
-            JSONArray json = new JSONArray(respuest);
-            if (json.length() > 0) {
-                res = 1;
-
-            }
-
-        } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), "Error inesperado en respuesta ", Toast.LENGTH_SHORT).show();
-        }
-
-        return res;
-    }
-
-    public int informacion(String response) {
-        int res = 0;
-        try {
-            final JSONArray json = new JSONArray(response);
-            if (json.length() > 0) {
-                for (int i = 0; i < response.length(); i++) {
-                    String[] hola = new String[0];
-                    //hola [i]= response.json.getString("id_usuario");
-                    jsonObject = new JSONObject(String.valueOf(jsonObject.getInt("id_usuario")));
-
-                }
-                res = Integer.parseInt(String.valueOf(jsonObject));
-
-            }
-
-        } catch (Exception e) {
-            Toast.makeText(getApplicationContext(), "Error inesperado en respuesta ", Toast.LENGTH_SHORT).show();
-        }
-
-        return res;
-
-    }
-
-    private void cargarPreferencia (){
-
-        SharedPreferences preferences = getSharedPreferences("credencial",Context.MODE_PRIVATE);
-        int id_usu  = preferences.getInt("usuario_ingreso",-1);
-        // intent.putExtra("usuario_ingreso",id_preferencia);
-
-
-    }
     private void sendTokenToServer() {
         //  progressDialog = new ProgressDialog(FormularioRegistroLogin.this);
         //  progressDialog.setMessage("Registering Device...");
