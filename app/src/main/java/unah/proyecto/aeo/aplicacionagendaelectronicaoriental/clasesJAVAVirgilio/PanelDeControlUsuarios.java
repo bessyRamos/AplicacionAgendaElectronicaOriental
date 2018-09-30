@@ -62,6 +62,7 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
     ProgressBar barraProgreso;
 
     int id_usuario_normal;
+    int organizacionesdadas;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,6 +74,9 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
         sesionUsuario = new SesionUsuario(this);
         SharedPreferences preferences = getSharedPreferences("credencial", Context.MODE_PRIVATE);
         id_usu  = preferences.getInt("usuario_ingreso",id_usu);
+
+        SharedPreferences datos= getSharedPreferences("datos",Context.MODE_PRIVATE);
+        organizacionesdadas = datos.getInt("usuariotraido",0);
         //
         mostrar_perfiles= new ArrayList<EntidadOrganizacion>();
         FloatingActionButton agregar = (FloatingActionButton) findViewById(R.id.agregarContacto);
@@ -310,7 +314,7 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
             //int prueba = preferences.getInt("usuario_ingreso",0);
 
             try {
-                JSONArray respJSON = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/WebServices/consultarOrganizacionesUsuarioLogeados.php?id_usuario="+id_usuario_resibido_usuario)).getEntity()));
+                JSONArray respJSON = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/WebServices/consultarOrganizacionesUsuarioLogeados.php?id_usuario="+organizacionesdadas)).getEntity()));
                 //recorre el array para asignar los resultados a las variables
                 for (int i = 0; i < respJSON.length(); i++) {
 

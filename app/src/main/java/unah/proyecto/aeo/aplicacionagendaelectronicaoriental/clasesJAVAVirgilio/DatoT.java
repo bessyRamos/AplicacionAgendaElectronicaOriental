@@ -17,20 +17,20 @@ public class DatoT {
         preferences = ctx.getSharedPreferences("DatoT",Context.MODE_PRIVATE);
         editor = preferences.edit();
     }
-    public void setLoginDato(String logindimDato){
-        editor.putString("loginDatos",logindimDato);
+    public void setLoginDatotkn(String logindimDatotkn){
+        editor.putString("loginDatos",logindimDatotkn);
         editor.commit();
     }
-    public void setLoginDator(String logindimDato){
-        editor.putString("loginDatosR",logindimDato);
+    public void setLoginDator(int logindimDatoid){
+        editor.putInt("loginDatosR",logindimDatoid);
         editor.commit();
     }
-    public void setLoginDatoid(String logindimDato){
-        editor.putString("loginDatosId",logindimDato);
+    public void setLoginDatoid(int logindimDator){
+        editor.putInt("loginDatosId",logindimDator);
         editor.commit();
     }
-    public void setLoginDatostd(String logindimDato){
-        editor.putString("loginDatosStd",logindimDato);
+    public void setLoginDatostd(int logindimDatostd){
+        editor.putInt("loginDatosStd",logindimDatostd);
         editor.commit();
     }
 

@@ -80,6 +80,8 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
     //preferencia de usuario
     private SesionUsuario  sessionUsuario;
     private Sesion session;
+    private DatoT datostraidos;
+
 
 
     int id_preferencia;
@@ -91,7 +93,10 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
     SharedPreferences logue;
     SharedPreferences.Editor editorLogueo;
 
-    DatoT datoT = new DatoT(this);
+    SharedPreferences datos;
+    SharedPreferences.Editor editordatos;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,12 +107,16 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
         //Preferencias de administrador y usuario
         session = new Sesion(this);
         sessionUsuario = new SesionUsuario(this);
+        datostraidos = new DatoT(this);
 
         preferences = getSharedPreferences("credencial",Context.MODE_PRIVATE);
         editor = preferences.edit();
 
         logue= getSharedPreferences("Nombre",Context.MODE_PRIVATE);
         editorLogueo = logue.edit();
+
+        datos= getSharedPreferences("datos",Context.MODE_PRIVATE);
+        editordatos = datos.edit();
 
         menu=new MenuPreferencias(this);
         acceder = (CircularProgressButton) findViewById(R.id.ingresar_login);
@@ -279,18 +288,25 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
                 editor.putInt("usuario_admin",id_preferencia);
                 editor.commit();
 
-
                 acceder.stopAnimation();
                 acceder.revertAnimation();
 
+                editordatos.putInt("usuariotraido",id_usuario);
+                editordatos.putInt("usuariotraidorol",rol);
+                editordatos.putInt("usuariotraidoestado",estado_usuario);
+                editordatos.putString("usuariotraidotkn",tkasig);
+                editordatos.commit();
 
+                datostraidos.setLoginDatoid(id_usuario);
+                datostraidos.setLoginDator(rol);
+                datostraidos.setLoginDatostd(estado_usuario);
+                datostraidos.setLoginDatotkn(tkasig);
 
                  if (rol == 1 && estado_usuario ==1) {
                     Intent intent = new Intent(Login.this,Panel_de_Control.class);
-
+                   
                     session.setLogin(true);
                     sessionUsuario.setLoginUsuario(false);
-
 
                     intent.putExtra("usuario_ingreso",id_preferencia);
 
@@ -453,6 +469,7 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
                 params.put("id_usuario",String.valueOf(id_usuario));
                 params.put("token", token);
                 return params;
+
             }
         };
         RequestQueue requestQueue = Volley.newRequestQueue(Login.this);
