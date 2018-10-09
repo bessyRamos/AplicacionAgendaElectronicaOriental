@@ -325,7 +325,7 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
             //int prueba = preferences.getInt("usuario_ingreso",0);
 
             try {
-             /*   HttpClient httpclient;
+                HttpClient httpclient;
                 HttpPost httppost;
                 ArrayList<NameValuePair> parametros;
                 httpclient = new DefaultHttpClient();
@@ -335,9 +335,9 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
 
                 httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));
                 JSONArray respJSON = new JSONArray(EntityUtils.toString(( httpclient.execute(httppost)).getEntity()));
-*/
 
-                 JSONArray respJSON = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/WebServices/consultarOrganizacionesUsuarioLogeados.php?id_usuario="+id_usuario_resibido_usuario)).getEntity()));
+
+                 //JSONArray respJSON = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/WebServices/consultarOrganizacionesUsuarioLogeados.php?id_usuario="+id_usuario_resibido_usuario)).getEntity()));
                 //recorre el array para asignar los resultados a las variables
                 for (int i = 0; i < respJSON.length(); i++) {
 
