@@ -316,10 +316,7 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
                    
                     session.setLogin(true);
                     sessionUsuario.setLoginUsuario(false);
-
                     intent.putExtra("usuario_ingreso",id_preferencia);
-                    Toast.makeText(getApplicationContext(),""+id_preferencia,Toast.LENGTH_SHORT).show();
-
                     editorLogueo.putInt("Admin",id_usuario);
                     editorLogueo.commit();
                     startActivity(intent);
@@ -335,11 +332,8 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
                     sessionUsuario.setLoginUsuario(true);
                     menu.setLoginMenu(true);
                     session.setLogin(false);
-
                     intent.putExtra("id",id_preferencia);
-                    Toast.makeText(getApplicationContext(),""+ id_preferencia,Toast.LENGTH_SHORT).show();
                     intent.putExtra("usuario_ingreso",id_preferencia);
-
                     editorLogueo.putInt("Normal",id_usuario);
                     editorLogueo.commit();
 
