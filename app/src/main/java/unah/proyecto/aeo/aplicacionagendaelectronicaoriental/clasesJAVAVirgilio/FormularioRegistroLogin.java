@@ -1,7 +1,9 @@
 package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio;
 
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -61,11 +63,16 @@ public class FormularioRegistroLogin extends AppCompatActivity {
     Button bottonvalidar;
     ArrayList lista = new ArrayList<>();
 
+    SharedPreferences datos;
+    String  traidotk;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_formulario_registro_login);
+        //
+        datos= getSharedPreferences("datos", Context.MODE_PRIVATE);
+        traidotk = datos.getString("usuariotraidotkn","no tkn");
 
         //flecha atras
         android.support.v7.app.ActionBar actionBar= getSupportActionBar();
@@ -267,6 +274,7 @@ public class FormularioRegistroLogin extends AppCompatActivity {
                 parametros.add(new BasicNameValuePair("usuarioemail",correo_insertar.getText().toString()));
                 parametros.add(new BasicNameValuePair("usariopassword",contrasena_insertar.getText().toString()));
                 parametros.add(new BasicNameValuePair("usuariosroles",String.valueOf(id_rol)));
+                parametros.add(new BasicNameValuePair("tkn",traidotk));
 
 
                 httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));

@@ -47,7 +47,8 @@ public class EditarUsuario extends AppCompatActivity implements NavigationView.O
     private Sesion sesion;
     private SesionUsuario sesionUsuario;
     int id_usu=-1;
-
+    SharedPreferences datos;
+    String  traidotk;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,10 +64,8 @@ public class EditarUsuario extends AppCompatActivity implements NavigationView.O
 
             id_usu  = preferences.getInt("usuario_ingreso",id_usu);
             //
-
-
-
-
+        datos= getSharedPreferences("datosusu", Context.MODE_PRIVATE);
+        traidotk = datos.getString("usuariotraidotkn","no tkn");
         //RECIVIMOS EL ID QUE VIENE DE LA CLASE MOSTRAR USUARIOS.
         Bundle extras = this.getIntent().getExtras();
         if(extras!=null) {
@@ -251,7 +250,7 @@ public class EditarUsuario extends AppCompatActivity implements NavigationView.O
                 parametros.add(new BasicNameValuePair("usuarionombre",nombreusuario.getText().toString()));
                 parametros.add(new BasicNameValuePair("usuariopropio",nombrepropio.getText().toString()));
                 parametros.add(new BasicNameValuePair("usuarioemail",correo.getText().toString()));
-
+                parametros.add(new BasicNameValuePair("tkn",traidotk));
 
                 httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));
 
@@ -296,7 +295,18 @@ public class EditarUsuario extends AppCompatActivity implements NavigationView.O
         protected Boolean doInBackground(String... strings) {
 
             try {
-                JSONArray respJSON = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/WebServices/Mostar_Los_Usuarios_Editados.php?usuario="+usuarioEditar)).getEntity()));
+                HttpClient httpclient;
+                HttpPost httppost;
+                ArrayList<NameValuePair> parametros;
+                httpclient = new DefaultHttpClient();
+                httppost = new HttpPost("http://aeo.web-hn.com/WebServices/Mostar_Los_Usuarios_Editados.php");
+                parametros = new ArrayList<NameValuePair>();
+                parametros.add(new BasicNameValuePair("usuario",String.valueOf(usuarioEditar) ));
+                parametros.add(new BasicNameValuePair("tkn",traidotk));
+
+                httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));
+                JSONArray respJSON = new JSONArray(EntityUtils.toString(( httpclient.execute(httppost)).getEntity()));
+               // JSONArray respJSON = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/WebServices/Mostar_Los_Usuarios_Editados.php?usuario="+usuarioEditar)).getEntity()));
                 for (int i = 0; i < respJSON.length(); i++) {
                     nombre_usuario = respJSON.getJSONObject(i).getString("nombre_usuario");
                     nombre_propio = respJSON.getJSONObject(i).getString("nombre_propio");

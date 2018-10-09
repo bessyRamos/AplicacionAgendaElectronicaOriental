@@ -1,8 +1,10 @@
 package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.AdministracionDePerfilesAdmin;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -71,10 +73,13 @@ public class EditarPerfil extends AppCompatActivity {
     private static final int PICK_IMAGE = 100;
     Uri imageUri;
 
+    SharedPreferences datos;
+    String  traidotk;
+
+
     /**********************************************************************************************
      *                                       ONCREATE
      **********************************************************************************************/
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -83,7 +88,10 @@ public class EditarPerfil extends AppCompatActivity {
         android.support.v7.app.ActionBar actionBar= getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
 
-
+        //
+        datos= getSharedPreferences("datos", Context.MODE_PRIVATE);
+        traidotk = datos.getString("usuariotraidotkn","no tkn");
+        //
         imagenOrg = findViewById(R.id.imagenDeOrganizacion);
         botonFoto = findViewById(R.id.botonFoto);
         botonGuardar= findViewById(R.id.botonGuardar);
@@ -473,8 +481,21 @@ public class EditarPerfil extends AppCompatActivity {
         protected Boolean doInBackground(String... strings) {
 
             try {
-                JSONObject respJSON = new JSONObject(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/WebServices/consultarDatosDePerfilParaEditar.php?cto="+id_perfilEditar)).getEntity()));
+
+                HttpClient httpclient;
+                HttpPost httppost;
+                ArrayList<NameValuePair> parametros;
+                httpclient = new DefaultHttpClient();
+                httppost = new HttpPost("http://aeo.web-hn.com/WebServices/consultarDatosDePerfilParaEditar.php");
+                parametros = new ArrayList<NameValuePair>();
+                parametros.add(new BasicNameValuePair("cto",String.valueOf(id_perfilEditar)));
+                parametros.add(new BasicNameValuePair("tkn",traidotk));
+                httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));
+
+                JSONObject respJSON = new JSONObject(EntityUtils.toString(httpclient.execute(httppost).getEntity()));
+                //JSONObject respJSON = new JSONObject(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/WebServices/consultarDatosDePerfilParaEditar.php?cto="+id_perfilEditar)).getEntity()));
                 JSONArray jsonArray = respJSON.getJSONArray("perfiles");
+
                 for (int i = 0; i < jsonArray.length(); i++) {
                     nomborg_rec = jsonArray.getJSONObject(i).getString("nombre_organizacion");
                     numtel_rec = jsonArray.getJSONObject(i).getString("numero_fijo");
@@ -569,6 +590,8 @@ public class EditarPerfil extends AppCompatActivity {
                 parametros.add(new BasicNameValuePair("longitud_rec",etlongitud.getText().toString()));
                 parametros.add(new BasicNameValuePair("id_categoria",String.valueOf(id_categoria)));
                 parametros.add(new BasicNameValuePair("id_region",String.valueOf(id_region)));
+                parametros.add(new BasicNameValuePair("tkn",traidotk));
+
                 if(editarFoto==true){
                     parametros.add(new BasicNameValuePair("imagen",encodeImagen));
                     parametros.add(new BasicNameValuePair("nombre_imagen",etnombreeorganizacion.getText().toString().replace(" ","_")+ ""+ i +".jpg"));
@@ -681,8 +704,19 @@ public class EditarPerfil extends AppCompatActivity {
 
             try {
 
+                HttpClient httpclient;
+                HttpPost httppost;
+                ArrayList<NameValuePair> parametros;
+                httpclient = new DefaultHttpClient();
+                httppost = new HttpPost("http://aeo.web-hn.com/WebServices/eliminarPerfil.php");
+                parametros = new ArrayList<NameValuePair>();
+                parametros.add(new BasicNameValuePair("cto",String.valueOf(id_perfilEditar)));
+                parametros.add(new BasicNameValuePair("tkn",traidotk));
+                httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));
+                httpclient.execute(httppost);
+
                 //se ejecuta la consulta al webservice y se pasa el id del perfil seleccionado
-                EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/WebServices/eliminarPerfil.php?cto="+id_perfilEditar)).getEntity());
+               // EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/WebServices/eliminarPerfil.php?cto="+id_perfilEditar)).getEntity());
                 resul = true;
             } catch (Exception ex) {
                 Log.e("ServicioRest", "Error!", ex);
@@ -696,6 +730,7 @@ public class EditarPerfil extends AppCompatActivity {
 
             if (resul) {
                 Toast.makeText(getApplicationContext(),"Perfil Eliminado",Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getApplicationContext(),""+ id_perfilEditar,Toast.LENGTH_SHORT).show();
                 Intent data = new Intent();
                 setResult(AdministracionDePerfiles.RESULT_OK, data);
                 finish();

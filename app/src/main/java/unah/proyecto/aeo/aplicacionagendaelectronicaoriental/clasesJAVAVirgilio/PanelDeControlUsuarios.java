@@ -27,11 +27,16 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
+import cz.msebera.android.httpclient.NameValuePair;
+import cz.msebera.android.httpclient.client.HttpClient;
+import cz.msebera.android.httpclient.client.entity.UrlEncodedFormEntity;
 import cz.msebera.android.httpclient.client.methods.HttpPost;
 import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
+import cz.msebera.android.httpclient.message.BasicNameValuePair;
 import cz.msebera.android.httpclient.util.EntityUtils;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.ActivityCategorias;
@@ -64,10 +69,16 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
     int id_usuario_normal;
     int organizacionesdadas;
 
+    SharedPreferences datos;
+    String  traidotk;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_panel_de_control_usuarios);
+        //
+        datos= getSharedPreferences("datos", Context.MODE_PRIVATE);
+        traidotk = datos.getString("usuariotraidotkn","no tkn");
 
         //envio de clase actual para las preferencias
         sesion = new Sesion(this);
@@ -314,7 +325,19 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
             //int prueba = preferences.getInt("usuario_ingreso",0);
 
             try {
-                JSONArray respJSON = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/WebServices/consultarOrganizacionesUsuarioLogeados.php?id_usuario="+organizacionesdadas)).getEntity()));
+             /*   HttpClient httpclient;
+                HttpPost httppost;
+                ArrayList<NameValuePair> parametros;
+                httpclient = new DefaultHttpClient();
+                httppost = new HttpPost("http://aeo.web-hn.com/WebServices/consultarOrganizacionesUsuarioLogeados.php");
+                parametros = new ArrayList<NameValuePair>();
+                parametros.add(new BasicNameValuePair("id_usuario",String.valueOf(organizacionesdadas)));
+
+                httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));
+                JSONArray respJSON = new JSONArray(EntityUtils.toString(( httpclient.execute(httppost)).getEntity()));
+*/
+
+                 JSONArray respJSON = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/WebServices/consultarOrganizacionesUsuarioLogeados.php?id_usuario="+id_usuario_resibido_usuario)).getEntity()));
                 //recorre el array para asignar los resultados a las variables
                 for (int i = 0; i < respJSON.length(); i++) {
 
@@ -404,8 +427,20 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
                 //Se obtiene el id del perfil que se va a eliminar
                 EntidadOrganizacion perf = mostrar_perfiles.get(perfilselecionado);
                 idperf=perf.getId();
+
+                HttpClient httpclient;
+                HttpPost httppost;
+                ArrayList<NameValuePair> parametros;
+                httpclient = new DefaultHttpClient();
+                httppost = new HttpPost("http://aeo.web-hn.com/WebServices/eliminarPerfil.php");
+                parametros = new ArrayList<NameValuePair>();
+                parametros.add(new BasicNameValuePair("cto",String.valueOf(idperf)) );
+                parametros.add(new BasicNameValuePair("tkn",traidotk));
+                httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));
+                httpclient.execute(httppost);
+
                 //se ejecuta la consulta al webservice y se pasa el id del perfil seleccionado
-                EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/WebServices/eliminarPerfil.php?cto="+idperf)).getEntity());
+                //EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/WebServices/eliminarPerfil.php?cto="+idperf)).getEntity());
                 resul = true;
             } catch (Exception ex) {
                 Log.e("ServicioRest", "Error!", ex);

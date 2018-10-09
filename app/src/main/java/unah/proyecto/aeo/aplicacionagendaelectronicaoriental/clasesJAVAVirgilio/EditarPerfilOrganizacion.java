@@ -103,7 +103,8 @@ public class EditarPerfilOrganizacion extends AppCompatActivity  implements Navi
     private SesionUsuario sesionUsuario;
     int id_usu=-1;
     int nu;
-
+    SharedPreferences datos;
+    String  traidotk;
     Double lat,log;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -127,6 +128,8 @@ public class EditarPerfilOrganizacion extends AppCompatActivity  implements Navi
         listaCategorias=new ArrayList<ModeloSpinner>();
         listaRegiones=new ArrayList<ModeloSpinner>();
 
+        datos= getSharedPreferences("datosusu", Context.MODE_PRIVATE);
+        traidotk = datos.getString("usuariotraidotkn","no tkn");
 
         //envio de clase actual para las preferencias
         sesion = new Sesion(this);
@@ -512,7 +515,18 @@ public class EditarPerfilOrganizacion extends AppCompatActivity  implements Navi
         protected Boolean doInBackground(String... strings) {
 
             try {
-                JSONObject respJSON = new JSONObject(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/WebServices/consultarDatosDePerfilParaEditar.php?cto="+id_usuario_resibido_usuario)).getEntity()));
+                HttpClient httpclient;
+                HttpPost httppost;
+                ArrayList<NameValuePair> parametros;
+                httpclient = new DefaultHttpClient();
+                httppost = new HttpPost("http://aeo.web-hn.com/WebServices/consultarDatosDePerfilParaEditar.php");
+                parametros = new ArrayList<NameValuePair>();
+                parametros.add(new BasicNameValuePair("cto",String.valueOf(id_usuario_resibido_usuario)));
+                parametros.add(new BasicNameValuePair("tkn",traidotk));
+                httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));
+
+                JSONObject respJSON = new JSONObject(EntityUtils.toString(httpclient.execute(httppost).getEntity()));
+                //JSONObject respJSON = new JSONObject(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/WebServices/consultarDatosDePerfilParaEditar.php?cto="+id_usuario_resibido_usuario)).getEntity()));
                 JSONArray jsonArray = respJSON.getJSONArray("perfiles");
                 for (int i = 0; i < jsonArray.length(); i++) {
                     nomborg_rec = jsonArray.getJSONObject(i).getString("nombre_organizacion");
@@ -604,6 +618,7 @@ public class EditarPerfilOrganizacion extends AppCompatActivity  implements Navi
                 parametros.add(new BasicNameValuePair("longitud_rec",etlongitud.getText().toString()));
                 parametros.add(new BasicNameValuePair("id_categoria",String.valueOf(id_categoria)));
                 parametros.add(new BasicNameValuePair("id_region",String.valueOf(id_region)));
+                parametros.add(new BasicNameValuePair("tkn",traidotk));
                 if(editarfoto==true){
                     parametros.add(new BasicNameValuePair("imagen",encodeImagen));
                     parametros.add(new BasicNameValuePair("nombre_imagen",etnombreeorganizacion.getText().toString().replace(" ","_")+ ""+ i +".jpg"));

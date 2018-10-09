@@ -1,6 +1,8 @@
 package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -12,6 +14,7 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 
@@ -29,7 +32,10 @@ import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
  * Created by alan fabricio on 15/03/2018.
  */
 
+
 public class Editar_Usuarios extends AppCompatActivity {
+    SharedPreferences datos;
+    String  traidotk;
 
     private int usuarioEditar;
     private EditText nombreusuario,nombrepropio,correo;
@@ -42,7 +48,10 @@ public class Editar_Usuarios extends AppCompatActivity {
         setContentView(R.layout.editar_usuarios);
 
         bottonvalidar = (Button)findViewById(R.id.editar);
-
+//
+        datos= getSharedPreferences("datos", Context.MODE_PRIVATE);
+        traidotk = datos.getString("usuariotraidotkn","no tkn");
+//
         //RECIVIMOS EL ID QUE VIENE DE LA CLASE MOSTRAR USUARIOS.
         Bundle extras = this.getIntent().getExtras();
         if(extras!=null) {
@@ -151,6 +160,7 @@ public class Editar_Usuarios extends AppCompatActivity {
                 parametros.add(new BasicNameValuePair("usuarionombre",nombreusuario.getText().toString()));
                 parametros.add(new BasicNameValuePair("usuariopropio",nombrepropio.getText().toString()));
                 parametros.add(new BasicNameValuePair("usuarioemail",correo.getText().toString()));
+                parametros.add(new BasicNameValuePair("tkn",traidotk));
 
 
                 httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));
@@ -197,7 +207,19 @@ public class Editar_Usuarios extends AppCompatActivity {
         protected Boolean doInBackground(String... strings) {
 
             try {
-                JSONArray respJSON = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/WebServices/Mostar_Los_Usuarios_Editados.php?usuario="+usuarioEditar)).getEntity()));
+                HttpClient httpclient;
+                HttpPost httppost;
+                ArrayList<NameValuePair> parametros;
+                httpclient = new DefaultHttpClient();
+                httppost = new HttpPost("http://aeo.web-hn.com/WebServices/Mostar_Los_Usuarios_Editados.php");
+                parametros = new ArrayList<NameValuePair>();
+                parametros.add(new BasicNameValuePair("usuario",String.valueOf(usuarioEditar) ));
+                parametros.add(new BasicNameValuePair("tkn",traidotk));
+
+                httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));
+                JSONArray respJSON = new JSONArray(EntityUtils.toString(( httpclient.execute(httppost)).getEntity()));
+
+                //JSONArray respJSON = new JSONArray(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/WebServices/Mostar_Los_Usuarios_Editados.php?usuario="+usuarioEditar)).getEntity()));
                 for (int i = 0; i < respJSON.length(); i++) {
                     nombre_usuario = respJSON.getJSONObject(i).getString("nombre_usuario");
                     nombre_propio = respJSON.getJSONObject(i).getString("nombre_propio");

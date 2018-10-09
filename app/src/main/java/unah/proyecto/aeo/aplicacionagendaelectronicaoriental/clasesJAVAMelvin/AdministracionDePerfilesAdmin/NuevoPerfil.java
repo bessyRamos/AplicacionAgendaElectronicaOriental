@@ -1,7 +1,9 @@
 package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.AdministracionDePerfilesAdmin;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -62,11 +64,17 @@ public class NuevoPerfil extends AppCompatActivity {
     Uri imageUri;
 
     String encodeImagen;
+    //
+    SharedPreferences datos;
+    String  traidotk;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editar_perfil);
+        //
+        datos= getSharedPreferences("datos", Context.MODE_PRIVATE);
+        traidotk = datos.getString("usuariotraidotkn","no tkn");
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         botonFoto = findViewById(R.id.botonFoto);
         imagenOrg = findViewById(R.id.imagenDeOrganizacion);
@@ -385,6 +393,8 @@ public class NuevoPerfil extends AppCompatActivity {
                 httppost = new HttpPost("http://aeo.web-hn.com/WebServices/ConsultarTodosLosUsuarios.php");
                 parametros = new ArrayList<NameValuePair>();
                 parametros.add(new BasicNameValuePair("estado","1"));
+                parametros.add(new BasicNameValuePair("tkn",traidotk));
+
                 httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));
 
 
@@ -451,6 +461,7 @@ public class NuevoPerfil extends AppCompatActivity {
                 parametros.add(new BasicNameValuePair("id_categoria",String.valueOf(id_categoria)));
                 parametros.add(new BasicNameValuePair("id_region",String.valueOf(id_region)));
                 parametros.add(new BasicNameValuePair("id_usuario",String.valueOf(id_usuario)));
+                parametros.add(new BasicNameValuePair("tkn",traidotk));
 
                 if(editarFoto==true){
                     parametros.add(new BasicNameValuePair("imagen",encodeImagen));

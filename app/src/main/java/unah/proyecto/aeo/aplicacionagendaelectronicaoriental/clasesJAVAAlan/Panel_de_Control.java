@@ -92,6 +92,7 @@ public class Panel_de_Control extends AppCompatActivity implements NavigationVie
                     if (getIntent().getExtras()!=null){
                         id_usuario_resibido = getIntent().getExtras().getInt("usuario_ingreso");
                         intent.putExtra("usuario_ingreso",id_usuario_resibido);
+                       // Toast.makeText(getApplicationContext(),""+id_usuario_resibido,Toast.LENGTH_SHORT).show();
                     }
                     startActivity(intent);
                 }else if(position==1){

@@ -60,12 +60,16 @@ public class NuevasSolicitudes extends AppCompatActivity
     private SesionUsuario sesionUsuario;
     int id_usuario_resibido_usuario;
     int id_usu=-1;
+    SharedPreferences datos;
+    String  traidotk;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nuevas_solicitudes);
-
+//
+        datos= getSharedPreferences("datos", Context.MODE_PRIVATE);
+        traidotk = datos.getString("usuariotraidotkn","no tkn");
 
 
         //envio de clase actual para las preferencias
@@ -333,11 +337,23 @@ public class NuevasSolicitudes extends AppCompatActivity
         protected Boolean doInBackground(String... strings) {
 
             try {
+
                 //Se obtiene el id del perfil que se va a eliminar
                 Fuente_mostrarPerfiles perf = mostrar_perfiles.get(perfilselecionado);
                 idperf=perf.getId();
                 //se ejecuta la consulta al webservice y se pasa el id del perfil seleccionado
-                EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/WebServices/aceptarSolicitud.php?cto="+idperf)).getEntity());
+                HttpClient httpclient;
+                HttpPost httppost;
+                ArrayList<NameValuePair> parametros;
+                httpclient = new DefaultHttpClient();
+                httppost = new HttpPost("http://aeo.web-hn.com/WebServices/aceptarSolicitud.php");
+                parametros = new ArrayList<NameValuePair>();
+                parametros.add(new BasicNameValuePair("cto",String.valueOf(idperf)));
+                parametros.add(new BasicNameValuePair("tkn",traidotk));
+                httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));
+                httpclient.execute(httppost);
+
+                //EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/WebServices/aceptarSolicitud.php?cto="+idperf)).getEntity());
                 resul = true;
             } catch (Exception ex) {
                 Log.e("ServicioRest", "Error!", ex);
@@ -375,8 +391,18 @@ public class NuevasSolicitudes extends AppCompatActivity
                 idperf=perf.getId();
                 //se ejecuta la consulta al webservice y se pasa el id del perfil seleccionado
 
+                HttpClient httpclient;
+                HttpPost httppost;
+                ArrayList<NameValuePair> parametros;
+                httpclient = new DefaultHttpClient();
+                httppost = new HttpPost("http://aeo.web-hn.com/WebServices/rechazarSolicitud.php");
+                parametros = new ArrayList<NameValuePair>();
+                parametros.add(new BasicNameValuePair("cto",String.valueOf(idperf)));
+                parametros.add(new BasicNameValuePair("tkn",traidotk));
+                httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));
+                httpclient.execute(httppost);
 
-                EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/WebServices/rechazarSolicitud.php?cto="+idperf)).getEntity());
+               // EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/WebServices/rechazarSolicitud.php?cto="+idperf)).getEntity());
                 resul = true;
             } catch (Exception ex) {
                 Log.e("ServicioRest", "Error!", ex);

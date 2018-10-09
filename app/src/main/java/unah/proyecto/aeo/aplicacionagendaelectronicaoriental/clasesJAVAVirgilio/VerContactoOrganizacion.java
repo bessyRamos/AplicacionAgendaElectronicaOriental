@@ -34,9 +34,14 @@ import org.json.JSONObject;
 import java.io.ByteArrayOutputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
+import java.util.ArrayList;
 
+import cz.msebera.android.httpclient.NameValuePair;
+import cz.msebera.android.httpclient.client.HttpClient;
+import cz.msebera.android.httpclient.client.entity.UrlEncodedFormEntity;
 import cz.msebera.android.httpclient.client.methods.HttpPost;
 import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
+import cz.msebera.android.httpclient.message.BasicNameValuePair;
 import cz.msebera.android.httpclient.util.EntityUtils;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.ActivityCategorias;
@@ -61,7 +66,8 @@ public class VerContactoOrganizacion extends AppCompatActivity implements Naviga
     private SesionUsuario sesionUsuario;
     int id_usu=-1,id_usuario_resibido_usuario=0;
     int usuario;
-
+    SharedPreferences datos;
+    String  traidotk;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -73,6 +79,8 @@ public class VerContactoOrganizacion extends AppCompatActivity implements Naviga
         SharedPreferences preferences = getSharedPreferences("credencial", Context.MODE_PRIVATE);
         id_usu  = preferences.getInt("usuario_ingreso",id_usu);
         //
+        datos= getSharedPreferences("datosusu", Context.MODE_PRIVATE);
+        traidotk = datos.getString("usuariotraidotkn","no tkn");
 
         boolean editarFoto=false;
 
@@ -353,7 +361,18 @@ public class VerContactoOrganizacion extends AppCompatActivity implements Naviga
         protected Boolean doInBackground(String... strings) {
 
             try {
-                JSONObject respJSON = new JSONObject(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/WebServices/consultarDatosDePerfilParaEditar.php?cto="+id_perfilEditar)).getEntity()));
+                HttpClient httpclient;
+                HttpPost httppost;
+                ArrayList<NameValuePair> parametros;
+                httpclient = new DefaultHttpClient();
+                httppost = new HttpPost("http://aeo.web-hn.com/WebServices/consultarDatosDePerfilParaEditar.php");
+                parametros = new ArrayList<NameValuePair>();
+                parametros.add(new BasicNameValuePair("cto",String.valueOf(id_perfilEditar)));
+                parametros.add(new BasicNameValuePair("tkn",traidotk));
+                httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));
+
+                JSONObject respJSON = new JSONObject(EntityUtils.toString(httpclient.execute(httppost).getEntity()));
+                //JSONObject respJSON = new JSONObject(EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/WebServices/consultarDatosDePerfilParaEditar.php?cto="+id_perfilEditar)).getEntity()));
                 JSONArray jsonArray = respJSON.getJSONArray("perfiles");
                 for (int i = 0; i < jsonArray.length(); i++) {
                     nombre_ver = jsonArray.getJSONObject(i).getString("nombre_organizacion");

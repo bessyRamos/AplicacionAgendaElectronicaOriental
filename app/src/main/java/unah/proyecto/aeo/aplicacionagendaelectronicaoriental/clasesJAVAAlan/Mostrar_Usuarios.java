@@ -3,8 +3,10 @@ package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan;
 import android.app.ActionBar;
 import android.app.Dialog;
 import android.content.ContentValues;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
@@ -63,6 +65,8 @@ Adaptador_mostrarusuarios adaptador;
     ProgressBar barra;
     int idusario;//es el id del usuario del web server.
 
+    SharedPreferences datos;
+    String  traidotk;
     public  void onCreate(Bundle b){
         super.onCreate(b);
 
@@ -72,6 +76,8 @@ Adaptador_mostrarusuarios adaptador;
         //envio de clase actual para las preferencias
         sesion = new Sesion(this);
         //
+        datos= getSharedPreferences("datos", Context.MODE_PRIVATE);
+        traidotk = datos.getString("usuariotraidotkn","no tkn");
        new ArrayList<>();
         //flecha atras
         android.support.v7.app.ActionBar actionBar= getSupportActionBar();
@@ -147,6 +153,7 @@ Adaptador_mostrarusuarios adaptador;
                 httppost = new HttpPost("http://aeo.web-hn.com/WebServices/ConsultarTodosLosUsuarios.php");
                 parametros = new ArrayList<NameValuePair>();
                 parametros.add(new BasicNameValuePair("estado","1"));
+                parametros.add(new BasicNameValuePair("tkn",traidotk));
 
                 httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));
                 JSONArray respJSON = new JSONArray(EntityUtils.toString(( httpclient.execute(httppost)).getEntity()));
@@ -181,6 +188,7 @@ Adaptador_mostrarusuarios adaptador;
                 return;
             }
             Toast.makeText(getApplicationContext(), "Problemas de conexión", Toast.LENGTH_SHORT).show();
+           // Toast.makeText(getApplicationContext(),""+traidotk,Toast.LENGTH_SHORT).show();
         }
 
 
@@ -210,7 +218,7 @@ Adaptador_mostrarusuarios adaptador;
                         if (sesion.logindim()) {
                             sesion.setLogin(false);
                         }
-                        Toast.makeText(getApplicationContext()," "+id_usuario_resibido,Toast.LENGTH_SHORT).show();
+                       //Toast.makeText(getApplicationContext()," "+id_usuario_resibido,Toast.LENGTH_SHORT).show();
                         finish();
                     }else{
                         new eliminarUsuario().execute();
@@ -247,6 +255,7 @@ Adaptador_mostrarusuarios adaptador;
             try {
                 Fuente_mostrarUsuarios perf=mostrar_usuarios.get(usuarioselecionado);
                 idusario=perf.getId();
+
                 HttpClient httpclient;
                 HttpPost httppost;
                 ArrayList<NameValuePair> parametros;
@@ -254,7 +263,7 @@ Adaptador_mostrarusuarios adaptador;
                 httppost = new HttpPost("http://aeo.web-hn.com/WebServices/eliminacion_de_un_usuario.php");
                 parametros = new ArrayList<NameValuePair>();
                 parametros.add(new BasicNameValuePair("usuario",String.valueOf(idusario)));
-
+                parametros.add(new BasicNameValuePair("tkn",traidotk));
                 httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));
 
                 httpclient.execute(httppost);

@@ -102,12 +102,18 @@ TextView lo,lat;
     double longitudResibida;
 
     String validemail,email,correoIgual;
+    //
+    SharedPreferences datos;
+    String  traidotk;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_formulario_nueva_organizacion);
-
+          //
+        datos= getSharedPreferences("datosusu", Context.MODE_PRIVATE);
+        traidotk = datos.getString("usuariotraidotkn","no tkn");
         //envio de clase actual para las preferencias
         sesion = new Sesion(this);
         sesionUsuario = new SesionUsuario(this);
@@ -505,6 +511,7 @@ TextView lo,lat;
                 parametros.add(new BasicNameValuePair("id_categoria",String.valueOf(id_categoria)));
                 parametros.add(new BasicNameValuePair("id_region",String.valueOf(id_region)));
                 parametros.add(new BasicNameValuePair("id_usuario",String.valueOf(id_usuario)));
+                parametros.add(new BasicNameValuePair("tkn",traidotk));
 
                 if(editarFoto==true){
                     parametros.add(new BasicNameValuePair("imagen",encodeImagen));
