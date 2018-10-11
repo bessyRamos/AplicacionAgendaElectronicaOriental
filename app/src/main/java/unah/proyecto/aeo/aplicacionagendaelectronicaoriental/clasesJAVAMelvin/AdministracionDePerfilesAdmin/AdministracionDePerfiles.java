@@ -166,6 +166,11 @@ public class AdministracionDePerfiles extends AppCompatActivity
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if(requestCode == PASAR_A_EDITAR && resultCode == RESULT_OK){
+            if(data.getExtras().getString("msg").toString().equals("update")){
+                Toast.makeText(getApplicationContext(),"Perfil actualizado correctamente",Toast.LENGTH_SHORT).show();
+            }else if(data.getExtras().getString("msg").toString().equals("delete")){
+                Toast.makeText(getApplicationContext(),"Perfil eliminado correctamente",Toast.LENGTH_SHORT).show();
+            }
 
             mostrar_perfiles.clear();
             new llenarLista().execute();
@@ -258,7 +263,7 @@ public class AdministracionDePerfiles extends AppCompatActivity
 
             }
 
-        }else if (id ==R.id.cerrarsecion){
+        }else if (id == R.id.cerrarsecion){
             //cerrar secion y borrado de preferencias
             if (sesion.logindim()) {
                 sesion.setLogin(false);
@@ -275,7 +280,7 @@ public class AdministracionDePerfiles extends AppCompatActivity
             }
 
         }else if (id == R.id.ediciondeCuenta){
-            Intent intent = new Intent(this,EditarUsuario.class);
+            Intent intent = new Intent(this, EditarUsuario.class);
             if (getIntent().getExtras()!=null){
                     id_usuario_resibido_usuario  = getIntent().getExtras().getInt("usuario_ingreso");
                 //id_usuario_resibido_usuario = getIntent().getExtras().getInt("id");
@@ -292,6 +297,8 @@ public class AdministracionDePerfiles extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
+
+
     //clase que se conecta al webservice y trae los registros solicitados
     private class llenarLista extends AsyncTask<String, Integer, Boolean> {
         private llenarLista(){}
@@ -335,6 +342,7 @@ public class AdministracionDePerfiles extends AppCompatActivity
             super.onProgressUpdate(values);
             //muestra el progreso en la barra de progreso
             barra.setProgress(values[0]);
+
         }
 
         protected void onPostExecute(Boolean result) {
@@ -437,44 +445,4 @@ public class AdministracionDePerfiles extends AppCompatActivity
 
 
     }
-
-
-    /*
-
-    private ActionMode.Callback amc = new ActionMode.Callback() {
-        @Override
-        public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            getMenuInflater().inflate(R.menu.opciones,menu);
-
-            return true;
-        }
-
-        @Override
-        public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
-            return false;
-        }
-
-        @Override
-
-        public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
-            if(item.getItemId()== R.id.EliminarItem){
-                removerperfil(perfilselecionado);
-                mode.finish();
-
-            }else if(item.getItemId()==R.id.EditarItem){
-                Fuente_mostrarPerfiles per = mostrar_perfiles.get(perfilselecionado);
-                Intent in = new Intent(getApplicationContext(),EditarPerfil.class);
-                in.putExtra("id",per.getId());
-                startActivity(in);
-                mode.finish();
-                finish();
-            }
-            return false;
-        }
-
-        @Override
-        public void onDestroyActionMode(ActionMode mode) {
-
-        }
-    };*/
 }

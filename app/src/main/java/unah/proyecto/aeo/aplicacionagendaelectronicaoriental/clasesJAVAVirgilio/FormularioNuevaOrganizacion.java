@@ -430,7 +430,7 @@ TextView lo,lat;
             }
         }
 
-        if(TextUtils.isEmpty(nomborg)){
+        if(TextUtils.isEmpty(nomborg) || nomborg.startsWith(" ")){
             nombreOrganizacion.setError(getString(R.string.errNombreOrg));
             nombreOrganizacion.requestFocus();
             return;
@@ -463,12 +463,12 @@ TextView lo,lat;
             }
         }
 
-        if(TextUtils.isEmpty(direccion)){
+        if(TextUtils.isEmpty(direccion) || direccion.startsWith(" ")){
             direccionOrganizacion.setError(getString(R.string.errDir));
             direccionOrganizacion.requestFocus();
             return;
         }
-        if(TextUtils.isEmpty(desc)){
+        if(TextUtils.isEmpty(desc) || desc.startsWith(" ")){
             descrpcionOrganizacion.setError(getString(R.string.errDesc));
             descrpcionOrganizacion.requestFocus();
             return;

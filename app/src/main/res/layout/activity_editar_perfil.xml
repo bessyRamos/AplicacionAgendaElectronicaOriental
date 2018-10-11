@@ -35,7 +35,8 @@
                     android:id="@+id/etnombreeorganizacion"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Nombre de la Organización"/>
+                    android:hint="Nombre de la Organización"
+                    android:inputType="text"/>
             </android.support.design.widget.TextInputLayout>
 
             <android.support.design.widget.TextInputLayout
@@ -52,6 +53,14 @@
                     android:digits="1234567890"
                     />
             </android.support.design.widget.TextInputLayout>
+            <ProgressBar
+                android:id="@+id/mProgress"
+                android:layout_below="@+id/iptlnumfijo"
+                android:layout_centerInParent="true"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="invisible"
+                />
 
             <android.support.design.widget.TextInputLayout
                 android:id="@+id/iptlnumcel"

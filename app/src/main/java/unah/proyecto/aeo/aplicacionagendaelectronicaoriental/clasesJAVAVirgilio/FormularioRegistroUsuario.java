@@ -81,17 +81,17 @@ public class FormularioRegistroUsuario extends AppCompatActivity {
 
 
 
-        if(TextUtils.isEmpty(nombusus)){
+        if(TextUtils.isEmpty(nombusus) || nombusus.startsWith(" ")){
             nombrepropio_isertar_usuario.setError(getString(R.string.error_nombre));
             nombrepropio_isertar_usuario.requestFocus();
             return;
         }
-        if(TextUtils.isEmpty(nomb)){
+        if(TextUtils.isEmpty(nomb) || nomb.startsWith(" ")){
             nombreusuario_insertar_usuario.setError(getString(R.string.error_nombre_usuario));
             nombreusuario_insertar_usuario.requestFocus();
             return;
 
-        }if(TextUtils.isEmpty(cor)){
+        }if(TextUtils.isEmpty(cor) || cor.startsWith(" ")){
             correo_insertar_usario.setError(getString(R.string.error_correo));
             correo_insertar_usario.requestFocus();
             return;
@@ -104,7 +104,7 @@ public class FormularioRegistroUsuario extends AppCompatActivity {
 
         }
 
-        if(TextUtils.isEmpty(cont)){
+        if(TextUtils.isEmpty(cont) || cont.startsWith(" ")){
             contrasena_insertar_usuario.setError(getString(R.string.error_contrasena));
             contrasena_insertar_usuario.requestFocus();
             return;
@@ -116,7 +116,7 @@ public class FormularioRegistroUsuario extends AppCompatActivity {
             }
         }
 
-        if(TextUtils.isEmpty(contr)){
+        if(TextUtils.isEmpty(contr) || contr.startsWith(" ")){
             confirmarcontrasena.setError(getString(R.string.error_contrasena1));
             confirmarcontrasena.requestFocus();
             return;

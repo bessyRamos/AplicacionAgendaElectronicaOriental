@@ -4,12 +4,23 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
+    android:orientation="horizontal"
     android:padding="10dp"
-    >
+    android:gravity="center_vertical">
+
+    <de.hdodenhof.circleimageview.CircleImageView
+        android:id="@+id/iconoUsuario"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/iconocontactowhite"/>
 
 
 
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:layout_marginLeft="20dp">
     <TextView
         android:id="@+id/id_mostrarusuarios"
         android:layout_width="wrap_content"
@@ -17,8 +28,7 @@
         android:text="@string/id_categorias"
         android:visibility="invisible"
         android:textColor="#ffffff"
-        android:textSize="1sp" />
-
+        android:textSize="0sp" />
     <TextView
         android:id="@+id/mostrarusuarios"
         android:layout_width="match_parent"
@@ -26,7 +36,7 @@
         android:layout_marginLeft="10dp"
         android:layout_weight="1"
         android:textColor="@color/cardview_dark_background"
-        android:textSize="14sp"
+        android:textSize="18sp"
         android:textStyle="bold"
         android:text="mostrar usuario" />
 
@@ -37,8 +47,14 @@
         android:layout_marginLeft="10dp"
         android:layout_weight="1"
         android:textColor="@color/cardview_dark_background"
-        android:textSize="11sp"
-        android:textStyle="bold"
+        android:textSize="14sp"
         android:text="descripcion rol" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#BBB"
+        android:layout_marginLeft="10dp"
+        />
+</LinearLayout>
 
 </LinearLayout>

@@ -34,10 +34,12 @@ public class Adaptador_paneldeControl extends ArrayAdapter<Fuente_Panel_de_contr
         View fila = inflador.inflate(R.layout.activity_item_list_view__panelde__control,viewGroup,false);
         ImageView imagen = (ImageView) fila.findViewById(R.id.imagepaneldecontrol);
         TextView texto = (TextView)fila.findViewById(R.id.textopaneldecontrol);
+        TextView descripcion = (TextView)fila.findViewById(R.id.descripcionpaneldecontrol);
 
 
         imagen.setImageResource(fuente_panel_de_control[posicion].getImagenPaneldeControl());
         texto.setText(fuente_panel_de_control[posicion].getTitulo());
+        descripcion.setText(fuente_panel_de_control[posicion].getDescripcion());
         return fila;
     }
 

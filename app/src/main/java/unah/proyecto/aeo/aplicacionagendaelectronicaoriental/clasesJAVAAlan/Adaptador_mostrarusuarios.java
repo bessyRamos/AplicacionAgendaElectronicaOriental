@@ -5,8 +5,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.TextView;
+
+import com.squareup.picasso.Picasso;
+
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 
 /**
@@ -49,10 +53,16 @@ public class Adaptador_mostrarusuarios extends BaseAdapter{
         TextView textid = (TextView)v.findViewById(R.id.id_mostrarusuarios);
         TextView textnombre = (TextView)v.findViewById(R.id.mostrarusuarios);
         TextView texdescripcion = (TextView)v.findViewById(R.id.descripcionmostrarusuarios);
-
+        CircleImageView imageView = v.findViewById(R.id.iconoUsuario);
         textid.setText(""+usuarios.get(i).getId());
         textnombre.setText(usuarios.get(i).getUsuario());
         texdescripcion.setText(usuarios.get(i).getDescripcion());
+        if(texdescripcion.getText().toString().equals("Administrador")){
+            Picasso.get().load(R.drawable.admin).into(imageView);
+        }else {
+            Picasso.get().load(R.drawable.cliente).into(imageView);
+        }
+
 
         return v;
     }

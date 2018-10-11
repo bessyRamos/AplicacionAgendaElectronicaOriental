@@ -318,7 +318,7 @@ public class NuevoPerfil extends AppCompatActivity {
             }
         }
 
-        if(TextUtils.isEmpty(nomborg)){
+        if(TextUtils.isEmpty(nomborg) || nomborg.startsWith(" ")){
             etnombreeorganizacion.setError(getString(R.string.errNombreOrg));
             etnombreeorganizacion.requestFocus();
             return;
@@ -351,12 +351,12 @@ public class NuevoPerfil extends AppCompatActivity {
             }
         }
 
-        if(TextUtils.isEmpty(direccion)){
+        if(TextUtils.isEmpty(direccion) || direccion.startsWith(" ")){
             etdireccion.setError(getString(R.string.errDir));
             etdireccion.requestFocus();
             return;
         }
-        if(TextUtils.isEmpty(desc)){
+        if(TextUtils.isEmpty(desc) || desc.startsWith(" ")){
             etdescripcion.setError(getString(R.string.errDesc));
             etdescripcion.requestFocus();
             return;

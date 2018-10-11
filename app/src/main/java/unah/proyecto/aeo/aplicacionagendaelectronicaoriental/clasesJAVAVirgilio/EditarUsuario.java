@@ -197,17 +197,17 @@ public class EditarUsuario extends AppCompatActivity implements NavigationView.O
         String cor = correo.getText().toString();
 
 
-        if(TextUtils.isEmpty(nombusus)){
+        if(TextUtils.isEmpty(nombusus) || nombusus.startsWith(" ")){
             nombreusuario.setError(getString(R.string.error_nombre_usuario));
             nombreusuario.requestFocus();
             return;
         }
-        if(TextUtils.isEmpty(nomb)){
+        if(TextUtils.isEmpty(nomb) || nomb.startsWith(" ")){
             nombrepropio.setError(getString(R.string.error_nombre));
             nombrepropio.requestFocus();
             return;
 
-        }if(TextUtils.isEmpty(cor)){
+        }if(TextUtils.isEmpty(cor) || cor.startsWith(" ")){
         }else{
             if(!correo.getText().toString().contains("@") && !correo.getText().toString().contains(".")){
                 correo.setError(getString(R.string.error_contrasena));

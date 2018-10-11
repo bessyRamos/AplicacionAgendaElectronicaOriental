@@ -73,8 +73,8 @@ public class Panel_de_Control extends AppCompatActivity implements NavigationVie
 
 
         Fuente_Panel_de_control fuente_panel_de_control[]={
-                new Fuente_Panel_de_control(R.drawable.administracioncuenta,"Administración de  Cuenta",0),
-                new Fuente_Panel_de_control(R.drawable.administracionperfil,"Administración de Perfil",0)
+                new Fuente_Panel_de_control(R.drawable.administracioncuenta,"Administración de  Cuenta","Crear, editar y eliminar cuentas de usuario",0),
+                new Fuente_Panel_de_control(R.drawable.administracionperfil,"Administración de Perfil","Crear, editar y eliminar perfiles de contacto / aceptar y rechazar solicitudes",0)
                 // new Fuente_Panel_de_control(R.drawable.celular,"Solicitudes Nuevas",0),
                 // new Fuente_Panel_de_control(R.drawable.celular,"Solicitudes Aprovadas",0),
                 // new Fuente_Panel_de_control(R.drawable.celular,"Solicitudes Eliminadas",0)
@@ -125,9 +125,6 @@ public class Panel_de_Control extends AppCompatActivity implements NavigationVie
         //
         preferences_2 = getSharedPreferences("Login", context.MODE_PRIVATE);
         editor_2 = preferences_2.edit();
-
-        String usuario_2 = preferences_2.getString("usuarioP","null");
-        String contrasena_2 = preferences_2.getString("contrasenaP","null");
         //
 
 

@@ -26,6 +26,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -75,6 +76,7 @@ public class EditarPerfil extends AppCompatActivity {
 
     SharedPreferences datos;
     String  traidotk;
+    ProgressBar progressBar;
 
 
     /**********************************************************************************************
@@ -87,7 +89,7 @@ public class EditarPerfil extends AppCompatActivity {
         setContentView(R.layout.activity_editar_perfil);
         android.support.v7.app.ActionBar actionBar= getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(true);
-
+        progressBar = findViewById(R.id.mProgress);
         //
         datos= getSharedPreferences("datos", Context.MODE_PRIVATE);
         traidotk = datos.getString("usuariotraidotkn","no tkn");
@@ -196,7 +198,6 @@ public class EditarPerfil extends AppCompatActivity {
                         etlongitud.getError()==null) {
                     botonGuardar.setClickable(false);
 
-                    Toast.makeText(getApplicationContext(),"Procesando... Por favor espere",Toast.LENGTH_SHORT).show();
                     i ++;
                     new actualizarPerfil().execute();
 
@@ -359,7 +360,7 @@ public class EditarPerfil extends AppCompatActivity {
             }
         }
 
-        if(TextUtils.isEmpty(nomborg)){
+        if(TextUtils.isEmpty(nomborg) || nomborg.startsWith(" ")){
             etnombreeorganizacion.setError(getString(R.string.errNombreOrg));
             etnombreeorganizacion.requestFocus();
             return;
@@ -392,12 +393,12 @@ public class EditarPerfil extends AppCompatActivity {
             }
         }
 
-        if(TextUtils.isEmpty(direccion)){
+        if(TextUtils.isEmpty(direccion) || direccion.startsWith(" ")){
             etdireccion.setError(getString(R.string.errDir));
             etdireccion.requestFocus();
             return;
         }
-        if(TextUtils.isEmpty(desc)){
+        if(TextUtils.isEmpty(desc) || desc.startsWith(" ")){
             etdescripcion.setError(getString(R.string.errDesc));
             etdescripcion.requestFocus();
             return;
@@ -611,12 +612,18 @@ public class EditarPerfil extends AppCompatActivity {
 
         }
 
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            super.onProgressUpdate(values);
+            progressBar.setVisibility(View.VISIBLE);
+            progressBar.setProgress(values[0]);
+
+        }
+
         protected void onPostExecute(Boolean result) {
             if (resul) {
-
-                    Toast.makeText(getApplicationContext(),"Perfil Actualizado Correctamente",Toast.LENGTH_SHORT).show();
-                    //startActivity(new Intent(getApplicationContext(),AdministracionDePerfiles.class));
                 Intent data = new Intent();
+                data.putExtra("msg","update");
                 setResult(AdministracionDePerfiles.RESULT_OK, data);
                 finish();
 
@@ -729,9 +736,8 @@ public class EditarPerfil extends AppCompatActivity {
         protected void onPostExecute(Boolean result) {
 
             if (resul) {
-                Toast.makeText(getApplicationContext(),"Perfil Eliminado",Toast.LENGTH_SHORT).show();
-                //Toast.makeText(getApplicationContext(),""+ id_perfilEditar,Toast.LENGTH_SHORT).show();
                 Intent data = new Intent();
+                data.putExtra("msg","delete");
                 setResult(AdministracionDePerfiles.RESULT_OK, data);
                 finish();
             }else {

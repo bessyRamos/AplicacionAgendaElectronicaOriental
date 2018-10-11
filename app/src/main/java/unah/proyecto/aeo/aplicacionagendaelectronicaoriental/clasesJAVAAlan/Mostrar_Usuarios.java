@@ -109,27 +109,21 @@ Adaptador_mostrarusuarios adaptador;
     }
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if(requestCode == 600 && resultCode == RESULT_OK){
-
-            mostrar_usuarios.clear();
-            new llenarLista().execute();
-            adaptador.notifyDataSetChanged();
-        }else if(requestCode == 600 && resultCode == RESULT_OK){
+        if( resultCode == RESULT_OK){
             mostrar_usuarios.clear();
             new llenarLista().execute();
             adaptador.notifyDataSetChanged();
         }
     }
     public void onclick(){
-        lista.setChoiceMode(ListView.CHOICE_MODE_SINGLE);
-        lista.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+        lista.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 usuarioselecionado = position;
-                mActionMode =Mostrar_Usuarios.this.startActionMode(amc);
-                view.setSelected(true);
-                return true;
-
+                Fuente_mostrarUsuarios usu = mostrar_usuarios.get(usuarioselecionado);
+                Intent in = new Intent(Mostrar_Usuarios.this,Editar_Usuarios.class);
+                in.putExtra("id",usu.getId());
+                startActivityForResult(in, new Integer(100));
             }
         });
     }
@@ -316,11 +310,7 @@ Adaptador_mostrarusuarios adaptador;
                 mode.finish();
             }else
             if(item.getItemId()==R.id.EditarItem){
-                Fuente_mostrarUsuarios usu = mostrar_usuarios.get(usuarioselecionado);
-                Intent in = new Intent(Mostrar_Usuarios.this,Editar_Usuarios.class);
-                in.putExtra("id",usu.getId());
-                startActivity(in);
-                mode.finish();
+
 
             }
             return false;

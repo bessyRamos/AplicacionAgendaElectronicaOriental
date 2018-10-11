@@ -100,8 +100,6 @@ public class ActivityCategorias extends AppCompatActivity
         preferencia = getSharedPreferences("acceso", Context.MODE_PRIVATE);
         id_usuario_normal = preferencia.getInt("idNormal",0);
 
-
-
         logue = getSharedPreferences("Nombre",Context.MODE_PRIVATE);
         id_administrador =logue.getInt("Admin",0);
         id_normal = logue.getInt("Normal",0);

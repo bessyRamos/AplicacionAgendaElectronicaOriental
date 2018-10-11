@@ -9,11 +9,13 @@ import android.widget.ImageView;
 public class Fuente_Panel_de_control {
     private int imagenPaneldeControl;
     private String titulo;
+    private String descripcion;
     private int id;
 
-    public Fuente_Panel_de_control(int imagenPaneldeControl, String titulo,int id) {
+    public Fuente_Panel_de_control(int imagenPaneldeControl, String titulo, String descripcion,int id) {
         this.imagenPaneldeControl = imagenPaneldeControl;
         this.titulo = titulo;
+        this.descripcion = descripcion;
         this.id=id;
     }
 
@@ -40,5 +42,13 @@ public class Fuente_Panel_de_control {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getDescripcion() {
+        return descripcion;
+    }
+
+    public void setDescripcion(String descripcion) {
+        this.descripcion = descripcion;
     }
 }

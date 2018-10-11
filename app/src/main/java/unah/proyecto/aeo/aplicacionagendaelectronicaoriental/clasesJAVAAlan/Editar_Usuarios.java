@@ -121,17 +121,17 @@ public class Editar_Usuarios extends AppCompatActivity {
 
 
 
-        if(TextUtils.isEmpty(nombusus)){
+        if(TextUtils.isEmpty(nombusus) || nombusus.startsWith(" ")){
             nombreusuario.setError(getString(R.string.error_nombre_usuario));
             nombreusuario.requestFocus();
             return;
         }
-        if(TextUtils.isEmpty(nomb)){
+        if(TextUtils.isEmpty(nomb) || nomb.startsWith(" ")){
             nombrepropio.setError(getString(R.string.error_nombre));
             nombrepropio.requestFocus();
             return;
 
-        }if(TextUtils.isEmpty(cor)){
+        }if(TextUtils.isEmpty(cor) || cor.startsWith(" ")){
         }else{
             if(!correo.getText().toString().contains("@") && !correo.getText().toString().contains(".")){
                 correo.setError(getString(R.string.error_contrasena));
@@ -185,8 +185,8 @@ public class Editar_Usuarios extends AppCompatActivity {
             if (resul) {
                 if (nombreusuario.getError()==null && nombrepropio.getError()==null && correo.getError()==null){
                     Toast.makeText(getApplicationContext(),"Usuario Realizado Correctamente",Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(Editar_Usuarios.this,Mostrar_Usuarios.class);
-                    startActivity(intent);
+                    Intent intent = new Intent();
+                    setResult(Mostrar_Usuarios.RESULT_OK,intent);
                     finish();
                 }
 
