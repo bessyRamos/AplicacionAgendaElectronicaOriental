@@ -45,8 +45,7 @@ import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.Ad
 
 public class PanelDeControlUsuarios extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     //preferencia de administrador o usuario
-    private Sesion sesion;
-    private SesionUsuario sesionUsuario;
+
     //
     private Button salir;
     int id_usuario_resibido_usuario;
@@ -67,29 +66,20 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
     ProgressBar barraProgreso;
 
     int id_usuario_normal;
-    int organizacionesdadas;
 
-    SharedPreferences datos;
-    String  traidotk;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_panel_de_control_usuarios);
-        //
-        datos= getSharedPreferences("datos", Context.MODE_PRIVATE);
-        traidotk = datos.getString("usuariotraidotkn","no tkn");
 
-        //envio de clase actual para las preferencias
-        sesion = new Sesion(this);
-        sesionUsuario = new SesionUsuario(this);
-        SharedPreferences preferences = getSharedPreferences("credencial", Context.MODE_PRIVATE);
-        id_usu  = preferences.getInt("usuario_ingreso",id_usu);
+        id_usu = SharedPrefManager.getInstance(this).getUSUARIO_LOGUEADO().getId_logueado();
 
-        SharedPreferences datos= getSharedPreferences("datos",Context.MODE_PRIVATE);
-        organizacionesdadas = datos.getInt("usuariotraido",0);
+
         //
-        mostrar_perfiles= new ArrayList<EntidadOrganizacion>();
+        mostrar_perfiles = new ArrayList<EntidadOrganizacion>();
         FloatingActionButton agregar = (FloatingActionButton) findViewById(R.id.agregarContacto);
         lista = (ListView) findViewById(R.id.lista_pefil_empresa);
 
@@ -98,21 +88,6 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
         barraProgreso.setProgress(0);
         //fin barra de progreso
 
-        //berificar y obtener la activit modo respuesta
-        Bundle tr = getIntent().getExtras();
-        if (getIntent().getExtras()!=null){
-            id_usuario_normal = tr.getInt("hola");
-        }
-///////////////////////////////////////////////////////////
-
-
-        //se asegura que el extra no este vacio
-        if (getIntent().getExtras()!=null){
-            id_usuario_resibido_usuario = getIntent().getExtras().getInt("id");
-
-        }else {
-            Toast.makeText(getApplicationContext(),"Error en id de usuario",Toast.LENGTH_SHORT).show();
-        }
 
         //llamado de que se ejecute el metodo llenarLista
         new llenarLista().execute();
@@ -122,19 +97,9 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
         agregar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(PanelDeControlUsuarios.this,FormularioNuevaOrganizacion.class);
+                Intent intent = new Intent(PanelDeControlUsuarios.this, FormularioNuevaOrganizacion.class);
                 //se asegura que el extra no este vacio
-                if (getIntent().getExtras()!=null){
-                    id_usuario_resibido_usuario = getIntent().getExtras().getInt("id");
-                    id = getIntent().getExtras().getInt("id");
-                    //Toast.makeText(getApplicationContext(),""+id_usuario_resibido_usuario,Toast.LENGTH_SHORT).show();
-
-                    intent.putExtra("id",id_usuario_resibido_usuario);
-                    startActivity(intent);
-                    finish();
-
-                }
-
+                startActivityForResult(intent,1000);
                 //startActivity(intent);
             }
         });
@@ -145,60 +110,15 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
             public void onItemClick(AdapterView<?> parent, View view, final int masterposition, long id) {
                 perfilselecionado = masterposition;
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(PanelDeControlUsuarios.this);
-                ListView modeloListView = new ListView(PanelDeControlUsuarios.this);
-                String[] modes = new String[] {"Ver Contacto ","Borrar Contacto"};
-                ArrayAdapter<String> modeAdapter  = new ArrayAdapter<String>(PanelDeControlUsuarios.this,android.R.layout.simple_list_item_1,android.R.id.text1,modes);
+                EntidadOrganizacion per = mostrar_perfiles.get(perfilselecionado);
+                Intent intent = new Intent(getApplicationContext(), EditarPerfilOrganizacion.class);
+                intent.putExtra("id", per.getId());
+                startActivityForResult(intent,1000);
 
-                modeloListView.setAdapter(modeAdapter);
-                builder.setView(modeloListView);
-                final Dialog dialog = builder.create();
-                dialog.show();
-                //metodo para el llenado de la lista al darle tap a cada perfil editar y borrar
-                modeloListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                    @Override
-                    public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
 
-                        if (position == 0){  //Editar Contacto
-
-                            EntidadOrganizacion per = mostrar_perfiles.get(perfilselecionado);
-                            Intent intent= new Intent(getApplicationContext(),VerContactoOrganizacion.class);
-                            intent.putExtra("id",per.getId());
-                            intent.putExtra("id_usuario",id_usuario_resibido_usuario);
-                            intent.putExtra("usuario",id_usuario_resibido_usuario);
-                            startActivity(intent);
-
-                        }else if(position ==1){ //Borrar Contacto
-
-                            AlertDialog.Builder builder = new AlertDialog.Builder(PanelDeControlUsuarios.this);
-                            builder.setTitle("Eliminar Perfil");
-                            String fmt= getResources().getString(R.string.eliminarPerfil);
-                            builder.setMessage(String.format(fmt,mostrar_perfiles.get(perfilselecionado).getTitulo()));
-                            builder.setPositiveButton(R.string.eliminar, new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialog, int which) {
-                                    //  llama a la clase que borra el perfil de la base de datos remota
-                                    new eliminarPerfil().execute();
-                                }
-                            });
-
-                            builder.setNegativeButton(R.string.canselar,new DialogInterface.OnClickListener() {
-                                @Override
-                                public void onClick(DialogInterface dialogInterface, int i) {
-
-                                }
-                            });
-
-                            builder.create().show();
-
-                        }
-
-                        dialog.dismiss();
-                    }
-                });
-
-                //Toast.makeText(getApplicationContext(),""+position,Toast.LENGTH_SHORT).show();
             }
+
+        //Toast.makeText(getApplicationContext(),""+position,Toast.LENGTH_SHORT).show();
         });
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -214,7 +134,14 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
 
     }
 
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        if(resultCode==RESULT_OK){
+            mostrar_perfiles.clear();
+            new PanelDeControlUsuarios.llenarLista().execute();
+            adaptadorMostrarPerfiles.notifyDataSetChanged();
+        }
+    }
 
     @Override
     public void onBackPressed() {
@@ -226,11 +153,15 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
         }
     }
     @Override
-    public void onRestart()
-    {
-        super.onRestart();
-        finish();
-        startActivity(getIntent());
+    protected void onStart() {
+        super.onStart();
+        if (SharedPrefManager.getInstance(this).estaLogueado()){
+
+
+        }else{
+            startActivity(new Intent(this, Login.class)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK)) ;
+        }
     }
 
     @SuppressWarnings("StatementWithEmptyBody")
@@ -247,59 +178,20 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
         } else if (id == R.id.acercadeinfodos) {
             Intent intent = new Intent(this,AcercaDe.class);
             startActivity(intent);
-            finish();
-
-        }else if (id == R.id.login) {
-
-            if (sesion.logindim()){
-                Intent intent = new Intent(PanelDeControlUsuarios.this,Panel_de_Control.class);
-                intent.putExtra("usuario_ingreso",id_usu);
-                //startActivity(new Intent(PanelDeControlUsuarios.this,Panel_de_Control.class));
-                startActivity(intent);
-                finish();
-            }else{
-                if (sesionUsuario.logindimUsuario()){
-                    Intent intent = new Intent(PanelDeControlUsuarios.this,PanelDeControlUsuarios.class);
-                    intent.putExtra("id",id_usu);
-                    //startActivity(new Intent(PanelDeControlUsuarios.this,PanelDeControlUsuarios.class));
-                    startActivity(intent);
-                    finish();
-                }else {
-                    Intent intent = new Intent(this, Login.class);
-                    startActivity(intent);
-                }
-
-            }
 
         }else if (id ==R.id.cerrarsecion){
-            //cerrar secion y borrado de preferencias
-            if (sesion.logindim()) {
-                sesion.setLogin(false);
-                startActivity(new Intent(this, Login.class));
-                finish();
-            }else {
-                //cerrar secion y borrado de preferencias
-                if(sesionUsuario.logindimUsuario()){
-                    sesionUsuario.setLoginUsuario(false);
-                    startActivity(new Intent(this, Login.class));
-                    finish();
-                }
-            }
+            SharedPrefManager.getInstance(this).limpiar();
+            startActivity(new Intent(this, Login.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+            finish();
 
         }else if (id == R.id.ediciondeCuenta){
             Intent intent = new Intent(this,EditarUsuario.class);
-            if (getIntent().getExtras()!=null){
-                id_usuario_resibido_usuario = getIntent().getExtras().getInt("id");
-
-                intent.putExtra("id",id_usuario_resibido_usuario);
-                startActivity(intent);
-
-
-            }else {
-                Toast.makeText(getApplicationContext(),"Error en id de usuario",Toast.LENGTH_SHORT).show();
-            }
-
-
+            startActivity(intent);
+        }else if (id == R.id.panelControlUsuario){
+            Intent intent = new Intent(this,PanelDeControlUsuarios.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
@@ -318,10 +210,7 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
         protected Boolean doInBackground(String... strings) {
 
 
-            //verifica que el id no este vacio
-            if (getIntent().getExtras()!=null){
-                id_usuario_resibido_usuario = getIntent().getExtras().getInt("id");
-            }
+
             //int prueba = preferences.getInt("usuario_ingreso",0);
 
             try {
@@ -331,7 +220,7 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
                 httpclient = new DefaultHttpClient();
                 httppost = new HttpPost("http://aeo.web-hn.com/WebServices/consultarOrganizacionesUsuarioLogeados.php");
                 parametros = new ArrayList<NameValuePair>();
-                parametros.add(new BasicNameValuePair("id_usuario",String.valueOf(organizacionesdadas)));
+                parametros.add(new BasicNameValuePair("id_usuario",String.valueOf(id_usu)));
 
                 httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));
                 JSONArray respJSON = new JSONArray(EntityUtils.toString(( httpclient.execute(httppost)).getEntity()));
@@ -412,69 +301,6 @@ public class PanelDeControlUsuarios extends AppCompatActivity implements Navigat
 
 
     }
-
-
-    //clase AsyncTask que se conecta al webservice que ejecuta la consulta para borrar el perfil
-
-    private class eliminarPerfil extends AsyncTask<String, Integer, Boolean> {
-        private eliminarPerfil(){}
-        boolean resul = true;
-
-        @Override
-        protected Boolean doInBackground(String... strings) {
-
-            try {
-                //Se obtiene el id del perfil que se va a eliminar
-                EntidadOrganizacion perf = mostrar_perfiles.get(perfilselecionado);
-                idperf=perf.getId();
-
-                HttpClient httpclient;
-                HttpPost httppost;
-                ArrayList<NameValuePair> parametros;
-                httpclient = new DefaultHttpClient();
-                httppost = new HttpPost("http://aeo.web-hn.com/WebServices/eliminarPerfil.php");
-                parametros = new ArrayList<NameValuePair>();
-                parametros.add(new BasicNameValuePair("cto",String.valueOf(idperf)) );
-                parametros.add(new BasicNameValuePair("tkn",traidotk));
-                httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));
-                httpclient.execute(httppost);
-
-                //se ejecuta la consulta al webservice y se pasa el id del perfil seleccionado
-                //EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/WebServices/eliminarPerfil.php?cto="+idperf)).getEntity());
-                resul = true;
-            } catch (Exception ex) {
-                Log.e("ServicioRest", "Error!", ex);
-                resul = false;
-            }
-            return resul;
-
-        }
-
-        protected void onPostExecute(Boolean result) {
-
-            if (resul) {
-                //barra de progreso
-                barraProgreso.setVisibility(View.VISIBLE);
-                //fin de barra de progreso
-                Toast.makeText(getApplicationContext(),"Perfil Eliminado",Toast.LENGTH_SHORT).show();
-                mostrar_perfiles.removeAll(mostrar_perfiles);
-                new llenarLista().execute();
-                adaptadorMostrarPerfiles.notifyDataSetChanged();
-            }else {
-                Toast.makeText(getApplicationContext(), "Problemas de conexión", Toast.LENGTH_SHORT).show();
-            }
-        }
-
-    }
-
-    @Override
-    public void finish(){
-        Intent data = new Intent();
-        data.putExtra("retorno",id_usuario_normal);
-        setResult(RESULT_OK,data);
-        super.finish();
-    }
-
 
 
 }

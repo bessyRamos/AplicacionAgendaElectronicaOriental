@@ -1,21 +1,12 @@
 package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan;
-import android.app.Activity;
-import android.app.Application;
 import android.app.LoaderManager;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
-import android.content.SharedPreferences;
-import android.content.SharedPreferences;
-import android.content.pm.ActivityInfo;
 import android.database.Cursor;
-import android.database.sqlite.SQLiteDatabase;
-import android.net.ConnectivityManager;
-import android.net.NetworkInfo;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.design.widget.Snackbar;
@@ -33,30 +24,18 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.Surface;
 import android.view.WindowManager;
-import android.widget.Toast;
 
-import com.squareup.picasso.LruCache;
-import com.squareup.picasso.Picasso;
-
-import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
 
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.HerramientaBusquedaAvanzada.BusquedaAvanzada;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.AcercaDe;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.EditarUsuario;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.Login;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.MenuPreferencias;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.PanelDeControlUsuarios;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.Sesion;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.SesionUsuario;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.provider.AEODbHelper;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.SharedPrefManager;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.provider.CategoriasContract;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.provider.PerfilesContract;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.sync.SyncAdapter;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.sync.SyncService;
-
-import static kotlin.text.Typography.amp;
 
 public class ActivityCategorias extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener,
@@ -67,50 +46,13 @@ public class ActivityCategorias extends AppCompatActivity
     RecyclerView contenedor;
     private static final int CATEGORIA_LOADER = 0;
 
-    //preferencias
-    private Sesion sesion;
-    private SesionUsuario sesionUsuario;
-    int id_usu=-0;
-    int id_usu2;
+    NavigationView navigationView;
 
-    private Picasso picasso;
-    private LruCache picassoLruCache;
-
-//va ala preferencia
-  SharedPreferences preferencia ;
-
-
-
-    //variables en la cual se almacenara la preferencia
-    //String usario = preferencia.getString("usarioAdmin","null");
-    //String contrasena = preferencia.getString("contrasenaAdmin","null");
-    //int id_usuario = preferencia.getInt("idAdmin",0);
-
-    int id_usuario_normal;
-    private MenuPreferencias menu;
-
-    SharedPreferences logue;
-    int id_administrador,id_normal;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_categorias);
-
-        preferencia = getSharedPreferences("acceso", Context.MODE_PRIVATE);
-        id_usuario_normal = preferencia.getInt("idNormal",0);
-
-        logue = getSharedPreferences("Nombre",Context.MODE_PRIVATE);
-        id_administrador =logue.getInt("Admin",0);
-        id_normal = logue.getInt("Normal",0);
-
-        //envio de clase actual para las preferencias
-        sesion = new Sesion(this);
-        sesionUsuario = new SesionUsuario(this);
-        SharedPreferences preferences = getSharedPreferences("credencial",Context.MODE_PRIVATE);
-        id_usu  = preferences.getInt("usuario_ingreso",0);
-        id_usu2  = preferences.getInt("usuario_admin",0);
-        //
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -119,18 +61,9 @@ public class ActivityCategorias extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        menu = new MenuPreferencias(this);
+         navigationView = (NavigationView) findViewById(R.id.nav_view);
 
-        if (sesion.logindim() || sesionUsuario.logindimUsuario()){
-                NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-                navigationView.inflateMenu(R.menu.menu_tercero);
-                navigationView.setNavigationItemSelectedListener(this);
-        }else {
-            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-            navigationView.inflateMenu(R.menu.activity_principal_drawer);
-            navigationView.setNavigationItemSelectedListener(this);
-        }
-
+        navigationView.setNavigationItemSelectedListener(this);
 
         contenedor = (RecyclerView) findViewById(R.id.contenedor);
         contenedor.setHasFixedSize(true);
@@ -171,13 +104,28 @@ public class ActivityCategorias extends AppCompatActivity
                 return "horizontal inversa";
         }
     }
+
     @Override
-    public void onRestart()
-    {
-        super.onRestart();
-        finish();
-        startActivity(getIntent());
+    protected void onStart() {
+        super.onStart();
+        if(SharedPrefManager.getInstance(getApplicationContext()).estaLogueado()){
+            int rol = SharedPrefManager.getInstance(getApplicationContext()).getUSUARIO_LOGUEADO().getRol_logueado();
+            if ( rol ==2){
+                navigationView.getMenu().clear();
+                navigationView.inflateMenu(R.menu.menu_cliente);
+
+            }else if(rol == 1){
+                navigationView.getMenu().clear();
+                navigationView.inflateMenu(R.menu.menu_admin);
+
+            }
+
+        }else{
+            navigationView.getMenu().clear();
+            navigationView.inflateMenu(R.menu.navigation_view);
+        }
     }
+
 
     @Override
     public void onBackPressed() {
@@ -229,55 +177,31 @@ public class ActivityCategorias extends AppCompatActivity
 
         if (id == R.id.principaldos) {
 
-            startActivity(new Intent(getBaseContext(), ActivityCategorias.class)
-                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP));
 
         } else if (id == R.id.acercadeinfodos) {
             Intent intent = new Intent(this,AcercaDe.class);
             startActivity(intent);
 
         }else if (id == R.id.login) {
-            if (sesion.logindim()){
-                Intent intent = new Intent(ActivityCategorias.this,Panel_de_Control.class);
-                intent.putExtra("usuario_ingreso",id_administrador);
 
-                sesionUsuario.setLoginUsuario(false);
+                Intent intent = new Intent(ActivityCategorias.this,Login.class);
                 startActivity(intent);
 
-            }else{
-                if (sesionUsuario.logindimUsuario()){
-                    Intent intent = new Intent(ActivityCategorias.this,PanelDeControlUsuarios.class);
-
-                    intent.putExtra("id",id_normal);
-                    //startActivity(new Intent(ActivityCategorias.this,PanelDeControlUsuarios.class));
-
-                    sesion.setLogin(false);
-                    startActivity(intent);
-
-
-                }else {
-                    Intent intent = new Intent(this, Login.class);
-                    startActivity(intent);
-                    //finish();
-
-                }
-
-            }
         }else if (id == R.id.cerrarsecion){
-            if (sesion.logindim()) {
-                sesion.setLogin(false);
-                //startActivity(new Intent(this, Login.class));
-                Intent intent = new Intent(this,Login.class);
-                startActivity(intent);
+            SharedPrefManager.getInstance(getApplicationContext()).limpiar();
+            startActivity(new Intent(this,Login.class)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK));
+        }else if(id == R.id.panelControl){
+            Intent intent = new Intent(this,Panel_de_Control.class);
+            startActivity(intent);
 
-            }else {
-                if(sesionUsuario.logindimUsuario()){
-                    sesionUsuario.setLoginUsuario(false);
-                    Intent intent = new Intent(this,Login.class);
-                    startActivity(intent);
+        }else if(id == R.id.panelControlUsuario){
+            Intent intent = new Intent(this,PanelDeControlUsuarios.class);
+            startActivity(intent);
 
-                }
-            }
+        }else if (id == R.id.ediciondeCuenta){
+            Intent intent = new Intent(this,EditarUsuario.class);
+            startActivity(intent);
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

@@ -54,6 +54,8 @@ import cz.msebera.android.httpclient.util.EntityUtils;
 import de.hdodenhof.circleimageview.CircleImageView;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVABessy.Ingresar_Ubicacion;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.Login;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.SharedPrefManager;
 
 public class EditarPerfil extends AppCompatActivity {
 
@@ -74,8 +76,6 @@ public class EditarPerfil extends AppCompatActivity {
     private static final int PICK_IMAGE = 100;
     Uri imageUri;
 
-    SharedPreferences datos;
-    String  traidotk;
     ProgressBar progressBar;
 
 
@@ -87,13 +87,9 @@ public class EditarPerfil extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_editar_perfil);
-        android.support.v7.app.ActionBar actionBar= getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         progressBar = findViewById(R.id.mProgress);
-        //
-        datos= getSharedPreferences("datos", Context.MODE_PRIVATE);
-        traidotk = datos.getString("usuariotraidotkn","no tkn");
-        //
+
         imagenOrg = findViewById(R.id.imagenDeOrganizacion);
         botonFoto = findViewById(R.id.botonFoto);
         botonGuardar= findViewById(R.id.botonGuardar);
@@ -206,6 +202,17 @@ public class EditarPerfil extends AppCompatActivity {
             }
         });
 
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (SharedPrefManager.getInstance(this).estaLogueado()){
+
+
+        }else{
+            startActivity(new Intent(this, Login.class)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK)) ;
+        }
     }
 
     /**********************************************************************************************
@@ -490,7 +497,7 @@ public class EditarPerfil extends AppCompatActivity {
                 httppost = new HttpPost("http://aeo.web-hn.com/WebServices/consultarDatosDePerfilParaEditar.php");
                 parametros = new ArrayList<NameValuePair>();
                 parametros.add(new BasicNameValuePair("cto",String.valueOf(id_perfilEditar)));
-                parametros.add(new BasicNameValuePair("tkn",traidotk));
+                parametros.add(new BasicNameValuePair("tkn",SharedPrefManager.getInstance(EditarPerfil.this).getUSUARIO_LOGUEADO().getToken()));
                 httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));
 
                 JSONObject respJSON = new JSONObject(EntityUtils.toString(httpclient.execute(httppost).getEntity()));
@@ -591,7 +598,7 @@ public class EditarPerfil extends AppCompatActivity {
                 parametros.add(new BasicNameValuePair("longitud_rec",etlongitud.getText().toString()));
                 parametros.add(new BasicNameValuePair("id_categoria",String.valueOf(id_categoria)));
                 parametros.add(new BasicNameValuePair("id_region",String.valueOf(id_region)));
-                parametros.add(new BasicNameValuePair("tkn",traidotk));
+                parametros.add(new BasicNameValuePair("tkn",SharedPrefManager.getInstance(EditarPerfil.this).getUSUARIO_LOGUEADO().getToken()));
 
                 if(editarFoto==true){
                     parametros.add(new BasicNameValuePair("imagen",encodeImagen));
@@ -718,7 +725,7 @@ public class EditarPerfil extends AppCompatActivity {
                 httppost = new HttpPost("http://aeo.web-hn.com/WebServices/eliminarPerfil.php");
                 parametros = new ArrayList<NameValuePair>();
                 parametros.add(new BasicNameValuePair("cto",String.valueOf(id_perfilEditar)));
-                parametros.add(new BasicNameValuePair("tkn",traidotk));
+                parametros.add(new BasicNameValuePair("tkn", SharedPrefManager.getInstance(EditarPerfil.this).getUSUARIO_LOGUEADO().getToken()));
                 httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));
                 httpclient.execute(httppost);
 

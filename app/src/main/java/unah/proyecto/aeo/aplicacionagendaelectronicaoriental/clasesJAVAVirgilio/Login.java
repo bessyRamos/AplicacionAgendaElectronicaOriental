@@ -1,11 +1,9 @@
 package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
-import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
@@ -20,34 +18,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
-
-import org.json.JSONArray;
-
-import java.io.BufferedInputStream;
-import java.io.BufferedReader;
-import java.io.DataOutputStream;
-import java.io.File;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
-import java.lang.reflect.Array;
-import java.net.HttpURLConnection;
-import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import br.com.simplepass.loading_button_lib.customViews.CircularProgressButton;
@@ -61,11 +36,6 @@ import cz.msebera.android.httpclient.util.EntityUtils;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.ActivityCategorias;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.Panel_de_Control;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.SharedPrefManager;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.HerramientaBusquedaAvanzada.BusquedaAvanzada;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.PerfilesBreves.ListaDeContactos;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVASheyli.RecuperacionDePassword;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.DatoT;
 
 public class Login extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
     public EditText usuario, contrasena;
@@ -75,28 +45,13 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
     private int rol;
     private int estado_usuario;
     //private Button acceder,registrarse;
-    private static final String IP_TOKEN="http://aeo.web-hn.com/RegisterDevice.php";
     Context context=this;
-    //preferencia de usuario
-    private SesionUsuario  sessionUsuario;
-    private Sesion session;
-    private DatoT datostraidos;
-
-
 
     int id_preferencia;
-    SharedPreferences preferences;
-    SharedPreferences.Editor editor;
+
+
     private CircularProgressButton acceder;
-    private MenuPreferencias menu;
     String nada,dato,tkasig;
-    SharedPreferences logue;
-    SharedPreferences.Editor editorLogueo;
-
-    SharedPreferences datos,usuariodata;
-    SharedPreferences.Editor editordatos,editordatosusu;
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -105,23 +60,7 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
         usuario = (EditText) findViewById(R.id.usuario_login);
         contrasena = (EditText) findViewById(R.id.contrasena_login);
         //Preferencias de administrador y usuario
-        session = new Sesion(this);
-        sessionUsuario = new SesionUsuario(this);
-        datostraidos = new DatoT(this);
 
-        preferences = getSharedPreferences("credencial",Context.MODE_PRIVATE);
-        editor = preferences.edit();
-
-        logue= getSharedPreferences("Nombre",Context.MODE_PRIVATE);
-        editorLogueo = logue.edit();
-
-        datos= getSharedPreferences("datos",Context.MODE_PRIVATE);
-        usuariodata =getSharedPreferences("datosusu",Context.MODE_PRIVATE);
-
-        editordatos = datos.edit();
-        editordatosusu = usuariodata.edit();
-
-        menu=new MenuPreferencias(this);
         acceder = (CircularProgressButton) findViewById(R.id.ingresar_login);
         acceder.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -164,29 +103,13 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
         if (drawer.isDrawerOpen(GravityCompat.START)) {
             drawer.closeDrawer(GravityCompat.START);
         } else {
-            Intent intent = new Intent();
-            setResult(ActivityCategorias.RESULT_CANCELED,intent);
-            setResult(ListaDeContactos.RESULT_CANCELED,intent);
-            setResult(BusquedaAvanzada.RESULT_CANCELED,intent);
-
             startActivity(new Intent(getBaseContext(), ActivityCategorias.class)
                     .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP));
             finish();
         }
     }
-    @Override
-    public void onRestart()
-    {
-        super.onRestart();
-        finish();
-        startActivity(getIntent());
-    }
-    //abrira activity recuperar contrasenia
-    public void recuperar1(View v){
 
-        Intent password = new Intent(this, RecuperacionDePassword.class);
-        startActivity(password);
-    }
+
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
@@ -195,11 +118,7 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
         int id = item.getItemId();
 
         if (id == R.id.principaldos) {
-            Intent intent = new Intent();
-            setResult(ActivityCategorias.RESULT_CANCELED,intent);
-            startActivity(new Intent(getBaseContext(), ActivityCategorias.class)
-                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP));
-            finish();
+           onBackPressed();
         } else if (id == R.id.acercadeinfodos) {
             Intent intent = new Intent(this, AcercaDe.class);
             startActivity(intent);
@@ -223,6 +142,7 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
 
 
     //METODO DE VERIFICADE DESDE EL SERVIDOR
+    @SuppressLint("StaticFieldLeak")
     private class LoginValidadoWeb extends AsyncTask<String, Integer, Boolean> {
         private LoginValidadoWeb() {
         }
@@ -265,13 +185,6 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
                 if (credencial.equals("Credenciales incorrectos")){
                     nada="nada";
                 }
-                if (id_usuario!=0&& rol==1&&estado_usuario==2){
-                    resul = false;
-                }
-                if (id_usuario!=0&& rol==2&&estado_usuario==2){
-                    resul = false;
-                }
-
 
             } catch (Exception ex) {
                 Log.e("ServicioRest", "Error!", ex);
@@ -285,67 +198,31 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
         protected void onPostExecute(Boolean result) {
 
             if (resul) {
-                dato = tkasig;
-                id_preferencia = id_usuario;
-                editor.putInt("usuario_ingreso",id_preferencia);
-                editor.putInt("usuario_admin",id_preferencia);
-                editor.commit();
+
+                SharedPrefManager.getInstance(context).guardarUsuario(
+                        new ModeloUsuarioLogueado(
+                                id_usuario,
+                                rol,
+                                tkasig
+                        )
+                );
+
 
                 acceder.stopAnimation();
                 acceder.revertAnimation();
-                //guarda data de admin
-                editordatos.putInt("usuariotraido",id_usuario);
-                editordatos.putInt("usuariotraidorol",rol);
-                editordatos.putInt("usuariotraidoestado",estado_usuario);
-                editordatos.putString("usuariotraidotkn",tkasig);
-                editordatos.commit();
-                //guarda data de usuario normal
-                editordatosusu.putInt("usuariotraido",id_usuario);
-                editordatosusu.putInt("usuariotraidorol",rol);
-                editordatosusu.putInt("usuariotraidoestado",estado_usuario);
-                editordatosusu.putString("usuariotraidotkn",tkasig);
-                editordatosusu.commit();
-
-                datostraidos.setLoginDatoid(id_usuario);
-                datostraidos.setLoginDator(rol);
-                datostraidos.setLoginDatostd(estado_usuario);
-                datostraidos.setLoginDatotkn(tkasig);
 
                  if (rol == 1 && estado_usuario ==1) {
                     Intent intent = new Intent(Login.this,Panel_de_Control.class);
-                   
-                    session.setLogin(true);
-                    sessionUsuario.setLoginUsuario(false);
-                    intent.putExtra("usuario_ingreso",id_preferencia);
-                    editorLogueo.putInt("Admin",id_usuario);
-                    editorLogueo.commit();
+                    intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP);
                     startActivity(intent);
-                    //limpieza de variables
-                    usuario.setText("");
-                    contrasena.setText("");
-                    //
                     finish();
 
                 } else if (rol ==2 && estado_usuario ==1){
 
                     Intent intent = new Intent(Login.this,PanelDeControlUsuarios.class);
-                    sessionUsuario.setLoginUsuario(true);
-                    menu.setLoginMenu(true);
-                    session.setLogin(false);
-                    intent.putExtra("id",id_preferencia);
-                    intent.putExtra("usuario_ingreso",id_preferencia);
-                    editorLogueo.putInt("Normal",id_usuario);
-                    editorLogueo.commit();
-
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
-
-                    //limpieza de variables
-                    usuario.setText("");
-                    contrasena.setText("");
-                    //
                     finish();
-
-
                 }
 
             } else {
@@ -360,6 +237,8 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
                         Toast.makeText(getApplicationContext(), "Limite de intentos agotados", Toast.LENGTH_SHORT).show();
                         finish();
                     }else {
+                        acceder.stopAnimation();
+                        acceder.revertAnimation();
                         Toast.makeText(getApplicationContext(), "Usuario y/o Contraseña incorrecta", Toast.LENGTH_SHORT).show();
                     }
                    // Toast.makeText(getApplicationContext(),"Usuario y/o Contraseña incorrecta 1",Toast.LENGTH_LONG).show();
@@ -371,6 +250,8 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
                         Toast.makeText(getApplicationContext(), "Limite de intentos agotados", Toast.LENGTH_SHORT).show();
                         finish();
                     }else {
+                        acceder.stopAnimation();
+                        acceder.revertAnimation();
                         Toast.makeText(getApplicationContext(), "Usuario y/o Contraseña incorrecta", Toast.LENGTH_SHORT).show();
                     }
                     //Toast.makeText(getApplicationContext(),"Usuario y/o Contraseña incorrecta 2",Toast.LENGTH_LONG).show();
@@ -382,6 +263,8 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
                         Toast.makeText(getApplicationContext(), "Limite de intentos agotados", Toast.LENGTH_SHORT).show();
                         finish();
                     }else {
+                        acceder.stopAnimation();
+                        acceder.revertAnimation();
                         Toast.makeText(getApplicationContext(), "Usuario y/o Contraseña incorrecta", Toast.LENGTH_SHORT).show();
                     }
                     //Toast.makeText(getApplicationContext(),"Usuario y/o Contraseña incorrecta 3",Toast.LENGTH_LONG).show();
@@ -389,7 +272,8 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
                     //Toast.makeText(getApplicationContext(), "Usuario y/o Contraseña incorrecta ", Toast.LENGTH_LONG).show();
                 }if (compruebaConexion()==false){
                     Toast.makeText(getApplicationContext(), "Problemas de conexion ", Toast.LENGTH_LONG).show();
-
+                    acceder.stopAnimation();
+                    acceder.revertAnimation();
                 }
 
             }//fin de onPostExecute
@@ -433,53 +317,6 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
 
     }
 
-    private void sendTokenToServer() {
-        //  progressDialog = new ProgressDialog(FormularioRegistroLogin.this);
-        //  progressDialog.setMessage("Registering Device...");
-        //  progressDialog.show();
 
-        final String token = SharedPrefManager.getInstance(Login.this).getDeviceToken();
-        // final String email = editTextEmail.getText().toString();
-
-        if (token == null) {
-            //  progressDialog.dismiss();
-            Toast.makeText(Login.this, "Token not generated", Toast.LENGTH_LONG).show();
-            return;
-        }
-
-        StringRequest stringRequest = new StringRequest(Request.Method.POST,IP_TOKEN,
-                new Response.Listener<String>() {
-                    @Override
-                    public void onResponse(String response) {
-                        //  progressDialog.dismiss();
-                        try {
-                            JSONObject obj = new JSONObject(response);
-                            // Toast.makeText(FormularioRegistroLogin.this, obj.getString("message"), Toast.LENGTH_LONG).show();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
-                    }
-                },
-                new Response.ErrorListener() {
-                    @Override
-                    public void onErrorResponse(VolleyError error) {
-                        //   progressDialog.dismiss();
-                        Toast.makeText(Login.this, error.getMessage(), Toast.LENGTH_LONG).show();
-                    }
-                }) {
-
-            @Override
-            protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String, String> params = new HashMap<>();
-                params.put("id_usuario",String.valueOf(id_usuario));
-                params.put("token", token);
-                return params;
-
-            }
-        };
-        RequestQueue requestQueue = Volley.newRequestQueue(Login.this);
-        requestQueue.add(stringRequest);
-    }
-
-}//todo:fin de subir token al server
+}
 

@@ -4,7 +4,6 @@ package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.A
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
@@ -38,13 +37,10 @@ import cz.msebera.android.httpclient.message.BasicNameValuePair;
 import cz.msebera.android.httpclient.util.EntityUtils;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.ActivityCategorias;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.Panel_de_Control;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.AcercaDe;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.EditarUsuario;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.Login;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.PanelDeControlUsuarios;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.Sesion;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.SesionUsuario;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.SharedPrefManager;
 
 public class NuevasSolicitudes extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -56,28 +52,16 @@ public class NuevasSolicitudes extends AppCompatActivity
     String nombre_organizacion,usuariopropietario, imagen;
     private int perfilselecionado = -1;
     int idperf;
-    private Sesion sesion;
-    private SesionUsuario sesionUsuario;
+
     int id_usuario_resibido_usuario;
     int id_usu=-1;
-    SharedPreferences datos;
-    String  traidotk;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_nuevas_solicitudes);
 //
-        datos= getSharedPreferences("datos", Context.MODE_PRIVATE);
-        traidotk = datos.getString("usuariotraidotkn","no tkn");
-
-
-        //envio de clase actual para las preferencias
-        sesion = new Sesion(this);
-        sesionUsuario = new SesionUsuario(this);
-        SharedPreferences preferences = getSharedPreferences("credencial", Context.MODE_PRIVATE);
-        id_usu  = preferences.getInt("usuario_ingreso",id_usu);
-        //
 
         barra = findViewById(R.id.progressBarPerfilesPendientes);
         mostrar_perfiles= new ArrayList<Fuente_mostrarPerfiles>();
@@ -159,59 +143,16 @@ public class NuevasSolicitudes extends AppCompatActivity
             startActivity(intent);
             finish();
 
-        }else if (id == R.id.login) {
-
-            if (sesion.logindim()){
-                Intent intent = new Intent(this,Panel_de_Control.class);
-                intent.putExtra("usuario_ingreso",id_usu);
-                //startActivity(new Intent(PanelDeControlUsuarios.this,Panel_de_Control.class));
-                startActivity(intent);
-                finish();
-            }else{
-                if (sesionUsuario.logindimUsuario()){
-                    Intent intent = new Intent(this,PanelDeControlUsuarios.class);
-                    intent.putExtra("id",id_usu);
-                    //startActivity(new Intent(PanelDeControlUsuarios.this,PanelDeControlUsuarios.class));
-                    startActivity(intent);
-                    finish();
-                }else {
-                    Intent intent = new Intent(this, Login.class);
-                    startActivity(intent);
-                    finish();
-                }
-
-            }
-
         }else if (id ==R.id.cerrarsecion){
-            //cerrar secion y borrado de preferencias
-            if (sesion.logindim()) {
-                sesion.setLogin(false);
-                startActivity(new Intent(this, Login.class));
-                Panel_de_Control.h.sendEmptyMessage(0);
-                AdministracionDePerfiles.h.sendEmptyMessage(0);
-                finish();
-            }else {
-                //cerrar secion y borrado de preferencias
-                if(sesionUsuario.logindimUsuario()){
-                    sesionUsuario.setLoginUsuario(false);
-                    startActivity(new Intent(this, Login.class));
-                    finish();
-                }
-            }
+            SharedPrefManager.getInstance(getApplicationContext()).limpiar();
+            startActivity(new Intent(this, Login.class)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK));
 
-        }else if (id == R.id.ediciondeCuenta){
-            Intent intent = new Intent(this,EditarUsuario.class);
-            if (getIntent().getExtras()!=null){
-                id_usuario_resibido_usuario = getIntent().getExtras().getInt("id");
-
-                intent.putExtra("id",id_usuario_resibido_usuario);
-                startActivity(intent);
-                finish();
-            }else {
-                Toast.makeText(getApplicationContext(),"Error en id de usuario",Toast.LENGTH_SHORT).show();
-            }
-
-
+        }else if (id == R.id.panelControl){
+            Intent intent = new Intent(this, PanelDeControlUsuarios.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
 
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -257,11 +198,15 @@ public class NuevasSolicitudes extends AppCompatActivity
         }
     }
     @Override
-    public void onRestart()
-    {
-        super.onRestart();
-        finish();
-        startActivity(getIntent());
+    protected void onStart() {
+        super.onStart();
+        if (SharedPrefManager.getInstance(this).estaLogueado()){
+
+
+        }else{
+            startActivity(new Intent(this, Login.class)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK)) ;
+        }
     }
 
     private class llenarListaPendientes extends AsyncTask<String, Integer, Boolean> {
@@ -349,7 +294,7 @@ public class NuevasSolicitudes extends AppCompatActivity
                 httppost = new HttpPost("http://aeo.web-hn.com/WebServices/aceptarSolicitud.php");
                 parametros = new ArrayList<NameValuePair>();
                 parametros.add(new BasicNameValuePair("cto",String.valueOf(idperf)));
-                parametros.add(new BasicNameValuePair("tkn",traidotk));
+                parametros.add(new BasicNameValuePair("tkn",SharedPrefManager.getInstance(getApplicationContext()).getUSUARIO_LOGUEADO().getToken()));
                 httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));
                 httpclient.execute(httppost);
 
@@ -398,7 +343,7 @@ public class NuevasSolicitudes extends AppCompatActivity
                 httppost = new HttpPost("http://aeo.web-hn.com/WebServices/rechazarSolicitud.php");
                 parametros = new ArrayList<NameValuePair>();
                 parametros.add(new BasicNameValuePair("cto",String.valueOf(idperf)));
-                parametros.add(new BasicNameValuePair("tkn",traidotk));
+                parametros.add(new BasicNameValuePair("tkn",SharedPrefManager.getInstance(getApplicationContext()).getUSUARIO_LOGUEADO().getToken()));
                 httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));
                 httpclient.execute(httppost);
 

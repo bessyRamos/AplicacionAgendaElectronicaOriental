@@ -60,10 +60,11 @@ import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.Acti
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.Panel_de_Control;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVABessy.Ingresar_Ubicacion;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.AdministracionDePerfilesAdmin.AdaptadorPersonalizadoSpinner;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.AdministracionDePerfilesAdmin.AdministracionDePerfiles;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.AdministracionDePerfilesAdmin.ModeloSpinner;
 
 
-public class FormularioNuevaOrganizacion extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener{
+public class FormularioNuevaOrganizacion extends AppCompatActivity {
 
     EditText nombreOrganizacion;
     EditText telefonoFijo;
@@ -93,8 +94,7 @@ public class FormularioNuevaOrganizacion extends AppCompatActivity  implements N
 
 TextView lo,lat;
     //preferencias
-    private Sesion sesion;
-    private SesionUsuario sesionUsuario;
+
     int id_usu=-1;
     //
 
@@ -103,25 +103,15 @@ TextView lo,lat;
 
     String validemail,email,correoIgual;
     //
-    SharedPreferences datos;
-    String  traidotk;
+
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_formulario_nueva_organizacion);
-          //
-        datos= getSharedPreferences("datosusu", Context.MODE_PRIVATE);
-        traidotk = datos.getString("usuariotraidotkn","no tkn");
-        //envio de clase actual para las preferencias
-        sesion = new Sesion(this);
-        sesionUsuario = new SesionUsuario(this);
-        SharedPreferences preferences = getSharedPreferences("credencial", Context.MODE_PRIVATE);
-        if (getIntent().getExtras()!=null) {
-            id_usu  = preferences.getInt("usuario_ingreso",id_usu);
-            //
-        }
+        setContentView(R.layout.content_registro_nueva_organizacion);
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
 
 
         nombreOrganizacion = (EditText) findViewById(R.id.txtNombreOrganizacion);
@@ -177,8 +167,8 @@ TextView lo,lat;
         });
         //
         new llenarSpinnersNuevoPerfil().execute();
-        if (getIntent().getExtras()!=null){
-            id_usuario = getIntent().getExtras().getInt("id");
+        if (SharedPrefManager.getInstance(getApplicationContext()).getUSUARIO_LOGUEADO().getId_logueado()!=-2){
+            id_usuario = SharedPrefManager.getInstance(getApplicationContext()).getUSUARIO_LOGUEADO().getId_logueado();
         }
 
         imageButton.setOnClickListener(new View.OnClickListener() {
@@ -235,19 +225,17 @@ TextView lo,lat;
             }
         });
 
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (SharedPrefManager.getInstance(this).estaLogueado()){
 
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
-
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
-
+        }else{
+            startActivity(new Intent(this, Login.class)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK)) ;
+        }
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
@@ -335,70 +323,7 @@ TextView lo,lat;
         }
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
 
-        if (id == R.id.principaldos) {
-            startActivity(new Intent(getBaseContext(), ActivityCategorias.class)
-                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP));
-            finish();
-
-        } else if (id == R.id.acercadeinfodos) {
-            Intent intent = new Intent(this,AcercaDe.class);
-            startActivity(intent);
-            finish();
-
-        }else if (id == R.id.login) {
-            if (sesion.logindim()){
-                Intent intent = new Intent(FormularioNuevaOrganizacion.this,Panel_de_Control.class);
-                intent.putExtra("usuario_ingreso",id_usu);
-                //startActivity(new Intent(ActivityCategorias.this,Panel_de_Control.class));
-                startActivity(intent);
-                finish();
-            }else{
-                if (sesionUsuario.logindimUsuario()){
-                    Intent intent = new Intent(FormularioNuevaOrganizacion.this,PanelDeControlUsuarios.class);
-                    intent.putExtra("id",id_usu);
-                    //startActivity(new Intent(ActivityCategorias.this,PanelDeControlUsuarios.class));
-                    startActivity(intent);
-                    finish();
-
-                }else {
-                    Intent intent = new Intent(this, Login.class);
-                    startActivity(intent);
-                    finish();
-                }
-
-            }
-
-        }else if (id ==R.id.cerrarsecion){
-                //cerrar secion y borrado de preferencias
-                if(sesionUsuario.logindimUsuario()){
-                    sesionUsuario.setLoginUsuario(false);
-                    startActivity(new Intent(this, Login.class));
-                    finish();
-                }
-
-
-        }else if (id == R.id.ediciondeCuenta){
-            Intent intent = new Intent(this,EditarUsuario.class);
-            if (getIntent().getExtras()!=null){
-                //id_usuario_resibido_usuario = getIntent().getExtras().getInt("id");
-                intent.putExtra("id",id_usu);
-                startActivity(intent);
-                finish();
-            }else {
-                Toast.makeText(getApplicationContext(),"Error en id de usuario",Toast.LENGTH_SHORT).show();
-            }
-
-
-        }
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
-    }
 
 
     private void validar(){
@@ -511,7 +436,7 @@ TextView lo,lat;
                 parametros.add(new BasicNameValuePair("id_categoria",String.valueOf(id_categoria)));
                 parametros.add(new BasicNameValuePair("id_region",String.valueOf(id_region)));
                 parametros.add(new BasicNameValuePair("id_usuario",String.valueOf(id_usuario)));
-                parametros.add(new BasicNameValuePair("tkn",traidotk));
+                parametros.add(new BasicNameValuePair("tkn", SharedPrefManager.getInstance(getApplicationContext()).getUSUARIO_LOGUEADO().getToken()));
 
                 if(editarFoto==true){
                     parametros.add(new BasicNameValuePair("imagen",encodeImagen));
@@ -536,9 +461,7 @@ TextView lo,lat;
                 validar();
                 if (nombreOrganizacion.getError()==null && telefonoFijo.getError()==null && telefonoCelular.getError()==null && direccionOrganizacion.getError()==null && emailOrganizacion.getError()==null && descrpcionOrganizacion.getError()==null && lat.getError()==null && lo.getError()==null){
                     Toast.makeText(getApplicationContext(),"Perfil Creado Correctamente",Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(FormularioNuevaOrganizacion.this,PanelDeControlUsuarios.class);
-                    intent.putExtra("id",id_usuario);
-                    startActivity(intent);
+                    setResult(PanelDeControlUsuarios.RESULT_OK);
                     finish();
                 }
 
@@ -655,11 +578,5 @@ TextView lo,lat;
         }
     }
 
-    /*@Override
-    public void onRestart()
-    {
-        super.onRestart();
-        finish();
-        startActivity(getIntent());
-    }*/
+
 }

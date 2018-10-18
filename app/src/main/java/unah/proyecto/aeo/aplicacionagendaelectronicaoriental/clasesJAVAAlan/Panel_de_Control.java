@@ -16,15 +16,14 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
+
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.PerfilesBreves.ListaDeContactos;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.AdministracionDePerfilesAdmin.AdministracionDePerfiles;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.AcercaDe;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.Login;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.PanelDeControlUsuarios;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.Sesion;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.SesionUsuario;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.SharedPrefManager;
 
 public class Panel_de_Control extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
     ListView lista;
@@ -32,15 +31,11 @@ public class Panel_de_Control extends AppCompatActivity implements NavigationVie
     private DrawerLayout mdrawerLayout;
     private ActionBarDrawerToggle mToggle;
     private int id_usuario_resibido;
-    private SharedPreferences preferences_2;
     private SharedPreferences.Editor editor_2;
     Context context=this;
     public static Handler h;
 
-    //preferencias de administrador y usuario
-    private Sesion sesion;
-    private SesionUsuario sesionUsuario;
-    //
+
 
     public Fuente_Panel_de_control[] fuente_panel_de_control;
     @Override
@@ -48,10 +43,7 @@ public class Panel_de_Control extends AppCompatActivity implements NavigationVie
         super.onCreate(savedInstanceState);
         setContentView(R.layout.content_panel_de_control);
 
-        //envio de la clase actual alas preferencias
-        sesion =new Sesion(this);
-        sesionUsuario = new SesionUsuario(this);
-        //
+
 
         lista=(ListView)findViewById(R.id.listViewPneldeControl);
         h = new Handler() {
@@ -89,18 +81,9 @@ public class Panel_de_Control extends AppCompatActivity implements NavigationVie
 
                 if(position==0){
                     Intent intent = new Intent(view.getContext(),Mostrar_Usuarios.class);
-                    if (getIntent().getExtras()!=null){
-                        id_usuario_resibido = getIntent().getExtras().getInt("usuario_ingreso");
-                        intent.putExtra("usuario_ingreso",id_usuario_resibido);
-                       // Toast.makeText(getApplicationContext(),""+id_usuario_resibido,Toast.LENGTH_SHORT).show();
-                    }
                     startActivity(intent);
                 }else if(position==1){
                     Intent intent = new Intent(view.getContext(),AdministracionDePerfiles.class);
-                    if (getIntent().getExtras()!=null){
-                        id_usuario_resibido = getIntent().getExtras().getInt("usuario_ingreso");
-                        intent.putExtra("usuario_ingreso",id_usuario_resibido);
-                    }
                     startActivity(intent);
                 }else if(position==2){
                     Intent intent = new Intent(view.getContext(),ListaDeContactos.class);
@@ -122,12 +105,6 @@ public class Panel_de_Control extends AppCompatActivity implements NavigationVie
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        //
-        preferences_2 = getSharedPreferences("Login", context.MODE_PRIVATE);
-        editor_2 = preferences_2.edit();
-        //
-
-
     }
 
 
@@ -138,6 +115,17 @@ public class Panel_de_Control extends AppCompatActivity implements NavigationVie
             drawer.closeDrawer(GravityCompat.START);
         } else {
             finish();
+        }
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (SharedPrefManager.getInstance(this).estaLogueado()){
+
+
+        }else{
+            startActivity(new Intent(this, Login.class)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK)) ;
         }
     }
 
@@ -155,39 +143,17 @@ public class Panel_de_Control extends AppCompatActivity implements NavigationVie
             Intent intent = new Intent(this,AcercaDe.class);
             startActivity(intent);
 
-        }else if (id == R.id.login) {
-            if (sesion.logindim()){
-
-            }else{
-                if (sesionUsuario.logindimUsuario()){
-                    startActivity(new Intent(Panel_de_Control.this,PanelDeControlUsuarios.class));
-                    finish();
-                }else {
-                    Intent intent = new Intent(this, Login.class);
-                    startActivity(intent);
-                }
-
-            }
         }else if (id ==R.id.cerrarsecion){
-            //
-            if (sesion.logindim()) {
-                sesion.setLogin(false);
-                startActivity(new Intent(this, Login.class));
-                finish();
-            }else {
-                //cerrar secion y borrado de preferencias
-                if(sesionUsuario.logindimUsuario()){
-                    sesionUsuario.setLoginUsuario(false);
-                    startActivity(new Intent(this, Login.class));
-                    finish();
-                }
-            }
 
-            //
-            /*editor_2.clear();
-            editor_2.commit();
+            SharedPrefManager.getInstance(this).limpiar();
+            startActivity(new Intent(this, Login.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK));
             finish();
-            */
+        }else if (id == R.id.panelControl){
+            Intent intent = new Intent(this, Panel_de_Control.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
+
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

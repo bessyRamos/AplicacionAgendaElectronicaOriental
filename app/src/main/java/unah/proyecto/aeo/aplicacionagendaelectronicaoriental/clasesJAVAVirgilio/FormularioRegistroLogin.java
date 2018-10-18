@@ -1,10 +1,8 @@
 package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio;
 
-import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -18,25 +16,12 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.Toast;
 
-import com.android.volley.AuthFailureError;
-import com.android.volley.Request;
-import com.android.volley.RequestQueue;
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
-import com.android.volley.toolbox.Volley;
 import com.loopj.android.http.AsyncHttpClient;
-import com.loopj.android.http.AsyncHttpResponseHandler;
 
 import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 
-import cz.msebera.android.httpclient.Header;
 import cz.msebera.android.httpclient.NameValuePair;
 import cz.msebera.android.httpclient.client.HttpClient;
 import cz.msebera.android.httpclient.client.entity.UrlEncodedFormEntity;
@@ -47,7 +32,6 @@ import cz.msebera.android.httpclient.util.EntityUtils;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.Mostrar_Usuarios;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.SharedPrefManager;
 
 public class FormularioRegistroLogin extends AppCompatActivity {
     private EditText id,nombrepropio_isertar,nombreusuario_insertar,correo_insertar,contrasena_insertar,contrasenarepetir,rol_insertar,estado_del_usuario;
@@ -63,16 +47,12 @@ public class FormularioRegistroLogin extends AppCompatActivity {
     Button bottonvalidar;
     ArrayList lista = new ArrayList<>();
 
-    SharedPreferences datos;
-    String  traidotk;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_formulario_registro_login);
-        //
-        datos= getSharedPreferences("datos", Context.MODE_PRIVATE);
-        traidotk = datos.getString("usuariotraidotkn","no tkn");
+
 
         //flecha atras
         android.support.v7.app.ActionBar actionBar= getSupportActionBar();
@@ -128,6 +108,18 @@ public class FormularioRegistroLogin extends AppCompatActivity {
          }
      });
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (SharedPrefManager.getInstance(this).estaLogueado()){
+
+
+        }else{
+            startActivity(new Intent(this, Login.class)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK)) ;
+        }
     }
 
     // public void registrar_usuario_login (View v){
@@ -274,7 +266,7 @@ public class FormularioRegistroLogin extends AppCompatActivity {
                 parametros.add(new BasicNameValuePair("usuarioemail",correo_insertar.getText().toString()));
                 parametros.add(new BasicNameValuePair("usariopassword",contrasena_insertar.getText().toString()));
                 parametros.add(new BasicNameValuePair("usuariosroles",String.valueOf(id_rol)));
-                parametros.add(new BasicNameValuePair("tkn",traidotk));
+                parametros.add(new BasicNameValuePair("tkn",SharedPrefManager.getInstance(FormularioRegistroLogin.this).getUSUARIO_LOGUEADO().getToken()));
 
 
                 httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));
@@ -311,14 +303,7 @@ public class FormularioRegistroLogin extends AppCompatActivity {
 
 
 
-}//todo:fin de subir token al server
-    @Override
-    public void onRestart()
-    {
-        super.onRestart();
-        finish();
-        startActivity(getIntent());
-    }
+}
 
  }
 

@@ -1,17 +1,13 @@
 package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.HerramientaBusquedaAvanzada;
 
-import android.app.LoaderManager;
-import android.content.Context;
-import android.content.CursorLoader;
 import android.content.Intent;
-import android.content.Loader;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.support.design.widget.TextInputEditText;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -22,8 +18,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
+import android.widget.RelativeLayout;
 import android.widget.Spinner;
-import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -31,20 +27,17 @@ import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.ActivityCategorias;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.Panel_de_Control;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.AdministracionDePerfilesAdmin.AdaptadorPersonalizadoSpinner;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.PerfilesBreves.AdaptadorPerfilBreve;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.AdministracionDePerfilesAdmin.ModeloSpinner;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.PerfilesBreves.ListaDeContactos;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.PerfilesBreves.PerfilBreve;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.AcercaDe;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.EditarUsuario;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.Login;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.PanelDeControlUsuarios;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.Sesion;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.SesionUsuario;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.SharedPrefManager;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.provider.AEODbHelper;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.provider.CategoriasContract;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.provider.PerfilesContract;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.provider.RegionesContract;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.web.Perfil;
 
 public class BusquedaAvanzada extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener{
@@ -65,12 +58,11 @@ public class BusquedaAvanzada extends AppCompatActivity
     boolean unaRegionSeleccionada, unaCategoriaSeleccionada;
     int id_categoria, id_region;
     ArrayList<PerfilBreve> lista =new ArrayList<PerfilBreve>();
-
+    RelativeLayout root;
     //preferencias
-    private Sesion sesion;
-    private SesionUsuario sesionUsuario;
-    int id_usu=-1;
 
+    int id_usu=-1;
+    NavigationView navigationView;
     /**********************************************************************************************
      *                                      MÉTODO ONCREATE
      **********************************************************************************************/
@@ -81,32 +73,19 @@ public class BusquedaAvanzada extends AppCompatActivity
         ********************************************************* */
         super.onCreate(savedInstanceState);
 
-        //envio de clase actual para las preferencias
-        sesion = new Sesion(this);
-        sesionUsuario = new SesionUsuario(this);
-        SharedPreferences preferences = getSharedPreferences("credencial", Context.MODE_PRIVATE);
-        id_usu  = preferences.getInt("usuario_ingreso",id_usu);
-        //
 
         setContentView(R.layout.activity_busqueda_avanzada);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
+        root=findViewById(R.id.root);
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        if (sesion.logindim() || sesionUsuario.logindimUsuario()){
-            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-            navigationView.inflateMenu(R.menu.menu_tercero);
-            navigationView.setNavigationItemSelectedListener(this);
-        }else {
-            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-            navigationView.inflateMenu(R.menu.activity_principal_drawer);
-            navigationView.setNavigationItemSelectedListener(this);
-        }
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
 
 
         /* *********************************************************
@@ -114,6 +93,7 @@ public class BusquedaAvanzada extends AppCompatActivity
         ********************************************************* */
 
         contactoABuscar = findViewById(R.id.contacto_a_buscar);
+
         
         categoria = findViewById(R.id.spinercategoria);
         region = findViewById(R.id.spinerregionesbuscar);
@@ -174,7 +154,9 @@ public class BusquedaAvanzada extends AppCompatActivity
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 id_categoria = listaCategorias.get(position).getId();
+
                 filtrosOffline();
+
             }
 
             @Override
@@ -187,7 +169,9 @@ public class BusquedaAvanzada extends AppCompatActivity
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 id_region = listaRegiones.get(position).getId();
+
                 filtrosOffline();
+
             }
 
             @Override
@@ -199,9 +183,11 @@ public class BusquedaAvanzada extends AppCompatActivity
         btnbusqueda.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                if(!contactoABuscar.getText().toString().isEmpty()){
                 filtrosOffline();
-                
+            }else{
+                contactoABuscar.setError("No ha ingresado contacto a buscar");
+            }
             }
         });
     }
@@ -327,11 +313,25 @@ public class BusquedaAvanzada extends AppCompatActivity
         }
     }
     @Override
-    public void onRestart()
-    {
-        super.onRestart();
-        finish();
-        startActivity(getIntent());
+    protected void onStart() {
+        super.onStart();
+        if(SharedPrefManager.getInstance(getApplicationContext()).estaLogueado()){
+            int rol = SharedPrefManager.getInstance(getApplicationContext()).getUSUARIO_LOGUEADO().getRol_logueado();
+            if ( rol ==2){
+                navigationView.getMenu().clear();
+                navigationView.inflateMenu(R.menu.menu_cliente);
+
+            }else if(rol == 1){
+                navigationView.getMenu().clear();
+                navigationView.inflateMenu(R.menu.menu_admin);
+
+            }
+
+        }else{
+            navigationView.getMenu().clear();
+            navigationView.inflateMenu(R.menu.navigation_view);
+
+        }
     }
 
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -348,48 +348,26 @@ public class BusquedaAvanzada extends AppCompatActivity
             startActivity(intent);
             finish();
         }else if (id == R.id.login) {
-            if (sesion.logindim()){
-                Intent intent = new Intent(BusquedaAvanzada.this,Panel_de_Control.class);
-                intent.putExtra("usuario_ingreso",id_usu);
-                sesionUsuario.setLoginUsuario(false);
-                startActivity(intent);
-                //startActivity(new Intent(ActivityCategorias.this,Panel_de_Control.class));
-                //startActivity(intent);
-                //finish();
-            }else{
-                if (sesionUsuario.logindimUsuario()){
-                    Intent intent = new Intent(BusquedaAvanzada.this,PanelDeControlUsuarios.class);
-                    intent.putExtra("id",id_usu);
-                    sesion.setLogin(false);
-                    startActivity(intent);
-                    //startActivity(new Intent(ActivityCategorias.this,PanelDeControlUsuarios.class));
-                    //startActivity(intent);
-                    //finish();
-                }else {
-                    Intent intent = new Intent(this, Login.class);
-                    startActivity(intent);
-                    //finish();
-                }
-
-            }
+            startActivity(new Intent(this,Log.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK));
 
         }else if (id == R.id.cerrarsecion){
 
-            if (sesion.logindim()) {
-                sesion.setLogin(false);
-                Intent intent = new Intent(this,Login.class);
-                startActivity(intent);
-                //startActivity(new Intent(this, Login.class));
-                //finish();
-            }else {
-                if(sesionUsuario.logindimUsuario()){
-                    sesionUsuario.setLoginUsuario(false);
-                    Intent intent = new Intent(this,Login.class);
-                    startActivity(intent);
-                    //startActivity(new Intent(this, Login.class));
-                    //finish();
-                }
-            }
+            SharedPrefManager.getInstance(getApplicationContext()).limpiar();
+            startActivity(new Intent(this,Login.class)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK));
+        }else if(id == R.id.panelControl){
+            Intent intent = new Intent(this,Panel_de_Control.class);
+            startActivity(intent);
+
+        }else if (id == R.id.ediciondeCuenta){
+            Intent intent = new Intent(this,EditarUsuario.class);
+            startActivity(intent);
+            finish();
+
+        }else if(id == R.id.panelControlUsuario){
+            Intent intent = new Intent(this,PanelDeControlUsuarios.class);
+            startActivity(intent);
+
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -402,7 +380,7 @@ public class BusquedaAvanzada extends AppCompatActivity
                                     FILTROS PARA LA BÚSQUEDA AVANZADA
        ******************************************************************************************/
     public void filtrosOffline(){
-        if(!contactoABuscar.getText().toString().isEmpty()){
+
             SQLiteDatabase db;
             ArrayList<PerfilBreve> lista =new ArrayList<PerfilBreve>();
             db=aeoDbHelper.getWritableDatabase();
@@ -494,9 +472,7 @@ public class BusquedaAvanzada extends AppCompatActivity
             }
 
             db.close();
-        }else{
-            contactoABuscar.setError("No ha ingresado contacto a buscar");
-        }
+
 
     }
 

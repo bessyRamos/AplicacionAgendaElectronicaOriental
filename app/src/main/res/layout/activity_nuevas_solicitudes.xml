@@ -47,6 +47,6 @@
         android:layout_height="match_parent"
         android:layout_gravity="start"
         app:headerLayout="@layout/nav_header_main_categorias"
-        app:menu="@menu/menu_tercero" />
+        app:menu="@menu/menu_admin" />
 
 </android.support.v4.widget.DrawerLayout>

@@ -7,7 +7,6 @@ import android.content.ContentResolver;
 import android.content.CursorLoader;
 import android.content.Intent;
 import android.content.Loader;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
@@ -25,20 +24,18 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.*;
 
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.ActivityCategorias;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.Panel_de_Control;
 
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.HerramientaBusquedaAvanzada.BusquedaAvanzada;
 
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.AcercaDe;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.EditarUsuario;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.Login;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.PanelDeControlUsuarios;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.Sesion;
-import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.SesionUsuario;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio.SharedPrefManager;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.provider.*;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.sync.*;
 
@@ -57,9 +54,9 @@ public class ListaDeContactos extends AppCompatActivity
     RecyclerView contenedor;
     private static final int PERFIL_LOADER=0;
     //preferencias
-    private Sesion sesion;
-    private SesionUsuario sesionUsuario;
+
     int id_usu=-1;
+    NavigationView navigationView;
 
     /**********************************************************************************************
      *                                      MÉTODO ONCREATE
@@ -74,12 +71,7 @@ public class ListaDeContactos extends AppCompatActivity
         //Obtiene el id de la categoria de la cual se mostrarán los contactos
         Bundle extras = getIntent().getExtras();
 
-        //envio de clase actual para las preferencias
-        sesion = new Sesion(this);
-        sesionUsuario = new SesionUsuario(this);
-        SharedPreferences preferences = getSharedPreferences("credencial", Context.MODE_PRIVATE);
-        id_usu  = preferences.getInt("usuario_ingreso",id_usu);
-        //
+
         if (extras!=null){
             id_categoria = extras.getInt("id_categoria");
             nombre_categoria = extras.getString("nombre_categoria");
@@ -90,23 +82,17 @@ public class ListaDeContactos extends AppCompatActivity
 
         setSupportActionBar(toolbar);
 
-
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        if (sesion.logindim() || sesionUsuario.logindimUsuario()){
-            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-            navigationView.inflateMenu(R.menu.menu_tercero);
-            navigationView.setNavigationItemSelectedListener(this);
-        }else {
-            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-            navigationView.inflateMenu(R.menu.activity_principal_drawer);
-            navigationView.setNavigationItemSelectedListener(this);
-        }
 
+
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
+
+        navigationView.setNavigationItemSelectedListener(this);
 
         contenedor = (RecyclerView) findViewById(R.id.recyclerViewPerfilBreve);
         contenedor.setHasFixedSize(true);
@@ -132,11 +118,25 @@ public class ListaDeContactos extends AppCompatActivity
         }
     }
     @Override
-    public void onRestart()
-    {
-        super.onRestart();
-        finish();
-        startActivity(getIntent());
+    protected void onStart() {
+        super.onStart();
+        if(SharedPrefManager.getInstance(getApplicationContext()).estaLogueado()){
+            int rol = SharedPrefManager.getInstance(getApplicationContext()).getUSUARIO_LOGUEADO().getRol_logueado();
+            if ( rol ==2){
+                navigationView.getMenu().clear();
+                navigationView.inflateMenu(R.menu.menu_cliente);
+
+            }else if(rol == 1){
+                navigationView.getMenu().clear();
+                navigationView.inflateMenu(R.menu.menu_admin);
+
+            }
+
+        }else{
+            navigationView.getMenu().clear();
+            navigationView.inflateMenu(R.menu.navigation_view);
+
+        }
     }
 
     @Override
@@ -178,54 +178,33 @@ public class ListaDeContactos extends AppCompatActivity
         int id = item.getItemId();
 
         if (id == R.id.principaldos) {
-            // Handle the camera action
+            onBackPressed();
             finish();
         } else if (id == R.id.acercadeinfodos) {
             Intent intent = new Intent(this,AcercaDe.class);
             startActivity(intent);
         }else if (id == R.id.login) {
-            if (sesion.logindim()){
-                Intent intent = new Intent(ListaDeContactos.this,Panel_de_Control.class);
-                intent.putExtra("usuario_ingreso",id_usu);
-                //startActivity(new Intent(ActivityCategorias.this,Panel_de_Control.class));
-                sesionUsuario.setLoginUsuario(false);
-                startActivity(intent);
-                //startActivity(intent);
-                //finish();
-            }else{
-                if (sesionUsuario.logindimUsuario()){
-                    Intent intent = new Intent(ListaDeContactos.this,PanelDeControlUsuarios.class);
-                    intent.putExtra("id",id_usu);
-                    //startActivity(new Intent(ActivityCategorias.this,PanelDeControlUsuarios.class));
-                    sesion.setLogin(false);
-                    startActivity(intent);
-                    //startActivity(intent);
-                    //finish();
 
-                }else {
-                    Intent intent = new Intent(this, Login.class);
-                    startActivity(intent);
+            Intent intent = new Intent(this, Login.class);
+            startActivity(intent);
                     //finish();
-                }
-
-            }
         }else if (id == R.id.cerrarsecion){
+            SharedPrefManager.getInstance(getApplicationContext()).limpiar();
+            startActivity(new Intent(this,Login.class)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|Intent.FLAG_ACTIVITY_CLEAR_TASK));
 
-            if (sesion.logindim()) {
-                sesion.setLogin(false);
-                Intent intent = new Intent(this,Login.class);
-                startActivity(intent);
-                //startActivity(new Intent(this, Login.class));
-                //finish();
-            }else {
-                if(sesionUsuario.logindimUsuario()){
-                    sesionUsuario.setLoginUsuario(false);
-                    Intent intent = new Intent(this,Login.class);
-                    startActivity(intent);
-                    //startActivity(new Intent(this, Login.class));
-                    //finish();
-                }
-            }
+        }else if (id == R.id.ediciondeCuenta){
+            Intent intent = new Intent(this,EditarUsuario.class);
+            startActivity(intent);
+
+        }else if(id == R.id.panelControl){
+            Intent intent = new Intent(this,Panel_de_Control.class);
+            startActivity(intent);
+
+        }else if(id == R.id.panelControlUsuario){
+            Intent intent = new Intent(this,PanelDeControlUsuarios.class);
+            startActivity(intent);
+
         }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);

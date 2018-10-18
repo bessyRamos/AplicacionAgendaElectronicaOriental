@@ -25,9 +25,11 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Base64;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
+import android.widget.ProgressBar;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -59,10 +61,10 @@ import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVABessy.Ing
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.AdministracionDePerfilesAdmin.AdaptadorPersonalizadoSpinner;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.AdministracionDePerfilesAdmin.ModeloSpinner;
 
-public class EditarPerfilOrganizacion extends AppCompatActivity  implements NavigationView.OnNavigationItemSelectedListener{
+public class EditarPerfilOrganizacion extends AppCompatActivity {
 
     private static final int MY_PERMISSIONS_REQUEST_READ_EXTERNAL_STORAGE = 1 ;
-
+    ProgressBar barraProgreso;
     int id_perfilEditar;
     Bitmap imagenBitmap;
     CircleImageView imagenOrg;
@@ -99,17 +101,18 @@ public class EditarPerfilOrganizacion extends AppCompatActivity  implements Navi
     String numero;
 
     //preferencias
-    private Sesion sesion;
-    private SesionUsuario sesionUsuario;
+
     int id_usu=-1;
     int nu;
-    SharedPreferences datos;
-    String  traidotk;
+
     Double lat,log;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_editar_perfil_organizacion);
+        setContentView(R.layout.content_nuevo_contacto);
+
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
         imagenOrg = findViewById(R.id.imagenDeOrganizacion);
         botonFoto = findViewById(R.id.botonFoto);
         botonGuardar= findViewById(R.id.botonGuardar);
@@ -127,20 +130,6 @@ public class EditarPerfilOrganizacion extends AppCompatActivity  implements Navi
 
         listaCategorias=new ArrayList<ModeloSpinner>();
         listaRegiones=new ArrayList<ModeloSpinner>();
-
-        datos= getSharedPreferences("datosusu", Context.MODE_PRIVATE);
-        traidotk = datos.getString("usuariotraidotkn","no tkn");
-
-        //envio de clase actual para las preferencias
-        sesion = new Sesion(this);
-        sesionUsuario = new SesionUsuario(this);
-        SharedPreferences preferences = getSharedPreferences("credencial", Context.MODE_PRIVATE);
-        id_usu  = preferences.getInt("usuario_ingreso",id_usu);
-        //
-        if (getIntent().getExtras()!=null){
-            id_usuario_resibido_usuario = getIntent().getExtras().getInt("id_usuario");
-
-        }
 
 
         Bundle a = getIntent().getExtras();
@@ -238,90 +227,24 @@ public class EditarPerfilOrganizacion extends AppCompatActivity  implements Navi
         //setSupportActionBar(toolbar);
        // getSupportActionBar().setDisplayHomeAsUpEnabled(false);
 
-        //muestra el menu lateral
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        drawer.setDrawerListener(toggle);
-        toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+    }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (SharedPrefManager.getInstance(this).estaLogueado()){
 
+
+        }else{
+            startActivity(new Intent(this, Login.class)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK)) ;
+        }
     }
     @Override
     public void onBackPressed() {
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START);
-        } else {
-            super.onBackPressed();
-        }
-    }
-    @Override
-    public void onRestart()
-    {
-        super.onRestart();
-        finish();
-        startActivity(getIntent());
-    }
 
+        super.onBackPressed();
 
-    @SuppressWarnings("StatementWithEmptyBody")
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
-
-        if (id == R.id.principaldos) {
-            // acción principal
-            startActivity(new Intent(getBaseContext(), ActivityCategorias.class)
-                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP));
-            finish();
-
-        } else if (id == R.id.acercadeinfodos) {
-            Intent intent = new Intent(this,AcercaDe.class);
-            startActivity(intent);
-
-        }else if (id == R.id.login) {
-            if (sesion.logindim()){
-                Intent intent = new Intent(EditarPerfilOrganizacion.this,Panel_de_Control.class);
-                intent.putExtra("usuario_ingreso",id_usu);
-                //startActivity(new Intent(ActivityCategorias.this,Panel_de_Control.class));
-                startActivity(intent);
-                finish();
-            }else{
-                if (sesionUsuario.logindimUsuario()){
-                    Intent intent = new Intent(EditarPerfilOrganizacion.this,PanelDeControlUsuarios.class);
-                    intent.putExtra("id",id_usu);
-                    //startActivity(new Intent(ActivityCategorias.this,PanelDeControlUsuarios.class));
-                    startActivity(intent);
-                    finish();
-                }else {
-                    Intent intent = new Intent(this, Login.class);
-                    startActivity(intent);
-                    finish();
-                }
-
-            }
-        }if (id == R.id.cerrarsecion){
-
-            if (sesion.logindim()) {
-                sesion.setLogin(false);
-                startActivity(new Intent(this, Login.class));
-                finish();
-            }else {
-                if(sesionUsuario.logindimUsuario()){
-                    sesionUsuario.setLoginUsuario(false);
-                    startActivity(new Intent(this, Login.class));
-                    finish();
-                }
-            }
-        }
-
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
     }
 
 
@@ -372,6 +295,30 @@ public class EditarPerfilOrganizacion extends AppCompatActivity  implements Navi
     private void openGallery(){
         Intent gallery = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.INTERNAL_CONTENT_URI);
         startActivityForResult(gallery, PICK_IMAGE);
+    }
+
+    /**********************************************************************************************
+     *            creación de menú
+     **********************************************************************************************/
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.borrar_perfil, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        if (id == R.id.eliminarPerfil) {
+            new eliminarPerfil().execute();
+
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 
     protected void onActivityResult(int requestCode, int resultCode, Intent data){
@@ -521,8 +468,8 @@ public class EditarPerfilOrganizacion extends AppCompatActivity  implements Navi
                 httpclient = new DefaultHttpClient();
                 httppost = new HttpPost("http://aeo.web-hn.com/WebServices/consultarDatosDePerfilParaEditar.php");
                 parametros = new ArrayList<NameValuePair>();
-                parametros.add(new BasicNameValuePair("cto",String.valueOf(id_usuario_resibido_usuario)));
-                parametros.add(new BasicNameValuePair("tkn",traidotk));
+                parametros.add(new BasicNameValuePair("cto",String.valueOf(id_perfilEditar)));
+                parametros.add(new BasicNameValuePair("tkn",SharedPrefManager.getInstance(getApplicationContext()).getUSUARIO_LOGUEADO().getToken()));
                 httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));
 
                 JSONObject respJSON = new JSONObject(EntityUtils.toString(httpclient.execute(httppost).getEntity()));
@@ -607,7 +554,7 @@ public class EditarPerfilOrganizacion extends AppCompatActivity  implements Navi
                 httpclient = new DefaultHttpClient();
                 httppost = new HttpPost("http://aeo.web-hn.com/WebServices/actualizarPerfil.php");
                 parametros = new ArrayList<NameValuePair>();
-                parametros.add(new BasicNameValuePair("cto", String.valueOf(id_usuario_resibido_usuario)));
+                parametros.add(new BasicNameValuePair("cto", String.valueOf(id_perfilEditar)));
                 parametros.add(new BasicNameValuePair("nomborg_rec",etnombreeorganizacion.getText().toString()));
                 parametros.add(new BasicNameValuePair("numtel_rec",etnumerofijo.getText().toString()));
                 parametros.add(new BasicNameValuePair("numcel_rec",etnumerocel.getText().toString()));
@@ -618,7 +565,7 @@ public class EditarPerfilOrganizacion extends AppCompatActivity  implements Navi
                 parametros.add(new BasicNameValuePair("longitud_rec",etlongitud.getText().toString()));
                 parametros.add(new BasicNameValuePair("id_categoria",String.valueOf(id_categoria)));
                 parametros.add(new BasicNameValuePair("id_region",String.valueOf(id_region)));
-                parametros.add(new BasicNameValuePair("tkn",traidotk));
+                parametros.add(new BasicNameValuePair("tkn",SharedPrefManager.getInstance(getApplicationContext()).getUSUARIO_LOGUEADO().getToken()));
                 if(editarfoto==true){
                     parametros.add(new BasicNameValuePair("imagen",encodeImagen));
                     parametros.add(new BasicNameValuePair("nombre_imagen",etnombreeorganizacion.getText().toString().replace(" ","_")+ ""+ i +".jpg"));
@@ -643,13 +590,7 @@ public class EditarPerfilOrganizacion extends AppCompatActivity  implements Navi
 
                 Toast.makeText(getApplicationContext(),"Perfil Actualizado Correctamente",Toast.LENGTH_SHORT).show();
                 //startActivity(new Intent(getApplicationContext(),AdministracionDePerfiles.class));
-                Intent intent = new Intent(EditarPerfilOrganizacion.this,PanelDeControlUsuarios.class);
-                if (getIntent().getExtras()!=null){
-                    nu = getIntent().getExtras().getInt("usuario");
-                }
-
-                intent.putExtra("id",nu);
-                startActivity(intent);
+                setResult(PanelDeControlUsuarios.RESULT_OK);
                 finish();
 
 
@@ -719,6 +660,55 @@ public class EditarPerfilOrganizacion extends AppCompatActivity  implements Navi
             }
         }
 
+
+    }
+
+    //clase AsyncTask que se conecta al webservice que ejecuta la consulta para borrar el perfil
+
+    private class eliminarPerfil extends AsyncTask<String, Integer, Boolean> {
+        private eliminarPerfil(){}
+        boolean resul = true;
+
+        @Override
+        protected Boolean doInBackground(String... strings) {
+
+            try {
+
+
+                HttpClient httpclient;
+                HttpPost httppost;
+                ArrayList<NameValuePair> parametros;
+                httpclient = new DefaultHttpClient();
+                httppost = new HttpPost("http://aeo.web-hn.com/WebServices/eliminarPerfil.php");
+                parametros = new ArrayList<NameValuePair>();
+                parametros.add(new BasicNameValuePair("cto",String.valueOf(id_perfilEditar)) );
+                parametros.add(new BasicNameValuePair("tkn",SharedPrefManager.getInstance(getApplicationContext()).getUSUARIO_LOGUEADO().getToken()));
+                httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));
+                httpclient.execute(httppost);
+
+                //se ejecuta la consulta al webservice y se pasa el id del perfil seleccionado
+                //EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/WebServices/eliminarPerfil.php?cto="+idperf)).getEntity());
+                resul = true;
+            } catch (Exception ex) {
+                Log.e("ServicioRest", "Error!", ex);
+                resul = false;
+            }
+            return resul;
+
+        }
+
+        protected void onPostExecute(Boolean result) {
+
+            if (resul) {
+                //barra de progreso
+                //fin de barra de progreso
+                Toast.makeText(getApplicationContext(),"Perfil Eliminado",Toast.LENGTH_SHORT).show();
+                setResult(PanelDeControlUsuarios.RESULT_OK);
+                finish();
+            }else {
+                Toast.makeText(getApplicationContext(), "Problemas de conexión", Toast.LENGTH_SHORT).show();
+            }
+        }
 
     }
 }

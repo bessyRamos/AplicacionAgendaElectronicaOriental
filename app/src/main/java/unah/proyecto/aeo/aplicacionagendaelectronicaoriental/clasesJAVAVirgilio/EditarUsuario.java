@@ -35,6 +35,7 @@ import cz.msebera.android.httpclient.util.EntityUtils;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.ActivityCategorias;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.Panel_de_Control;
+import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.AdministracionDePerfilesAdmin.EditarPerfil;
 
 public class EditarUsuario extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
 
@@ -44,11 +45,8 @@ public class EditarUsuario extends AppCompatActivity implements NavigationView.O
     Button bottonvalidar;
     String nombre_usuario,nombre_propio,corre_o;
 
-    private Sesion sesion;
-    private SesionUsuario sesionUsuario;
+
     int id_usu=-1;
-    SharedPreferences datos;
-    String  traidotk;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,21 +55,10 @@ public class EditarUsuario extends AppCompatActivity implements NavigationView.O
 
         bottonvalidar = (Button)findViewById(R.id.editar);
 
-        //envio de clase actual para las preferencias
-        sesion = new Sesion(this);
-        sesionUsuario = new SesionUsuario(this);
-        SharedPreferences preferences = getSharedPreferences("credencial", Context.MODE_PRIVATE);
 
-            id_usu  = preferences.getInt("usuario_ingreso",id_usu);
-            //
-        datos= getSharedPreferences("datosusu", Context.MODE_PRIVATE);
-        traidotk = datos.getString("usuariotraidotkn","no tkn");
-        //RECIVIMOS EL ID QUE VIENE DE LA CLASE MOSTRAR USUARIOS.
-        Bundle extras = this.getIntent().getExtras();
-        if(extras!=null) {
-            usuarioEditar = extras.getInt("id");
+            usuarioEditar = SharedPrefManager.getInstance(this).getUSUARIO_LOGUEADO().getId_logueado();
 
-        }
+
         bottonvalidar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -117,6 +104,24 @@ public class EditarUsuario extends AppCompatActivity implements NavigationView.O
             super.onBackPressed();
         }
     }
+    @Override
+    protected void onStart() {
+        super.onStart();
+        if (SharedPrefManager.getInstance(this).estaLogueado()){
+
+
+        }else{
+            startActivity(new Intent(this, Login.class)
+                    .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK)) ;
+        }
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        // Inflate the menu; this adds items to the action bar if it is present.
+        getMenuInflater().inflate(R.menu.borrar_perfil, menu);
+        return true;
+    }
+
 
     @SuppressWarnings("StatementWithEmptyBody")
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -133,44 +138,10 @@ public class EditarUsuario extends AppCompatActivity implements NavigationView.O
             startActivity(intent);
             finish();
 
-        }else if (id == R.id.login) {
-            if (sesion.logindim()){
-                Intent intent = new Intent(EditarUsuario.this,Panel_de_Control.class);
-                intent.putExtra("usuario_ingreso",id_usu);
-                //startActivity(new Intent(ActivityCategorias.this,Panel_de_Control.class));
-                startActivity(intent);
-                finish();
-
-            }else{
-                if (sesionUsuario.logindimUsuario()){
-                    Intent intent = new Intent(EditarUsuario.this,PanelDeControlUsuarios.class);
-                    intent.putExtra("id",id_usu);
-                    //startActivity(new Intent(ActivityCategorias.this,PanelDeControlUsuarios.class));
-                    startActivity(intent);
-                    finish();
-
-                }else {
-                    Intent intent = new Intent(this, Login.class);
-                    startActivity(intent);
-                    finish();
-                }
-
-            }
-
         }else if (id ==R.id.cerrarsecion){
-            //cerrar secion y borrado de preferencias
-            if (sesion.logindim()) {
-                sesion.setLogin(false);
-                startActivity(new Intent(this, Login.class));
-                finish();
-            }else {
-                //cerrar secion y borrado de preferencias
-                if(sesionUsuario.logindimUsuario()){
-                    sesionUsuario.setLoginUsuario(false);
-                    startActivity(new Intent(this, Login.class));
-                    finish();
-                }
-            }
+            SharedPrefManager.getInstance(this).limpiar();
+            startActivity(new Intent(this, Login.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+            finish();
 
         }else if (id == R.id.ediciondeCuenta){
 
@@ -179,8 +150,6 @@ public class EditarUsuario extends AppCompatActivity implements NavigationView.O
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-
 
 
     private void validar(){
@@ -250,7 +219,7 @@ public class EditarUsuario extends AppCompatActivity implements NavigationView.O
                 parametros.add(new BasicNameValuePair("usuarionombre",nombreusuario.getText().toString()));
                 parametros.add(new BasicNameValuePair("usuariopropio",nombrepropio.getText().toString()));
                 parametros.add(new BasicNameValuePair("usuarioemail",correo.getText().toString()));
-                parametros.add(new BasicNameValuePair("tkn",traidotk));
+                parametros.add(new BasicNameValuePair("tkn", SharedPrefManager.getInstance(getApplicationContext()).getUSUARIO_LOGUEADO().getToken()));
 
                 httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));
 
@@ -274,7 +243,6 @@ public class EditarUsuario extends AppCompatActivity implements NavigationView.O
                 if (nombreusuario.getError()==null && nombrepropio.getError()==null && correo.getError()==null){
                     Toast.makeText(getApplicationContext(),"Usuario Realizado Correctamente",Toast.LENGTH_SHORT).show();
                     Intent intent = new Intent(EditarUsuario.this,PanelDeControlUsuarios.class);
-                    intent.putExtra("id",id_usu);
                     startActivity(intent);
                     finish();
                 }
@@ -302,7 +270,7 @@ public class EditarUsuario extends AppCompatActivity implements NavigationView.O
                 httppost = new HttpPost("http://aeo.web-hn.com/WebServices/Mostar_Los_Usuarios_Editados.php");
                 parametros = new ArrayList<NameValuePair>();
                 parametros.add(new BasicNameValuePair("usuario",String.valueOf(usuarioEditar) ));
-                parametros.add(new BasicNameValuePair("tkn",traidotk));
+                parametros.add(new BasicNameValuePair("tkn",SharedPrefManager.getInstance(getApplicationContext()).getUSUARIO_LOGUEADO().getToken()));
 
                 httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));
                 JSONArray respJSON = new JSONArray(EntityUtils.toString(( httpclient.execute(httppost)).getEntity()));
@@ -335,13 +303,5 @@ public class EditarUsuario extends AppCompatActivity implements NavigationView.O
 
 
     }
-    @Override
-    public void onRestart()
-    {
-        super.onRestart();
-        finish();
-        startActivity(getIntent());
-    }
-
 }
 

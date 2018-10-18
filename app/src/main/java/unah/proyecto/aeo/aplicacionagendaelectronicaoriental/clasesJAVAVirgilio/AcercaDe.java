@@ -3,9 +3,7 @@ package unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAVirgilio
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.NavigationView;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
@@ -19,12 +17,9 @@ import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
-import android.widget.TextView;
 
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.R;
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.ActivityCategorias;
@@ -47,10 +42,9 @@ public class AcercaDe extends AppCompatActivity implements NavigationView.OnNavi
      */
     private ViewPager mViewPager;
 
-    //preferencias
-    private Sesion sesion;
-    private SesionUsuario sesionUsuario;
+
     int id_usu=-1;
+    NavigationView navigationView;
 
 
     @Override
@@ -58,12 +52,6 @@ public class AcercaDe extends AppCompatActivity implements NavigationView.OnNavi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.app_bar_acerca_de);
 
-        //envio de clase actual para las preferencias
-        sesion = new Sesion(this);
-        sesionUsuario = new SesionUsuario(this);
-        SharedPreferences preferences = getSharedPreferences("credencial", Context.MODE_PRIVATE);
-        id_usu  = preferences.getInt("usuario_ingreso",0);
-        //
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -88,15 +76,9 @@ public class AcercaDe extends AppCompatActivity implements NavigationView.OnNavi
         toggle.syncState();
 
 
-        if (sesion.logindim() || sesionUsuario.logindimUsuario()){
-            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-            navigationView.inflateMenu(R.menu.menu_tercero);
-            navigationView.setNavigationItemSelectedListener(this);
-        }else {
-            NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-            navigationView.inflateMenu(R.menu.activity_principal_drawer);
-            navigationView.setNavigationItemSelectedListener(this);
-        }
+       navigationView = (NavigationView) findViewById(R.id.nav_view);
+
+       navigationView.setNavigationItemSelectedListener(this);
 
 
 
@@ -114,11 +96,25 @@ public class AcercaDe extends AppCompatActivity implements NavigationView.OnNavi
     }
 
     @Override
-    public void onRestart()
-    {
-        super.onRestart();
-        finish();
-        startActivity(getIntent());
+    protected void onStart() {
+        super.onStart();
+        if(SharedPrefManager.getInstance(getApplicationContext()).estaLogueado()){
+            int rol = SharedPrefManager.getInstance(getApplicationContext()).getUSUARIO_LOGUEADO().getRol_logueado();
+            if ( rol ==2){
+                navigationView.getMenu().clear();
+                navigationView.inflateMenu(R.menu.menu_cliente);
+
+            }else if(rol == 1){
+                navigationView.getMenu().clear();
+                navigationView.inflateMenu(R.menu.menu_admin);
+
+            }
+
+        }else{
+            navigationView.getMenu().clear();
+            navigationView.inflateMenu(R.menu.navigation_view);
+
+        }
     }
 
 
@@ -137,46 +133,34 @@ public class AcercaDe extends AppCompatActivity implements NavigationView.OnNavi
 
 
         }else if (id == R.id.login) {
-            if (sesion.logindim()){
-                //Intent intent = new Intent(AcercaDe.this,Panel_de_Control.class);
-                Intent intent = new Intent(this,Panel_de_Control.class);
-                intent.putExtra("usuario_ingreso",id_usu);
-                //startActivity(new Intent(ActivityCategorias.this,Panel_de_Control.class));
 
-                sesionUsuario.setLoginUsuario(false);
-                startActivityForResult(intent,100);
-                startActivity(intent);
-                finish();
-            }else{
-                if (sesionUsuario.logindimUsuario()){
-                   // Intent intent = new Intent(AcercaDe.this,PanelDeControlUsuarios.class);
-                    Intent intent = new Intent(this,PanelDeControlUsuarios.class);
-                    intent.putExtra("id",id_usu);
-                    //startActivity(new Intent(ActivityCategorias.this,PanelDeControlUsuarios.class));
-                    sesion.setLogin(false);
-                    startActivityForResult(intent,300);
-                    finish();
-                }else {
-                    Intent intent = new Intent(this, Login.class);
-                    startActivityForResult(intent,100);
-                    finish();
 
-                }
+            Intent intent = new Intent(this, Login.class);
+            startActivityForResult(intent,100);
+            finish();
 
-            }
+
         }else if (id == R.id.cerrarsecion){
 
-            if (sesion.logindim()) {
-                sesion.setLogin(false);
-                startActivity(new Intent(this, Login.class));
-                finish();
-            }else {
-                if(sesionUsuario.logindimUsuario()){
-                    sesionUsuario.setLoginUsuario(false);
-                    startActivity(new Intent(this, Login.class));
-                    finish();
-                }
-            }
+            SharedPrefManager.getInstance(this).limpiar();
+            startActivity(new Intent(this, Login.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+            finish();
+        }else if(id == R.id.panelControl){
+            Intent intent = new Intent(this,Panel_de_Control.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
+
+        }else if (id == R.id.ediciondeCuenta){
+            Intent intent = new Intent(this,EditarUsuario.class);
+            startActivity(intent);
+
+        }else if(id == R.id.panelControlUsuario){
+            Intent intent = new Intent(this,PanelDeControlUsuarios.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+            startActivity(intent);
+            finish();
+
         }
 
 
