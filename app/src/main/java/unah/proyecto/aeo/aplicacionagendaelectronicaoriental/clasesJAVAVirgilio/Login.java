@@ -118,7 +118,8 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
         int id = item.getItemId();
 
         if (id == R.id.principaldos) {
-           onBackPressed();
+           startActivity(new Intent(this,ActivityCategorias.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+           finish();
         } else if (id == R.id.acercadeinfodos) {
             Intent intent = new Intent(this, AcercaDe.class);
             startActivity(intent);
