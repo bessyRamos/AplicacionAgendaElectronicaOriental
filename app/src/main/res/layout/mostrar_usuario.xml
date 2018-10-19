@@ -13,7 +13,6 @@
         android:layout_weight="0.45"
         android:divider="@null"
         android:dividerHeight="0dp"
-        android:listSelector="@color/colorlista"
       />
     <ProgressBar
         android:id="@+id/progressBarUsuarios"
