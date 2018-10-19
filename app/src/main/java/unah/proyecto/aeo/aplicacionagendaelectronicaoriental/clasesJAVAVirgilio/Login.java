@@ -59,7 +59,7 @@ public class Login extends AppCompatActivity implements NavigationView.OnNavigat
         setContentView(R.layout.activity_login);
         usuario = (EditText) findViewById(R.id.usuario_login);
         contrasena = (EditText) findViewById(R.id.contrasena_login);
-        //Preferencias de administrador y usuario
+        //Preferencias de imgadministrador y usuario
 
         acceder = (CircularProgressButton) findViewById(R.id.ingresar_login);
         acceder.setOnClickListener(new View.OnClickListener() {

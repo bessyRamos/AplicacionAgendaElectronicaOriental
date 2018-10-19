@@ -44,7 +44,7 @@ import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAAlan.Pane
 import unah.proyecto.aeo.aplicacionagendaelectronicaoriental.clasesJAVAMelvin.AdministracionDePerfilesAdmin.EditarPerfil;
 
 public class PanelDeControlUsuarios extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener{
-    //preferencia de administrador o usuario
+    //preferencia de imgadministrador o usuario
 
     //
     private Button salir;
