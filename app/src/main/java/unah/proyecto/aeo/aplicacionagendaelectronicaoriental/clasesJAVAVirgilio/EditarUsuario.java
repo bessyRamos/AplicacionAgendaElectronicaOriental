@@ -359,7 +359,6 @@ public class EditarUsuario extends AppCompatActivity implements NavigationView.O
                 //barra de progreso
                 //fin de barra de progreso
                 Toast.makeText(getApplicationContext(),"Usuario Eliminado",Toast.LENGTH_SHORT).show();
-                setResult(PanelDeControlUsuarios.RESULT_OK);
                 SharedPrefManager.getInstance(getApplicationContext()).limpiar();
                 startActivity(new Intent(getApplicationContext(), Login.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK));
                 finish();
