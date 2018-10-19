@@ -58,9 +58,9 @@ public class Adaptador_mostrarusuarios extends BaseAdapter{
         textnombre.setText(usuarios.get(i).getUsuario());
         texdescripcion.setText(usuarios.get(i).getDescripcion());
         if(texdescripcion.getText().toString().equals("Administrador")){
-            Picasso.get().load(R.drawable.admin).into(imageView);
+            Picasso.get().load(R.drawable.administrador).into(imageView);
         }else {
-            Picasso.get().load(R.drawable.cliente).into(imageView);
+            Picasso.get().load(R.drawable.imgcliente).into(imageView);
         }
 
 
