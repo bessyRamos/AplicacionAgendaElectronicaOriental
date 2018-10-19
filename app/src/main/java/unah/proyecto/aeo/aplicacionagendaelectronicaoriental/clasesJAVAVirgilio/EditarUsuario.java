@@ -119,6 +119,21 @@ public class EditarUsuario extends AppCompatActivity implements NavigationView.O
         return true;
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle action bar item clicks here. The action bar will
+        // automatically handle clicks on the Home/Up button, so long
+        // as you specify a parent activity in AndroidManifest.xml.
+        int id = item.getItemId();
+
+        if (id == R.id.eliminarPerfil) {
+            new eliminarUsuario().execute();
+
+        }
+
+        return super.onOptionsItemSelected(item);
+    }
+
 
     @SuppressWarnings("StatementWithEmptyBody")
     public boolean onNavigationItemSelected(MenuItem item) {
@@ -141,6 +156,11 @@ public class EditarUsuario extends AppCompatActivity implements NavigationView.O
             finish();
 
         }else if (id == R.id.ediciondeCuenta){
+
+        }else if(id == R.id.panelControlUsuario){
+            Intent intent = new Intent(this,PanelDeControlUsuarios.class);
+            startActivity(intent);
+            finish();
 
         }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
@@ -298,6 +318,55 @@ public class EditarUsuario extends AppCompatActivity implements NavigationView.O
             }
         }
 
+
+    }
+
+    private class eliminarUsuario extends AsyncTask<String, Integer, Boolean> {
+        private eliminarUsuario(){}
+        boolean resul = true;
+
+        @Override
+        protected Boolean doInBackground(String... strings) {
+
+            try {
+
+
+                HttpClient httpclient;
+                HttpPost httppost;
+                ArrayList<NameValuePair> parametros;
+                httpclient = new DefaultHttpClient();
+                httppost = new HttpPost("http://aeo.web-hn.com/WebServices/eliminacion_de_un_usuario.php");
+                parametros = new ArrayList<NameValuePair>();
+                parametros.add(new BasicNameValuePair("usuario",String.valueOf(SharedPrefManager.getInstance(getApplicationContext()).getUSUARIO_LOGUEADO().getId_logueado())) );
+                parametros.add(new BasicNameValuePair("tkn",SharedPrefManager.getInstance(getApplicationContext()).getUSUARIO_LOGUEADO().getToken()));
+                httppost.setEntity(new UrlEncodedFormEntity(parametros, "UTF-8"));
+                httpclient.execute(httppost);
+
+                //se ejecuta la consulta al webservice y se pasa el id del perfil seleccionado
+                //EntityUtils.toString(new DefaultHttpClient().execute(new HttpPost("http://aeo.web-hn.com/WebServices/eliminarPerfil.php?cto="+idperf)).getEntity());
+                resul = true;
+            } catch (Exception ex) {
+                Log.e("ServicioRest", "Error!", ex);
+                resul = false;
+            }
+            return resul;
+
+        }
+
+        protected void onPostExecute(Boolean result) {
+
+            if (resul) {
+                //barra de progreso
+                //fin de barra de progreso
+                Toast.makeText(getApplicationContext(),"Usuario Eliminado",Toast.LENGTH_SHORT).show();
+                setResult(PanelDeControlUsuarios.RESULT_OK);
+                SharedPrefManager.getInstance(getApplicationContext()).limpiar();
+                startActivity(new Intent(getApplicationContext(), Login.class).setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_CLEAR_TASK));
+                finish();
+            }else {
+                Toast.makeText(getApplicationContext(), "Problemas de conexión", Toast.LENGTH_SHORT).show();
+            }
+        }
 
     }
 }

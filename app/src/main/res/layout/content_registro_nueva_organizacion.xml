@@ -58,8 +58,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Número fijo"
-                    android:inputType="text"
-                    android:digits="1234567890-"/>
+                    android:inputType="phone"
+                    android:digits="1234567890"
+                    />
 
             </android.support.design.widget.TextInputLayout>
 
@@ -74,8 +75,8 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Número móvil"
-                    android:inputType="text"
-                    android:digits="1234567890-"/>
+                    android:inputType="phone"
+                    android:digits="1234567890"/>
 
             </android.support.design.widget.TextInputLayout>
 
@@ -131,7 +132,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Categoría"
-                android:layout_marginLeft="10dp"
+                android:textColor="@color/colorPrimary"
                 android:layout_marginTop="10dp"
                 android:textSize="15sp"
 
@@ -143,7 +144,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:spinnerMode="dialog"
-                android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_marginTop="10dp"
 
@@ -153,7 +153,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:text="Región"
-                android:layout_marginLeft="10dp"
+                android:textColor="@color/colorPrimary"
                 android:layout_marginTop="10dp"
                 android:textSize="15sp"
                 android:layout_below="@id/spinercategoriaOrganizacion"
@@ -163,7 +163,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:spinnerMode="dropdown"
-                android:layout_marginLeft="10dp"
                 android:layout_marginRight="10dp"
                 android:layout_below="@+id/viewRegion"
             />
